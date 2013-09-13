@@ -1,0 +1,3 @@
+mein_feedback_home_homepage:
+    pattern:  /
+    defaults: { _controller: MeinFeedbackHomeBundle:Default:index }

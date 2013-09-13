@@ -1,0 +1,4 @@
+mein_feedback_home:
+    resource: "@MeinFeedbackHomeBundle/Resources/config/routing.yml"
+    prefix:   /
+
