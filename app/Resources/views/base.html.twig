@@ -1,24 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <meta charset="utf-8">
+    <title>{% block title %}Welcome to MeinFeedback!{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
     {% block stylesheets %}
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+        {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+        {% endstylesheets %}
+        <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
     {% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-</head>
-<body>
-{% block body %}{% endblock %}
-{% block javascripts %}
     <!--[if lt IE 9]>
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if gte IE 9]><!-->
-    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-    <!--<![endif]-->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-{% endblock %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    {% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        if (typeof jQuery == 'undefined') {
+            {% javascripts '@MeinFeedbackHomeBundle/Resources/public/js/jquery-1.9.1.min.js' %}
+            document.write(unescape("%3Cscript src='{{ asset_url }}' type='text/javascript'%3E%3C/script%3E"));
+            {% endjavascripts %}
+        }
+    </script>
+
+    <!--Has to be in head, to lazy load images.
+    Minimize in production. -->
+    {% javascripts
+    '@MeinFeedbackHomeBundle/Resources/public/js/lazyload.min.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/jRespond.min.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/spin.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/bootstrap.min.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/lightbox.min.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/main.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% endblock %}
+</head>
+
+<body id="top" data-spy="scroll" data-target=".navbar">
+    {% block body %}{% endblock %}
 </body>
 </html>

@@ -1,45 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>MeinFeedback</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Twitter bootstrap theme">
-    <meta name="author" content="prettystrap">
-    {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %}
-    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+{% extends "::base.html.twig" %}
 
-    <link rel="shortcut icon" href="favicon.ico">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script>
-        if (typeof jQuery == 'undefined') {
-            {% javascripts '@MeinFeedbackHomeBundle/Resources/public/js/jquery-1.9.1.min.js' %}
-                document.write(unescape("%3Cscript src='{{ asset_url }}' type='text/javascript'%3E%3C/script%3E"));
-            {% endjavascripts %}
-        }
-    </script>
+{% block title %}Welcome to MeinFeedback{% endblock %}
 
-    <!--Has to be in head, to lazy load images.
-    Minimize in production. -->
-        {% javascripts
-            '@MeinFeedbackHomeBundle/Resources/public/js/lazyload.min.js'
-            '@MeinFeedbackHomeBundle/Resources/public/js/jRespond.min.js'
-            '@MeinFeedbackHomeBundle/Resources/public/js/spin.js'
-            '@MeinFeedbackHomeBundle/Resources/public/js/bootstrap.min.js'
-            '@MeinFeedbackHomeBundle/Resources/public/js/lightbox.min.js'
-            '@MeinFeedbackHomeBundle/Resources/public/js/main.js'
-        %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-</head>
-
-<body id="top" data-spy="scroll" data-target=".navbar">
-
+{% block body %}
 <!-- Brand and Navigation -->
 <header class="navbar navbar-fixed-top">
     <div class="inner-page">
@@ -124,5 +87,4 @@
                 <div class="span6 text-right"> made with <i class="icon-heart farbeblau"></i> in Berlin </div>
             </div>
         </footer>
-</body>
-</html>
+{% endblock %}
