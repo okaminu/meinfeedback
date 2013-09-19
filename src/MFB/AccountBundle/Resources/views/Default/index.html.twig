@@ -1,25 +1,25 @@
-{% extends '::base.html.twig' %}
+{% extends "::base.html.twig" %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets '@MFBAccountBundle/Resources/public/css/signin.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
+{% block title %}Login to MeinFeedback{% endblock %}
 
 {% block body %}
+    <div class="formular">
+        <h3>Kunden Login</h3>
 
-<div class="container">
+        <div class="kontaktform">
 
-    <form class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" class="form-control" placeholder="Email address" autofocus>
-        <input type="password" class="form-control" placeholder="Password">
-        <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    </form>
+            <form name="login" method="post" action="https://interface.foxrate.de/index.php?page=start" class="form-inline">
 
-</div>
+                <input name="user_id" id="user_id" onfocus="weg('user_id')" onblur="hin('user_id')"  class="log_feld breite240" type="text" placeholder="Benutzername">
+                <input name="user_pass" id="user_pass" onfocus="weg('user_pass')" onblur="hin('user_pass')"  class="log_feld breite240" type="password" placeholder="Passwort">
+                <input name="page" value="start" type="hidden"><input name="check_login" id="check_login" value="1" type="hidden">
+                <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
+
+            </form>
+            {#<p>&nbsp;</p>#}
+            {#<p>&nbsp;</p>#}
+            {#<p>Sie haben Ihr Passwort vergessen? Klicken Sie <a href="passwort-vergessen/" title="Passwort vergessen" class="login_sublnk fright">hier</a> um ein neues anzufordern.</p>#}
+
+        </div>
+    </div>
 {% endblock %}
