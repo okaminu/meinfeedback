@@ -1,0 +1,39 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Registration{% endblock %}
+
+{% block body %}
+    <div class="formular">
+        <div style="padding:20px 10px 15px 0; font-size: 17px; font-weight:100;">Melden Sie sich jetzt kostenlos an<br> und beginnen Sie gleich mit dem Sammeln von Bewertungen an.</div>
+
+        <div class="kontaktform">
+
+
+            <form id="" action="" enctype="multipart/form-data" class="form-inline">
+                <input name="Quelle" value="" type="hidden">
+                <input name="register-lang" id="register-lang" value="de" type="hidden">
+
+
+                <div>
+
+                    <input name="username" id="username" class="required fr_input_txt fr_97_5pro breite490" type="text" placeholder="Name*">
+                    <input name="email" id="email" class="required validate-email fr_input_txt fr_97_5pro breite490" type="text" placeholder="Email*">
+
+                    <input name="passwd" id="passwd" class="required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite490" type="password" placeholder="Passwort*">
+
+                    <input name="repeat_passwd" id="repeat_passwd" class="required validate-match validate-alphanum matchInput:'passwd' matchName:'passwd' fr_input_txt fr_97_5pro breite490" type="password" placeholder="Passwort Wiederholung*">
+
+                    <div class="kleiner"> Bitte verwenden Sie für Ihr Passwort nur Buchstaben von <strong>"a-z"</strong>, <strong>"A-Z"</strong> und Zahlen von <strong>"0-9"</strong>.</div>
+
+                    <div class="textagb controls">  <input name="reg_terms_ds" class="inputcheckbox required validate-required-check" id="check-1" type="checkbox">
+
+
+                        <label for="check-1" class="inputcheckbox-text ">&nbsp; Ich bestätige hiermit die <a href="https://www.foxrate.de/unternehmen/impressum-agb/" class="laws" name="Foxrate AGB">AGB</a> und die <a href="https://www.foxrate.de/unternehmen/datenschutz/" class="laws" name="Foxrate Datenschutzbestimmungen">Datenschutzbestimmungen</a>.<span class="reqtag">*</span></label></div>
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Jetzt anmelden" type="submit">
+
+
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
