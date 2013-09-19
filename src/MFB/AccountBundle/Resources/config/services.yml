@@ -1,0 +1,7 @@
+parameters:
+#    mfb_account.example.class: MFB\AccountBundle\Example
+
+services:
+#    mfb_account.example:
+#        class: %mfb_account.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

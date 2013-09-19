@@ -1,0 +1,3 @@
+mfb_account_homepage:
+    pattern:  /login
+    defaults: { _controller: MFBAccountBundle:Default:index }

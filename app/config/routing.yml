@@ -1,3 +1,7 @@
+mfb_account:
+    resource: "@MFBAccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
 mein_feedback_home:
     resource: "@MeinFeedbackHomeBundle/Resources/config/routing.yml"
     prefix:   /

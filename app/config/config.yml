@@ -32,6 +32,7 @@ assetic:
     use_controller: false
     bundles:
         - MeinFeedbackHomeBundle
+        - MFBAccountBundle
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

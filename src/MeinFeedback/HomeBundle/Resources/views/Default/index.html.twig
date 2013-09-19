@@ -1,4 +1,11 @@
-{% extends '@MeinFeedbackHome/base.html.twig' %}
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/home.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block body %}
 
