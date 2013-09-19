@@ -1,41 +1,128 @@
-{% extends '::base.html.twig' %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/home.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MeinFeedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Twitter bootstrap theme">
+    <meta name="author" content="prettystrap">
+    {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
-{% endblock %}
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-{% block body %}
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        if (typeof jQuery == 'undefined') {
+            {% javascripts '@MeinFeedbackHomeBundle/Resources/public/js/jquery-1.9.1.min.js' %}
+                document.write(unescape("%3Cscript src='{{ asset_url }}' type='text/javascript'%3E%3C/script%3E"));
+            {% endjavascripts %}
+        }
+    </script>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Mein Feedback</a>
+    <!--Has to be in head, to lazy load images.
+    Minimize in production. -->
+        {% javascripts
+            '@MeinFeedbackHomeBundle/Resources/public/js/lazyload.min.js'
+            '@MeinFeedbackHomeBundle/Resources/public/js/jRespond.min.js'
+            '@MeinFeedbackHomeBundle/Resources/public/js/spin.js'
+            '@MeinFeedbackHomeBundle/Resources/public/js/bootstrap.min.js'
+            '@MeinFeedbackHomeBundle/Resources/public/js/lightbox.min.js'
+            '@MeinFeedbackHomeBundle/Resources/public/js/main.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+</head>
+
+<body id="top" data-spy="scroll" data-target=".navbar">
+
+<!-- Brand and Navigation -->
+<header class="navbar navbar-fixed-top">
+    <div class="inner-page">
+        <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo.png') }}"/></h1>
+        <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
+
+
+        <div class="nav-collapse collapse">
+            <ul class="nav navigation" id="menu">
+                <li class="active"><a title="Start" class="scroll brand-1" href="#home">Startseite</a></li>
+                <li><a title="Produkt" href="#produkt" class="scroll brand-4">Produkt</a></li>
+                <li><a title="Preise" href="#preise" class="scroll brand-3">Preise</a></li>
+
+                <li><a title="Login" href="login.html" class="scroll fadeto brand-4 iframe" rel="nofollow">Login</a></li>
+            </ul>
+        </div>
+
+    </div>
+</header>
+
+<!-- Home Page -->
+
+
+<div id="home" class="page color-1" style="background:url('{{ asset('bundles/meinfeedbackhome/images/bg_1.png') }}') #b2b2b2 no-repeat; height:500px;">
+    <div class="inner-page">
+        <div class="page-headline_start large">Ihre Kunden lieben Ihre Produkte. Und Ihren Service.</br> Zeigen Sie es - mit Mein<span style="color:#5aff6a;">Feedback</span></h2>
+
+            <div align="center">
+                </br>
+                <a rel="nofollow" href="formular.html" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe">Jetzt anmelden</a>
             </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
         </div>
     </div>
 
-    <div class="container">
 
-        <div class="starter-template">
-            <h1>Bootstrap starter template</h1>
-            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+    <!-- Produkt -->
+    <div id="produkt" class="page color-4">
+        <div class="inner-page">
+            <div class="page-headline_2">So funktioniert Mein<span style="color:#5aff6a;">Feedback</span></div>
+            <img class="lazy" alt="So funktioniert Foxrate" src="{{ asset('bundles/meinfeedbackhome/images/pixel.png') }}" data-original="{{ asset('bundles/meinfeedbackhome/images/circle.png') }}" />
         </div>
 
-    </div><!-- /.container -->
+        <!-- Preise -->
 
-{% endblock %}
+        <div id="preise" class="page color-2">
+            <div class="inner-page">
+                <div class="page-headline_1">Preise & Features</div>
+                <div class="row-fluid inner-page">
+                    <table class="preisliste" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="taboben" style="background:#5aff6a"><h3>Monatlicher Grundpreis</h3><h1>69€</h1></td>
+                            <td class="taboben" style="width:217px;"><h3>Vertagslaufzeit</h3><h2>12 Monate</h2></td>
+                            <td class="taboben" style="width:217px;"><h3>Transaktionen inklusive</h3><h2>200</h2></td>
+                            <td class="taboben" style="width:217px;"><h3>Einmalige Einrichtungsgebühr</h3><h2>69€</h2></td>
+                            <td class="taboben" style="width:217px;"><h3>Aufpreis für je 100 Transaktionen</h3><h2>7€</h2></td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a href="formular.html" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe">Jetzt anmelden</a>
+                    </div>
+                    <br><br><br>
+                </div>
+            </div>
+        </div>
+
+        <footer class="page color-5 footer">
+            <div class="inner-page row-fluid">
+                <div class="span6 social_icon">
+                    <a href="http://facebook.com" target="_blank">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/fb_icon.png') }}">
+                    </a>
+                    <a href="#kontakt">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/tw_icon.png') }}">
+                    </a>
+                    <a href="#kontakt">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/in_icon.png') }}">
+                    </a>
+                    <a href="#kontakt">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/xi_icon.png ') }}">
+                    </a>
+                </div>
+                <div class="span6 text-right"> made with <i class="icon-heart farbeblau"></i> in Berlin </div>
+            </div>
+        </footer>
+</body>
+</html>
