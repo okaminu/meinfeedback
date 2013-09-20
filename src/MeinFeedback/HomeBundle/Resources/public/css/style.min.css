@@ -1224,3 +1224,22 @@ textarea, input {font-family:Open Sans,Source Sans Pro,Helvetica,Arial,sans-seri
 
 
 
+a.footer_link:active, a.footer_link:visited, a.footer_link:link {
+    font-size:14px; font-weight:300; color: #dcdcdc;
+}
+a.footer_link:hover {
+    font-size:14px; font-weight:300; color: #5aff6a;
+}
+.footer_right {
+    font-size:14px; font-weight:300; color: #dcdcdc;
+}
+.legal_impressum {
+    font-size: 14px; text-align: left;
+    padding: 10px;
+}
+
+.impressumdata {
+    text-align: left;
+    padding: 20px 20px 0 0;
+    float: left;
+}

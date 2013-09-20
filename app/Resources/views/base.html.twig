@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     {% block stylesheets %}
-        {% stylesheets '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css' %}
+        {% stylesheets
+        '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css'
+        '@MeinFeedbackHomeBundle/Resources/public/css/acprofile.css'
+        %}
         <link rel="stylesheet" href="{{ asset_url }}">
         {% endstylesheets %}
         <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>

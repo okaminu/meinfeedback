@@ -15,7 +15,6 @@
                 <li class="active"><a title="Start" class="scroll brand-1" href="#home">Startseite</a></li>
                 <li><a title="Produkt" href="#produkt" class="scroll brand-4">Produkt</a></li>
                 <li><a title="Preise" href="#preise" class="scroll brand-3">Preise</a></li>
-                <li><a title="Impressum" href="#impressum" class="scroll fadeto brand-4">Impressum</a></li>
                 <li><a title="Login" href="{{ path('mfb_account_login') }}" class="scroll fadeto brand-4 iframe" rel="nofollow">Login</a></li>
             </ul>
         </div>
@@ -68,48 +67,13 @@
             </div>
         </div>
 
-    <div id="impressum" class="page color-2">
-
-        <div class="row-fluid inner-page contact">
-            <div class="span6">
-            </div>
-            <div class="span4 offset1" style="padding-top:50px">
-                <h3>Impressum</h3>
-                <p>Foxrate Internet GmbH<br>
-                    Cicerostr.21<br>
-                    D-10709 - Berlin </p>
-                <p>Geschäftsführer: Martin Shein<br>
-                    Handelsregister: HRB 134137 B<br>
-                    Register Gericht: AG Charlottenburg<br>
-                    UST ID: DE277546484<br>
-                    Steuernummer: 27/416/09492</p>
-                <p>Mail: meinfeedback(at)foxrate.de<br>
-                    Fax: 030 / 886 228 299<br>
-                    Web: www.meinfeedback.net</p>
-            </div>
-        </div>
-    </div>
-
-
-
-
     <footer class="page color-5 footer">
-            <div class="inner-page row-fluid">
-                <div class="span6 social_icon">
-                    <a href="http://facebook.com" target="_blank">
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/fb_icon.png') }}">
-                    </a>
-                    <a href="#kontakt">
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/tw_icon.png') }}">
-                    </a>
-                    <a href="#kontakt">
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/in_icon.png') }}">
-                    </a>
-                    <a href="#kontakt">
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/xi_icon.png ') }}">
-                    </a>
-                </div>
-                <div class="span6 text-right"> made with <i class="icon-heart farbeblau"></i> in Berlin </div>
+        <div class="inner-page row-fluid">
+            <div class="span6 social_icon"> <a href="http://facebook.com/meinfeedback" target="_blank"><img src="{{ asset('bundles/meinfeedbackhome/images/fb_icon.png') }}"></a>
+                </a>
+                <a href="mailto:service@meinfeedback.net">service@meinfeedback.net</a>
             </div>
-        </footer>
+            <div class="span6 text-right footer_right"> made with &nbsp;<i class="icon-heart farbeblau"></i>  &nbsp;in Berlin </div>
+        </div>
+    </footer>
 {% endblock %}

@@ -1,0 +1,45 @@
+
+body {
+font-family: Lato, Helvetica, sans-serif;
+}
+
+.box-comment {
+border: 1px solid;
+-moz-border-radius: 3px 3px 3px 3px;
+-webkit-border-radius: 3px 3px 3px 3px;
+border-radius: 3px 3px 3px 3px;
+padding: 5px;
+margin: 0 0 8px 0;
+border-color: #b2b2b2;
+color: #666;
+}
+
+.comment-piece {
+position: absolute;
+left: 50px;
+margin-top: -9px;
+}
+
+.left {
+text-align: left;
+}
+
+.comment-text {
+padding: 0 0 0 15px;
+word-wrap: break-word;
+font-size: 14px;
+}
+
+
+.timeago {
+	font-size: 12px;
+}
+
+.username {
+	font-size: 14px;
+	color: #666;
+	padding: 10px 10px 10px 20px;
+	font-weight: bold;
+	font-size: 12px;
+}
+

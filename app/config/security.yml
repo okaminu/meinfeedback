@@ -19,6 +19,8 @@ security:
             form_login:
                 check_path: mfb_admin_homepage
                 login_path: mfb_account_login
+                use_referer: true
+                default_target_path: /admin/
             logout:
                 path:   mfb_admin_logout
                 target: /

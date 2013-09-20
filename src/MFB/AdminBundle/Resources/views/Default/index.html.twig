@@ -24,13 +24,68 @@
 
     <!-- Home Page -->
 
+    <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks</h3>
 
-<div id="home" class="page color-1" style="background:url('{{ asset('bundles/meinfeedbackhome/images/bg_1.png') }}') #b2b2b2 no-repeat; height:500px;">
-    <div class="inner-page">
-        <div class="page-headline_start large">Ihre Kunden lieben Ihre Produkte. Und Ihren Service.</br> Zeigen Sie es - mit Mein<span style="color:#5aff6a;">Feedback</span></h2>
-        </div>
+    <div style="padding:10px">
+        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+            <tbody><tr>
+                <td width="80%" style="padding:10px;">
+            <span class="comment-text left" itemprop="description">
+                Sehr schnelle Lieferung.
+            </span>
+                </td>
+
+                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                    <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
+                        <span title="2013-08-19" class="timeago">1 day ago</span>
+                    </time>
+                </td>
+            </tr>
+            </tbody></table>
+        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+        <div class="username">Anonymous [1] says:</div>
+
+                <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                    <tbody><tr>
+                        <td width="80%" style="padding:10px;">
+            <span class="comment-text left" itemprop="description">
+                Wäre es ein kleiner Artikel würde ich ihn zum Umtausch zurückschicken.
+Hätte ich nicht per Nachnahme bezahlt, hätte ich auf jeden Fall um einen Nachlass gebeten.
+Aufhängematerial (Dübel und Haken) haben gefeht.
+Aufhängematerial (Dübel und Aufhängehaken) waren leider nicht im Paket.
+            </span>
+                        </td>
+
+                        <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                            <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
+                                <span title="2013-08-19" class="timeago">2 days ago</span>
+                            </time>
+                        </td>
+                    </tr>
+                    </tbody></table>
+                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+                <div class="username">Anonymous [2] says:</div>
+
+
+                    <div style="padding:10px 0 10px 0">
+                        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                            <tbody><tr>
+                                <td width="80%" style="padding:10px;">
+            <span class="comment-text left" itemprop="description">
+                Unkompliziert.
+            </span>
+                                </td>
+
+                                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                    <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
+                                        <span title="2013-08-19" class="timeago">3 days ago</span>
+                                    </time>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+                        <div class="username">Anonymous [3] says:</div>
+
+                    </div>
     </div>
-
-
-
 {% endblock %}
