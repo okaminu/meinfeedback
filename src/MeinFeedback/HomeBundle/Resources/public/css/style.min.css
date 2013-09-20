@@ -1206,7 +1206,7 @@ td.zwischenheadline { background-color:#5aff6a; color:#fff; text-align:left; tex
 textarea, input {font-family:Open Sans,Source Sans Pro,Helvetica,Arial,sans-serif;font-weight:400;}
 .closed { display:none; }
 .open { display:table-row; }
-.formular { margin:0 50px 50px 50px; text-align:center; }
+.formular { margin:50px 50px 50px 50px; text-align:center; }
 .breite490 { width:490px;}
 .breite240 { width:237px;}
 .breite400 { width:400px;}

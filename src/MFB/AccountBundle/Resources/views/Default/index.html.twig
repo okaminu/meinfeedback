@@ -8,11 +8,10 @@
 
         <div class="kontaktform">
 
-            <form name="login" method="post" action="https://interface.foxrate.de/index.php?page=start" class="form-inline">
+            <form action="{{ path("mfb_account_login_check") }}" method="post" id="login" class="form-inline">
 
-                <input name="user_id" id="user_id" onfocus="weg('user_id')" onblur="hin('user_id')"  class="log_feld breite240" type="text" placeholder="Benutzername">
-                <input name="user_pass" id="user_pass" onfocus="weg('user_pass')" onblur="hin('user_pass')"  class="log_feld breite240" type="password" placeholder="Passwort">
-                <input name="page" value="start" type="hidden"><input name="check_login" id="check_login" value="1" type="hidden">
+                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld breite240"/>
+                <input type="password" id="password" name="_password"  class="log_feld breite240"  placeholder="Passwort"/>
                 <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
 
             </form>
