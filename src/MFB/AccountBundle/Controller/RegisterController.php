@@ -21,7 +21,6 @@ class RegisterController extends Controller
                 'form'   => $form->createView(),
             ));
 
-        return $this->render('MFBAccountBundle:Register:index.html.twig');
     }
     /**
      * Creates a new Account entity.
@@ -44,7 +43,7 @@ class RegisterController extends Controller
             return $this->redirect($this->generateUrl('mfb_account_login', array('id' => $entity->getId())));
         }
 
-        return $this->render('MFBAccountBundle:Account:new.html.twig', array(
+        return $this->render('MFBAccountBundle:Register:index.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
             ));
