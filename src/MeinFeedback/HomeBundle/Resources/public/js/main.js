@@ -1,10 +1,6 @@
 $(document).ready(function() {
 
-// Add spin.js to lazy load container
-
-$('.lazy-container').spin({ color: '#000'});
-
-// Lazy loading. 
+// Lazy loading.
 $("img.lazy").lazyload({ 
   // The image starts loading 200 px before it is in viewport
    threshold : 200,
@@ -109,23 +105,4 @@ $('#menu a').click(function (e) {
         if ($('.btn-nav').is(":visible"))
           $('.btn-nav').click();
       });
-
-//  Remove logo from menu. when mobile view
-var jRes = jRespond([
-    {
-        label: 'mobile',
-        enter: 0,
-        exit: 768
-    }
-]);
-
-jRes.addFunc({
-    breakpoint: 'mobile',
-    enter: function() {
-    $('h1').fadeOut('slow');          
-    },
-    exit: function() {
-  $('h1').fadeIn('slow');
-    }
-});
 });
