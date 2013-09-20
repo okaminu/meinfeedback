@@ -1,0 +1,19 @@
+mfb_admin_homepage:
+    pattern:  /
+    defaults: { _controller: MFBAdminBundle:Default:index }
+
+mfb_admin_login_check:
+    pattern: /login_check
+    defaults: { _controller: MFBAdminBundle:Default:index }
+
+mfb_admin_logout:
+    pattern: /logout
+    defaults: { _controller: MFBAdminBundle:Default:index }
+
+mfb_location:
+    pattern: /about_me
+    defaults: { _controller: MFBAdminBundle:Default:location }
+
+mfb_add_customer:
+    pattern: /add_customer
+    defaults: { _controller: MFBAdminBundle:Default:customer }

@@ -3,7 +3,7 @@ security:
         main:
             entity:
                 class: MFB\AccountBundle\Entity\Account
-                property: username
+                property: email
     encoders:
             MFB\AccountBundle\Entity\Account: sha1
     role_hierarchy:
@@ -17,10 +17,10 @@ security:
         secured_area:
             pattern:    ^/admin/
             form_login:
-                check_path: mfb_account_login_check
+                check_path: mfb_admin_homepage
                 login_path: mfb_account_login
             logout:
-                path:   /logout
+                path:   mfb_admin_logout
                 target: /
 
     access_control:

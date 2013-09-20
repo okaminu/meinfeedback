@@ -1,3 +1,7 @@
+mfb_admin:
+    resource: "@MFBAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
 mfb_account:
     resource: "@MFBAccountBundle/Resources/config/routing.yml"
     prefix:   /

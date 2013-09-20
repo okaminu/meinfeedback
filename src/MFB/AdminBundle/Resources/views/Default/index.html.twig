@@ -1,0 +1,36 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Welcome to MeinFeedback{% endblock %}
+
+{% block body %}
+    <!-- Brand and Navigation -->
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo.png') }}"/></h1>
+            <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
+
+
+            <div class="nav-collapse collapse">
+                <ul class="nav navigation" id="menu">
+                    <li class="active"><a title="Start" class="scroll brand-1" href="#home">Dashboard</a></li>
+                    <li><a title="Location" href="{{ path('mfb_location') }}" class="scroll fadeto brand-4 iframe" rel="nofollow">Location</a></li>
+                    <li><a title="Add customer" href="{{ path('mfb_add_customer') }}" class="scroll fadeto brand-4 iframe" rel="nofollow">Add Customer</a></li>
+                    <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">Logout</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Home Page -->
+
+
+<div id="home" class="page color-1" style="background:url('{{ asset('bundles/meinfeedbackhome/images/bg_1.png') }}') #b2b2b2 no-repeat; height:500px;">
+    <div class="inner-page">
+        <div class="page-headline_start large">Ihre Kunden lieben Ihre Produkte. Und Ihren Service.</br> Zeigen Sie es - mit Mein<span style="color:#5aff6a;">Feedback</span></h2>
+        </div>
+    </div>
+
+
+
+{% endblock %}
