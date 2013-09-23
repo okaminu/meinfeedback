@@ -6,24 +6,29 @@
 
     <div class="formular">
         <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Places setting</div>
-
         <div class="places">
 
 
-            <form id="" action="assets/img/joker.png" enctype="multipart/form-data" class="form-inline">
-                <input name="Quelle" value="" type="hidden">
-                <input name="register-lang" id="register-lang" value="de" type="hidden">
-                <div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
 
-                    <input name="firma" id="firma" class="required fr_input_txt fr_97_5pro breite490" type="text" placeholder="Firma*">
-                    <input name="address" id="address" class="required fr_input_txt fr_97_5pro breite490" type="text" placeholder="Berlinstraße 31, 10090, Berlin*">
+            {#<form id="" action="assets/img/joker.png" enctype="multipart/form-data" class="form-inline">#}
 
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">
+            <div>
+                {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Firma*'} }) }}
+                {{ form_errors(form.name) }}
+            </div>
+            <div>
+                {{ form_widget(form.address, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Berlinstraße 31, 10090, Berlin*'} }) }}
+                {{ form_errors(form.address) }}
+            </div>
 
+            <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">
 
-            </form>
+            {{ form_end(form) }}
 
         </div>
+
     </div>
 
 {% endblock %}
