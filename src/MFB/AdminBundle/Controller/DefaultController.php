@@ -2,9 +2,13 @@
 
 namespace MFB\AdminBundle\Controller;
 
+use Doctrine\DBAL\DBALException;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
+use MFB\CustomerBundle\Entity\Customer;
+use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -34,10 +38,12 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('mfb_location', array('id' => $entity->getId())));
+
+            return $this->redirect($this->generateUrl('mfb_location'));
         }
 
         return $this->render('MFBAdminBundle:Default:location.html.twig', array(
@@ -46,8 +52,44 @@ class DefaultController extends Controller
             ));
     }
 
-    public function customerAction()
+    public function customerAction(Request $request)
     {
-        return $this->render('MFBAdminBundle:Default:customer.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        $token = $this->get('security.context')->getToken();
+        $accountId = $token->getUser()->getId();
+
+        $entity = new Customer();
+        $entity->setAccountId($accountId);
+
+        $form = $this->createForm(new CustomerType(), $entity, array(
+                'action' => $this->generateUrl('mfb_add_customer'),
+                'method' => 'POST',
+            ));
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            try {
+                $em->persist($entity);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail())));
+            } catch (DBALException $ex) {
+                $ex = $ex->getPrevious();
+                if ($ex instanceof \PDOException && $ex->getCode() == 23000 ) {
+                    $form->get('email')->addError( new FormError('Email already exists'));
+                } else {
+                    $form->addError( new FormError($ex->getMessage()));
+                }
+
+            }
+        }
+
+        return $this->render('MFBAdminBundle:Default:customer.html.twig', array(
+                'entity' => $entity,
+                'form'   => $form->createView(),
+                'added_email' => $request->get('added_email')
+            ));
     }
 }

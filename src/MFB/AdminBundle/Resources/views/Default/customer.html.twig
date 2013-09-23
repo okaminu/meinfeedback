@@ -6,13 +6,28 @@
 
     <!-- Contact Us -->
     <div>
+        {% if added_email %}
+        <div class="alert alert-success">
+            <strong>Well done!</strong> Customer added ({{ added_email }})
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+        </div>
+        {% endif %}
         <div class="row-fluid inner-page contact">
             <div class="span6">
                 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Customer Form</div>
-                <input name="email" id="email" class="required validate-email fr_input_txt fr_97_5pro breite490" type="text" placeholder="Customers email*">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+
+                <div>
+                    {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
+                    {{ form_errors(form.email) }}
+                </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
+
+                {{ form_end(form) }}
+
             </div>
 
         </div>

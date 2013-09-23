@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new MFB\AccountBundle\MFBAccountBundle(),
             new MFB\AdminBundle\MFBAdminBundle(),
             new MFB\ChannelBundle\MFBChannelBundle(),
+            new MFB\CustomerBundle\MFBCustomerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
