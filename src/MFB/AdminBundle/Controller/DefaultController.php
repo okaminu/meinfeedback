@@ -74,6 +74,9 @@ class DefaultController extends Controller
                 $em->persist($entity);
                 $em->flush();
 
+                $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId'=>$accountId));
+                $this->get('mfb_email.sender')->createForAccountChannel($entity, $accountChannel);
+
                 return $this->redirect($this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail())));
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();

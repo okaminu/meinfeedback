@@ -1,0 +1,8 @@
+parameters:
+    mfb_email.example.class: MFB\EmailBundle\Service\Sender
+
+services:
+    mfb_email.sender:
+        class: %mfb_email.example.class%
+        arguments: [@mailer, @templating]
+#        arguments: [@service_id, "plain_value", %parameter%]
