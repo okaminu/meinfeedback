@@ -7,9 +7,9 @@ parameters:
     database_password: '<%= database[:password] %>'
 
     mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_host:       email-smtp.us-east-1.amazonaws.com
+    mailer_user:       AKIAIMXXXSM5BZRMMFMA
+    mailer_password:   "AoHK78zsZG4+22dcVRAx7JLe4HnpeFhOBsZos8KI0Y2y"
 
     locale:            en
     secret:            MoreSecretKeyHere

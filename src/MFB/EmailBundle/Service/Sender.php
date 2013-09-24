@@ -31,7 +31,7 @@ class Sender
         $message = new \Swift_Message();
         $message_title = 'Please leave feedback for '.$channel->getName();
 
-        $message->setFrom( array( 'info@meinfeedback.net' => 'MeinFeedback.net' ) );
+        $message->setFrom( array( 'mazvydas@meinfeedback.net' => 'MeinFeedback.net' ) );
         $message->setTo($customer->getEmail());
         $message->setSubject($message_title);
 
