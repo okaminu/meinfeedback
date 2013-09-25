@@ -7,9 +7,11 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
+use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends Controller
 {
@@ -74,8 +76,25 @@ class DefaultController extends Controller
                 $em->persist($entity);
                 $em->flush();
 
-                $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId'=>$accountId));
-                $this->get('mfb_email.sender')->createForAccountChannel($entity, $accountChannel);
+                $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+                    array('accountId'=>$accountId)
+                );
+
+                $invite = new FeedbackInvite();
+                $invite->setAccountId($entity->getAccountId());
+                $invite->setCustomerId($entity->getId());
+                $invite->setChannelId($accountChannel->getId());
+                $invite->updatedTimestamps();
+                $em->persist($invite);
+                $em->flush();
+
+                $inviteUrl  = $this->generateUrl(
+                    'mfb_feedback_create_with_invite',
+                    array('token' => $invite->getToken()),
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
+
+                $this->get('mfb_email.sender')->createForAccountChannel($entity, $accountChannel, $inviteUrl);
 
                 return $this->redirect($this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail())));
             } catch (DBALException $ex) {

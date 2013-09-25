@@ -26,7 +26,7 @@ class Sender
 
     }
 
-    public function createForAccountChannel(Customer $customer, AccountChannel $channel)
+    public function createForAccountChannel(Customer $customer, AccountChannel $channel, $inviteUrl)
     {
         $message = new \Swift_Message();
         $message_title = 'Please leave feedback for '.$channel->getName();
@@ -41,7 +41,7 @@ class Sender
                 array(
                     'email_title' => $message_title,
                     'account_channel_name' => $channel->getName(),
-                    'create_feedback_link' => 'http://www.meinfeedback.net/'
+                    'create_feedback_link' => $inviteUrl
                 )
             ),
             'text/html'

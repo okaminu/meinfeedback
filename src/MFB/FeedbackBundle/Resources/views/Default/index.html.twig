@@ -1,0 +1,23 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}MeinFeedback{% endblock %}
+
+{% block body %}
+    <div>
+        <div class="row-fluid inner-page contact">
+            <div class="span6">
+                <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
+                    Please leave feedback about {{ account_channel_name }}
+                </div>
+                <form method="post" action="{{ path('mfb_feedback_save_with_invite', {'token': token}) }}">
+                <textarea rows="6" name="feedback" placeholder="Feedback"></textarea>
+                <div style="width:250px; padding-top:10px;">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
