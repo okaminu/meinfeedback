@@ -1,0 +1,3 @@
+mfb_widget_account_channel:
+    pattern:  /account_channel/{accountId}
+    defaults: { _controller: MFBWidgetBundle:Default:index }

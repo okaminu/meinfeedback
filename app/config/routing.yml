@@ -1,3 +1,7 @@
+mfb_widget:
+    resource: "@MFBWidgetBundle/Resources/config/routing.yml"
+    prefix:   /widget
+
 mfb_account_profile:
     resource: "@MFBAccountProfileBundle/Resources/config/routing.yml"
     prefix:   /

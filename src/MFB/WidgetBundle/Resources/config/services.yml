@@ -1,0 +1,7 @@
+parameters:
+#    mfb_widget.example.class: MFB\WidgetBundle\Example
+
+services:
+#    mfb_widget.example:
+#        class: %mfb_widget.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
