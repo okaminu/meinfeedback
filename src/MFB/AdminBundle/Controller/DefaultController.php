@@ -17,7 +17,23 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('MFBAdminBundle:Default:index.html.twig');
+        $token = $this->get('security.context')->getToken();
+        $accountId = $token->getUser()->getId();
+
+        $em = $this->getDoctrine()->getManager();
+            $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
+                array(
+                    'accountId' => $accountId
+                ),
+                array('id'=>'DESC')
+            );
+
+        return $this->render(
+            'MFBAdminBundle:Default:index.html.twig',
+            array(
+                'feedbackList'=>$feedbackList
+            )
+        );
     }
     public function locationAction(Request $request)
     {

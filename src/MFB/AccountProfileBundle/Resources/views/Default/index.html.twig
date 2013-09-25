@@ -1,0 +1,43 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Feedbacks für {{ account_channel_name }}{% endblock %}
+
+{% block body %}
+    <!-- Brand and Navigation -->
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo.png') }}"/></h1>
+            <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
+
+
+        </div>
+    </header>
+
+    <!-- Home Page -->
+
+    <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks für {{ account_channel_name }}</h3>
+
+    <div style="padding:10px">
+
+        {% for feedback in feedbackList %}
+        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+            <tbody><tr>
+                <td width="80%" style="padding:10px;">
+            <span class="comment-text left" itemprop="description">
+                {{ feedback.content }}
+            </span>
+                </td>
+
+                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                    <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
+                        <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
+                    </time>
+                </td>
+            </tr>
+            </tbody></table>
+        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+        <div class="username">Anonymous says:</div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

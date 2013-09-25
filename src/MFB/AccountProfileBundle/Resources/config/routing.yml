@@ -1,0 +1,3 @@
+mfb_account_profile_homepage:
+    pattern:  /feedbacks/{accountId}
+    defaults: { _controller: MFBAccountProfileBundle:Default:index }

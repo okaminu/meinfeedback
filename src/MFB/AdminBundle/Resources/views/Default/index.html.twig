@@ -22,70 +22,31 @@
         </div>
     </header>
 
-    <!-- Home Page -->
-
     <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks</h3>
 
     <div style="padding:10px">
-        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-            <tbody><tr>
-                <td width="80%" style="padding:10px;">
+
+        {% for feedback in feedbackList %}
+            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                <tbody><tr>
+                    <td width="80%" style="padding:10px;">
             <span class="comment-text left" itemprop="description">
-                Sehr schnelle Lieferung.
+                {{ feedback.content }}
             </span>
-                </td>
+                    </td>
 
-                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                    <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
-                        <span title="2013-08-19" class="timeago">1 day ago</span>
-                    </time>
-                </td>
-            </tr>
-            </tbody></table>
-        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-        <div class="username">Anonymous [1] says:</div>
+                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                        <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
+                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
+                        </time>
+                    </td>
+                </tr>
+                </tbody></table>
+            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+            <div class="username">Anonymous says:</div>
+        {% else %}
+            No feedbacks yet.
+        {% endfor %}
 
-                <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                    <tbody><tr>
-                        <td width="80%" style="padding:10px;">
-            <span class="comment-text left" itemprop="description">
-                Wäre es ein kleiner Artikel würde ich ihn zum Umtausch zurückschicken.
-Hätte ich nicht per Nachnahme bezahlt, hätte ich auf jeden Fall um einen Nachlass gebeten.
-Aufhängematerial (Dübel und Haken) haben gefeht.
-Aufhängematerial (Dübel und Aufhängehaken) waren leider nicht im Paket.
-            </span>
-                        </td>
-
-                        <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                            <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
-                                <span title="2013-08-19" class="timeago">2 days ago</span>
-                            </time>
-                        </td>
-                    </tr>
-                    </tbody></table>
-                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-                <div class="username">Anonymous [2] says:</div>
-
-
-                    <div style="padding:10px 0 10px 0">
-                        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                            <tbody><tr>
-                                <td width="80%" style="padding:10px;">
-            <span class="comment-text left" itemprop="description">
-                Unkompliziert.
-            </span>
-                                </td>
-
-                                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                                    <time itemprop="datePublished" datetime="2013-08-19T21-41-51">
-                                        <span title="2013-08-19" class="timeago">3 days ago</span>
-                                    </time>
-                                </td>
-                            </tr>
-                            </tbody></table>
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-                        <div class="username">Anonymous [3] says:</div>
-
-                    </div>
     </div>
 {% endblock %}
