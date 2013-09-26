@@ -40,7 +40,7 @@ class RegisterController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('mfb_account_login', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('mfb_account_login'));
         }
 
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(

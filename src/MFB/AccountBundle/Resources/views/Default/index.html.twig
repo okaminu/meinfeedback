@@ -6,9 +6,15 @@
     <div class="formular">
         <h3>Kunden Login</h3>
 
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error.message }}
+            </div>
+        {% endif %}
+
         <div class="kontaktform">
 
-            <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" target="_top">
+            <form action="{{ path("mfb_admin_login_check") }}" method="post" id="login" class="form-inline" target="_top">
 
                 <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld breite240"/>
                 <input type="password" id="password" name="_password"  class="log_feld breite240"  placeholder="Passwort"/>
