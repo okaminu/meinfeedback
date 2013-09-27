@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new MFB\AccountProfileBundle\MFBAccountProfileBundle(),
             new MFB\WidgetBundle\MFBWidgetBundle(),
             new MFB\ReskribeBundle\MFBReskribeBundle(),
+            new \Sensio\Bundle\BuzzBundle\SensioBuzzBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

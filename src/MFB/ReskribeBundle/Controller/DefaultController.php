@@ -23,4 +23,18 @@ class DefaultController extends Controller
         }
         return new Response('OK');
     }
+
+    public function successAction(Request $request)
+    {
+        $uid = $request->get('uid');
+        if ($uid) {
+            $em = $this->getDoctrine()->getManager();
+            $account = $em->find('MFBAccountBundle:Account', $uid);
+            $account->setIsEnabled(true);
+            $em->persist($account);
+            $em->flush();
+            return $this->redirect($this->generateUrl('mfb_account_login'));
+        }
+        throw new BadRequestHttpException('no needed data set');
+    }
 }

@@ -274,7 +274,7 @@ class Account implements AdvancedUserInterface
      */
     public function isAccountNonLocked()
     {
-        return $this->getIsLocked();
+        return !$this->getIsLocked();
     }
 
     /**

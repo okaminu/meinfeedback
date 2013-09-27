@@ -42,7 +42,8 @@ class RegisterController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect('https://meinfeedback.reskribe.com/b01');
+            $url = $this->get('mfb_reskribe.api')->getSignUrl($entity);
+            return $this->redirect($url);
         }
 
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(

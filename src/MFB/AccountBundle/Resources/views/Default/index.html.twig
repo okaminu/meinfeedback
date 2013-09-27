@@ -9,7 +9,7 @@
         {% if error %}
             <div class="alert alert-error">
                 {% if error.getMessageKey == 'Account is disabled.' %}
-                    We are waiting for payment. If you did not do that yet, please click here : <a href="https://meinfeedback.reskribe.com/b01">https://meinfeedback.reskribe.com/b01</a> <br/>
+                    We are waiting for payment. If you did not do that yet, please click here : <a href="{{ pay_url }}">{{ pay_url }}</a> <br/>
                     If you already paid, please try again latter or contact support.
                 {% else %}
                     {{ error.message }}

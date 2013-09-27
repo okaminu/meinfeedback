@@ -3,3 +3,6 @@ mfb_reskribe_homepage:
     defaults: { _controller: MFBReskribeBundle:Default:index }
     requirements: { _method: post }
 
+mfb_reskribe_homepage:
+    pattern:  /success
+    defaults: { _controller: MFBReskribeBundle:Default:success }

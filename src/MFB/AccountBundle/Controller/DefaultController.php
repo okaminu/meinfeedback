@@ -4,6 +4,7 @@ namespace MFB\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class DefaultController extends Controller
@@ -16,9 +17,15 @@ class DefaultController extends Controller
             $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
+        $payUrl = '';
+        if ($error && $error instanceof DisabledException) {
+            $payUrl = $this->get('mfb_reskribe.api')->getSignUrl($error->getUser());
+        }
+
         return $this->render('MFBAccountBundle:Default:index.html.twig', array(
                 'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
                 'error'         => $error,
+                'pay_url'       => $payUrl,
             )
         );
     }
