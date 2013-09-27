@@ -8,7 +8,12 @@
 
         {% if error %}
             <div class="alert alert-error">
-                {{ error.message }}
+                {% if error.getMessageKey == 'Account is disabled.' %}
+                    We are waiting for payment. If you did not do that yet, please click here : <a href="https://meinfeedback.reskribe.com/b01">https://meinfeedback.reskribe.com/b01</a> <br/>
+                    If you already paid, please try again latter or contact support.
+                {% else %}
+                    {{ error.message }}
+                {% endif %}
             </div>
         {% endif %}
 

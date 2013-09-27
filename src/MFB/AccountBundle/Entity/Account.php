@@ -3,6 +3,7 @@
 namespace MFB\AccountBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @UniqueEntity(fields="email", message="Email already taken")
  */
-class Account implements UserInterface
+class Account implements AdvancedUserInterface
 {
     /**
      * @var integer
@@ -57,6 +58,19 @@ class Account implements UserInterface
      */
     private $salt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="is_enabled", type="boolean")
+     */
+    private $isEnabled;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="is_locked", type="boolean")
+     */
+    private $isLocked;
 
     /**
      * Get id
@@ -179,6 +193,38 @@ class Account implements UserInterface
     }
 
     /**
+     * @param string $isEnabled
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * @param string $isLocked
+     */
+    public function setIsLocked($isLocked)
+    {
+        $this->isLocked = $isLocked;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsLocked()
+    {
+        return $this->isLocked;
+    }
+
+    /**
      * Returns the username used to authenticate the user.
      *
      * @return string The username
@@ -199,5 +245,65 @@ class Account implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * Checks whether the user's account has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw an AccountExpiredException and prevent login.
+     *
+     * @return Boolean true if the user's account is non expired, false otherwise
+     *
+     * @see AccountExpiredException
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is locked.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a LockedException and prevent login.
+     *
+     * @return Boolean true if the user is not locked, false otherwise
+     *
+     * @see LockedException
+     */
+    public function isAccountNonLocked()
+    {
+        return $this->getIsLocked();
+    }
+
+    /**
+     * Checks whether the user's credentials (password) has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a CredentialsExpiredException and prevent login.
+     *
+     * @return Boolean true if the user's credentials are non expired, false otherwise
+     *
+     * @see CredentialsExpiredException
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is enabled.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a DisabledException and prevent login.
+     *
+     * @return Boolean true if the user is enabled, false otherwise
+     *
+     * @see DisabledException
+     */
+    public function isEnabled()
+    {
+        return $this->getIsEnabled();
     }
 }

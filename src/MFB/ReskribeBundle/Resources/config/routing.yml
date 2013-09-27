@@ -1,0 +1,5 @@
+mfb_reskribe_homepage:
+    pattern:  /callback
+    defaults: { _controller: MFBReskribeBundle:Default:index }
+    requirements: { _method: post }
+

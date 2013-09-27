@@ -1,3 +1,7 @@
+mfb_reskribe:
+    resource: "@MFBReskribeBundle/Resources/config/routing.yml"
+    prefix:   /reskribe
+
 mfb_widget:
     resource: "@MFBWidgetBundle/Resources/config/routing.yml"
     prefix:   /widget

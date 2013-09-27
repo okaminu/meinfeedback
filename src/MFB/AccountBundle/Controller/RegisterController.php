@@ -36,11 +36,13 @@ class RegisterController extends Controller
             $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
             $entity->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
             $entity->setPassword($encoder->encodePassword($entity->getPassword(), $entity->getSalt()));
+            $entity->setIsEnabled(false);
+            $entity->setIsLocked(false);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('mfb_account_login'));
+            return $this->redirect('https://meinfeedback.reskribe.com/b01');
         }
 
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(
