@@ -4,6 +4,7 @@ namespace MFB\EmailBundle\Service;
 
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
+use MFB\EmailBundle\Entity\EmailTemplate;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 
 
@@ -26,10 +27,14 @@ class Sender
 
     }
 
-    public function createForAccountChannel(Customer $customer, AccountChannel $channel, $inviteUrl)
-    {
+    public function createForAccountChannel(
+        Customer $customer,
+        AccountChannel $channel,
+        EmailTemplate $template,
+        $inviteUrl
+    ) {
         $message = new \Swift_Message();
-        $message_title = 'Please leave feedback for '.$channel->getName();
+        $message_title = $template->getTitle();
 
         $message->setFrom( array( 'mazvydas@meinfeedback.net' => 'MeinFeedback.net' ) );
         $message->setTo($customer->getEmail());
@@ -40,6 +45,7 @@ class Sender
                 'MFBEmailBundle:Default:AccountChannelEmail.html.twig',
                 array(
                     'email_title' => $message_title,
+                    'email_content' => $template->getTemplateCode(),
                     'account_channel_name' => $channel->getName(),
                     'create_feedback_link' => $inviteUrl
                 )

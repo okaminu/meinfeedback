@@ -17,3 +17,7 @@ mfb_location:
 mfb_add_customer:
     pattern: /add_customer
     defaults: { _controller: MFBAdminBundle:Default:customer }
+
+mfb_admin_edit_email_template:
+    pattern: /edit_template
+    defaults: { _controller: MFBAdminBundle:EmailTemplates:edit }
