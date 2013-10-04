@@ -10,34 +10,32 @@
                 <source>
                     <![CDATA[
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Hi there!
                 </p>
                 <p>
-                    To leave feedback click on this link: <a href="{{ create_feedback_link }}">{{ create_feedback_link }}</a>
+                    As we are constantly trying to improve our services and provide the best shopping experience for you, we would sincerely value your opinion and appreciate your feedback regarding our performance as a seller and your overall experience.
                 </p>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Simply follow the link below to submit your feedback: #LINK#
                 </p>
                 <p>
-                    Regards,<br>
-                    {{ account_channel_name }}
+                    Thank you for your time – we appreciate it!
                 </p>
                             ]]>
                 </source>
                 <target>
                     <![CDATA[
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Hi there!
                 </p>
                 <p>
-                    To leave feedback click on this link: <a href="{{ create_feedback_link }}">{{ create_feedback_link }}</a>
+                    As we are constantly trying to improve our services and provide the best shopping experience for you, we would sincerely value your opinion and appreciate your feedback regarding our performance as a seller and your overall experience.
                 </p>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Simply follow the link below to submit your feedback: #LINK#
                 </p>
                 <p>
-                    Regards,<br>
-                    {{ account_channel_name }}
+                    Thank you for your time – we appreciate it!
                 </p>
                             ]]>
                 </target>

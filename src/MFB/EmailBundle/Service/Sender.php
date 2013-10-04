@@ -36,22 +36,35 @@ class Sender
         $message = new \Swift_Message();
         $message_title = $template->getTitle();
 
-        $message->setFrom( array( 'mazvydas@meinfeedback.net' => 'MeinFeedback.net' ) );
+        $message->setFrom(array('mazvydas@meinfeedback.net' => 'MeinFeedback.net'));
         $message->setTo($customer->getEmail());
         $message->setSubject($message_title);
 
+        $emailContent = $template->getTemplateCode();
+        $emailContent = $this->replacePlaceHolders($emailContent, array("#LINK#" => $inviteUrl));
+
+        $emailBody = $this->twig->render(
+            'MFBEmailBundle:Default:AccountChannelEmail.html.twig',
+            array(
+                'email_title' => $message_title,
+                'email_content' => $emailContent,
+                'account_channel_name' => $channel->getName(),
+                'create_feedback_link' => $inviteUrl
+            )
+        );
         $message->setBody(
-            $this->twig->render(
-                'MFBEmailBundle:Default:AccountChannelEmail.html.twig',
-                array(
-                    'email_title' => $message_title,
-                    'email_content' => $template->getTemplateCode(),
-                    'account_channel_name' => $channel->getName(),
-                    'create_feedback_link' => $inviteUrl
-                )
-            ),
+            $emailBody,
             'text/html'
         );
         $this->mailer->send($message);
+    }
+
+    public function replacePlaceHolders($html, $placeholders)
+    {
+        if (isset($placeholders['#LINK#'])) {
+            $placeholders['#LINK#'] = '<a href="' . $placeholders['#LINK#'] . '">' . $placeholders['#LINK#'] . '</a>';
+        }
+        $html = strtr($html, $placeholders);
+        return $html;
     }
 }

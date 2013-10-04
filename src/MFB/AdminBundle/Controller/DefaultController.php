@@ -7,6 +7,7 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
+use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -104,15 +105,36 @@ class DefaultController extends Controller
                 $em->persist($invite);
                 $em->flush();
 
+                $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
+                    array(
+                        'accountId' => $accountId,
+                        'name' => 'AccountChannel'
+                    )
+                );
+                if (!$emailTemplate) {
+                    $emailTemplate = new EmailTemplate();
+                    $emailTemplate->setTitle($this->get('translator')->trans('Please leave feedback'));
+                    $emailTemplate->setTemplateCode(
+                        $this->get('translator')->trans('default_account_channel_template')
+                    );
+                }
+
                 $inviteUrl  = $this->generateUrl(
                     'mfb_feedback_create_with_invite',
                     array('token' => $invite->getToken()),
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                $this->get('mfb_email.sender')->createForAccountChannel($entity, $accountChannel, $inviteUrl);
+                $this->get('mfb_email.sender')->createForAccountChannel(
+                    $entity,
+                    $accountChannel,
+                    $emailTemplate,
+                    $inviteUrl
+                );
 
-                return $this->redirect($this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail())));
+                return $this->redirect(
+                    $this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail()))
+                );
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();
                 if ($ex instanceof \PDOException && $ex->getCode() == 23000 ) {
