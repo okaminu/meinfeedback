@@ -23,8 +23,9 @@ class EmailTemplatesController extends Controller
         );
         if (!$emailTemplate) {
             $emailTemplate = new EmailTemplate();
-            $emailTemplate->setTitle($this->get('translator')->trans('Please leave feedback'));
-            $emailTemplate->setTemplateCode($this->get('translator')->trans('default_account_channel_template'));
+            $emailTemplate->setTitle($this->get('translator')->trans('default_template_subject'));
+            $emailTemplate->setTemplateCode($this->get('translator')->trans('default_template_body'));
+            $emailTemplate->setThankYouCode($this->get('translator')->trans('default_template_thank_you'));
         }
         $emailTemplate->setAccountId($accountId);
         $emailTemplate->setName('AccountChannel');

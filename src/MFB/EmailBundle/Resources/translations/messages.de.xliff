@@ -1,10 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1" resname="default_template_subject">
                 <source>Please leave feedback for _company_name_</source>
-                <target>Please leave feedback for _company_name_</target>
+                <target>Bitte bewerten Sie _company_name_</target>
             </trans-unit>
             <trans-unit id="2" resname="default_template_body">
                 <source>
@@ -28,18 +28,18 @@
                 <target>
                     <![CDATA[
                         <p>
-                            Hi there!
+                            Hallo!
                         </p>
                         <p>
-                            As we are constantly trying to improve our services and provide the best shopping
-                            experience for you, we would sincerely value your opinion and appreciate your feedback
-                            regarding our performance as a seller and your overall experience.
+                            Da wir ständig versuchen, unsere Dienstleistungen zu verbessern und die beste
+                            Shopping-Erlebnis für Sie, würden wir aufrichtig schätzen Ihre Meinung und freuen
+                            uns über Ihr Feedback zu unserer Leistung als Verkäufer und Ihre allgemeine Erfahrung.
                         </p>
                         <p>
-                            Simply follow the link below to submit your feedback: #LINK#
+                            Folgen Sie einfach den unten stehenden Link auf Ihr Feedback einreichen: #LINK#
                         </p>
                         <p>
-                            Thank you for your time - we appreciate it!
+                            Vielen Dank für Ihre Zeit - wir schätzen es!
                         </p>
                     ]]>
                 </target>
@@ -58,10 +58,10 @@
                 <target>
                     <![CDATA[
                         <p>
-                            Thank you for your time - we appreciate it!
+                            Vielen Dank für Ihre Zeit - wir schätzen es!
                         </p>
                         <p>
-                            Yours _company_name_
+                            Ihr _company_name_ Team
                         </p>
                     ]]>
                 </target>
