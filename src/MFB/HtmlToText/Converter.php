@@ -37,8 +37,13 @@ function convert_html_to_text($html) {
     $html = fix_newlines($html);
 
     $doc = new \DOMDocument();
-    if (!$doc->loadHTML($html))
+    if (!$doc->loadHTML('<?xml encoding="UTF-8">' .$html))
         throw new Html2TextException("Could not load HTML - badly formed?", $html);
+// dirty fix
+    foreach ($doc->childNodes as $item)
+        if ($item->nodeType == XML_PI_NODE)
+            $doc->removeChild($item); // remove hack
+    $doc->encoding = 'UTF-8'; // insert proper
 
     $output = iterate_over_node($doc);
 
