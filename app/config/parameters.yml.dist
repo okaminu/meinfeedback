@@ -1,10 +1,10 @@
 parameters:
     database_driver:   pdo_mysql
-    database_host:     '<%= database[:host] %>'
+    database_host:     'mfbdb0.cmolshlvl5b0.eu-west-1.rds.amazonaws.com'
     database_port:     ~
     database_name:     meinfeedback
-    database_user:     '<%= database[:username] %>'
-    database_password: '<%= database[:password] %>'
+    database_user:     'mfb_app'
+    database_password: 'xNzSViuaURe62QY5'
 
     mailer_transport:  smtp
     mailer_host:       email-smtp.us-east-1.amazonaws.com
