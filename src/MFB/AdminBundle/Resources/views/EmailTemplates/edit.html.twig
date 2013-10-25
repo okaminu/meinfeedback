@@ -19,6 +19,10 @@
                     {{ form_widget(form.templateCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required', 'placeholder': 'Text*'} }) }}
                     {{ form_errors(form.templateCode) }}
                 </div>
+                <div>
+                    {{ form_widget(form.thankYouCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required', 'placeholder': 'Thank you text*'} }) }}
+                    {{ form_errors(form.thankYouCode) }}
+                </div>
 
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">

@@ -34,6 +34,7 @@ class EmailTemplatesController extends Controller
 
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
+            $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
             $em->persist($emailTemplate);
             $em->flush();
 
@@ -41,6 +42,7 @@ class EmailTemplatesController extends Controller
         }
 
         $editForm->get('templateCode')->setData($this->html2plain($emailTemplate->getTemplateCode()));
+        $editForm->get('thankYouCode')->setData($this->html2plain($emailTemplate->getThankYouCode()));
         return $this->render(
             'MFBAdminBundle:EmailTemplates:edit.html.twig',
             array(
