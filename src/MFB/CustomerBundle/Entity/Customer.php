@@ -35,6 +35,33 @@ class Customer
      */
     private $accountId;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="integer")
+     */
+    private $gender;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=32)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=32)
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salutation", type="string", length=16)
+     */
+    private $salutation;
 
     /**
      * Get id
@@ -90,5 +117,69 @@ class Customer
     public function getAccountId()
     {
         return $this->accountId;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
     }
 }

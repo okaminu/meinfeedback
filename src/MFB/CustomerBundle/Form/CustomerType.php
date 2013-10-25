@@ -16,6 +16,20 @@ class CustomerType extends AbstractType
     {
         $builder
             ->add('email', 'email')
+            ->add(
+                'gender',
+                'choice',
+                array(
+                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'required' => false,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true
+                )
+            )
+            ->add('firstName')
+            ->add('lastName')
+            ->add('salutation')
         ;
     }
     
@@ -24,9 +38,11 @@ class CustomerType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'MFB\CustomerBundle\Entity\Customer'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'MFB\CustomerBundle\Entity\Customer'
+            )
+        );
     }
 
     /**
