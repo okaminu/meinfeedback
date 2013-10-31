@@ -1,0 +1,30 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Welcome to MeinFeedback{% endblock %}
+
+{% block body %}
+    <!-- Brand and Navigation -->
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo.png') }}"/></h1>
+            <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
+
+
+            <div class="nav-collapse collapse">
+                <ul class="nav navigation" id="menu">
+                    <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
+                        <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">Dashboard</a>
+                    </li>
+                    <li><a title="Account setup" href="{{ path('mfb_location') }}" class="scroll fadeto brand-4 iframe" rel="nofollow">Account Set-Up</a></li>
+                    <li{% if app.request.get('_route') == 'mfb_admin_edit_email_template' %} class="active"{% endif %}>
+                        <a title="Template setup" href="{{ path('mfb_admin_edit_email_template') }}" class="scroll fadeto brand-1" rel="nofollow">Templates Set-Up</a>
+                    </li>
+                    <li><a title="Add customer" href="{{ path('mfb_add_customer') }}" class="scroll fadeto brand-4 iframe" rel="nofollow">Add Customer</a></li>
+                    <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">Logout</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+{% endblock %}
