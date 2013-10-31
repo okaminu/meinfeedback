@@ -3,6 +3,7 @@
 namespace MFB\AdminBundle\Controller;
 
 use MFB\EmailBundle\Entity\EmailTemplate;
+use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Form\EmailTemplateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,11 @@ class EmailTemplatesController extends Controller
             $emailTemplate->setTitle($this->get('translator')->trans('default_template_subject'));
             $emailTemplate->setTemplateCode($this->get('translator')->trans('default_template_body'));
             $emailTemplate->setThankYouCode($this->get('translator')->trans('default_template_thank_you'));
+            $linkVariable = new EmailTemplateVariable();
+            $linkVariable->setType('link');
+            $linkVariable->setValue('');
+            $linkVariable->setEmailTemplate($emailTemplate);
+            $emailTemplate->addVariable($linkVariable);
         }
         $emailTemplate->setAccountId($accountId);
         $emailTemplate->setName('AccountChannel');

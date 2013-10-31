@@ -2,6 +2,7 @@
 
 namespace MFB\EmailBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,6 +57,15 @@ class EmailTemplate
      */
     private $thankYouCode;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EmailTemplateVariable", mappedBy="emailTemplate",cascade={"persist"})
+     **/
+    private $variables;
+
+    public function __construct()
+    {
+        $this->variables = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -175,4 +185,27 @@ class EmailTemplate
         return $this->thankYouCode;
     }
 
+    /**
+     * @param ArrayCollection $variables
+     */
+    public function setVariables($variables)
+    {
+        $this->variables = $variables;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getVariables()
+    {
+        return $this->variables;
+    }
+
+    /**
+     * @param EmailTemplateVariable $variable
+     */
+    public function addVariable($variable)
+    {
+        $this->variables->add($variable);
+    }
 }

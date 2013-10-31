@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MFB\EmailBundle\Entity\EmailTemplate;
 
 /**
  * Feedback
@@ -57,6 +58,13 @@ class Feedback
      */
     private $content;
 
+    /**
+     * @var EmailTemplate
+     *
+     * @ORM\ManyToOne(targetEntity="\MFB\EmailBundle\Entity\EmailTemplate")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     **/
+    private $emailTemplate;
 
     /**
      * Get id
@@ -181,6 +189,22 @@ class Feedback
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @param EmailTemplate $emailTemplate
+     */
+    public function setEmailTemplate($emailTemplate)
+    {
+        $this->emailTemplate = $emailTemplate;
+    }
+
+    /**
+     * @return EmailTemplate
+     */
+    public function getEmailTemplate()
+    {
+        return $this->emailTemplate;
     }
 
     /**
