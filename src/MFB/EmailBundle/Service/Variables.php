@@ -17,7 +17,8 @@ class Variables
      * @var array
      */
     private $allVariables = array(
-        'link', 'firstname', 'lastname', 'sal'
+        'link', 'firstname', 'lastname', 'sal', 'homepage',
+        'service_name', 'service_date', 'reference_id'
     );
 
     public function __construct(TranslatorInterface $translator)
@@ -66,8 +67,16 @@ class Variables
             $variables[] = array(
                 'type' => strtolower($variable),
                 'name' => '#'.strtoupper($variable).'#',
-                'description' => $this->translator->trans('email_variable_desc_'.strtolower($variable)),
-                'example' => $this->translator->trans('email_variable_example_'.strtolower($variable))
+                'description' => $this->translator->trans(
+                    'email_variable_desc_'.strtolower($variable),
+                    array('email_variable_desc_'.strtolower($variable) => '')
+                ),
+                'example' => $this->translator->trans(
+                    'email_variable_example_'.strtolower($variable),
+                    array(
+                        'email_variable_example_'.strtolower($variable)=>''
+                    )
+                )
             );
         }
         return $variables;
