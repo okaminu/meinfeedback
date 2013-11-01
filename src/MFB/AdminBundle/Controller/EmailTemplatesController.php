@@ -32,6 +32,8 @@ class EmailTemplatesController extends Controller
             $linkVariable->setValue('');
             $linkVariable->setEmailTemplate($emailTemplate);
             $emailTemplate->addVariable($linkVariable);
+            $em->persist($emailTemplate);
+            $em->flush();
         }
         $emailTemplate->setAccountId($accountId);
         $emailTemplate->setName('AccountChannel');
@@ -64,6 +66,37 @@ class EmailTemplatesController extends Controller
 
     }
 
+    public function listPossibleVariablesAction($emailTemplateId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $emailTemplate = $em->find('MFBEmailBundle:EmailTemplate', $emailTemplateId);
+
+        $variables = $this->get('mfb_email.variables')->getPossibleVariables($emailTemplate);
+        return $this->render(
+            'MFBAdminBundle:EmailTemplates:possibleVariablesList.html.twig',
+            array(
+                'emailTemplateId' => $emailTemplateId,
+                'variables' => $variables
+            )
+        );
+    }
+
+    public function addVariableAction($emailTemplateId, $variableType)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $emailTemplate = $em->find('MFBEmailBundle:EmailTemplate', $emailTemplateId);
+
+        $linkVariable = new EmailTemplateVariable();
+        $linkVariable->setType($variableType);
+        $linkVariable->setValue('');
+        $linkVariable->setEmailTemplate($emailTemplate);
+        $em->persist($linkVariable);
+        $em->flush();
+
+        return $this->redirect(
+            $this->generateUrl('mfb_admin_list_possible_variables', array('emailTemplateId' => $emailTemplateId))
+        );
+    }
     /**
      * Creates a form to edit a EmailTemplate entity.
      *

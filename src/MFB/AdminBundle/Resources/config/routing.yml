@@ -21,3 +21,12 @@ mfb_add_customer:
 mfb_admin_edit_email_template:
     pattern: /edit_template
     defaults: { _controller: MFBAdminBundle:EmailTemplates:edit }
+
+mfb_admin_list_possible_variables:
+    pattern: /template/{emailTemplateId}/list_variables
+    defaults: { _controller: MFBAdminBundle:EmailTemplates:listPossibleVariables }
+
+mfb_admin_add_variable:
+    pattern: /template/{emailTemplateId}/add_variable/{variableType}
+    defaults: { _controller: MFBAdminBundle:EmailTemplates:addVariable }
+
