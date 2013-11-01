@@ -194,7 +194,7 @@ class EmailTemplate
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|EmailTemplateVariable[]
      */
     public function getVariables()
     {

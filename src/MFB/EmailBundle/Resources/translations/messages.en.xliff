@@ -3,27 +3,12 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1" resname="default_template_subject">
-                <source>Please leave feedback for _company_name_</source>
+                <source>default_template_subject</source>
                 <target>Please leave feedback for _company_name_</target>
             </trans-unit>
             <trans-unit id="2" resname="default_template_body">
                 <source>
-                    <![CDATA[
-                        <p>
-                            Hi there!
-                        </p>
-                        <p>
-                            As we are constantly trying to improve our services and provide the best shopping
-                            experience for you, we would sincerely value your opinion and appreciate your feedback
-                            regarding our performance as a seller and your overall experience.
-                        </p>
-                        <p>
-                            Simply follow the link below to submit your feedback: #LINK#
-                        </p>
-                        <p>
-                            Thank you for your time - we appreciate it!
-                        </p>
-                    ]]>
+                    default_template_body
                 </source>
                 <target>
                     <![CDATA[
@@ -65,6 +50,38 @@
                         </p>
                     ]]>
                 </target>
+            </trans-unit>
+            <trans-unit id="4" resname="email_variable_desc_link">
+                <source>Link there customer can write his feedback</source>
+                <target>Link there customer can write his feedback</target>
+            </trans-unit>
+            <trans-unit id="5" resname="email_variable_example_link">
+                <source>http://meinfeedback.net/write/a1245c45bf</source>
+                <target>http://meinfeedback.net/write/a1245c45bf</target>
+            </trans-unit>
+            <trans-unit id="6" resname="email_variable_desc_firstname">
+                <source>Customers first name</source>
+                <target>Customers first name</target>
+            </trans-unit>
+            <trans-unit id="7" resname="email_variable_example_firstname">
+                <source>John</source>
+                <target>John</target>
+            </trans-unit>
+            <trans-unit id="8" resname="email_variable_desc_lastname">
+                <source>Customers last name</source>
+                <target>Customers last name</target>
+            </trans-unit>
+            <trans-unit id="9" resname="email_variable_example_lastname">
+                <source>Doe</source>
+                <target>Doe</target>
+            </trans-unit>
+            <trans-unit id="10" resname="email_variable_desc_sal">
+                <source>Salutation for customer</source>
+                <target>Salutation for customer</target>
+            </trans-unit>
+            <trans-unit id="11" resname="email_variable_example_sal">
+                <source>Mr.</source>
+                <target>Mr.</target>
             </trans-unit>
         </body>
     </file>

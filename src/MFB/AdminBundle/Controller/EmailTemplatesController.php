@@ -50,9 +50,13 @@ class EmailTemplatesController extends Controller
 
         $editForm->get('templateCode')->setData($this->html2plain($emailTemplate->getTemplateCode()));
         $editForm->get('thankYouCode')->setData($this->html2plain($emailTemplate->getThankYouCode()));
+
+        $variables = $this->get('mfb_email.variables')->getVariables($emailTemplate);
+
         return $this->render(
             'MFBAdminBundle:EmailTemplates:edit.html.twig',
             array(
+                'variables' => $variables,
                 'entity'      => $emailTemplate,
                 'form'   => $editForm->createView(),
             )

@@ -30,26 +30,13 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {% for placeholder in variables %}
                         <tr>
-                            <td>#LINK#</td>
-                            <td> Link there customer can write his feedback</td>
-                            <td> http://meinfeedback.net/write/a1245c45bf</td>
+                            <td>{{ placeholder.name }}</td>
+                            <td>{{ placeholder.description }}</td>
+                            <td>{{ placeholder.example }}</td>
                         </tr>
-                        <tr>
-                            <td>#FIRSTNAME#</td>
-                            <td> Customers first name </td>
-                            <td> John </td>
-                        </tr>
-                        <tr>
-                            <td>#LASTNAME#</td>
-                            <td> Customers last name </td>
-                            <td> Doe </td>
-                        </tr>
-                        <tr>
-                            <td>#SAL#</td>
-                            <td> Salutation for customer </td>
-                            <td> Mr. </td>
-                        </tr>
+                        {% endfor %}
                         </tbody>
                         <tfoot>
                         <tr>

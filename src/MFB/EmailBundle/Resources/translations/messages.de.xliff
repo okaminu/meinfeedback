@@ -3,27 +3,12 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1" resname="default_template_subject">
-                <source>Please leave feedback for _company_name_</source>
+                <source>default_template_subject</source>
                 <target>Bitte bewerten Sie _company_name_</target>
             </trans-unit>
             <trans-unit id="2" resname="default_template_body">
                 <source>
-                    <![CDATA[
-                        <p>
-                            Hi there!
-                        </p>
-                        <p>
-                            As we are constantly trying to improve our services and provide the best shopping
-                            experience for you, we would sincerely value your opinion and appreciate your feedback
-                            regarding our performance as a seller and your overall experience.
-                        </p>
-                        <p>
-                            Simply follow the link below to submit your feedback: #LINK#
-                        </p>
-                        <p>
-                            Thank you for your time - we appreciate it!
-                        </p>
-                    ]]>
+                    default_template_body
                 </source>
                 <target>
                     <![CDATA[
