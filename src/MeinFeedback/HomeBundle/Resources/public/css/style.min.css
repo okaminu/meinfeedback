@@ -1207,6 +1207,7 @@ textarea, input {font-family:Open Sans,Source Sans Pro,Helvetica,Arial,sans-seri
 .closed { display:none; }
 .open { display:table-row; }
 .formular { margin:50px 50px 50px 50px; text-align:center; }
+.formular_left { margin:50px 50px 50px 50px; text-align:left; }
 .breite490 { width:490px;}
 .breite240 { width:237px;}
 .breite400 { width:400px;}
@@ -1314,4 +1315,21 @@ a.footer_link:hover {
 
 .alert-block p + p {
     margin-top: 5px;
+}
+
+
+.widgetDisplay{
+    width:300px;
+    display: inline;
+    margin: 0px 30px;
+}
+
+.widgetCode{
+    display: inline;
+    margin: 0px 30px;
+}
+
+.widgetCode textarea{
+    height: 150px;
+    width: 400px;
 }

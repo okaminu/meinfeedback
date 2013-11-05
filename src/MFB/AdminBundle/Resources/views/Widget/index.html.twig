@@ -1,0 +1,20 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Welcome to MeinFeedback{% endblock %}
+
+{% block body %}
+
+    <div class="formular_left">
+        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Widget</div>
+        <div class="widgetDisplay">
+            <a href="{{ testWidgetLink }}" target="_blank">
+                <img src="{{ testWidgetImage }}">
+            </a>
+        </div>
+
+        <div class="widgetCode">
+            <textarea>{% raw %}<a href="{% endraw %}{{ widgetLink }}{% raw %}" target="_blank"><img src="{% endraw %}{{ widgetImage }}{% raw %}"></a>{% endraw %}</textarea>
+        </div>
+    </div>
+
+{% endblock %}
