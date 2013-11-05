@@ -16,14 +16,18 @@ class EmailTemplatesController extends Controller
         $accountId = $token->getUser()->getId();
 
         $em = $this->getDoctrine()->getManager();
+        $name = 'AccountChannel';
+
         $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
             array(
                 'accountId' => $accountId,
-                'name' => 'AccountChannel'
+                'name' => $name
             )
         );
         if (!$emailTemplate) {
             $emailTemplate = new EmailTemplate();
+            $emailTemplate->setAccountId($accountId);
+            $emailTemplate->setName($name);
             $emailTemplate->setTitle($this->get('translator')->trans('default_template_subject'));
             $emailTemplate->setTemplateCode($this->get('translator')->trans('default_template_body'));
             $emailTemplate->setThankYouCode($this->get('translator')->trans('default_template_thank_you'));
