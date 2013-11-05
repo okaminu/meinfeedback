@@ -19,39 +19,14 @@
                     {{ form_widget(form.templateCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required', 'placeholder': 'Text*'} }) }}
                     {{ form_errors(form.templateCode) }}
                 </div>
-                <div class="span8">
-                    <table class="table table-condensed">
-                        <caption>Variables</caption>
-                        <thead>
-                        <tr>
-                            <th>PlaceHolder</th>
-                            <th>Explanation</th>
-                            <th>Sample Value</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for placeholder in variables %}
-                        <tr>
-                            <td>{{ placeholder.name }}</td>
-                            <td>{{ placeholder.description }}</td>
-                            <td>{{ placeholder.example }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="3">
-                                <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': entity.id }) }}" class="iframe"> Add Variable</a>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
+
                 <div>
                     {{ form_widget(form.thankYouCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required', 'placeholder': 'Thank you text*'} }) }}
                     {{ form_errors(form.thankYouCode) }}
                 </div>
-
+                <div class="add-variable">
+                    <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': entity.id }) }}" class="iframe"> Add Variable</a>
+                </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">
                 </div>
