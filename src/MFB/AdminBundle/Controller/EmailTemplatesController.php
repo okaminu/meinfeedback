@@ -24,10 +24,12 @@ class EmailTemplatesController extends Controller
                 'name' => $name
             )
         );
+
+        $emailTemplate->setAccountId($accountId);
+        $emailTemplate->setName($name);
+
         if (!$emailTemplate) {
             $emailTemplate = new EmailTemplate();
-            $emailTemplate->setAccountId($accountId);
-            $emailTemplate->setName($name);
             $emailTemplate->setTitle($this->get('translator')->trans('default_template_subject'));
             $emailTemplate->setTemplateCode($this->get('translator')->trans('default_template_body'));
             $emailTemplate->setThankYouCode($this->get('translator')->trans('default_template_thank_you'));
@@ -39,8 +41,6 @@ class EmailTemplatesController extends Controller
             $em->persist($emailTemplate);
             $em->flush();
         }
-        $emailTemplate->setAccountId($accountId);
-        $emailTemplate->setName('AccountChannel');
 
         $editForm = $this->createEditForm($emailTemplate);
         $editForm->handleRequest($request);
