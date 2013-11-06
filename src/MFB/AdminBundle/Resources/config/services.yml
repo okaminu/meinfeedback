@@ -1,7 +1,14 @@
 parameters:
 #    mfb_admin.example.class: MFB\AdminBundle\Example
 
+
 services:
-#    mfb_admin.example:
-#        class: %mfb_admin.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    my_locale_listener:
+        class: MFB\AdminBundle\LocaleListener
+        arguments:
+            hostMap:
+                default: de
+                miofeedback.it: it
+                meinfeedback.net: de
+        tags:
+            -  { name: kernel.event_subscriber }
