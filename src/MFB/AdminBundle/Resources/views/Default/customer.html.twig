@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Welcome to MeinFeedback{% endblock %}
+{% block title %}{% trans %} Welcome to MeinFeedback {% endtrans %}{% endblock %}
 
 {% block body %}
 
@@ -8,16 +8,15 @@
     <div>
         {% if added_email %}
         <div class="alert alert-success">
-            <strong>Well done!</strong> Customer added ({{ added_email }})
+            <strong>{% trans %} Well done! {% endtrans %}</strong> {% trans %} Customer added {% endtrans %} ({{ added_email }})
             <a href="#" class="close" data-dismiss="alert">&times;</a>
         </div>
         {% endif %}
         <div class="row-fluid inner-page contact">
             <div class="span6">
-                <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Customer Form</div>
+                <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">{% trans %} Customer Form {% endtrans %}</div>
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
-
                 <div>
                     {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
                     {{ form_errors(form.email) }}
@@ -42,7 +41,7 @@
                     {{ form_widget(form.referenceId) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">
                 </div>
 
                 {{ form_end(form) }}

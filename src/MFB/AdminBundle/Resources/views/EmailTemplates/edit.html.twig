@@ -6,7 +6,7 @@
         <div class="row-fluid inner-page contact">
             <div class="span12">
                 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
-                    Email template
+                    {% trans %} Email template {% endtrans %}
                 </div>
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
@@ -25,10 +25,10 @@
                     {{ form_errors(form.thankYouCode) }}
                 </div>
                 <div class="add-variable">
-                    <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': entity.id }) }}" class="iframe"> Add Variable</a>
+                    <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': entity.id }) }}" class="iframe"> {% trans %} Add Variable {% endtrans %}</a>
                 </div>
                 <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
                 </div>
                 {{ form_end(form) }}
             </div>
