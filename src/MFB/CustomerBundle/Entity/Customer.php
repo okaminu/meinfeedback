@@ -78,6 +78,21 @@ class Customer
     private $referenceId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="homepage", type="string", length=128)
+     */
+    private $homepage;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serviceName", type="string", length=32)
+     */
+    private $serviceName;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -242,5 +257,51 @@ class Customer
     public function getReferenceId()
     {
         return $this->referenceId;
+    }
+
+    /**
+     * Set homepage
+     *
+     * @param string $homepage
+     * @return Customer
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+    
+        return $this;
+    }
+
+    /**
+     * Get homepage
+     *
+     * @return string 
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
+    }
+
+    /**
+     * Set serviceName
+     *
+     * @param string $serviceName
+     * @return Customer
+     */
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceName
+     *
+     * @return string 
+     */
+    public function getServiceName()
+    {
+        return $this->serviceName;
     }
 }

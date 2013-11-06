@@ -30,7 +30,6 @@
                     {{ form_label(form.lastName) }}
                     {{ form_widget(form.lastName) }}
 
-
                     {{ form_label(form.salutation) }}
                     {{ form_widget(form.salutation) }}
 
@@ -39,6 +38,12 @@
 
                     {{ form_label(form.referenceId) }}
                     {{ form_widget(form.referenceId) }}
+
+                    {{ form_label(form.serviceName) }}
+                    {{ form_widget(form.serviceName) }}
+
+                    {{ form_label(form.homepage) }}
+                    {{ form_widget(form.homepage) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">

@@ -50,7 +50,9 @@ class Sender
                   "#LASTNAME#" => $entity->getLastName(),
                   "#SAL#" => $entity->getSalutation(),
                   "#SERVICE_DATE#" => $entity->getServiceDate()->format('Y-m-d'),
-                  "#REFERENCE_ID#" => $entity->getReferenceId()
+                  "#REFERENCE_ID#" => $entity->getReferenceId(),
+                  "#SERVICE_NAME#" => $entity->getServiceName(),
+                  "#HOMEPAGE#" => $entity->getHomepage()
             )
         );
 
