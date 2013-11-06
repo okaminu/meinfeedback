@@ -64,6 +64,20 @@ class Customer
     private $salutation;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="service_date", type="date")
+     */
+    private $serviceDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reference_id", type="string", length=16)
+     */
+    private $referenceId;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -181,5 +195,52 @@ class Customer
     public function getSalutation()
     {
         return $this->salutation;
+    }
+
+
+    /**
+     * Set serviceDate
+     *
+     * @param \DateTime $serviceDate
+     * @return Customer
+     */
+    public function setServiceDate($serviceDate)
+    {
+        $this->serviceDate = $serviceDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceDate
+     *
+     * @return \DateTime 
+     */
+    public function getServiceDate()
+    {
+        return $this->serviceDate;
+    }
+
+    /**
+     * Set referenceId
+     *
+     * @param string $referenceId
+     * @return Customer
+     */
+    public function setReferenceId($referenceId)
+    {
+        $this->referenceId = $referenceId;
+    
+        return $this;
+    }
+
+    /**
+     * Get referenceId
+     *
+     * @return string 
+     */
+    public function getReferenceId()
+    {
+        return $this->referenceId;
     }
 }
