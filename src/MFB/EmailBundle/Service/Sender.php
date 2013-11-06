@@ -31,7 +31,8 @@ class Sender
         Customer $customer,
         AccountChannel $channel,
         EmailTemplate $template,
-        $inviteUrl
+        $inviteUrl,
+        $entity
     ) {
         $message = new \Swift_Message();
         $message_title = $template->getTitle();
@@ -41,7 +42,17 @@ class Sender
         $message->setSubject($message_title);
 
         $emailContent = $template->getTemplateCode();
-        $emailContent = $this->replacePlaceHolders($emailContent, array("#LINK#" => $inviteUrl));
+        $emailContent = $this->replacePlaceHolders(
+            $emailContent,
+            array(
+                  "#LINK#" => $inviteUrl,
+                  "#FIRSTNAME#" => $entity->getFirstName(),
+                  "#LASTNAME#" => $entity->getLastName(),
+                  "#SAL#" => $entity->getSalutation(),
+                  "#SERVICE_DATE#" => $entity->getServiceDate()->format('Y-m-d'),
+                  "#REFERENCE_ID#" => $entity->getReferenceId()
+            )
+        );
 
         $emailBody = $this->twig->render(
             'MFBEmailBundle:Default:AccountChannelEmail.html.twig',
@@ -64,6 +75,7 @@ class Sender
         if (isset($placeholders['#LINK#'])) {
             $placeholders['#LINK#'] = '<a href="' . $placeholders['#LINK#'] . '">' . $placeholders['#LINK#'] . '</a>';
         }
+
         $html = strtr($html, $placeholders);
         return $html;
     }
