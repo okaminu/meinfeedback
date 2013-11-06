@@ -30,6 +30,8 @@ class CustomerType extends AbstractType
             ->add('firstName')
             ->add('lastName')
             ->add('salutation')
+            ->add('serviceDate')
+            ->add('referenceId')
         ;
     }
     

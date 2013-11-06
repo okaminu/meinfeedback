@@ -129,7 +129,8 @@ class DefaultController extends Controller
                     $entity,
                     $accountChannel,
                     $emailTemplate,
-                    $inviteUrl
+                    $inviteUrl,
+                    $entity
                 );
 
                 return $this->redirect(

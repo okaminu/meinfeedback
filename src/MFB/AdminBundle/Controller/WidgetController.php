@@ -21,13 +21,31 @@ class WidgetController extends Controller
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
 
-        $widgetLink = $this->generateUrl('mfb_account_profile_homepage', array('accountId' => $accountId), true);
-        $widgetImage = $this->generateUrl('mfb_widget_account_channel', array('accountId' => $accountId), true);
+        $widgetLink = $this->generateUrl(
+            'mfb_account_profile_homepage',
+            array('accountId' => $accountId),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
-        $testWidgetLink = $this->generateUrl('mfb_account_profile_homepage', array('accountId' => 12), true);
-        $testWidgetImage = $this->generateUrl('mfb_widget_account_channel', array('accountId' => 12), true);
+        $widgetImage = $this->generateUrl(
+            'mfb_widget_account_channel',
+            array('accountId' => $accountId),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
-        return $this->render('MFBAdminBundle:Widget:index.html.twig',
+        $testWidgetLink = $this->generateUrl(
+            'mfb_account_profile_homepage',
+            array('accountId' => 12),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $testWidgetImage = $this->generateUrl(
+            'mfb_widget_account_channel',
+            array('accountId' => 12),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        return $this->render(
+            'MFBAdminBundle:Widget:index.html.twig',
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
