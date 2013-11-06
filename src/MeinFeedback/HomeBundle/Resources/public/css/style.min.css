@@ -1333,3 +1333,13 @@ a.footer_link:hover {
     height: 150px;
     width: 400px;
 }
+
+.gender label{
+    display:inline;
+    width: 60px !important;
+}
+
+.gender input{
+    display:inline;
+    width: 60px !important;
+}
