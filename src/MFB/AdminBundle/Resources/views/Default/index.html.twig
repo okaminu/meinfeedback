@@ -1,10 +1,10 @@
 {% extends "MFBAdminBundle::base.html.twig" %}
 
-{% block title %}Welcome to MeinFeedback{% endblock %}
+{% block title %}{% trans %} Welcome to MeinFeedback {% endtrans %}{% endblock %}
 
 {% block content %}
 
-    <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks</h3>
+    <h3 style="margin-top: 50px; margin-left: 20px">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
     <div style="padding:10px">
 
@@ -12,11 +12,10 @@
             <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
                 <tbody><tr>
                     <td width="80%" style="padding:10px;">
-            <span class="comment-text left" itemprop="description">
-                {{ feedback.content }}
-            </span>
+                        <span class="comment-text left" itemprop="description">
+                            {{ feedback.content }}
+                        </span>
                     </td>
-
                     <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
                         <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
                             <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
@@ -25,9 +24,9 @@
                 </tr>
                 </tbody></table>
             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-            <div class="username">Anonymous says:</div>
+            <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
         {% else %}
-            No feedback yet.
+            {% trans %} No feedback yet. {% endtrans %}
         {% endfor %}
 
     </div>

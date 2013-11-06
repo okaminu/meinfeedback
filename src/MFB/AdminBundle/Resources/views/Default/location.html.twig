@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="formular">
-        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Places setting</div>
+        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">{% trans %} Places setting {% endtrans %}</div>
         <div class="places">
 
 
@@ -23,7 +23,7 @@
                 {{ form_errors(form.address) }}
             </div>
 
-            <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Save" type="submit">
+            <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
 
             {{ form_end(form) }}
 
