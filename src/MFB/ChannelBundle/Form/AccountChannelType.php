@@ -18,7 +18,7 @@ class AccountChannelType extends AbstractType
             ->add('name')
             ->add('address')
             ->add(
-                'ratings',
+                'ratingsEnabled',
                 'choice',
                 array(
                     'choices' => array('1' => 'Enabled', '0' => 'Disabled')

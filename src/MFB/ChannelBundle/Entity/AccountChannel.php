@@ -44,9 +44,9 @@ class AccountChannel
     /**
      * @var smallint
      *
-     * @ORM\Column(name="ratings", type="smallint")
+     * @ORM\Column(name="ratings_enabled", type="smallint")
      */
-    private $ratings = 0;
+    private $ratingsEnabled = 0;
 
     /**
      * Get id
@@ -127,26 +127,27 @@ class AccountChannel
         return $this->address;
     }
 
+
     /**
-     * Set ratings
+     * Set ratingsEnabled
      *
-     * @param \smallint $ratings
+     * @param integer $ratingsEnabled
      * @return AccountChannel
      */
-    public function setRatings($ratings)
+    public function setRatingsEnabled($ratingsEnabled)
     {
-        $this->ratings = $ratings;
+        $this->ratingsEnabled = $ratingsEnabled;
     
         return $this;
     }
 
     /**
-     * Get ratings
+     * Get ratingsEnabled
      *
-     * @return \smallint
+     * @return integer 
      */
-    public function getRatings()
+    public function getRatingsEnabled()
     {
-        return $this->ratings;
+        return $this->ratingsEnabled;
     }
 }

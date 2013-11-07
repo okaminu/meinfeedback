@@ -20,14 +20,12 @@ class DefaultController extends Controller
         }
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
 
-        $ratingEnabled = $accountChannel->getRatings();
-
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
                 'token' => $token,
                 'account_channel_name' => $accountChannel->getName(),
-                'ratingEnabled' => $ratingEnabled,
+                'ratingEnabled' => $accountChannel->getRatingsEnabled(),
                 'errorMessage' => false
             )
         );
@@ -61,13 +59,13 @@ class DefaultController extends Controller
             $rating = $requestRating;
         }
 
-        if (($accountChannel->getRatings() == '1') && (is_null($rating))) {
+        if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
             return $this->render(
                 'MFBFeedbackBundle:Default:index.html.twig',
                 array(
                     'token' => $request->get('token'),
                     'account_channel_name' => $accountChannel->getName(),
-                    'ratingEnabled' => $accountChannel->getRatings(),
+                    'ratingEnabled' => $accountChannel->getRatingsEnabled(),
                     'errorMessage' => 'Please select star rating'
                 )
             );

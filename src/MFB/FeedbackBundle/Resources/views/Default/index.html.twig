@@ -30,15 +30,14 @@
                     <div class="stars_gray">
                         <span style="width: 0%;" class="stars_gold"></span>
                         <div onmouseout="setRating(0);" class="stars_coords">
-                            <div onmousemove="setRating(1);" onclick="clickRating(1);">&nbsp;</div>
-                            <div onmousemove="setRating(2);" onclick="clickRating(2);">&nbsp;</div>
-                            <div onmousemove="setRating(3);" onclick="clickRating(3);">&nbsp;</div>
-                            <div onmousemove="setRating(4);" onclick="clickRating(4);">&nbsp;</div>
-                            <div onmousemove="setRating(5);" onclick="clickRating(5);">&nbsp;</div>
+                            {% for i in 1..5 %}
+                                <div onmousemove="setRating({{ i }});" onclick="clickRating({{ i }});"></div>
+                            {% endfor %}
                         </div>
                     </div>
                 <input type="hidden" value="0" name="rating" class="rating"/>
                 {% endif %}
+
                 <textarea rows="6" name="feedback" placeholder="Feedback"></textarea>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
