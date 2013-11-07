@@ -41,6 +41,12 @@ class AccountChannel
      */
     private $address;
 
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="ratings", type="smallint")
+     */
+    private $ratings = 0;
 
     /**
      * Get id
@@ -119,5 +125,28 @@ class AccountChannel
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set ratings
+     *
+     * @param \smallint $ratings
+     * @return AccountChannel
+     */
+    public function setRatings($ratings)
+    {
+        $this->ratings = $ratings;
+    
+        return $this;
+    }
+
+    /**
+     * Get ratings
+     *
+     * @return \smallint
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
     }
 }

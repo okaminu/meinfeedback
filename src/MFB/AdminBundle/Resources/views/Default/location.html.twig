@@ -23,6 +23,12 @@
                 {{ form_errors(form.address) }}
             </div>
 
+            <div style="margin: 10px 0px">
+                {{ form_label(form.ratings) }}
+                {{ form_widget(form.ratings) }}
+                {{ form_errors(form.ratings) }}
+            </div>
+
             <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
 
             {{ form_end(form) }}

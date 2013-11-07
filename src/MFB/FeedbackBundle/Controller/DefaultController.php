@@ -19,11 +19,16 @@ class DefaultController extends Controller
             return $this->render('MFBFeedbackBundle:Default:no_invite.html.twig');
         }
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
+
+        $ratingEnabled = $accountChannel->getRatings();
+
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
                 'token' => $token,
-                'account_channel_name' => $accountChannel->getName()
+                'account_channel_name' => $accountChannel->getName(),
+                'ratingEnabled' => $ratingEnabled,
+                'errorMessage' => false
             )
         );
     }
@@ -40,6 +45,8 @@ class DefaultController extends Controller
             return $this->render('MFBFeedbackBundle:Default:no_invite.html.twig');
         }
 
+        $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
+
         $feedback = new Feedback();
         $feedback->setAccountId($invite->getAccountId());
         $feedback->setChannelId($invite->getChannelId());
@@ -54,7 +61,17 @@ class DefaultController extends Controller
             $rating = $requestRating;
         }
 
-
+        if (($accountChannel->getRatings() == '1') && (is_null($rating))) {
+            return $this->render(
+                'MFBFeedbackBundle:Default:index.html.twig',
+                array(
+                    'token' => $request->get('token'),
+                    'account_channel_name' => $accountChannel->getName(),
+                    'ratingEnabled' => $accountChannel->getRatings(),
+                    'errorMessage' => 'Please select star rating'
+                )
+            );
+        }
 
         $feedback->setRating($rating);
         $em->persist($feedback);

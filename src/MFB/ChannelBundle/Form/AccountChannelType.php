@@ -17,6 +17,13 @@ class AccountChannelType extends AbstractType
         $builder
             ->add('name')
             ->add('address')
+            ->add(
+                'ratings',
+                'choice',
+                array(
+                    'choices' => array('1' => 'Enabled', '0' => 'Disabled')
+                )
+            )
         ;
     }
     
