@@ -6,9 +6,8 @@
 <!-- Brand and Navigation -->
 <header class="navbar navbar-fixed-top">
     <div class="inner-page">
-        <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo.png') }}"/></h1>
+        <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
         <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
-
 
         <div class="nav-collapse collapse">
             <ul class="nav navigation" id="menu">
@@ -21,7 +20,6 @@
 
     </div>
 </header>
-
 <!-- Home Page -->
 
 
