@@ -1360,3 +1360,8 @@ a.footer_link:hover {
     margin: 0;
     position: relative;
 }
+.stars_rating
+{
+    padding-bottom: 10px;
+}
+

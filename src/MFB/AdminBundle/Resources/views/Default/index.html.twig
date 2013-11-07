@@ -9,15 +9,20 @@
     <div style="padding:10px">
 
         {% for feedback in feedbackList %}
-            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                <tbody><tr>
-                    <div class="stars_gray_small">
-                        {{ feedback.rating }}
-                        <span style="width: 0%;" class="stars_gold_small"></span>
-                        <div onmouseout="setRating(0);" class="stars_coords">
 
-                        </div>
-                    </div>
+            {%  if feedback.rating %}
+            <div class="stars_rating">
+                <div class="stars_gray_small">
+                    <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            {% endif %}
+
+            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                <tbody>
+                    <tr>
+
 
                     <td width="80%" style="padding:10px;">
                         <span class="comment-text left" itemprop="description">
