@@ -83,13 +83,28 @@ class DefaultController extends Controller
 
         imagettftext(
             $img, //img to apply
-            8, // size
+            9, // size
             0, // angle
-            120, // x
-            222, // y
-            $fontColorBottom, // color
-            $arialFontFile, // font file
-            $lastFeedback->getCreatedAt()->format('d.m.Y') // text
+            10, // x
+            40, // y
+            $fontColorTop, // color
+            $lucidaFontFile, // font file
+            $comment // text
+        );
+
+        imagettftext(
+            $img, //img to apply
+            9, // size
+            0, // angle
+            10, // x
+            180, // y
+            $fontColorTop, // color
+            $lucidaFontFile, // font file
+                $this->get('translator')->transChoice(
+                '1 review | %count% reviews',
+                $feedbackCount,
+                array('%count%' => $feedbackCount)
+            ) // text
         );
 
         imagettftext(
@@ -105,13 +120,13 @@ class DefaultController extends Controller
 
         imagettftext(
             $img, //img to apply
-            9, // size
+            8, // size
             0, // angle
-            10, // x
-            40, // y
-            $fontColorTop, // color
-            $lucidaFontFile, // font file
-            $comment // text
+            120, // x
+            222, // y
+            $fontColorBottom, // color
+            $arialFontFile, // font file
+            $lastFeedback->getCreatedAt()->format('d.m.Y') // text
         );
 
 
