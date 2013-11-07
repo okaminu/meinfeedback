@@ -1344,3 +1344,19 @@ a.footer_link:hover {
     display:inline;
     width: 60px !important;
 }
+
+
+.stars_gray_small {
+    background: url("/bundles/meinfeedbackhome/images/stars_gray_small.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    height: 14px;
+    position: relative;
+    width: 80px;
+    float: left;
+}
+.stars_gold_small {
+    background: url("/bundles/meinfeedbackhome/images/stars_gold_small.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    float: left;
+    height: 14px;
+    margin: 0;
+    position: relative;
+}
