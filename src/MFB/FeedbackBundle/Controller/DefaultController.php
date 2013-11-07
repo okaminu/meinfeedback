@@ -46,6 +46,17 @@ class DefaultController extends Controller
         $feedback->setCustomerId($invite->getCustomerId());
         $feedback->setContent($request->get('feedback'));
 
+        $rating = null;
+
+        $requestRating = (int)$request->get('rating');
+
+        if (($requestRating > 0) && ($requestRating <= 5)) {
+            $rating = $requestRating;
+        }
+
+
+
+        $feedback->setRating($rating);
         $em->persist($feedback);
         $em->remove($invite);
         $em->flush();

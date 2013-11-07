@@ -33,6 +33,7 @@ assetic:
     bundles:
         - MeinFeedbackHomeBundle
         - MFBAccountBundle
+        - MFBFeedbackBundle
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

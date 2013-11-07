@@ -67,6 +67,14 @@ class Feedback
     private $emailTemplate;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating", type="integer", nullable=true)
+     */
+    private $rating = NULL;
+
+
+    /**
      * Get id
      *
      * @return integer 
@@ -216,5 +224,28 @@ class Feedback
         if ($this->getCreatedAt() == null) {
             $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
+    }
+
+    /**
+     * Set rating
+     *
+     * @param \integer $rating
+     * @return Feedback
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return \integer
+     */
+    public function getRating()
+    {
+        return $this->rating;
     }
 }

@@ -1,0 +1,29 @@
+div.stars_gray {
+    background: url("/bundles/mfbfeedback/images/stars_gray.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    float: left;
+    height: 42px;
+    margin: 0 0 0 30px;
+    position: relative;
+    width: 246px;
+    height: 60px;
+}
+span.stars_gold {
+    background: url("/bundles/mfbfeedback/images/stars_gold.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    float: left;
+    height: 42px;
+    position: relative;
+}
+
+.stars_coords {
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 246px;
+    z-index: 1000;
+    cursor: pointer;
+}
+.stars_coords div {
+    float: left;
+    height: 42px;
+    width: 20%;
+}

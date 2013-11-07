@@ -3,6 +3,15 @@
 {% block title %}MeinFeedback{% endblock %}
 
 {% block body %}
+
+    {% javascripts '@MFBFeedbackBundle/Resources/public/js/main.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% stylesheets '@MFBFeedbackBundle/Resources/public/css/style.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
     <div>
         <div class="row-fluid inner-page contact">
             <div class="span6">
@@ -10,6 +19,18 @@
                     Please leave feedback about {{ account_channel_name }}
                 </div>
                 <form method="post" action="{{ path('mfb_feedback_save_with_invite', {'token': token}) }}">
+
+                    <div class="stars_gray">
+                        <span style="width: 0%;" class="stars_gold"></span>
+                        <div onmouseout="setRating(0);" class="stars_coords">
+                            <div onmousemove="setRating(1);" onclick="clickRating(1);">&nbsp;</div>
+                            <div onmousemove="setRating(2);" onclick="clickRating(2);">&nbsp;</div>
+                            <div onmousemove="setRating(3);" onclick="clickRating(3);">&nbsp;</div>
+                            <div onmousemove="setRating(4);" onclick="clickRating(4);">&nbsp;</div>
+                            <div onmousemove="setRating(5);" onclick="clickRating(5);">&nbsp;</div>
+                        </div>
+                    </div>
+                <input type="hidden" value="0" name="rating" class="rating"/>
                 <textarea rows="6" name="feedback" placeholder="Feedback"></textarea>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
