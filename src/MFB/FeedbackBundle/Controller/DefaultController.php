@@ -26,7 +26,8 @@ class DefaultController extends Controller
                 'token' => $token,
                 'account_channel_name' => $accountChannel->getName(),
                 'ratingEnabled' => $accountChannel->getRatingsEnabled(),
-                'errorMessage' => false
+                'errorMessage' => false,
+                'feedback' => ''
             )
         );
     }
@@ -66,7 +67,8 @@ class DefaultController extends Controller
                     'token' => $request->get('token'),
                     'account_channel_name' => $accountChannel->getName(),
                     'ratingEnabled' => $accountChannel->getRatingsEnabled(),
-                    'errorMessage' => 'Please select star rating'
+                    'errorMessage' => 'Please select star rating',
+                    'feedback' => $request->get('feedback')
                 )
             );
         }
