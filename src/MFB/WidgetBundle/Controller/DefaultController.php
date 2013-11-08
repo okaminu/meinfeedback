@@ -92,20 +92,20 @@ class DefaultController extends Controller
             $comment // text
         );
 
-        imagettftext(
-            $img, //img to apply
-            9, // size
-            0, // angle
-            10, // x
-            180, // y
-            $fontColorTop, // color
-            $lucidaFontFile, // font file
-                $this->get('translator')->transChoice(
-                '1 review | %count% reviews',
-                $feedbackCount,
-                array('%count%' => $feedbackCount)
-            ) // text
-        );
+//        imagettftext(
+//            $img, //img to apply
+//            9, // size
+//            0, // angle
+//            10, // x
+//            180, // y
+//            $fontColorTop, // color
+//            $lucidaFontFile, // font file
+//                $this->get('translator')->transChoice(
+//                '1 review | %count% reviews',
+//                $feedbackCount,
+//                array('%count%' => $feedbackCount)
+//            ) // text
+//        );
 
         imagettftext(
             $img, //img to apply
