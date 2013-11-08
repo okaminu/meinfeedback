@@ -66,7 +66,7 @@ class DefaultController extends Controller
                 '025' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_025.gif'),
                 '05' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_05.gif'),
                 '075' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_075.gif'),
-                '1' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_big_1.gif'),
+                '1' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_1.gif'),
             )
         );
     }

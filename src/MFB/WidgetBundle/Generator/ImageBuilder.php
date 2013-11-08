@@ -58,7 +58,7 @@ class ImageBuilder {
      */
     public function  getTextHeight($text, $fontSize)
     {
-        return substr_count($text, "\n") * $fontSize;
+        return substr_count($text, "\n") * ($fontSize * 1.10);
 
     }
 
@@ -72,21 +72,26 @@ class ImageBuilder {
         $paddingAfter = 5;
 
         foreach ($feedbacks as $feedback) {
-            try {
-                $comment = $this->wrap(
-                    $fontSize,
-                    $font,
-                    $comment . '"'.$feedback->getContent().'"'."\n\n\n",
-                    170,
-                    170
-                );
+            if ($commentPositionY < 100)
+            {
+                try {
+                    $comment = $this->wrap(
+                        $fontSize,
+                        $font,
+                        $comment . '"'.$feedback->getContent().'"'."\n\n\n",
+                        170,
+                        170
+                    );
 
-                $starHeight = $this->addStars($feedback->getRating(), 10, $commentPositionY);
-                $commentPositionY = $commentPositionY + $starHeight + $this->getTextHeight($comment, $fontSize) + $paddingAfter;
+                    $starHeight = $this->addStars($feedback->getRating(), 10, $commentPositionY);
+                    $commentSize = $this->getTextHeight($comment, $fontSize);
+                    $commentPositionY = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
 
-            } catch (\Exception $ex) {
+                } catch (\Exception $ex) {
 
+                }
             }
+
         }
         if ($comment == '') {
             $comment = $this->wrap(
@@ -104,7 +109,7 @@ class ImageBuilder {
             9, // size
             0, // angle
             10, // x
-            60, // y
+            50, // y
             $this->fontColorTop, // color
             $font, // font file
             $comment // text
