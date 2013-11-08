@@ -65,8 +65,7 @@ class ImageBuilder {
      */
     public function  getTextHeight($text, $fontSize)
     {
-        return substr_count($text, "\n") * ($fontSize * 1.10);
-
+        return substr_count($text, "\n") * ($fontSize);
     }
 
     public function addComment($feedbacks)
@@ -90,7 +89,13 @@ class ImageBuilder {
                         170
                     );
 
-                    $starHeight = $this->addStars($feedback->getRating(), 10, $commentPositionY);
+                    $rating = $feedback->getRating();
+                    $starHeight = 0;
+
+                    if (isset($rating)) {
+                        $starHeight = $this->addStars($rating, 10, $commentPositionY);
+                    }
+
                     $commentSize = $this->getTextHeight($comment, $fontSize);
                     $commentPositionY = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
 
@@ -136,7 +141,7 @@ class ImageBuilder {
         return $element->getStarHeight();
     }
 
-    public function  addDate($feedbacks)
+    public function addDate($feedbacks)
     {
         /** @var Feedback $lastFeedback */
         $lastFeedback = reset($feedbacks);
