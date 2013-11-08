@@ -15,6 +15,8 @@ class ImageBuilder {
 
     protected $fontColorTop;
 
+    protected $lastLine = 222;
+
     /**
      * @return mixed
      */
@@ -30,7 +32,7 @@ class ImageBuilder {
         $this->fontColorBottom = imagecolorallocate($this->image, 108, 108, 108);
     }
 
-    public function build($feedbacks, $feedbackCount)
+    public function build($feedbacks, $feedbackCount, $feedbackRatingCount, $feedbackAverage)
     {
 
         $this->createImage();
@@ -40,6 +42,11 @@ class ImageBuilder {
             ->addComment($feedbacks)
             ->addReviewCount($feedbackCount)
             ;
+
+        if ($feedbackRatingCount != '0') {
+            $this->addRatingCount($feedbackRatingCount);
+            $this->addRatingAverage($feedbackAverage);
+        }
 
         ob_start();
         imagepng($this->getImage());
@@ -150,16 +157,32 @@ class ImageBuilder {
 
     public function addReviewCount($feedbackCount)
     {
+        return $this->addBottomText($feedbackCount ." Bewertungen");
+    }
+
+    public function addRatingCount($feedbackCount)
+    {
+        return $this->addBottomText($feedbackCount ." Ratings");
+    }
+
+    public function addRatingAverage($average)
+    {
+        return $this->addBottomText($average ." Average");
+    }
+
+    public function addBottomText($text)
+    {
         imagettftext(
             $this->image, //img to apply
             8, // size
             0, // angle
             10, // x
-            222, // y
+            $this->lastLine, // y
             $this->fontColorBottom, // color
             $this->getRecource('arialFontFile'), // font file
-            $feedbackCount.' Bewertungen' // text
+            $text // text
         );
+        $this->lastLine += 20;
 
         return $this;
     }
