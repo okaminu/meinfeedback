@@ -45,9 +45,17 @@ class DefaultController extends Controller
         $query->setParameter(1, $accountChannel->getId());
         $feedbackCount = $query->getSingleScalarResult();
 
+        $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.rating IS NOT NULL');
+        $query->setParameter(1, $accountChannel->getId());
+        $feedbackRatingCount = $query->getSingleScalarResult();
+
+        $query = $em->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1');
+        $query->setParameter(1, $accountChannel->getId());
+        $feedbackRatingAverage = round($query->getSingleScalarResult(), 1);
+
         $imageBuilder = new ImageBuilder();
         $imageBuilder->setResources($this->getResources());
-        $imageBlob = $imageBuilder->build($lastFeedbacks, $feedbackCount);
+        $imageBlob = $imageBuilder->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/png');
