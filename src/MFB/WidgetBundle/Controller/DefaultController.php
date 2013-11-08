@@ -40,9 +40,6 @@ class DefaultController extends Controller
             array('id'=>'DESC'),
             4
         );
-        /** @var Feedback $lastFeedback */
-        $lastFeedback = reset($lastFeedbacks);
-
 
         $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1');
         $query->setParameter(1, $accountChannel->getId());
@@ -50,7 +47,7 @@ class DefaultController extends Controller
 
         $imageBuilder = new ImageBuilder();
         $imageBuilder->setResources($this->getResources());
-        $imageBlob = $imageBuilder->build($lastFeedback, $feedbackCount);
+        $imageBlob = $imageBuilder->build($lastFeedbacks, $feedbackCount);
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/png');
@@ -63,7 +60,14 @@ class DefaultController extends Controller
         return array(
             'widgetTemplate' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/n1.png'),
             'arialFontFile' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Arial_Bold.ttf'),
-            'lucidaFontFile' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Lucida_Grande.ttf')
+            'lucidaFontFile' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Lucida_Grande.ttf'),
+            'stars' => array(
+                '0' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_0.gif'),
+                '025' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_025.gif'),
+                '05' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_05.gif'),
+                '075' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_075.gif'),
+                '1' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/public/images/stars/star_big_1.gif'),
+            )
         );
     }
 

@@ -3,7 +3,7 @@
 
 namespace MFB\WidgetBundle\Generator;
 
-
+use MFB\WidgetBundle\Generator\RatingStarsElement;
 
 class ImageBuilder {
 
@@ -36,7 +36,7 @@ class ImageBuilder {
         $this->createImage();
 
         $this
-            ->addDate( $feedbacks )
+            ->addDate($feedbacks)
             ->addComment($feedbacks)
             ->addReviewCount($feedbackCount)
             ;
@@ -49,20 +49,41 @@ class ImageBuilder {
         return $imageBlob;
     }
 
+    /**
+     * Get text height. Because text is wrapped, we simply multiply wrap count by font size
+     *
+     * @param $text
+     * @param $fontSize
+     * @return int
+     */
+    public function  getTextHeight($text, $fontSize)
+    {
+        return substr_count($text, "\n") * $fontSize;
+
+    }
+
     public function addComment($feedbacks)
     {
         $font = $this->getRecource('lucidaFontFile');
+        $fontSize = 9;
 
+        $commentPositionY = 20;
         $comment = '';
+        $paddingAfter = 5;
+
         foreach ($feedbacks as $feedback) {
             try {
                 $comment = $this->wrap(
-                    9,
+                    $fontSize,
                     $font,
-                    $comment . '"'.$feedback->getContent().'"'."\n\n",
+                    $comment . '"'.$feedback->getContent().'"'."\n\n\n",
                     170,
                     170
                 );
+
+                $starHeight = $this->addStars($feedback->getRating(), 10, $commentPositionY);
+                $commentPositionY = $commentPositionY + $starHeight + $this->getTextHeight($comment, $fontSize) + $paddingAfter;
+
             } catch (\Exception $ex) {
 
             }
@@ -83,7 +104,7 @@ class ImageBuilder {
             9, // size
             0, // angle
             10, // x
-            40, // y
+            60, // y
             $this->fontColorTop, // color
             $font, // font file
             $comment // text
@@ -92,8 +113,22 @@ class ImageBuilder {
         return $this;
     }
 
+    public function addStars($rating, $positionX, $positionY)
+    {
+        $element = new RatingStarsElement($this->image, $rating, $this->getResources());
+        $element
+            ->setPositionX($positionX)
+            ->setPositionY($positionY)
+            ->createRatingStar();
+
+        return $element->getStarHeight();
+    }
+
     public function  addDate($feedbacks)
     {
+        /** @var Feedback $lastFeedback */
+        $lastFeedback = reset($feedbacks);
+
         imagettftext(
             $this->image, //img to apply
             8, // size
@@ -102,7 +137,7 @@ class ImageBuilder {
             222, // y
             $this->fontColorBottom, // color
             $this->getRecource('arialFontFile'), // font file
-            $feedbacks->getCreatedAt()->format('d.m.Y') // text
+            $lastFeedback->getCreatedAt()->format('d.m.Y') // text
         );
 
         return $this;
@@ -150,6 +185,14 @@ class ImageBuilder {
     public function setResources($resources)
     {
         $this->resources = $resources;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResources()
+    {
+        return $this->resources;
     }
 
     /**
