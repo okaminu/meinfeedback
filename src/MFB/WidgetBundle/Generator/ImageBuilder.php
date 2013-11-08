@@ -33,32 +33,16 @@ class ImageBuilder {
     public function build($feedbacks, $feedbackCount)
     {
 
-        $arialFontFile = $this->getRecource('arialFontFile');
-
         $this->createImage();
 
         $this
             ->addDate( $feedbacks )
             ->addComment($feedbacks)
+            ->addReviewCount($feedbackCount)
             ;
-//
-        $img = $this->getImage();
-
-
-
-        imagettftext(
-            $img, //img to apply
-            8, // size
-            0, // angle
-            10, // x
-            222, // y
-            $this->fontColorBottom, // color
-            $arialFontFile, // font file
-            $feedbackCount.' Bewertungen' // text
-        );
 
         ob_start();
-        imagepng($img);
+        imagepng($this->getImage());
         $imageBlob = ob_get_contents();
         ob_end_clean();
 
@@ -125,6 +109,22 @@ class ImageBuilder {
     }
 
     public function addReviewCount($feedbackCount)
+    {
+        imagettftext(
+            $this->image, //img to apply
+            8, // size
+            0, // angle
+            10, // x
+            222, // y
+            $this->fontColorBottom, // color
+            $this->getRecource('arialFontFile'), // font file
+            $feedbackCount.' Bewertungen' // text
+        );
+
+        return $this;
+    }
+
+    public function addReviewCountTranslated($feedbackCount)
     {
          imagettftext(
             $$this->image, //img to apply
