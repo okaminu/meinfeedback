@@ -55,8 +55,8 @@ class ImageCommentElement extends AbstractImageBase {
                         $fontSize,
                         $font,
                         $comment . '"'.$feedback->getContent().'"'."\n\n\n",
-                        170,
-                        170
+                        $this->getPositionX(),
+                        $this->getPositionY()
                     );
 
                     $rating = $feedback->getRating();
@@ -80,8 +80,8 @@ class ImageCommentElement extends AbstractImageBase {
                 9,
                 $font,
                 '"'. substr($feedbacks->getContent(), 0, 500).'.."',
-                170,
-                170
+                $this->getPositionX(),
+                $this->getPositionY()
             );
 
         }
@@ -102,10 +102,12 @@ class ImageCommentElement extends AbstractImageBase {
 
     /**
      * @param mixed $text
+     * @return $this
      */
     public function setText($text)
     {
         $this->text = $text;
+        return $this;
     }
 
     /**
