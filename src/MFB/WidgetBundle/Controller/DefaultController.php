@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback;
-use MFB\WidgetBundle\Generator\ImageBuilder;
+//use MFB\WidgetBundle\Generator\ImageBuilder;
+use MFB\WidgetBundle\Builder\ImageBuilder;
+use MFB\WidgetBundle\Director\MainWidgetDirector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,9 +55,9 @@ class DefaultController extends Controller
         $query->setParameter(1, $accountChannel->getId());
         $feedbackRatingAverage = round($query->getSingleScalarResult(), 1);
 
-        $imageBuilder = new ImageBuilder();
-        $imageBuilder->setResources($this->getResources());
-        $imageBlob = $imageBuilder->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
+        $imageBuilder = new ImageBuilder($this->resources());
+        $imageDirector = new MainWidgetDirector($imageBuilder);
+        $imageBlob = $imageDirector->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/png');
@@ -63,7 +65,7 @@ class DefaultController extends Controller
         return $response;
     }
 
-    protected function getResources()
+    protected function resources()
     {
         return array(
             'widgetTemplate' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/n1.png'),

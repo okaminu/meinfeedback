@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MFB\WidgetBundle\Generator;
+namespace MFB\WidgetBundle\Builder\Elements;
 
 
 class RatingStarsElement {
