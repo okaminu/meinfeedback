@@ -7,8 +7,7 @@ use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
 class ImageBaseElement implements ElementInterface {
 
-    protected $fontColorBottom;
-    protected $fontColorTop;
+    protected $image;
 
     public function __construct($resources)
     {
@@ -28,8 +27,6 @@ class ImageBaseElement implements ElementInterface {
     public function render()
     {
         $this->createBase();
-        $this->fontColorTop = imagecolorallocate($this->image, 230, 230, 230);
-        $this->fontColorBottom = imagecolorallocate($this->image, 108, 108, 108);
         return $this->image;
     }
 

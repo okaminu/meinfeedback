@@ -36,8 +36,10 @@ class MainWidgetDirector implements WidgetDirectorInterface {
 
         $this->builder->getElement('comment')
             ->setText($lastFeedbacks)
-            ->setPositionX(170)
-            ->setPositionY(170);
+            ->setBoxWidth(170)
+            ->setBoxHeight(170)
+            ->setPositionX(10)
+            ->setPositionY(20);
 
         return $this->builder->createImage();
     }

@@ -18,6 +18,10 @@ class ImageCommentElement extends AbstractImageBase {
 
     protected $fontColorBottom;
 
+    protected $boxWidth;
+
+    protected $boxHeight;
+
     public function __construct($resources)
     {
         $this->setResources($resources);
@@ -45,34 +49,45 @@ class ImageCommentElement extends AbstractImageBase {
 
         $commentPositionY = 20;
         $comment = '';
-        $paddingAfter = 5;
+        $paddingAfter = 9;
+        $starHeight = 0;
 
         foreach ($feedbacks as $feedback) {
-            if ($commentPositionY < 100)
-            {
+
                 try {
-                    $comment = $this->wrap(
+
+                    //this is quite complicated. needs deeper look.
+                    $commentAdded = $this->wrap(
                         $fontSize,
                         $font,
-                        $comment . '"'.$feedback->getContent().'"'."\n\n\n",
-                        $this->getPositionX(),
-                        $this->getPositionY()
+                        '"'. trim($feedback->getContent()) . '"'."\n\n\n",
+                        $this->getBoxWidth(),
+                        $this->getBoxHeight()
                     );
+
+                    $commentSize = $this->getTextBoxHeight($commentAdded, $fontSize, $font);
+
+                    $nextCommentHeight = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
+
+                    if ($nextCommentHeight > 200 )
+                    {
+                        break;
+                    }
+                    $comment .= $commentAdded;
 
                     $rating = $feedback->getRating();
                     $starHeight = 0;
 
                     if (isset($rating)) {
-                        $starHeight = $this->addStars($rating, 10, $commentPositionY);
+                        $starHeight = $this->addStars($rating, $this->getPositionX(), $commentPositionY);
                     }
 
-                    $commentSize = $this->getTextHeight($comment, $fontSize);
                     $commentPositionY = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
 
                 } catch (\Exception $ex) {
 
                 }
-            }
+
 
         }
         if ($comment == '') {
@@ -80,8 +95,8 @@ class ImageCommentElement extends AbstractImageBase {
                 9,
                 $font,
                 '"'. substr($feedbacks->getContent(), 0, 500).'.."',
-                $this->getPositionX(),
-                $this->getPositionY()
+                $this->getBoxWidth(),
+                $this->getBoxHeight()
             );
 
         }
@@ -90,7 +105,7 @@ class ImageCommentElement extends AbstractImageBase {
             $this->image, //img to apply
             9, // size
             0, // angle
-            10, // x
+            $this->getPositionX(), // x
             50, // y
             $this->fontColorTop, // color
             $font, // font file
@@ -130,6 +145,23 @@ class ImageCommentElement extends AbstractImageBase {
         return substr_count($text, "\n") * ($fontSize);
     }
 
+    public function getTextBoxHeight($text, $fontSize, $fontFace)
+    {
+        $info = imagettfbbox($fontSize, 0, $fontFace, $text);
+        return ($info[5] - $info[3]) * - 1;
+    }
+
+    /**
+     * Wrap text to fit specified sized box
+     *
+     * @param $fontSize
+     * @param $fontFace
+     * @param $string
+     * @param $width
+     * @param $maxHeight
+     * @return string
+     * @throws \Exception
+     */
     protected function wrap($fontSize, $fontFace, $string, $width, $maxHeight)
     {
 
@@ -171,6 +203,42 @@ class ImageCommentElement extends AbstractImageBase {
             ->createRatingStar();
 
         return $element->getStarHeight();
+    }
+
+    /**
+     * @param mixed $boxWidth
+     * @return $this;
+     */
+    public function setBoxWidth($boxWidth)
+    {
+        $this->boxWidth = $boxWidth;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBoxWidth()
+    {
+        return $this->boxWidth;
+    }
+
+    /**
+     * @param mixed $boxHeight
+     * @return $this;
+     */
+    public function setBoxHeight($boxHeight)
+    {
+        $this->boxHeight = $boxHeight;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBoxHeight()
+    {
+        return $this->boxHeight;
     }
 
 }
