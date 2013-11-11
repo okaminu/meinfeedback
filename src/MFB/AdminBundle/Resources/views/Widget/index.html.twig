@@ -7,9 +7,11 @@
     <div class="formular_left">
         <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Widget</div>
         <div class="widgetDisplay">
-            <a href="{{ testWidgetLink }}" target="_blank">
-                <img src="{{ testWidgetImage }}">
-            </a>
+            <img src="{{ testWidgetImage }}" usemap="#widgetmap">
+            <map name="widgetmap">
+                <area shape="rect" coords="0,0,193,193" href="{{ testWidgetLink }}" >
+                <area shape="rect" coords="0,193,270,270" href="{{ inviteUrl }}">
+            </map>
         </div>
 
         <div class="widgetCode">

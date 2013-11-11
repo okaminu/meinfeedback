@@ -44,13 +44,22 @@ class WidgetController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
+
+        /* @todo  this is not clear. should we use url from invite */
+        $inviteUrl  = $this->generateUrl(
+            'mfb_feedback_create_with_invite',
+            array('token' => '87b074b234cace56f95efaea9bd9f50f'),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         return $this->render(
             'MFBAdminBundle:Widget:index.html.twig',
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
                 'testWidgetLink' => $testWidgetLink,
-                'testWidgetImage' => $testWidgetImage
+                'testWidgetImage' => $testWidgetImage,
+                'inviteUrl' => $inviteUrl
             )
         );
     }
