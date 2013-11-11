@@ -21,6 +21,8 @@ class MainWidgetDirector implements WidgetDirectorInterface {
         $this->builder->getElement('base');
 
         $this->builder->getElement('repeatText')
+            ->setPositionX(10)
+            ->setLastLine(222)
             ->addText($feedbackCount . " Bewertungen")
             ->addText($feedbackCount . " Ratings")
             ->addText($feedbackRatingAverage ." Average");
@@ -28,7 +30,9 @@ class MainWidgetDirector implements WidgetDirectorInterface {
         /** @var Feedback $lastFeedback */
         $lastFeedback = reset($lastFeedbacks);
         $this->builder->getElement('text')
-            ->setText($lastFeedback->getCreatedAt()->format('d.m.Y'));
+            ->setText($lastFeedback->getCreatedAt()->format('d.m.Y'))
+            ->setPositionX(120)
+            ->setPositionY(222);
 
         $this->builder->getElement('comment')
             ->setText($lastFeedbacks);

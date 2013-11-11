@@ -54,7 +54,41 @@ abstract class AbstractImageBase {
 
     /**
      * @return mixed
+     */  /**
+ * @param $positionX
+ * @return $this
+ */
+    public function setPositionX($positionX)
+    {
+        $this->positionX = $positionX;
+        return $this;
+    }
+
+    /**
+     * @return mixed
      */
+    public function getPositionX()
+    {
+        return $this->positionX;
+    }
+
+    /**
+     * @param mixed $positionY
+     * @return $this
+     */
+    public function setPositionY($positionY)
+    {
+        $this->positionY = $positionY;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPositionY()
+    {
+        return $this->positionY;
+    }
     public function getResources()
     {
         return $this->resources;

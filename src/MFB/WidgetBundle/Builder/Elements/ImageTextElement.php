@@ -15,6 +15,10 @@ class ImageTextElement extends AbstractImageBase {
 
     protected $fontColorBottom;
 
+    protected $positionX;
+
+    protected $positionY;
+
     public function __construct($resources)
     {
         $this->setResources($resources);
@@ -42,8 +46,8 @@ class ImageTextElement extends AbstractImageBase {
             $this->image, //img to apply
             8, // size
             0, // angle
-            120, // x
-            222, // y
+            $this->getPositionX(), // x
+            $this->getPositionY(), // y
             $this->fontColorBottom, // color
             $this->getRecource('arialFontFile'), // font file
             $text // text
@@ -59,10 +63,12 @@ class ImageTextElement extends AbstractImageBase {
 
     /**
      * @param mixed $text
+     * @return $this
      */
     public function setText($text)
     {
         $this->text = $text;
+        return $this;
     }
 
     /**

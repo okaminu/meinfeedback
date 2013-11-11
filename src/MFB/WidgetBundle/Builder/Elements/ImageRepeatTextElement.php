@@ -9,7 +9,7 @@ class ImageRepeatTextElement extends AbstractImageBase {
 
     protected  static $last_line_padding = 20;
 
-    protected $lastLine = 222;
+    protected $lastLine;
 
     protected $text;
 
@@ -43,7 +43,7 @@ class ImageRepeatTextElement extends AbstractImageBase {
             $this->image, //img to apply
             8, // size
             0, // angle
-            10, // x
+            $this->getPositionX(), // x
             $this->lastLine, // y
             $this->fontColorBottom, // color
             $this->getRecource('arialFontFile'), // font file
@@ -71,5 +71,16 @@ class ImageRepeatTextElement extends AbstractImageBase {
         $this->text[] = $text;
         return $this;
     }
+
+    /**
+     * @param int $lastLine
+     * @return $this
+     */
+    public function setLastLine($lastLine)
+    {
+        $this->lastLine = $lastLine;
+        return $this;
+    }
+
 
 }
