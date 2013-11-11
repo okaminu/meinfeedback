@@ -5,7 +5,7 @@ Add Variable: 	Aggiungi Variabile
 Thank you text*: 	Testo di ringraziamento
 save: 	Salva
 Add Customer: 	Aggiungi Cliente
-Customer Form: 	Cliente da
+Customer Form: 	Cliente
 Customers email*: 	Email Cliente
 Gender: 	Genere
 Male: 	Uomo
@@ -17,7 +17,11 @@ Send: 	Invia
 Logout: 	Logout
 Dashboard: 	Pannello di controllo
 Account Set-Up: 	Set-up Account
-Places setting: 	Impostazione Places
+Places setting: 	Impostazioni Places
 Anonymous says:: 	Anonimo dice:
-Firma*: 	Firma*
-Berlinstraße 31,  10090, Berlin*: 	Berlinstraße 31,  10090 Berlin
+Firma*: 	Azienda*
+Berlinstraße 31,  10090, Berlin*: 	Via Del Corso 10049, Roma RM
+No feedback yet: Nessun feedback presente
+Service date: Data della transazione
+Reference id: ID di Riferimento
+Service Name: Descrizione Srevizio
