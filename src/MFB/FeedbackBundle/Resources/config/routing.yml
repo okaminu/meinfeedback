@@ -3,7 +3,7 @@ mfb_feedback_create:
     defaults: { _controller: MFBFeedbackBundle:Default:index }
 
 mfb_feedback_save:
-    pattern:  /saveFeedback/{accountId}
+    pattern:  /saveFeedback/{accountId}/{accountChannelId}
     defaults: { _controller: MFBFeedbackBundle:Default:save }
     requirements: { _method: post }
 

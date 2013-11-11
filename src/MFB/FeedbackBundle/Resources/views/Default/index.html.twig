@@ -24,7 +24,7 @@
                     {{ errorMessage }}
                 </div>
                 {% endif %}
-                <form method="post" action="{{ path('mfb_feedback_save_with_invite', {'token': token}) }}">
+                <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannelId}) }}">
 
                 {% if ratingEnabled == 1 %}
                     <div class="stars_gray">
