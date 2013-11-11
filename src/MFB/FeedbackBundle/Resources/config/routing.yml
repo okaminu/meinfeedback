@@ -1,8 +1,17 @@
-mfb_feedback_create_with_invite:
-    pattern:  /createFeedback/{token}
+mfb_feedback_create:
+    pattern:  /createFeedback/{accountId}
     defaults: { _controller: MFBFeedbackBundle:Default:index }
 
-mfb_feedback_save_with_invite:
-    pattern:  /saveFeedback/{token}
+mfb_feedback_save:
+    pattern:  /saveFeedback/{accountId}
     defaults: { _controller: MFBFeedbackBundle:Default:save }
+    requirements: { _method: post }
+
+mfb_feedback_create_with_invite:
+    pattern:  /createFeedback/invite/{token}
+    defaults: { _controller: MFBFeedbackBundle:Invite:index }
+
+mfb_feedback_save_with_invite:
+    pattern:  /saveFeedback/invite/{token}
+    defaults: { _controller: MFBFeedbackBundle:Invite:save }
     requirements: { _method: post }
