@@ -18,26 +18,34 @@
     <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks für {{ account_channel_name }}</h3>
 
     <div style="padding:10px">
-
         {% for feedback in feedbackList %}
-        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-            <tbody><tr>
-                <td width="80%" style="padding:10px;">
-            <span class="comment-text left" itemprop="description">
-                {{ feedback.content }}
-            </span>
-                </td>
 
-                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                    <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
-                        <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
-                    </time>
-                </td>
-            </tr>
-            </tbody></table>
-        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-        <div class="username">Anonymous says:</div>
+            {%  if feedback.rating %}
+                <div class="stars_rating">
+                    <div class="stars_gray_small">
+                        <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
+
+            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                <tbody><tr>
+                    <td width="80%" style="padding:10px;">
+                <span class="comment-text left" itemprop="description">
+                    {{ feedback.content }}
+                </span>
+                    </td>
+
+                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                        <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
+                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
+                        </time>
+                    </td>
+                </tr>
+                </tbody></table>
+            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+            <div class="username">Anonymous says:</div>
         {% endfor %}
-
     </div>
 {% endblock %}

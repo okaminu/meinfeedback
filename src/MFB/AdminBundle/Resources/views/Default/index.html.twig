@@ -38,8 +38,9 @@
                 </tbody></table>
             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
             <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
-        {% else %}
+            {% else %}
             {% trans %} No feedback yet. {% endtrans %}
+
         {% endfor %}
 
     </div>

@@ -9,13 +9,17 @@
         <div class="widgetDisplay">
             <img src="{{ testWidgetImage }}" usemap="#widgetmap">
             <map name="widgetmap">
-                <area shape="rect" coords="0,0,193,193" href="{{ testWidgetLink }}" >
-                <area shape="rect" coords="0,193,270,270" href="{{ inviteUrl }}">
+                <area shape="rect" coords="0,0,193,193" href="{{ testWidgetLink }}" target="_blank"/>
+                <area shape="rect" coords="0,193,270,270" href="{{ testInviteUrl }}" target="_blank"/>
             </map>
         </div>
 
         <div class="widgetCode">
-            <textarea>{% raw %}<a href="{% endraw %}{{ widgetLink }}{% raw %}" target="_blank"><img src="{% endraw %}{{ widgetImage }}{% raw %}"></a>{% endraw %}</textarea>
+<textarea>{% raw %} <img src=" {% endraw %} {{ widgetImage }} {% raw %} " usemap="#widgetmap">
+    <map name="widgetmap"> {% endraw %}
+        {% raw %} <area shape="rect" coords="0,0,193,193" href=" {% endraw %} {{ widgetLink }} {% raw %} " target="_blank"/>
+        <area shape="rect" coords="0,193,270,270" href="{% endraw %} {{ inviteUrl }} {% raw %} " target="_blank"/>
+     </map> {% endraw %}</textarea>
         </div>
     </div>
 

@@ -33,6 +33,12 @@ class WidgetController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
+        $inviteUrl  = $this->generateUrl(
+            'mfb_feedback_create',
+            array('accountId' => $accountId),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $testWidgetLink = $this->generateUrl(
             'mfb_account_profile_homepage',
             array('accountId' => 12),
@@ -44,11 +50,9 @@ class WidgetController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-
-        /* @todo  this is not clear. should we use url from invite */
-        $inviteUrl  = $this->generateUrl(
-            'mfb_feedback_create_with_invite',
-            array('token' => '87b074b234cace56f95efaea9bd9f50f'),
+        $testInviteUrl = $this->generateUrl(
+            'mfb_feedback_create',
+            array('accountId' => 12),
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
@@ -57,9 +61,10 @@ class WidgetController extends Controller
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
+                'inviteUrl' => $inviteUrl,
                 'testWidgetLink' => $testWidgetLink,
                 'testWidgetImage' => $testWidgetImage,
-                'inviteUrl' => $inviteUrl
+                'testInviteUrl' => $testInviteUrl,
             )
         );
     }
