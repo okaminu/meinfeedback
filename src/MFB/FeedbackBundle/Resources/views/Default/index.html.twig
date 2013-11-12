@@ -23,7 +23,9 @@
                 <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannel.getId}) }}">
 
                     {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
+                    <div class="errorMessage">
                     {{ form_errors(form.email) }}
+                    </div>
 
                     {% if accountChannel.getRatingsEnabled == 1 %}
                         <div class="stars_gray">
@@ -36,7 +38,7 @@
                         </div>
                         <input type="hidden" value="0" name="rating" class="rating"/>
                         {% if starErrorMessage %}
-                            <div style="padding:20px 10px 15px 0; font-size: 17px; font-weight:300; color:red">
+                            <div class="errorMessage">
                                 {{ starErrorMessage }}
                             </div>
                         {% endif %}
@@ -54,6 +56,7 @@
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
+                    {{ form_end(form) }}
                 </form>
             </div>
 

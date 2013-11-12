@@ -38,49 +38,49 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="integer")
+     * @ORM\Column(name="gender", type="integer", nullable=true)
      */
     private $gender;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=32)
+     * @ORM\Column(name="first_name", type="string", length=32, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=32)
+     * @ORM\Column(name="last_name", type="string", length=32, nullable=true)
      */
     private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="salutation", type="string", length=16)
+     * @ORM\Column(name="salutation", type="string", length=16, nullable=true)
      */
     private $salutation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="service_date", type="date")
+     * @ORM\Column(name="service_date", type="date", nullable=true)
      */
     private $serviceDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reference_id", type="string", length=16)
+     * @ORM\Column(name="reference_id", type="string", length=16, nullable=true)
      */
     private $referenceId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="homepage", type="string", length=128)
+     * @ORM\Column(name="homepage", type="string", length=128, nullable=true)
      */
     private $homepage;
 
@@ -88,7 +88,7 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="serviceDescription", type="string", length=255)
+     * @ORM\Column(name="serviceDescription", type="string", length=255, nullable=true)
      */
     private $serviceDescription;
 

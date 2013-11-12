@@ -18,10 +18,6 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = new Customer();
-        $entity->setAccountId($accountId);
-        $form = $this->createForm(new CustomerType(), $entity);
-
         /** @var Account $account */
         $account = $em->find('MFBAccountBundle:Account', $accountId);
         if (!$account) {
@@ -36,6 +32,27 @@ class DefaultController extends Controller
         if (!$accountChannel) {
             throw $this->createNotFoundException('Account does not have any channels');
         }
+
+        $entity = new Customer();
+        $entity->setAccountId($account->getId());
+        $form = $this->createFormBuilder($entity)
+            ->add('email', 'email', array('required' => false))
+            ->add(
+                'gender',
+                'choice',
+                array(
+                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'required' => false,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true
+                )
+            )
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false))
+            ->add('serviceDescription', 'text', array('required' => false))
+            ->getForm();
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -59,12 +76,30 @@ class DefaultController extends Controller
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->createForm(new CustomerType(), $customer);
+        $form = $this->createFormBuilder($customer)
+            ->add('email', 'email', array('required' => false))
+            ->add(
+                'gender',
+                'choice',
+                array(
+                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'required' => false,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true
+                )
+            )
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false))
+            ->add('serviceDescription', 'text', array('required' => false))
+            ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
+
                 $em->persist($customer);
                 $em->flush();
 
@@ -81,7 +116,9 @@ class DefaultController extends Controller
                 }
 
                 if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
-                    $this->showFeedbackForm(
+                    $em->remove($customer);
+                    $em->flush();
+                    return $this->showFeedbackForm(
                         $account->getId(),
                         $accountChannel,
                         $form->createView(),
@@ -91,8 +128,10 @@ class DefaultController extends Controller
                 }
 
                 $feedback->setRating($rating);
+
                 $em->persist($feedback);
                 $em->flush();
+                return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
 
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();
@@ -102,9 +141,8 @@ class DefaultController extends Controller
                     $form->addError(new FormError($ex->getMessage()));
                 }
             }
-            return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
+            return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
         }
-        return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
 
 
