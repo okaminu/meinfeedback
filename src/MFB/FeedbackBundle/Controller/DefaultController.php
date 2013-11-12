@@ -130,8 +130,9 @@ class DefaultController extends Controller
     private function getCustomerForm($customer)
     {
         $form = $this->createFormBuilder($customer)
-            ->add('email', 'email', array('required' => false))
+            ->add('email', 'email', array('required' => true))
             ->add('anonymous', 'checkbox', array('required' => false))
+            ->add('customerIdReference', 'text', array('required' => false))
             ->add(
                 'gender',
                 'choice',

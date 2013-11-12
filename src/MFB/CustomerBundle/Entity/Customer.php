@@ -100,6 +100,13 @@ class Customer
     private $anonymous;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_id_reference", type="string", length=255, nullable=true)
+     */
+    private $customerIdReference;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -333,5 +340,28 @@ class Customer
     public function getAnonymous()
     {
         return $this->anonymous;
+    }
+
+    /**
+     * Set customerIdReference
+     *
+     * @param string $customerIdReference
+     * @return Customer
+     */
+    public function setCustomerIdReference($customerIdReference)
+    {
+        $this->customerIdReference = $customerIdReference;
+    
+        return $this;
+    }
+
+    /**
+     * Get customerIdReference
+     *
+     * @return string 
+     */
+    public function getCustomerIdReference()
+    {
+        return $this->customerIdReference;
     }
 }
