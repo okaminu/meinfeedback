@@ -52,7 +52,7 @@ class Service
     /**
      * @var string
      *
-     * @ORM\Column(name="serviceIdReference", type="string", nullable=true)
+     * @ORM\Column(name="service_id_reference", type="string", nullable=true)
      */
     private $serviceIdReference;
 

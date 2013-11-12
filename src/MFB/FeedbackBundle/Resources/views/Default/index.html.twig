@@ -54,9 +54,10 @@
                 {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
                 {{ form_row(form.firstName) }}
                 {{ form_row(form.lastName) }}
+                {{ form_row(form.customerIdReference) }}
                 {{ form_row(form.serviceDate) }}
                 {{ form_row(form.serviceDescription) }}
-                {{ form_row(form.customerIdReference) }}
+                {{ form_row(form.serviceIdReference) }}
 
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">

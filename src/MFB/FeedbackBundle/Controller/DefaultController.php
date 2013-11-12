@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\ServiceBundle\Entity\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\AccountBundle\Entity\Account;
@@ -43,6 +44,9 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
+        $requestForm = $request->get('form');
+        $serviceIdReference = $requestForm['serviceIdReference'];
+        $serviceDescription = $requestForm['serviceDescription'];
         $em = $this->getDoctrine()->getManager();
 
         /** @var Account $account */
@@ -98,6 +102,23 @@ class DefaultController extends Controller
 
                 $em->persist($feedback);
                 $em->flush();
+
+
+                if ($serviceDescription || $serviceIdReference) {
+                    $service = new Service();
+                    $service->setAccountId($account->getId());
+                    $service->setChannelId($accountChannel->getId());
+                    $service->setDescription($serviceDescription);
+                    $service->setServiceIdReference($serviceIdReference);
+                    $em->persist($service);
+                    $em->flush();
+
+                    $customer->setServiceId($service->getId());
+                    $em->persist($customer);
+                    $em->flush();
+                }
+
+
                 return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
 
             } catch (DBALException $ex) {
@@ -146,8 +167,9 @@ class DefaultController extends Controller
             )
             ->add('firstName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false))
-            ->add('serviceDescription', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
+            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
+            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
             ->getForm();
         return $form;
     }
