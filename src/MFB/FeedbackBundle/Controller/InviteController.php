@@ -20,20 +20,12 @@ class InviteController extends Controller
         }
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
 
-        return $this->render(
-            'MFBFeedbackBundle:Invite:index.html.twig',
-            array(
-                'token' => $token,
-                'account_channel_name' => $accountChannel->getName(),
-                'ratingEnabled' => $accountChannel->getRatingsEnabled(),
-                'errorMessage' => false,
-                'feedback' => ''
-            )
-        );
+        return $this->showFeedbackForm($token, $accountChannel);
     }
 
     public function saveAction(Request $request)
     {
+        $rating = null;
         $em = $this->getDoctrine()->getManager();
 
         /** @var FeedbackInvite $invite */
@@ -52,8 +44,6 @@ class InviteController extends Controller
         $feedback->setCustomerId($invite->getCustomerId());
         $feedback->setContent($request->get('feedback'));
 
-        $rating = null;
-
         $requestRating = (int)$request->get('rating');
 
         if (($requestRating > 0) && ($requestRating <= 5)) {
@@ -61,15 +51,11 @@ class InviteController extends Controller
         }
 
         if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
-            return $this->render(
-                'MFBFeedbackBundle:Invite:index.html.twig',
-                array(
-                    'token' => $request->get('token'),
-                    'account_channel_name' => $accountChannel->getName(),
-                    'ratingEnabled' => $accountChannel->getRatingsEnabled(),
-                    'errorMessage' => 'Please select star rating',
-                    'feedback' => $request->get('feedback')
-                )
+            return $this->showFeedbackForm(
+                $request->get('token'),
+                $accountChannel,
+                $request->get('feedback'),
+                'Please select star rating'
             );
         }
 
@@ -80,5 +66,18 @@ class InviteController extends Controller
 
         return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
 
+    }
+
+    private function showFeedbackForm($token, $accountChannel, $feedback = '', $starErrorMessage = false)
+    {
+        return $this->render(
+            'MFBFeedbackBundle:Invite:index.html.twig',
+            array(
+                'token' => $token,
+                'accountChannel' => $accountChannel,
+                'starErrorMessage' => $starErrorMessage,
+                'feedback' => $feedback,
+            )
+        );
     }
 }
