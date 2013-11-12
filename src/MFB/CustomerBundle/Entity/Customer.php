@@ -93,6 +93,13 @@ class Customer
     private $serviceDescription;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="anonymous", type="integer", options={"default" : 0})
+     */
+    private $anonymous;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -303,5 +310,28 @@ class Customer
     public function getServiceDescription()
     {
         return $this->serviceDescription;
+    }
+
+    /**
+     * Set anonymous
+     *
+     * @param integer $anonymous
+     * @return Customer
+     */
+    public function setAnonymous($anonymous)
+    {
+        $this->anonymous = $anonymous;
+    
+        return $this;
+    }
+
+    /**
+     * Get anonymous
+     *
+     * @return integer 
+     */
+    public function getAnonymous()
+    {
+        return $this->anonymous;
     }
 }

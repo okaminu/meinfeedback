@@ -33,26 +33,9 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Account does not have any channels');
         }
 
-        $entity = new Customer();
-        $entity->setAccountId($account->getId());
-        $form = $this->createFormBuilder($entity)
-            ->add('email', 'email', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false))
-            ->add('serviceDescription', 'text', array('required' => false))
-            ->getForm();
+        $customer = new Customer();
+        $customer->setAccountId($account->getId());
+        $form = $this->getCustomerForm($customer);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -76,24 +59,8 @@ class DefaultController extends Controller
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->createFormBuilder($customer)
-            ->add('email', 'email', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false))
-            ->add('serviceDescription', 'text', array('required' => false))
-            ->getForm();
+
+        $form = $this->getCustomerForm($customer);
 
         $form->handleRequest($request);
 
@@ -158,5 +125,29 @@ class DefaultController extends Controller
                 'form' => $formView
             )
         );
+    }
+
+    private function getCustomerForm($customer)
+    {
+        $form = $this->createFormBuilder($customer)
+            ->add('email', 'email', array('required' => false))
+            ->add('anonymous', 'checkbox', array('required' => false))
+            ->add(
+                'gender',
+                'choice',
+                array(
+                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'required' => false,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true
+                )
+            )
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false))
+            ->add('serviceDescription', 'text', array('required' => false))
+            ->getForm();
+        return $form;
     }
 }
