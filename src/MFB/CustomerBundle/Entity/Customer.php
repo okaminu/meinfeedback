@@ -88,9 +88,9 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="serviceName", type="string", length=32)
+     * @ORM\Column(name="serviceDescription", type="string", length=255)
      */
-    private $serviceName;
+    private $serviceDescription;
 
     /**
      * Get id
@@ -283,25 +283,25 @@ class Customer
     }
 
     /**
-     * Set serviceName
+     * Set serviceDescription
      *
-     * @param string $serviceName
+     * @param string $serviceDescription
      * @return Customer
      */
-    public function setServiceName($serviceName)
+    public function setServiceDescription($serviceDescription)
     {
-        $this->serviceName = $serviceName;
+        $this->serviceDescription = $serviceDescription;
     
         return $this;
     }
 
     /**
-     * Get serviceName
+     * Get serviceDescription
      *
      * @return string 
      */
-    public function getServiceName()
+    public function getServiceDescription()
     {
-        return $this->serviceName;
+        return $this->serviceDescription;
     }
 }

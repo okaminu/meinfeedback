@@ -51,7 +51,7 @@ class Sender
                   "#SAL#" => $entity->getSalutation(),
                   "#SERVICE_DATE#" => $entity->getServiceDate()->format('Y-m-d'),
                   "#REFERENCE_ID#" => $entity->getReferenceId(),
-                  "#SERVICE_NAME#" => $entity->getServiceName(),
+                  "#SERVICE_NAME#" => $entity->getServiceDescription(),
                   "#HOMEPAGE#" => $entity->getHomepage()
             )
         );

@@ -138,10 +138,10 @@ class DefaultController extends Controller
                 );
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();
-                if ($ex instanceof \PDOException && $ex->getCode() == 23000 ) {
-                    $form->get('email')->addError( new FormError('Email already exists'));
+                if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
+                    $form->get('email')->addError(new FormError('Email already exists'));
                 } else {
-                    $form->addError( new FormError($ex->getMessage()));
+                    $form->addError(new FormError($ex->getMessage()));
                 }
 
             }
