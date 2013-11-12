@@ -16,17 +16,12 @@
         <div class="row-fluid inner-page contact">
             <div class="span6">
                 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
-                    Please leave feedback about {{ account_channel_name }}
+                    Please leave feedback about {{ accountChannel.getName }}
                 </div>
 
-                {% if errorMessage %}
-                <div style="padding:20px 10px 15px 0; font-size: 17px; font-weight:300; color:red">
-                    {{ errorMessage }}
-                </div>
-                {% endif %}
                 <form method="post" action="{{ path('mfb_feedback_save_with_invite', {'token': token}) }}">
 
-                {% if ratingEnabled == 1 %}
+                {% if accountChannel.getRatingsEnabled == 1 %}
                     <div class="stars_gray">
                         <span style="width: 0%;" class="stars_gold"></span>
                         <div onmouseout="setRating(0);" class="stars_coords">
@@ -35,7 +30,13 @@
                             {% endfor %}
                         </div>
                     </div>
-                <input type="hidden" value="0" name="rating" class="rating"/>
+                    <input type="hidden" value="0" name="rating" class="rating"/>
+                    {% if starErrorMessage %}
+                        <div style="clear: both"></div>
+                        <div class="starError">
+                            {{ starErrorMessage }}
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
