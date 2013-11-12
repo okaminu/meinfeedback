@@ -15,9 +15,9 @@ abstract class AbstractImageBase {
         $this->setResources($resources);
     }
 
-    abstract protected function getName();
+    abstract public function getName();
 
-    abstract protected function render($image = null);
+    abstract public function render($image = null);
 
     /**
      * @param mixed $image
@@ -89,6 +89,7 @@ abstract class AbstractImageBase {
     {
         return $this->positionY;
     }
+
     public function getResources()
     {
         return $this->resources;

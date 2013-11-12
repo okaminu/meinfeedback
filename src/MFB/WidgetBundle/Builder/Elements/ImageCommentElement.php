@@ -5,8 +5,9 @@ namespace MFB\WidgetBundle\Builder\Elements;
 
 use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
 use MFB\WidgetBundle\Builder\Elements\RatingStarsElement;
+use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-class ImageCommentElement extends AbstractImageBase {
+class ImageCommentElement extends AbstractImageBase  implements ElementInterface {
 
     protected  static $last_line_padding = 20;
 
@@ -196,11 +197,12 @@ class ImageCommentElement extends AbstractImageBase {
 
     public function addStars($rating, $positionX, $positionY)
     {
-        $element = new RatingStarsElement($this->image, $rating, $this->getResources());
+        $element = new RatingStarsElement( $this->getResources() );
         $element
+            ->setRating($rating)
             ->setPositionX($positionX)
             ->setPositionY($positionY)
-            ->createRatingStar();
+            ->render($this->image);
 
         return $element->getStarHeight();
     }

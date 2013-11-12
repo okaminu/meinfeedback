@@ -3,10 +3,14 @@
 
 namespace MFB\WidgetBundle\Builder;
 
+
+use MFB\WidgetBundle\Builder\Elements\ElementInterface;
+
 use MFB\WidgetBundle\Builder\Elements\ImageBaseElement;
 use MFB\WidgetBundle\Builder\Elements\ImageRepeatTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
+
 
 class ImageBuilder implements BuilderInterface{
 
@@ -30,7 +34,7 @@ class ImageBuilder implements BuilderInterface{
      * @param $block
      * @return $this
      */
-    public function addElement($block)
+    public function addElement(ElementInterface $block)
     {
         $this->layout[$block->getName()] = $block;
         return $this;

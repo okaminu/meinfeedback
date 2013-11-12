@@ -45,6 +45,12 @@ class LocaleListener implements EventSubscriberInterface
         );
     }
 
+    /**
+     * Get locale by host from host map passed from service arguments
+     *
+     * @param $currentHost
+     * @return mixed
+     */
     protected function getMappedLocale($currentHost)
     {
         $locale = $this->hostMap['default'];

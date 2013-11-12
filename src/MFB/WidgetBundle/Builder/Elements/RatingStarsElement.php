@@ -3,10 +3,10 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
+use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
+use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-class RatingStarsElement {
-
-    protected $image;
+class RatingStarsElement extends AbstractImageBase implements ElementInterface{
 
     protected $stars;
 
@@ -15,20 +15,6 @@ class RatingStarsElement {
     protected $starWidth;
 
     protected $rating;
-
-    protected $positionX;
-
-    protected $positionY;
-
-    public function __construct($image, $rating, $resources)
-    {
-        $this->image = $image;
-
-        $this->rating = $rating;
-
-        $this->stars = $resources['stars'];
-
-    }
 
     public function countStarSizes($image)
     {
@@ -39,12 +25,26 @@ class RatingStarsElement {
         $this->setStarWidth($WidgetRatingStarsCurrentWidth);
     }
 
+    public function getName()
+    {
+        return 'ratingStars';
+    }
+
+    public function render($image = null)
+    {
+        $this->setImage($image);
+        return $this->createRatingStar();
+    }
+
+
     public function createRatingStar()
     {
         $opacity = 100;
 
-        $emptyStar = $this->stars['0'];
-        $fullStar = $this->stars['1'];
+        $stars = $this->getStars();
+
+        $emptyStar = $stars['0'];
+        $fullStar = $stars['1'];
 
         // Take the integer part of the rating(sum of fully stars).
         $StarSumFirstPart = $StarSum = (int)$this->rating;
@@ -72,13 +72,13 @@ class RatingStarsElement {
             $StarSum += 1;
             switch (true) {
                 case ($StarSumSecondPart > 0 && $StarSumSecondPart < 0.5) :
-                    $WidgetRatingStarsCurrentPath = $this->stars['025'];
+                    $WidgetRatingStarsCurrentPath = $stars['025'];
                     break;
                 case ($StarSumSecondPart >= 0.5 && $StarSumSecondPart < 0.75) :
-                    $WidgetRatingStarsCurrentPath = $this->stars['05'];
+                    $WidgetRatingStarsCurrentPath = $stars['05'];
                     break;
                 case ($StarSumSecondPart >= 0.75 && $StarSumSecondPart < 1) :
-                    $WidgetRatingStarsCurrentPath = $this->stars['075'];
+                    $WidgetRatingStarsCurrentPath = $stars['075'];
                     break;
             }
 
@@ -107,47 +107,6 @@ class RatingStarsElement {
 
         return $this;
 
-    }
-
-    public  function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param $positionX
-     * @return $this
-     */
-    public function setPositionX($positionX)
-    {
-        $this->positionX = $positionX;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPositionX()
-    {
-        return $this->positionX;
-    }
-
-    /**
-     * @param $positionY
-     * @return $this
-     */
-    public function setPositionY($positionY)
-    {
-        $this->positionY = $positionY;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPositionY()
-    {
-        return $this->positionY;
     }
 
     /**
@@ -182,5 +141,31 @@ class RatingStarsElement {
         return $this->starWidth;
     }
 
+    /**
+     * @param mixed $rating
+     * @return $this;
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+        return $this;
+    }
 
-} 
+    /**
+     * @return mixed
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStars()
+    {
+        return $this->resources['stars'];
+    }
+
+
+}
