@@ -4,8 +4,9 @@
 namespace MFB\WidgetBundle\Builder\Elements;
 
 use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
+use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-class ImageTextElement extends AbstractImageBase {
+class ImageTextElement extends AbstractImageBase implements ElementInterface {
 
     protected  static $last_line_padding = 20;
 
