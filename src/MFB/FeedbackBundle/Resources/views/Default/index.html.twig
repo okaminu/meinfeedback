@@ -16,56 +16,41 @@
         <div class="row-fluid inner-page contact">
             <div class="span6">
                 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
-                    Please leave feedback about {{ account_channel_name }}
+                    Please leave feedback about {{ accountChannel.getName }}
                 </div>
 
-                {% if errorMessage %}
-                <div style="padding:20px 10px 15px 0; font-size: 17px; font-weight:300; color:red">
-                    {{ errorMessage }}
-                </div>
-                {% endif %}
-                <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannelId}) }}">
+
+                <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannel.getId}) }}">
 
                     {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
                     {{ form_errors(form.email) }}
 
-                    {{ form_label(form.gender) }}
-                    {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
-
-                    {{ form_label(form.firstName) }}
-                    {{ form_widget(form.firstName) }}
-
-                    {{ form_label(form.lastName) }}
-                    {{ form_widget(form.lastName) }}
-
-                    {{ form_label(form.salutation) }}
-                    {{ form_widget(form.salutation) }}
-
-                    {{ form_label(form.serviceDate) }}
-                    {{ form_widget(form.serviceDate) }}
-
-                    {{ form_label(form.referenceId) }}
-                    {{ form_widget(form.referenceId) }}
-
-                    {{ form_label(form.serviceDescription) }}
-                    {{ form_widget(form.serviceDescription) }}
-
-                    {{ form_label(form.homepage) }}
-                    {{ form_widget(form.homepage) }}
-
-                {% if ratingEnabled == 1 %}
-                    <div class="stars_gray">
-                        <span style="width: 0%;" class="stars_gold"></span>
-                        <div onmouseout="setRating(0);" class="stars_coords">
-                            {% for i in 1..5 %}
-                                <div onmousemove="setRating({{ i }});" onclick="clickRating({{ i }});"></div>
-                            {% endfor %}
+                    {% if accountChannel.getRatingsEnabled == 1 %}
+                        <div class="stars_gray">
+                            <span style="width: 0%;" class="stars_gold"></span>
+                            <div onmouseout="setRating(0);" class="stars_coords">
+                                {% for i in 1..5 %}
+                                    <div onmousemove="setRating({{ i }});" onclick="clickRating({{ i }});"></div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                <input type="hidden" value="0" name="rating" class="rating"/>
-                {% endif %}
+                        <input type="hidden" value="0" name="rating" class="rating"/>
+                        {% if starErrorMessage %}
+                            <div style="padding:20px 10px 15px 0; font-size: 17px; font-weight:300; color:red">
+                                {{ starErrorMessage }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
 
                 <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
+
+                {{ form_label(form.gender) }}
+                {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.serviceDate) }}
+                {{ form_row(form.serviceDescription) }}
+
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
