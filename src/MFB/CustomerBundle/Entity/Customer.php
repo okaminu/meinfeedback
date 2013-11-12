@@ -36,6 +36,13 @@ class Customer
     private $accountId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="serviceId", type="integer", nullable=true)
+     */
+    private $serviceId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="gender", type="integer", nullable=true)
@@ -66,13 +73,6 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="service_date", type="date", nullable=true)
-     */
-    private $serviceDate;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="reference_id", type="string", length=16, nullable=true)
      */
     private $referenceId;
@@ -83,14 +83,6 @@ class Customer
      * @ORM\Column(name="homepage", type="string", length=128, nullable=true)
      */
     private $homepage;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="serviceDescription", type="string", length=255, nullable=true)
-     */
-    private $serviceDescription;
 
     /**
      * @var integer
@@ -226,30 +218,6 @@ class Customer
         return $this->salutation;
     }
 
-
-    /**
-     * Set serviceDate
-     *
-     * @param \DateTime $serviceDate
-     * @return Customer
-     */
-    public function setServiceDate($serviceDate)
-    {
-        $this->serviceDate = $serviceDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get serviceDate
-     *
-     * @return \DateTime 
-     */
-    public function getServiceDate()
-    {
-        return $this->serviceDate;
-    }
-
     /**
      * Set referenceId
      *
@@ -297,29 +265,6 @@ class Customer
     }
 
     /**
-     * Set serviceDescription
-     *
-     * @param string $serviceDescription
-     * @return Customer
-     */
-    public function setServiceDescription($serviceDescription)
-    {
-        $this->serviceDescription = $serviceDescription;
-    
-        return $this;
-    }
-
-    /**
-     * Get serviceDescription
-     *
-     * @return string 
-     */
-    public function getServiceDescription()
-    {
-        return $this->serviceDescription;
-    }
-
-    /**
      * Set anonymous
      *
      * @param integer $anonymous
@@ -363,5 +308,28 @@ class Customer
     public function getCustomerIdReference()
     {
         return $this->customerIdReference;
+    }
+
+    /**
+     * Set serviceId
+     *
+     * @param integer $serviceId
+     * @return Customer
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceId
+     *
+     * @return integer 
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
     }
 }
