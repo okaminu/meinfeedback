@@ -37,10 +37,10 @@ class Customer
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="serviceId", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\Service")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
-    private $serviceId;
+    private $service;
 
     /**
      * @var string
@@ -311,25 +311,25 @@ class Customer
     }
 
     /**
-     * Set serviceId
+     * Set service
      *
-     * @param integer $serviceId
+     * @param \MFB\ServiceBundle\Entity\Service $service
      * @return Customer
      */
-    public function setServiceId($serviceId)
+    public function setService(\MFB\ServiceBundle\Entity\Service $service = null)
     {
-        $this->serviceId = $serviceId;
+        $this->service = $service;
     
         return $this;
     }
 
     /**
-     * Get serviceId
+     * Get service
      *
-     * @return integer 
+     * @return \MFB\ServiceBundle\Entity\Service 
      */
-    public function getServiceId()
+    public function getService()
     {
-        return $this->serviceId;
+        return $this->service;
     }
 }

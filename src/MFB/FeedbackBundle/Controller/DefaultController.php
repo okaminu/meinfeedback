@@ -36,7 +36,7 @@ class DefaultController extends Controller
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->getCustomerForm($customer);
+        $form = $this->createForm(new CustomerType(), $customer);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -44,7 +44,7 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
-        $requestForm = $request->get('form');
+        $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
         $serviceDate = $requestForm['serviceDate'];
@@ -65,20 +65,17 @@ class DefaultController extends Controller
         $customer = new Customer();
         $customer->setAccountId($account->getId());
 
-        $form = $this->getCustomerForm($customer);
+        $form = $this->createForm(new CustomerType(), $customer);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
 
-                $em->persist($customer);
-                $em->flush();
-
                 $feedback = new Feedback();
                 $feedback->setAccountId($account->getId());
                 $feedback->setChannelId($accountChannel->getId());
-                $feedback->setCustomerId($customer->getId());
+                $feedback->setCustomer($customer);
                 $feedback->setContent($request->get('feedback'));
 
                 $requestRating = (int)$request->get('rating');
@@ -88,8 +85,6 @@ class DefaultController extends Controller
                 }
 
                 if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
-                    $em->remove($customer);
-                    $em->flush();
                     return $this->showFeedbackForm(
                         $account->getId(),
                         $accountChannel,
@@ -101,24 +96,30 @@ class DefaultController extends Controller
 
                 $feedback->setRating($rating);
 
-                $em->persist($feedback);
-                $em->flush();
-
-
-                if ($serviceDescription || $serviceIdReference || $serviceDate) {
-                    $service = new Service();
-                    $service->setAccountId($account->getId());
-                    $service->setChannelId($accountChannel->getId());
+                $service = new Service();
+                $service->setAccountId($account->getId());
+                $service->setChannelId($accountChannel->getId());
+                if ($serviceDescription) {
                     $service->setDescription($serviceDescription);
-                    $service->setDate(new \DateTime(implode('-', $serviceDate)));
-                    $service->setServiceIdReference($serviceIdReference);
-                    $em->persist($service);
-                    $em->flush();
-
-                    $customer->setServiceId($service->getId());
-                    $em->persist($customer);
-                    $em->flush();
                 }
+
+                if ($serviceIdReference) {
+                    $service->setServiceIdReference($serviceIdReference);
+                }
+
+                if ($serviceDate['year'] != "" &&
+                    $serviceDate['month'] != "" &&
+                    $serviceDate['day'] != "") {
+                    $service->setDate(new \DateTime(implode('-', $serviceDate)));
+                }
+
+                $customer->setService($service);
+
+                $em->persist($feedback);
+                $em->persist($customer);
+                $em->persist($service);
+
+                $em->flush();
 
 
                 return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
@@ -148,31 +149,5 @@ class DefaultController extends Controller
                 'form' => $formView
             )
         );
-    }
-
-    private function getCustomerForm($customer)
-    {
-        $form = $this->createFormBuilder($customer)
-            ->add('email', 'email', array('required' => true))
-            ->add('anonymous', 'checkbox', array('required' => false))
-            ->add('customerIdReference', 'text', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
-            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
-            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
-            ->getForm();
-        return $form;
     }
 }
