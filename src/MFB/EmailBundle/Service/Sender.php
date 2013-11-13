@@ -4,6 +4,7 @@ namespace MFB\EmailBundle\Service;
 
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
+use MFB\ServiceBundle\Entity\Service;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 
@@ -32,7 +33,7 @@ class Sender
         AccountChannel $channel,
         EmailTemplate $template,
         $inviteUrl,
-        $entity
+        Service $service
     ) {
         $message = new \Swift_Message();
         $message_title = $template->getTitle();
@@ -42,17 +43,21 @@ class Sender
         $message->setSubject($message_title);
 
         $emailContent = $template->getTemplateCode();
+        $date = null;
+        if ($service->getDate()) {
+            $date = $service->getDate()->format('Y-m-d');
+        }
         $emailContent = $this->replacePlaceHolders(
             $emailContent,
             array(
                   "#LINK#" => $inviteUrl,
-                  "#FIRSTNAME#" => $entity->getFirstName(),
-                  "#LASTNAME#" => $entity->getLastName(),
-                  "#SAL#" => $entity->getSalutation(),
-                  "#SERVICE_DATE#" => $entity->getServiceDate()->format('Y-m-d'),
-                  "#REFERENCE_ID#" => $entity->getReferenceId(),
-                  "#SERVICE_NAME#" => $entity->getServiceDescription(),
-                  "#HOMEPAGE#" => $entity->getHomepage()
+                  "#FIRSTNAME#" => $customer->getFirstName(),
+                  "#LASTNAME#" => $customer->getLastName(),
+                  "#SAL#" => $customer->getSalutation(),
+                  "#SERVICE_DATE#" => $date,
+                  "#REFERENCE_ID#" => $service->getServiceIdReference(),
+                  "#SERVICE_NAME#" => $service->getDescription(),
+                  "#HOMEPAGE#" => $customer->getHomepage()
             )
         );
 
