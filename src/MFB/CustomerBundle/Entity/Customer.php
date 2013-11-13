@@ -36,13 +36,6 @@ class Customer
     private $accountId;
 
     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\Service")
-     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
-     */
-    private $service;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="gender", type="integer", nullable=true)
@@ -308,28 +301,5 @@ class Customer
     public function getCustomerIdReference()
     {
         return $this->customerIdReference;
-    }
-
-    /**
-     * Set service
-     *
-     * @param \MFB\ServiceBundle\Entity\Service $service
-     * @return Customer
-     */
-    public function setService(\MFB\ServiceBundle\Entity\Service $service = null)
-    {
-        $this->service = $service;
-    
-        return $this;
-    }
-
-    /**
-     * Get service
-     *
-     * @return \MFB\ServiceBundle\Entity\Service 
-     */
-    public function getService()
-    {
-        return $this->service;
     }
 }

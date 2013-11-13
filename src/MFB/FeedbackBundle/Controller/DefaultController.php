@@ -99,6 +99,7 @@ class DefaultController extends Controller
                 $service = new Service();
                 $service->setAccountId($account->getId());
                 $service->setChannelId($accountChannel->getId());
+                $service->setCustomer($customer);
                 if ($serviceDescription) {
                     $service->setDescription($serviceDescription);
                 }
@@ -113,10 +114,8 @@ class DefaultController extends Controller
                     $service->setDate(new \DateTime(implode('-', $serviceDate)));
                 }
 
-                $customer->setService($service);
-
-                $em->persist($feedback);
                 $em->persist($customer);
+                $em->persist($feedback);
                 $em->persist($service);
 
                 $em->flush();
