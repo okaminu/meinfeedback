@@ -47,6 +47,7 @@ class DefaultController extends Controller
         $requestForm = $request->get('form');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
+        $serviceDate = $requestForm['serviceDate'];
         $em = $this->getDoctrine()->getManager();
 
         /** @var Account $account */
@@ -104,11 +105,12 @@ class DefaultController extends Controller
                 $em->flush();
 
 
-                if ($serviceDescription || $serviceIdReference) {
+                if ($serviceDescription || $serviceIdReference || $serviceDate) {
                     $service = new Service();
                     $service->setAccountId($account->getId());
                     $service->setChannelId($accountChannel->getId());
                     $service->setDescription($serviceDescription);
+                    $service->setDate(new \DateTime(implode('-', $serviceDate)));
                     $service->setServiceIdReference($serviceIdReference);
                     $em->persist($service);
                     $em->flush();
