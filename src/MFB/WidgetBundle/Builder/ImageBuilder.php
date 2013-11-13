@@ -69,7 +69,7 @@ class ImageBuilder implements BuilderInterface{
         }
 
         ob_start();
-        imagepng($element->getImage());
+        imagepng($base);
         $imageBlob = ob_get_contents();
         ob_end_clean();
 
