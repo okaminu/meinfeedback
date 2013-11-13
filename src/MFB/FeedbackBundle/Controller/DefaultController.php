@@ -12,6 +12,8 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Component\Form\FormError;
 use Doctrine\DBAL\DBALException;
+use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
+use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 
 class DefaultController extends Controller
 {
@@ -72,19 +74,17 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             try {
 
-                $feedback = new Feedback();
-                $feedback->setAccountId($account->getId());
-                $feedback->setChannelId($accountChannel->getId());
-                $feedback->setCustomer($customer);
-                $feedback->setContent($request->get('feedback'));
+                $feedbackEntityManager = new FeedbackEntityManager(
+                    $account->getId(),
+                    $accountChannel->getId(),
+                    $customer,
+                    $request->get('feedback'),
+                    $request->get('rating')
+                );
 
-                $requestRating = (int)$request->get('rating');
+                $feedbackEntity = $feedbackEntityManager->createEntity();
 
-                if (($requestRating > 0) && ($requestRating <= 5)) {
-                    $rating = $requestRating;
-                }
-
-                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
+                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
                     return $this->showFeedbackForm(
                         $account->getId(),
                         $accountChannel,
@@ -94,29 +94,19 @@ class DefaultController extends Controller
                     );
                 }
 
-                $feedback->setRating($rating);
+                $serviceEntityManager = new ServiceEntityManager(
+                    $account->getId(),
+                    $accountChannel->getId(),
+                    $customer,
+                    $serviceDescription,
+                    $serviceDate,
+                    $serviceIdReference
+                );
 
-                $service = new Service();
-                $service->setAccountId($account->getId());
-                $service->setChannelId($accountChannel->getId());
-                $service->setCustomer($customer);
-                if ($serviceDescription) {
-                    $service->setDescription($serviceDescription);
-                }
-
-                if ($serviceIdReference) {
-                    $service->setServiceIdReference($serviceIdReference);
-                }
-
-                if ($serviceDate['year'] != "" &&
-                    $serviceDate['month'] != "" &&
-                    $serviceDate['day'] != "") {
-                    $service->setDate(new \DateTime(implode('-', $serviceDate)));
-                }
-
+                $serviceEntity = $serviceEntityManager->createEntity();
                 $em->persist($customer);
-                $em->persist($feedback);
-                $em->persist($service);
+                $em->persist($feedbackEntity);
+                $em->persist($serviceEntity);
 
                 $em->flush();
 
