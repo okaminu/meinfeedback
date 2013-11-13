@@ -6,6 +6,7 @@ use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 
 class InviteController extends Controller
 {
@@ -38,19 +39,19 @@ class InviteController extends Controller
 
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
 
-        $feedback = new Feedback();
-        $feedback->setAccountId($invite->getAccountId());
-        $feedback->setChannelId($invite->getChannelId());
-        $feedback->setCustomerId($invite->getCustomerId());
-        $feedback->setContent($request->get('feedback'));
+        $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
-        $requestRating = (int)$request->get('rating');
+        $feedbackEntityManager = new FeedbackEntityManager(
+            $invite->getAccountId(),
+            $accountChannel->getId(),
+            $customer,
+            $request->get('feedback'),
+            $request->get('rating')
+        );
 
-        if (($requestRating > 0) && ($requestRating <= 5)) {
-            $rating = $requestRating;
-        }
+        $feedbackEntity = $feedbackEntityManager->createEntity();
 
-        if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
+        if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
             return $this->showFeedbackForm(
                 $request->get('token'),
                 $accountChannel,
@@ -59,8 +60,7 @@ class InviteController extends Controller
             );
         }
 
-        $feedback->setRating($rating);
-        $em->persist($feedback);
+        $em->persist($feedbackEntity);
         $em->remove($invite);
         $em->flush();
 

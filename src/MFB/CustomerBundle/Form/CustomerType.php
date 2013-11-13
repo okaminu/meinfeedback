@@ -15,7 +15,9 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email')
+            ->add('email', 'email', array('required' => true))
+            ->add('anonymous', 'checkbox', array('required' => false))
+            ->add('customerIdReference', 'text', array('required' => false))
             ->add(
                 'gender',
                 'choice',
@@ -27,13 +29,11 @@ class CustomerType extends AbstractType
                     'expanded' => true
                 )
             )
-            ->add('firstName')
-            ->add('lastName')
-            ->add('salutation')
-            ->add('serviceDate')
-            ->add('referenceId')
-            ->add('serviceDescription')
-            ->add('homepage')
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
+            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
+            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
         ;
     }
     

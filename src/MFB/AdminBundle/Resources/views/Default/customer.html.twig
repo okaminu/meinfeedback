@@ -21,29 +21,20 @@
                     {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
                     {{ form_errors(form.email) }}
 
+                    {{ form_label(form.anonymous) }}
+                    <div style="display:block; width:50px">
+                        {{ form_widget(form.anonymous) }}
+                    </div>
                     {{ form_label(form.gender) }}
                     {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
-
-                    {{ form_label(form.firstName) }}
-                    {{ form_widget(form.firstName) }}
-
-                    {{ form_label(form.lastName) }}
-                    {{ form_widget(form.lastName) }}
-
-                    {{ form_label(form.salutation) }}
-                    {{ form_widget(form.salutation) }}
-
-                    {{ form_label(form.serviceDate) }}
-                    {{ form_widget(form.serviceDate) }}
-
-                    {{ form_label(form.referenceId) }}
-                    {{ form_widget(form.referenceId) }}
-
-                    {{ form_label(form.serviceDescription) }}
-                    {{ form_widget(form.serviceDescription) }}
-
-                    {{ form_label(form.homepage) }}
-                    {{ form_widget(form.homepage) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.lastName) }}
+                    {{ form_row(form.customerIdReference) }}
+                    {{ form_row(form.serviceDate) }}
+                    {{ form_row(form.serviceDescription) }}
+                    {{ form_row(form.serviceIdReference) }}
+                    {{ form_row(form.homepage) }}
+                    {{ form_row(form.salutation) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">

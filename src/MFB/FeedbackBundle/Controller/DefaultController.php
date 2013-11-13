@@ -12,6 +12,8 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Component\Form\FormError;
 use Doctrine\DBAL\DBALException;
+use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
+use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 
 class DefaultController extends Controller
 {
@@ -36,7 +38,7 @@ class DefaultController extends Controller
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->getCustomerForm($customer);
+        $form = $this->createForm(new CustomerType(), $customer);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -44,9 +46,10 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
-        $requestForm = $request->get('form');
+        $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
+        $serviceDate = $requestForm['serviceDate'];
         $em = $this->getDoctrine()->getManager();
 
         /** @var Account $account */
@@ -64,31 +67,24 @@ class DefaultController extends Controller
         $customer = new Customer();
         $customer->setAccountId($account->getId());
 
-        $form = $this->getCustomerForm($customer);
+        $form = $this->createForm(new CustomerType(), $customer);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
 
-                $em->persist($customer);
-                $em->flush();
+                $feedbackEntityManager = new FeedbackEntityManager(
+                    $account->getId(),
+                    $accountChannel->getId(),
+                    $customer,
+                    $request->get('feedback'),
+                    $request->get('rating')
+                );
 
-                $feedback = new Feedback();
-                $feedback->setAccountId($account->getId());
-                $feedback->setChannelId($accountChannel->getId());
-                $feedback->setCustomerId($customer->getId());
-                $feedback->setContent($request->get('feedback'));
+                $feedbackEntity = $feedbackEntityManager->createEntity();
 
-                $requestRating = (int)$request->get('rating');
-
-                if (($requestRating > 0) && ($requestRating <= 5)) {
-                    $rating = $requestRating;
-                }
-
-                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($rating))) {
-                    $em->remove($customer);
-                    $em->flush();
+                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
                     return $this->showFeedbackForm(
                         $account->getId(),
                         $accountChannel,
@@ -98,25 +94,21 @@ class DefaultController extends Controller
                     );
                 }
 
-                $feedback->setRating($rating);
+                $serviceEntityManager = new ServiceEntityManager(
+                    $account->getId(),
+                    $accountChannel->getId(),
+                    $customer,
+                    $serviceDescription,
+                    $serviceDate,
+                    $serviceIdReference
+                );
 
-                $em->persist($feedback);
+                $serviceEntity = $serviceEntityManager->createEntity();
+                $em->persist($customer);
+                $em->persist($feedbackEntity);
+                $em->persist($serviceEntity);
+
                 $em->flush();
-
-
-                if ($serviceDescription || $serviceIdReference) {
-                    $service = new Service();
-                    $service->setAccountId($account->getId());
-                    $service->setChannelId($accountChannel->getId());
-                    $service->setDescription($serviceDescription);
-                    $service->setServiceIdReference($serviceIdReference);
-                    $em->persist($service);
-                    $em->flush();
-
-                    $customer->setServiceId($service->getId());
-                    $em->persist($customer);
-                    $em->flush();
-                }
 
 
                 return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
@@ -146,31 +138,5 @@ class DefaultController extends Controller
                 'form' => $formView
             )
         );
-    }
-
-    private function getCustomerForm($customer)
-    {
-        $form = $this->createFormBuilder($customer)
-            ->add('email', 'email', array('required' => true))
-            ->add('anonymous', 'checkbox', array('required' => false))
-            ->add('customerIdReference', 'text', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
-            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
-            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
-            ->getForm();
-        return $form;
     }
 }

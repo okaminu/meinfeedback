@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 
 class DefaultController extends Controller
 {
@@ -73,24 +74,32 @@ class DefaultController extends Controller
 
     public function customerAction(Request $request)
     {
+        $requestForm = $request->get('mfb_customerbundle_customer');
+        $serviceIdReference = $requestForm['serviceIdReference'];
+        $serviceDescription = $requestForm['serviceDescription'];
+        $serviceDate = $requestForm['serviceDate'];
+
         $em = $this->getDoctrine()->getManager();
 
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
 
-        $entity = new Customer();
-        $entity->setAccountId($accountId);
+        $customer = new Customer();
+        $customer->setAccountId($accountId);
 
-        $form = $this->createForm(new CustomerType(), $entity, array(
+        $form = $this->createForm(new CustomerType(), $customer, array(
                 'action' => $this->generateUrl('mfb_add_customer'),
                 'method' => 'POST',
             ));
+
+        $form->add('salutation', 'text', array('required' => false));
+        $form->add('homepage', 'text', array('required' => false));
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
-                $em->persist($entity);
+                $em->persist($customer);
                 $em->flush();
 
                 $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
@@ -98,12 +107,23 @@ class DefaultController extends Controller
                 );
 
                 $invite = new FeedbackInvite();
-                $invite->setAccountId($entity->getAccountId());
-                $invite->setCustomerId($entity->getId());
+                $invite->setAccountId($customer->getAccountId());
+                $invite->setCustomerId($customer->getId());
                 $invite->setChannelId($accountChannel->getId());
                 $invite->updatedTimestamps();
                 $em->persist($invite);
                 $em->flush();
+
+                $serviceEntityManager = new ServiceEntityManager(
+                    $accountId,
+                    $accountChannel->getId(),
+                    $customer,
+                    $serviceDescription,
+                    $serviceDate,
+                    $serviceIdReference
+                );
+
+                $serviceEntity = $serviceEntityManager->createEntity();
 
                 $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
                     array(
@@ -125,16 +145,19 @@ class DefaultController extends Controller
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
+                $em->persist($serviceEntity);
+                $em->flush();
+
                 $this->get('mfb_email.sender')->createForAccountChannel(
-                    $entity,
+                    $customer,
                     $accountChannel,
                     $emailTemplate,
                     $inviteUrl,
-                    $entity
+                    $serviceEntity
                 );
 
                 return $this->redirect(
-                    $this->generateUrl('mfb_add_customer', array('added_email' => $entity->getEmail()))
+                    $this->generateUrl('mfb_add_customer', array('added_email' => $customer->getEmail()))
                 );
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();
@@ -148,7 +171,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('MFBAdminBundle:Default:customer.html.twig', array(
-                'entity' => $entity,
+                'entity' => $customer,
                 'form'   => $form->createView(),
                 'added_email' => $request->get('added_email')
             ));

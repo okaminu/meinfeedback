@@ -36,13 +36,6 @@ class Customer
     private $accountId;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="serviceId", type="integer", nullable=true)
-     */
-    private $serviceId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="gender", type="integer", nullable=true)
@@ -308,28 +301,5 @@ class Customer
     public function getCustomerIdReference()
     {
         return $this->customerIdReference;
-    }
-
-    /**
-     * Set serviceId
-     *
-     * @param integer $serviceId
-     * @return Customer
-     */
-    public function setServiceId($serviceId)
-    {
-        $this->serviceId = $serviceId;
-    
-        return $this;
-    }
-
-    /**
-     * Get serviceId
-     *
-     * @return integer 
-     */
-    public function getServiceId()
-    {
-        return $this->serviceId;
     }
 }

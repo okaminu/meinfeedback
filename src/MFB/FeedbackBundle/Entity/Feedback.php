@@ -40,9 +40,10 @@ class Feedback
     /**
      * @var integer
      *
-     * @ORM\Column(name="customer_id", type="integer")
-     */
-    private $customerId;
+     * @ORM\ManyToOne(targetEntity="MFB\CustomerBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     **/
+    private $customer;
 
     /**
      * @var integer
@@ -128,29 +129,6 @@ class Feedback
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Set customerId
-     *
-     * @param integer $customerId
-     * @return Feedback
-     */
-    public function setCustomerId($customerId)
-    {
-        $this->customerId = $customerId;
-    
-        return $this;
-    }
-
-    /**
-     * Get customerId
-     *
-     * @return integer 
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
     }
 
     /**
@@ -247,5 +225,28 @@ class Feedback
     public function getRating()
     {
         return $this->rating;
+    }
+
+    /**
+     * Set customer
+     *
+     * @param \MFB\CustomerBundle\Entity\Customer $customer
+     * @return Feedback
+     */
+    public function setCustomer(\MFB\CustomerBundle\Entity\Customer $customer = null)
+    {
+        $this->customer = $customer;
+    
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \MFB\CustomerBundle\Entity\Customer 
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 }
