@@ -36,6 +36,13 @@ class Customer
     private $accountId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="serviceId", type="integer", nullable=true)
+     */
+    private $serviceId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="gender", type="integer", nullable=true)
@@ -66,13 +73,6 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="service_date", type="date", nullable=true)
-     */
-    private $serviceDate;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="reference_id", type="string", length=16, nullable=true)
      */
     private $referenceId;
@@ -84,13 +84,19 @@ class Customer
      */
     private $homepage;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="anonymous", type="integer", options={"default" : 0})
+     */
+    private $anonymous;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="serviceDescription", type="string", length=255, nullable=true)
+     * @ORM\Column(name="customer_id_reference", type="string", length=255, nullable=true)
      */
-    private $serviceDescription;
+    private $customerIdReference;
 
     /**
      * Get id
@@ -212,30 +218,6 @@ class Customer
         return $this->salutation;
     }
 
-
-    /**
-     * Set serviceDate
-     *
-     * @param \DateTime $serviceDate
-     * @return Customer
-     */
-    public function setServiceDate($serviceDate)
-    {
-        $this->serviceDate = $serviceDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get serviceDate
-     *
-     * @return \DateTime 
-     */
-    public function getServiceDate()
-    {
-        return $this->serviceDate;
-    }
-
     /**
      * Set referenceId
      *
@@ -283,25 +265,71 @@ class Customer
     }
 
     /**
-     * Set serviceDescription
+     * Set anonymous
      *
-     * @param string $serviceDescription
+     * @param integer $anonymous
      * @return Customer
      */
-    public function setServiceDescription($serviceDescription)
+    public function setAnonymous($anonymous)
     {
-        $this->serviceDescription = $serviceDescription;
+        $this->anonymous = $anonymous;
     
         return $this;
     }
 
     /**
-     * Get serviceDescription
+     * Get anonymous
+     *
+     * @return integer 
+     */
+    public function getAnonymous()
+    {
+        return $this->anonymous;
+    }
+
+    /**
+     * Set customerIdReference
+     *
+     * @param string $customerIdReference
+     * @return Customer
+     */
+    public function setCustomerIdReference($customerIdReference)
+    {
+        $this->customerIdReference = $customerIdReference;
+    
+        return $this;
+    }
+
+    /**
+     * Get customerIdReference
      *
      * @return string 
      */
-    public function getServiceDescription()
+    public function getCustomerIdReference()
     {
-        return $this->serviceDescription;
+        return $this->customerIdReference;
+    }
+
+    /**
+     * Set serviceId
+     *
+     * @param integer $serviceId
+     * @return Customer
+     */
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceId
+     *
+     * @return integer 
+     */
+    public function getServiceId()
+    {
+        return $this->serviceId;
     }
 }

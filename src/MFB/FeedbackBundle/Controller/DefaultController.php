@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\ServiceBundle\Entity\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\AccountBundle\Entity\Account;
@@ -33,26 +34,9 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Account does not have any channels');
         }
 
-        $entity = new Customer();
-        $entity->setAccountId($account->getId());
-        $form = $this->createFormBuilder($entity)
-            ->add('email', 'email', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false))
-            ->add('serviceDescription', 'text', array('required' => false))
-            ->getForm();
+        $customer = new Customer();
+        $customer->setAccountId($account->getId());
+        $form = $this->getCustomerForm($customer);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -60,6 +44,9 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
+        $requestForm = $request->get('form');
+        $serviceIdReference = $requestForm['serviceIdReference'];
+        $serviceDescription = $requestForm['serviceDescription'];
         $em = $this->getDoctrine()->getManager();
 
         /** @var Account $account */
@@ -76,24 +63,8 @@ class DefaultController extends Controller
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->createFormBuilder($customer)
-            ->add('email', 'email', array('required' => false))
-            ->add(
-                'gender',
-                'choice',
-                array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
-                    'required' => false,
-                    'multiple'  => false,
-                    'empty_value' => false,
-                    'expanded' => true
-                )
-            )
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false))
-            ->add('serviceDescription', 'text', array('required' => false))
-            ->getForm();
+
+        $form = $this->getCustomerForm($customer);
 
         $form->handleRequest($request);
 
@@ -131,6 +102,23 @@ class DefaultController extends Controller
 
                 $em->persist($feedback);
                 $em->flush();
+
+
+                if ($serviceDescription || $serviceIdReference) {
+                    $service = new Service();
+                    $service->setAccountId($account->getId());
+                    $service->setChannelId($accountChannel->getId());
+                    $service->setDescription($serviceDescription);
+                    $service->setServiceIdReference($serviceIdReference);
+                    $em->persist($service);
+                    $em->flush();
+
+                    $customer->setServiceId($service->getId());
+                    $em->persist($customer);
+                    $em->flush();
+                }
+
+
                 return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
 
             } catch (DBALException $ex) {
@@ -158,5 +146,31 @@ class DefaultController extends Controller
                 'form' => $formView
             )
         );
+    }
+
+    private function getCustomerForm($customer)
+    {
+        $form = $this->createFormBuilder($customer)
+            ->add('email', 'email', array('required' => true))
+            ->add('anonymous', 'checkbox', array('required' => false))
+            ->add('customerIdReference', 'text', array('required' => false))
+            ->add(
+                'gender',
+                'choice',
+                array(
+                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'required' => false,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true
+                )
+            )
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
+            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
+            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
+            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
+            ->getForm();
+        return $form;
     }
 }

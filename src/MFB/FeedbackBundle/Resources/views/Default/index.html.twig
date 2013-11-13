@@ -46,12 +46,18 @@
 
                 <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
 
+                {{ form_label(form.anonymous) }}
+                <div style="display:block; width:50px">
+                    {{ form_widget(form.anonymous) }}
+                </div>
                 {{ form_label(form.gender) }}
                 {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
                 {{ form_row(form.firstName) }}
                 {{ form_row(form.lastName) }}
+                {{ form_row(form.customerIdReference) }}
                 {{ form_row(form.serviceDate) }}
                 {{ form_row(form.serviceDescription) }}
+                {{ form_row(form.serviceIdReference) }}
 
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">

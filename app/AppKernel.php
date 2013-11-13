@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new MFB\AccountProfileBundle\MFBAccountProfileBundle(),
             new MFB\WidgetBundle\MFBWidgetBundle(),
             new MFB\ReskribeBundle\MFBReskribeBundle(),
+            new MFB\ServiceBundle\MFBServiceBundle(),
             new \Sensio\Bundle\BuzzBundle\SensioBuzzBundle()
         );
 
