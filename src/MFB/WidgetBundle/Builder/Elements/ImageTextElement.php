@@ -29,8 +29,6 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface {
     public function render($image = null)
     {
         $this->setImage($image);
-        $this->fontColorTop = imagecolorallocate($this->image, 230, 230, 230);
-        $this->fontColorBottom = imagecolorallocate($this->image, 108, 108, 108);
         $this->writeText();
         return $this->getImage();
     }
@@ -48,18 +46,34 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface {
             8, // size
             0, // angle
             $this->getPositionX(), // x
-            $this->getPositionY(), // y
-            $this->fontColorBottom, // color
-            $this->getRecource('arialFontFile'), // font file
+            $this->getPositionY() + 8, // y + baseline modifier. this is cordinate for baseline, so we adjust it
+            $this->getFontColor(), // color
+            $this->getFont(), // font file
             $text // text
         );
 
         return $this;
     }
 
+    public function getElementHeight()
+    {
+        $info = imagettfbbox($this->getFontSize(), 0, $this->getFont(), $this->getText());
+        return ($info[5] - $info[3]) * - 1;
+    }
+
     public function writeText()
     {
         $this->writeTextElement($this->getText());
+    }
+
+    public function getFontSize()
+    {
+        return 8;
+    }
+
+    public function getFont()
+    {
+        return $this->getRecource('arialFontFile');
     }
 
     /**
@@ -79,5 +93,4 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface {
     {
         return $this->text;
     }
-
 }

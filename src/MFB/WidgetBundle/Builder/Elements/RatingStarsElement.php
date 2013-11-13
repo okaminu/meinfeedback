@@ -10,7 +10,7 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
 
     protected $stars;
 
-    protected $starHeight;
+    protected $elementHeight;
 
     protected $starWidth;
 
@@ -18,10 +18,10 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
 
     public function countStarSizes($image)
     {
-        if (isset($this->starHeight) && isset($this->starWidth) ) return;
+        if (isset($this->elementHeight) && isset($this->starWidth) ) return;
 
         list($WidgetRatingStarsCurrentWidth, $WidgetRatingStarsCurrentHeight) =  getimagesize($image);
-        $this->setStarHeight($WidgetRatingStarsCurrentHeight);
+        $this->setElementHeight($WidgetRatingStarsCurrentHeight);
         $this->setStarWidth($WidgetRatingStarsCurrentWidth);
     }
 
@@ -33,7 +33,7 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
     public function render($image = null)
     {
         $this->setImage($image);
-        return $this->createRatingStar();
+        return $this->createRatingStar()->getImage();
     }
 
 
@@ -59,7 +59,7 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
                 ImageAlphaBlending($WidgetRatingStarsCurrent, true);
                 imageSaveAlpha($WidgetRatingStarsCurrent, true);
 
-                imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getStarHeight(), $opacity);
+                imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getElementHeight(), $opacity);
                 imageSaveAlpha($this->image, true);
                 $WidgetRatingStarsPaddingLaft += $this->getStarWidth();
             }
@@ -86,7 +86,7 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
             ImageAlphaBlending($WidgetRatingStarsCurrent, true);
             imageSaveAlpha($WidgetRatingStarsCurrent, true);
 
-            imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getStarHeight(), $opacity);
+            imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getElementHeight(), $opacity);
             imageSaveAlpha($this->image, true);
 
             $WidgetRatingStarsPaddingLaft += $this->getStarWidth();
@@ -99,7 +99,7 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
                 ImageAlphaBlending($WidgetRatingStarsCurrent, true);
                 imageSaveAlpha($WidgetRatingStarsCurrent, true);
 
-                imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getStarHeight(), $opacity);
+                imagecopymerge($this->image, $WidgetRatingStarsCurrent, $WidgetRatingStarsPaddingLaft, $this->getPositionY(), 0, 0, $this->getStarWidth(), $this->getElementHeight(), $opacity);
                 imageSaveAlpha($this->image, true);
                 $WidgetRatingStarsPaddingLaft += $this->getStarWidth();
             }
@@ -110,19 +110,24 @@ class RatingStarsElement extends AbstractImageBase implements ElementInterface{
     }
 
     /**
-     * @param mixed $starHeight
+     * @param mixed $elementHeight
      */
-    public function setStarHeight($starHeight)
+    public function setElementHeight($elementHeight)
     {
-        $this->starHeight = $starHeight;
+        $this->elementHeight = $elementHeight;
     }
 
     /**
      * @return mixed
      */
-    public function getStarHeight()
+    public function getElementHeight()
     {
-        return $this->starHeight;
+        if ($this->elementHeight === null)
+        {
+            $stars = $this->getStars();
+            $this->countStarSizes($stars['1']);
+        }
+        return $this->elementHeight;
     }
 
     /**

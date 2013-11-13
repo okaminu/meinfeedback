@@ -5,6 +5,7 @@ namespace MFB\WidgetBundle\Builder\Elements;
 
 use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
 use MFB\WidgetBundle\Builder\Elements\RatingStarsElement;
+use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
 class ImageCommentElement extends AbstractImageBase  implements ElementInterface {
@@ -12,6 +13,10 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     protected  static $last_line_padding = 20;
 
     protected $lastLine = 222;
+
+    protected static $spaceAfterComment = 5;
+
+    protected static $spacerHeight = 2;
 
     protected $text;
 
@@ -26,14 +31,11 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     public function __construct($resources)
     {
         $this->setResources($resources);
-
     }
 
     public function render($image = null)
     {
         $this->setImage($image);
-        $this->fontColorTop = imagecolorallocate($this->image, 230, 230, 230);
-        $this->fontColorBottom = imagecolorallocate($this->image, 108, 108, 108);
         $this->addComment($this->getText());
         return $this->getImage();
     }
@@ -43,77 +45,142 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return 'comment';
     }
 
+
+    public function isHeigher($maxHeight, $elementsHeight, $startingHeight = 0)
+    {
+
+        if ($startingHeight + $elementsHeight > $maxHeight) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getGroupHeight($elements)
+    {
+        $elementsHeight = 0;
+        foreach($elements as $element)
+        {
+            $elementsHeight += $element->getElementHeight();
+        }
+
+        return $elementsHeight;
+    }
+
+
     public function addComment($feedbacks)
     {
-        $font = $this->getRecource('lucidaFontFile');
-        $fontSize = 9;
-
-        $commentPositionY = 20;
-        $comment = '';
-        $paddingAfter = 9;
-        $starHeight = 0;
 
         foreach ($feedbacks as $feedback) {
 
                 try {
 
-                    //this is quite complicated. needs deeper look.
-                    $commentAdded = $this->wrap(
-                        $fontSize,
-                        $font,
-                        '"'. trim($feedback->getContent()) . '"'."\n\n\n",
-                        $this->getBoxWidth(),
-                        $this->getBoxHeight()
+                    $groupHeight = $this->getGroupHeight(
+                        array(
+                            $this->getStarsElement($feedback),
+                            $this->getTextElement($feedback)
+                        )
                     );
 
-                    $commentSize = $this->getTextBoxHeight($commentAdded, $fontSize, $font);
-
-                    $nextCommentHeight = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
-
-                    if ($nextCommentHeight > 200 )
+                    if ($this->isHeigher(
+                        $this->getBoxHeight(),
+                        $groupHeight,
+                        $this->getPositionY()
+                    ) == true)
                     {
                         break;
                     }
-                    $comment .= $commentAdded;
 
-                    $rating = $feedback->getRating();
-                    $starHeight = 0;
+                    $positionY = $this->writeElements(
+                        array(
+                            $this->getStarsElement($feedback),
+                            $this->getTextElement($feedback)
+                        ),
+                        $this->getPositionY(),
+                        $this->getSpacerHeight()
+                    );
 
-                    if (isset($rating)) {
-                        $starHeight = $this->addStars($rating, $this->getPositionX(), $commentPositionY);
-                    }
-
-                    $commentPositionY = $commentPositionY + $starHeight + $commentSize + $paddingAfter;
+                    $this->setPositionY($positionY + self::$spaceAfterComment);
 
                 } catch (\Exception $ex) {
-
+                    echo $ex->getMessage();
                 }
 
-
         }
-        if ($comment == '') {
-            $comment = $this->wrap(
-                9,
-                $font,
-                '"'. substr($feedbacks->getContent(), 0, 500).'.."',
-                $this->getBoxWidth(),
-                $this->getBoxHeight()
-            );
-
-        }
-
-        imagettftext(
-            $this->image, //img to apply
-            9, // size
-            0, // angle
-            $this->getPositionX(), // x
-            50, // y
-            $this->fontColorTop, // color
-            $font, // font file
-            $comment // text
-        );
 
         return $this;
+    }
+
+    protected function increasePositionY($height)
+    {
+        $this->setPositionY($this->getPositionY() + $height);
+    }
+
+    public function writeElements($elements, $startingPositionY, $spacerHeight)
+    {
+        $render = $this->image;
+        $positionY = $startingPositionY;
+
+        foreach ($elements as $element)
+        {
+            $element->setPositionY($positionY);
+            if ($element->getElementHeight() > 0) {
+                $render = $element->render($render);
+            }
+
+            $positionY = $positionY + $element->getElementHeight() + $spacerHeight ;
+        }
+
+        return $positionY;
+    }
+
+    protected function getStarsElement($feedback)
+    {
+        $element = new RatingStarsElement( $this->getResources() );
+
+        if ($feedback->getRating() == null)
+        {
+            $element->setElementHeight(0);
+        }
+
+        return $element
+            ->setPositionX($this->getPositionX())
+            ->setPositionY($this->getPositionY())
+            ->setRating($feedback->getRating());
+    }
+
+    protected function getTextElement($feedback)
+    {
+        $textElement = new ImageTextElement( $this->getResources() );
+
+        $commentAdded = $this->wrap(
+            $this->getFontSize(),
+            $this->getFontType(),
+            '"'. trim($feedback->getContent()) . '"',
+            $this->getBoxWidth(),
+            $this->getBoxHeight()
+        );
+
+        return $textElement
+            ->setText($commentAdded)
+            ->setPositionX($this->getPositionX())
+            ->setPositionY($this->getPositionY())
+            ->setFontColorCode(230, 230, 230);
+    }
+
+    public function getFontSize()
+    {
+        return 9;
+    }
+
+    public function getFontType()
+    {
+        return $this->getRecource('lucidaFontFile');
+    }
+
+    protected function getSpacerHeight()
+    {
+        return self::$spacerHeight;
     }
 
     /**
@@ -146,7 +213,7 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return substr_count($text, "\n") * ($fontSize);
     }
 
-    public function getTextBoxHeight($text, $fontSize, $fontFace)
+    public function getElementHeight($text, $fontSize, $fontFace)
     {
         $info = imagettfbbox($fontSize, 0, $fontFace, $text);
         return ($info[5] - $info[3]) * - 1;
@@ -193,18 +260,6 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         }
 
         return $ret;
-    }
-
-    public function addStars($rating, $positionX, $positionY)
-    {
-        $element = new RatingStarsElement( $this->getResources() );
-        $element
-            ->setRating($rating)
-            ->setPositionX($positionX)
-            ->setPositionY($positionY)
-            ->render($this->image);
-
-        return $element->getStarHeight();
     }
 
     /**
