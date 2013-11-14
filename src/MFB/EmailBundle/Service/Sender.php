@@ -4,6 +4,7 @@ namespace MFB\EmailBundle\Service;
 
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\AccountBundle\Entity\Account;
+use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\ServiceBundle\Entity\Service;
 use MFB\EmailBundle\Entity\EmailTemplate;
@@ -57,7 +58,7 @@ class Sender
                   "#SERVICE_DATE#" => $date,
                   "#REFERENCE_ID#" => $service->getServiceIdReference(),
                   "#SERVICE_NAME#" => $service->getDescription(),
-                  "#HOMEPAGE#" => $customer->getHomepage()
+                  "#HOMEPAGE#" => $channel->getHomepageUrl()
             )
         );
 
