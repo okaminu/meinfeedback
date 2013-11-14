@@ -31,7 +31,12 @@ class CustomerType extends AbstractType
             )
             ->add('firstName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array('required' => false, 'mapped' => false))
+            ->add('serviceDate', 'date', array(
+                    'required' => false,
+                    'mapped' => false,
+                    'input' => 'datetime',
+                    'widget' => 'choice',
+                    'data'  => new \DateTime('now')))
             ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
             ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
         ;

@@ -2,7 +2,7 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +50,8 @@ class InviteController extends Controller
             $accountChannel->getId(),
             $customer,
             $request->get('feedback'),
-            $request->get('rating')
+            $request->get('rating'),
+            new FeedbackEntity()
         );
 
         $feedbackEntity = $feedbackEntityManager->createEntity();
