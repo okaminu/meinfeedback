@@ -95,16 +95,26 @@ class DefaultController extends Controller
 
         $form->add('salutation', 'text', array('required' => false));
 
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('accountId'=>$accountId)
+        );
+
+        if ($accountChannel === null)
+        {
+            return $this->render(
+                'MFBAdminBundle:Default:error.html.twig',
+                array(
+                    'errorMessage' => $this->get('translator')->trans('No account data found. Please fill Account setup form.')
+                )
+            );
+        }
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
                 $em->persist($customer);
                 $em->flush();
-
-                $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-                    array('accountId'=>$accountId)
-                );
 
                 $invite = new FeedbackInvite();
                 $invite->setAccountId($customer->getAccountId());
