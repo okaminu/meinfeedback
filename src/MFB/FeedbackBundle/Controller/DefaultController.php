@@ -76,6 +76,16 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             try {
 
+                if ($request->get('feedback') == '') {
+                    return $this->showFeedbackForm(
+                        $account->getId(),
+                        $accountChannel,
+                        $form->createView(),
+                        $request->get('feedback'),
+                        'Please leave a feedback'
+                    );
+                }
+
                 $feedbackEntityManager = new FeedbackEntityManager(
                     $account->getId(),
                     $accountChannel->getId(),
@@ -173,7 +183,7 @@ class DefaultController extends Controller
             array(
                 'accountId' => $accountId,
                 'accountChannel' => $accountChannel,
-                'starErrorMessage' => $starErrorMessage,
+                'errorMessage' => $starErrorMessage,
                 'feedback' => $feedback,
                 'form' => $formView
             )

@@ -21,7 +21,11 @@
 
 
                 <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannel.getId}) }}">
-
+                    {% if errorMessage %}
+                        <div class="errorMessage">
+                            {{ errorMessage }}
+                        </div>
+                    {% endif %}
                     {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
                     <div class="errorMessage">
                     {{ form_errors(form.email) }}
@@ -37,11 +41,7 @@
                             </div>
                         </div>
                         <input type="hidden" value="0" name="rating" class="rating"/>
-                        {% if starErrorMessage %}
-                            <div class="errorMessage">
-                                {{ starErrorMessage }}
-                            </div>
-                        {% endif %}
+
                     {% endif %}
 
                 <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>

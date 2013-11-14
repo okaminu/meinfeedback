@@ -49,6 +49,16 @@ class InviteController extends Controller
 
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
+
+        if ($request->get('feedback') == '') {
+            return $this->showFeedbackForm(
+                $request->get('token'),
+                $accountChannel,
+                $request->get('feedback'),
+                'Please leave a feedback'
+            );
+        }
+
         $feedbackEntityManager = new FeedbackEntityManager(
             $invite->getAccountId(),
             $accountChannel->getId(),
@@ -104,14 +114,14 @@ class InviteController extends Controller
     }
 
 
-    private function showFeedbackForm($token, $accountChannel, $feedback = '', $starErrorMessage = false)
+    private function showFeedbackForm($token, $accountChannel, $feedback = '', $errorMessage = false)
     {
         return $this->render(
             'MFBFeedbackBundle:Invite:index.html.twig',
             array(
                 'token' => $token,
                 'accountChannel' => $accountChannel,
-                'starErrorMessage' => $starErrorMessage,
+                'errorMessage' => $errorMessage,
                 'feedback' => $feedback,
             )
         );
