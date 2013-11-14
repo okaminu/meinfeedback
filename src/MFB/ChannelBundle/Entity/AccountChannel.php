@@ -37,6 +37,13 @@ class AccountChannel
     /**
      * @var string
      *
+     * @ORM\Column(name="homepageUrl", type="string", length=128, nullable=true)
+     */
+    private $homepageUrl;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="address", type="string", length=255)
      */
     private $address;
@@ -149,5 +156,28 @@ class AccountChannel
     public function getRatingsEnabled()
     {
         return $this->ratingsEnabled;
+    }
+
+    /**
+     * Set homepageUrl
+     *
+     * @param string $homepageUrl
+     * @return AccountChannel
+     */
+    public function setHomepageUrl($homepageUrl)
+    {
+        $this->homepageUrl = $homepageUrl;
+    
+        return $this;
+    }
+
+    /**
+     * Get homepageUrl
+     *
+     * @return string 
+     */
+    public function getHomepageUrl()
+    {
+        return $this->homepageUrl;
     }
 }

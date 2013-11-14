@@ -64,20 +64,6 @@ class Customer
     private $salutation;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="reference_id", type="string", length=16, nullable=true)
-     */
-    private $referenceId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="homepage", type="string", length=128, nullable=true)
-     */
-    private $homepage;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="anonymous", type="integer", options={"default" : 0})
@@ -209,52 +195,6 @@ class Customer
     public function getSalutation()
     {
         return $this->salutation;
-    }
-
-    /**
-     * Set referenceId
-     *
-     * @param string $referenceId
-     * @return Customer
-     */
-    public function setReferenceId($referenceId)
-    {
-        $this->referenceId = $referenceId;
-    
-        return $this;
-    }
-
-    /**
-     * Get referenceId
-     *
-     * @return string 
-     */
-    public function getReferenceId()
-    {
-        return $this->referenceId;
-    }
-
-    /**
-     * Set homepage
-     *
-     * @param string $homepage
-     * @return Customer
-     */
-    public function setHomepage($homepage)
-    {
-        $this->homepage = $homepage;
-    
-        return $this;
-    }
-
-    /**
-     * Get homepage
-     *
-     * @return string 
-     */
-    public function getHomepage()
-    {
-        return $this->homepage;
     }
 
     /**
