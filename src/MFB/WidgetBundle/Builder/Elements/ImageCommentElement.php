@@ -130,6 +130,14 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return $positionY;
     }
 
+    /**
+     * Get Stars Element
+     *
+     * @param $feedback
+     * @return $this
+     *
+     * @todo here we need dependency injection
+     */
     protected function getStarsElement($feedback)
     {
         $element = new RatingStarsElement( $this->getResources() );
@@ -188,8 +196,6 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     {
         return self::$spacerHeight;
     }
-
-
 
     /**
      * Get text height. Because text is wrapped, we simply multiply wrap count by font size

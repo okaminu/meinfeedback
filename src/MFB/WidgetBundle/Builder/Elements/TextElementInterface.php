@@ -16,4 +16,9 @@ interface TextElementInterface {
      */
     public function getFontSize();
 
+    /**
+     * Get font family
+     * @return mixed
+     */
+    public function getFont();
 }

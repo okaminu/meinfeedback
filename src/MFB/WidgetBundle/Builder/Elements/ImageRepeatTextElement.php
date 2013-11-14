@@ -41,13 +41,18 @@ class ImageRepeatTextElement extends AbstractImageBase implements ElementInterfa
             $this->getPositionX(), // x
             $this->lastLine + $this->getBaseLineModifier(), // y
             $this->getFontColor(), // color
-            $this->getRecource('arialFontFile'), // font file
+            $this->getFont(), // font file
             $text // text
         );
 
         $this->lastLine += self::$last_line_padding;
 
         return $this;
+    }
+
+    public function getFont()
+    {
+        return $this->getRecource('arialFontFile');
     }
 
     public function getFontSize()
