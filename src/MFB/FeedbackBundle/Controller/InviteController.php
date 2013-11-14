@@ -7,6 +7,10 @@ use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
+use MFB\Template\ThankYouTemplate;
+use MFB\Template\Manager\TemplateManager;
+
+use MFB\Template\Placeholder\PlaceholderContainer;
 
 class InviteController extends Controller
 {
@@ -64,9 +68,30 @@ class InviteController extends Controller
         $em->remove($invite);
         $em->flush();
 
-        return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
+        $templateManager = new TemplateManager();
+        $templateEntity = $templateManager->getTemplate(
+            $invite->getAccountId(),
+            $templateManager::THANKYOU_TEMPLATE_TYPE,
+            'ThankYouPage',
+            $em,
+            $this->get('translator')
+        );
+
+        $template = new ThankYouTemplate();
+        $templateText = $template
+            ->setContent($templateEntity->getTemplateCode())
+            ->setCustomer($customer)
+            ->getTranslation();
+
+        return $this->render(
+            'MFBFeedbackBundle:Invite:thank_you.html.twig',
+            array(
+                'thankyou_text' => $templateText,
+            )
+        );
 
     }
+
 
     private function showFeedbackForm($token, $accountChannel, $feedback = '', $starErrorMessage = false)
     {

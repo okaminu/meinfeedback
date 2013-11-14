@@ -30,6 +30,13 @@ class EmailTemplate
     private $accountId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="template_type_id", type="integer")
+     */
+    private $templateTypeId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=16)
@@ -98,6 +105,26 @@ class EmailTemplate
     public function getAccountId()
     {
         return $this->accountId;
+    }
+
+    /**
+     * Set Template Id
+     *
+     * @param int $templateTypeId
+     */
+    public function setTemplateTypeId($templateTypeId)
+    {
+        $this->templateTypeId = $templateTypeId;
+    }
+
+    /**
+     * Get template type id
+     *
+     * @return int
+     */
+    public function getTemplateTypeId()
+    {
+        return $this->templateTypeId;
     }
 
     /**
@@ -208,4 +235,6 @@ class EmailTemplate
     {
         $this->variables->add($variable);
     }
+
+
 }

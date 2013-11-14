@@ -128,7 +128,7 @@ class DefaultController extends Controller
                 $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
                     array(
                         'accountId' => $accountId,
-                        'name' => 'AccountChannel'
+                        'name' => 'AccountChannel',
                     )
                 );
                 if (!$emailTemplate) {

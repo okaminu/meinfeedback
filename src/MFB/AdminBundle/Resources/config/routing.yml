@@ -26,6 +26,10 @@ mfb_admin_edit_email_template:
     pattern: /edit_template
     defaults: { _controller: MFBAdminBundle:EmailTemplates:edit }
 
+mfb_admin_edit_thankyou_template:
+    pattern: /edit_thankyou_template
+    defaults: { _controller: MFBAdminBundle:ThankYouTemplates:edit }
+
 mfb_admin_list_possible_variables:
     pattern: /template/{emailTemplateId}/list_variables
     defaults: { _controller: MFBAdminBundle:EmailTemplates:listPossibleVariables }
