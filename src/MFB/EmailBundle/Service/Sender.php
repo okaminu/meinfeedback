@@ -25,7 +25,6 @@ class Sender
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
-
     }
 
     public function createForAccountChannel(
@@ -86,4 +85,15 @@ class Sender
         $html = strtr($html, $placeholders);
         return $html;
     }
+
+    public function sendEmail($destinationEmail, $emailSubject, $emailText)
+    {
+        $message = new \Swift_Message();
+        $message->setFrom(array('mazvydas@meinfeedback.net' => 'MeinFeedback.net'));
+        $message->setTo($destinationEmail);
+        $message->setSubject($emailSubject);
+        $message->setBody($emailText);
+        $this->mailer->send($message);
+    }
+
 }

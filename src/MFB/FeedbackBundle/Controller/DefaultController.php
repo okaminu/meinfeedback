@@ -119,6 +119,11 @@ class DefaultController extends Controller
 
                 $em->flush();
 
+                $this->get('mfb_email.sender')->sendEmail(
+                    $account->getEmail(),
+                    'You have received a feedback',
+                    'A feedback has been written on meinfeedback'
+                );
 
                 return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
 
