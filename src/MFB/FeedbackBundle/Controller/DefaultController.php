@@ -156,7 +156,12 @@ class DefaultController extends Controller
                     $form->addError(new FormError($ex->getMessage()));
                 }
             }
-            return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
+            return $this->showFeedbackForm(
+                $account->getId(),
+                $accountChannel,
+                $form->createView(),
+                $request->get('feedback')
+            );
         }
         return $this->render('MFBFeedbackBundle:Invite:invalid_data.html.twig');
     }
