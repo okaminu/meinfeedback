@@ -94,7 +94,6 @@ class DefaultController extends Controller
             ));
 
         $form->add('salutation', 'text', array('required' => false));
-        $form->add('homepage', 'text', array('required' => false));
 
         $form->handleRequest($request);
 

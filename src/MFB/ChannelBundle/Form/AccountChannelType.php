@@ -17,6 +17,7 @@ class AccountChannelType extends AbstractType
         $builder
             ->add('name')
             ->add('address')
+            ->add('homepageUrl')
             ->add(
                 'ratingsEnabled',
                 'choice',

@@ -121,6 +121,11 @@ class DefaultController extends Controller
 
                 $em->flush();
 
+                $this->get('mfb_email.sender')->sendFeedbackNotification(
+                    $account,
+                    $customer,
+                    $feedbackEntity
+                );
                 $templateManager = new TemplateManager();
                 $templateEntity = $templateManager->getTemplate(
                     $account->getId(),

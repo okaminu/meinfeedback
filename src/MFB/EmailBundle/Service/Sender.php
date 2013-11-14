@@ -2,6 +2,8 @@
 namespace MFB\EmailBundle\Service;
 
 
+use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\ServiceBundle\Entity\Service;
@@ -25,7 +27,6 @@ class Sender
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
-
     }
 
     public function createForAccountChannel(
@@ -57,7 +58,7 @@ class Sender
                   "#SERVICE_DATE#" => $date,
                   "#REFERENCE_ID#" => $service->getServiceIdReference(),
                   "#SERVICE_NAME#" => $service->getDescription(),
-                  "#HOMEPAGE#" => $customer->getHomepage()
+                  "#HOMEPAGE#" => $channel->getHomepageUrl()
             )
         );
 
@@ -86,4 +87,37 @@ class Sender
         $html = strtr($html, $placeholders);
         return $html;
     }
+
+    public function sendEmail($destinationEmail, $emailSubject, $emailText)
+    {
+        $message = new \Swift_Message();
+        $message->setFrom(array('mazvydas@meinfeedback.net' => 'MeinFeedback.net'));
+        $message->setTo($destinationEmail);
+        $message->setSubject($emailSubject);
+        $message->setBody($emailText, 'text/html');
+        $this->mailer->send($message);
+    }
+
+
+    public function sendFeedbackNotification(Account $account, Customer $customer, Feedback $feedback)
+    {
+        $emailSubject = 'Feedback received on meinfeedback';
+        $customerName = $customer->getEmail();
+
+        if (($customer->getFirstName()) && ($customer->getLastName())) {
+            $customerName = $customer->getFirstName() ." ". $customer->getLastName();
+        }
+
+        $emailBody = $this->twig->render(
+            'MFBEmailBundle:Default:FeedbackNotificationEmail.html.twig',
+            array(
+                'email_title' => $emailSubject,
+                'customerName' => $customerName,
+                'feedback' => $feedback
+            )
+        );
+        $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);
+    }
+
+
 }

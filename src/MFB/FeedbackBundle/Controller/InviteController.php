@@ -7,6 +7,7 @@ use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
+use MFB\AccountBundle\Entity\Account;
 use MFB\Template\ThankYouTemplate;
 use MFB\Template\Manager\TemplateManager;
 
@@ -41,6 +42,9 @@ class InviteController extends Controller
             return $this->render('MFBFeedbackBundle:Invite:no_invite.html.twig');
         }
 
+        /** @var Account $account */
+        $account = $em->find('MFBAccountBundle:Account', $invite->getAccountId());
+
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
 
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
@@ -68,6 +72,12 @@ class InviteController extends Controller
         $em->persist($feedbackEntity);
         $em->remove($invite);
         $em->flush();
+
+        $this->get('mfb_email.sender')->sendFeedbackNotification(
+            $account,
+            $customer,
+            $feedbackEntity
+        );
 
         $templateManager = new TemplateManager();
         $templateEntity = $templateManager->getTemplate(
