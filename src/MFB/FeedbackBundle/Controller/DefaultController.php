@@ -119,7 +119,7 @@ class DefaultController extends Controller
                 $em->persist($feedbackEntity);
                 $em->persist($serviceEntity);
 
-                //$em->flush();
+                $em->flush();
 
                 $templateManager = new TemplateManager();
                 $templateEntity = $templateManager->getTemplate(
