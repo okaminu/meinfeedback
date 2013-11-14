@@ -2,7 +2,8 @@
 namespace MFB\EmailBundle\Service;
 
 
-use MFB\ChannelBundle\Entity\AccountChannel;
+use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\AccountBundle\Entity\Account;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\ServiceBundle\Entity\Service;
 use MFB\EmailBundle\Entity\EmailTemplate;
@@ -92,8 +93,30 @@ class Sender
         $message->setFrom(array('mazvydas@meinfeedback.net' => 'MeinFeedback.net'));
         $message->setTo($destinationEmail);
         $message->setSubject($emailSubject);
-        $message->setBody($emailText);
+        $message->setBody($emailText, 'text/html');
         $this->mailer->send($message);
     }
+
+
+    public function sendFeedbackNotification(Account $account, Customer $customer, Feedback $feedback)
+    {
+        $emailSubject = 'Feedback received on meinfeedback';
+        $customerName = $customer->getEmail();
+
+        if (($customer->getFirstName()) && ($customer->getLastName())) {
+            $customerName = $customer->getFirstName() ." ". $customer->getLastName();
+        }
+
+        $emailBody = $this->twig->render(
+            'MFBEmailBundle:Default:FeedbackNotificationEmail.html.twig',
+            array(
+                'email_title' => $emailSubject,
+                'customerName' => $customerName,
+                'feedback' => $feedback
+            )
+        );
+        $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);
+    }
+
 
 }
