@@ -7,8 +7,12 @@
         <div class="row-fluid inner-page contact">
             <div class="span6">
                 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
-                    Thank you !
+                   {% trans %}  Thank you ! {% endtrans %}
                 </div>
+                <div class="">
+                   {{ thankyou_text | raw }}
+                </div>
+
             </div>
 
         </div>

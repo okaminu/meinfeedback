@@ -3,7 +3,6 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 abstract class AbstractImageBase {

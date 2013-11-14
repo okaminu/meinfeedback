@@ -6,7 +6,7 @@ namespace MFB\WidgetBundle\Builder\Elements;
 use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-class ImageTextElement extends AbstractImageBase implements ElementInterface {
+class ImageTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface {
 
     protected  static $last_line_padding = 20;
 
@@ -43,10 +43,10 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface {
 
         imagettftext(
             $this->image, //img to apply
-            8, // size
+            $this->getFontSize(), // size
             0, // angle
             $this->getPositionX(), // x
-            $this->getPositionY() + 8, // y + baseline modifier. this is cordinate for baseline, so we adjust it
+            $this->getPositionY() + $this->getBaseLineModifier(), // y
             $this->getFontColor(), // color
             $this->getFont(), // font file
             $text // text
@@ -66,9 +66,17 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface {
         $this->writeTextElement($this->getText());
     }
 
+    /**
+     * @doc inherit
+     */
     public function getFontSize()
     {
         return 8;
+    }
+
+    public function getBaseLineModifier()
+    {
+        return $this->getFontSize();
     }
 
     public function getFont()

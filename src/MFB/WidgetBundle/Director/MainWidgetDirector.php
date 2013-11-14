@@ -22,11 +22,11 @@ class MainWidgetDirector implements WidgetDirectorInterface {
 
         $this->builder->getElement('repeatText')
             ->setPositionX(10)
-            ->setLastLine(222)
+            ->setLastLine(214)
             ->addText($feedbackCount . " Bewertungen")
             ->addText($feedbackCount . " Ratings")
             ->addText($feedbackRatingAverage ." Average")
-            ->setFontColorCode(230, 230, 230)
+            ->setFontColorCode(108, 108, 108)
         ;
 
         /** @var Feedback $lastFeedback */
@@ -34,7 +34,7 @@ class MainWidgetDirector implements WidgetDirectorInterface {
         $this->builder->getElement('text')
             ->setText($lastFeedback->getCreatedAt()->format('d.m.Y'))
             ->setPositionX(120)
-            ->setPositionY(222)
+            ->setPositionY(214)
             ->setFontColorCode(108, 108, 108);
 
         $this->builder->getElement('comment')
@@ -43,7 +43,7 @@ class MainWidgetDirector implements WidgetDirectorInterface {
             ->setBoxHeight(180)
             ->setPositionX(10)
             ->setPositionY(25)
-            ->setFontColorCode(108, 108, 108);
+            ->setFontColorCode(230, 230, 230);
 
         return $this->builder->createImage();
     }

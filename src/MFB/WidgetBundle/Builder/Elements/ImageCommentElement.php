@@ -14,15 +14,13 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
 
     protected $lastLine = 222;
 
-    protected static $spaceAfterComment = 5;
+    protected static $spaceAfterComment = 8;
 
-    protected static $spacerHeight = 2;
+    protected static $spacerHeight = 4;
+
+    protected static $baselineModifier = 10;
 
     protected $text;
-
-    protected $fontColorTop;
-
-    protected $fontColorBottom;
 
     protected $boxWidth;
 
@@ -45,7 +43,6 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return 'comment';
     }
 
-
     public function isHeigher($maxHeight, $elementsHeight, $startingHeight = 0)
     {
 
@@ -66,7 +63,6 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
 
         return $elementsHeight;
     }
-
 
     public function addComment($feedbacks)
     {
@@ -134,6 +130,14 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return $positionY;
     }
 
+    /**
+     * Get Stars Element
+     *
+     * @param $feedback
+     * @return $this
+     *
+     * @todo here we need dependency injection
+     */
     protected function getStarsElement($feedback)
     {
         $element = new RatingStarsElement( $this->getResources() );
@@ -178,27 +182,19 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return $this->getRecource('lucidaFontFile');
     }
 
+    /**
+     *
+     * @return mixed
+     */
+    public function  getTextBaselineModifier()
+    {
+        return self::$baselineModifier;
+    }
+
+
     protected function getSpacerHeight()
     {
         return self::$spacerHeight;
-    }
-
-    /**
-     * @param mixed $text
-     * @return $this
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getText()
-    {
-        return $this->text;
     }
 
     /**
@@ -296,6 +292,24 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     public function getBoxHeight()
     {
         return $this->boxHeight;
+    }
+
+    /**
+     * @param mixed $text
+     * @return $this
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 
 }

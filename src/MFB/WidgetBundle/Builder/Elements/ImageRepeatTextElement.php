@@ -3,10 +3,7 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
-use MFB\WidgetBundle\Builder\Elements\ElementInterface;
-
-class ImageRepeatTextElement extends AbstractImageBase implements ElementInterface {
+class ImageRepeatTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface {
 
     protected  static $last_line_padding = 20;
 
@@ -21,14 +18,11 @@ class ImageRepeatTextElement extends AbstractImageBase implements ElementInterfa
     public function __construct($resources)
     {
         $this->setResources($resources);
-
     }
 
     public function render($image = null)
     {
         $this->setImage($image);
-        $this->fontColorTop = imagecolorallocate($this->image, 230, 230, 230);
-        $this->fontColorBottom = imagecolorallocate($this->image, 108, 108, 108);
         $this->writeText();
         return $this->getImage();
     }
@@ -42,12 +36,12 @@ class ImageRepeatTextElement extends AbstractImageBase implements ElementInterfa
     {
         imagettftext(
             $this->image, //img to apply
-            8, // size
+            $this->getFontSize(), // size
             0, // angle
             $this->getPositionX(), // x
-            $this->lastLine, // y
-            $this->fontColorBottom, // color
-            $this->getRecource('arialFontFile'), // font file
+            $this->lastLine + $this->getBaseLineModifier(), // y
+            $this->getFontColor(), // color
+            $this->getFont(), // font file
             $text // text
         );
 
@@ -56,8 +50,23 @@ class ImageRepeatTextElement extends AbstractImageBase implements ElementInterfa
         return $this;
     }
 
+    public function getFont()
+    {
+        return $this->getRecource('arialFontFile');
+    }
+
+    public function getFontSize()
+    {
+        return 8;
+    }
+
+    public function getBaseLineModifier()
+    {
+        return $this->getFontSize();
+    }
+
     /**
-     *
+     * Write all text elements
      */
     public function writeText()
     {

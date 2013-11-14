@@ -14,6 +14,8 @@ use Symfony\Component\Form\FormError;
 use Doctrine\DBAL\DBALException;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
+use MFB\Template\ThankYouTemplate;
+use MFB\Template\Manager\TemplateManager;
 
 class DefaultController extends Controller
 {
@@ -124,8 +126,27 @@ class DefaultController extends Controller
                     $customer,
                     $feedbackEntity
                 );
+                $templateManager = new TemplateManager();
+                $templateEntity = $templateManager->getTemplate(
+                    $account->getId(),
+                    $templateManager::THANKYOU_TEMPLATE_TYPE,
+                    'ThankYouPage',
+                    $em,
+                    $this->get('translator')
+                );
 
-                return $this->render('MFBFeedbackBundle:Invite:thank_you.html.twig');
+                $template = new ThankYouTemplate();
+                $templateText = $template
+                    ->setContent($templateEntity->getTemplateCode())
+                    ->setCustomer($customer)
+                    ->getTranslation();
+
+                return $this->render(
+                    'MFBFeedbackBundle:Invite:thank_you.html.twig',
+                    array(
+                        'thankyou_text' => $templateText,
+                    )
+                );
 
             } catch (DBALException $ex) {
                 $ex = $ex->getPrevious();
@@ -139,7 +160,6 @@ class DefaultController extends Controller
         }
         return $this->render('MFBFeedbackBundle:Invite:invalid_data.html.twig');
     }
-
 
     private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $starErrorMessage = false)
     {
