@@ -12,7 +12,7 @@ class TemplateManager {
     const EMAIL_TEMPLATE_TYPE = 1;
     const THANKYOU_TEMPLATE_TYPE = 2;
 
-    public function getTemplate($accountId, $templateTypeId, $name, ObjectManager $em, TranslatorInterface $translatator)
+    public function getTemplate($accountId, $templateTypeId, $name, ObjectManager $em, TranslatorInterface $translator)
     {
 
         $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
@@ -30,9 +30,9 @@ class TemplateManager {
             $emailTemplate->setName($name);
             $emailTemplate->setTemplateTypeId($templateTypeId);
 
-            $emailTemplate->setTitle($translatator->trans('default_template_subject'));
-            $emailTemplate->setTemplateCode($translatator->trans('default_template_body'));
-            $emailTemplate->setThankYouCode($translatator->trans('default_template_thank_you'));
+            $emailTemplate->setTitle($translator->trans('default_template_subject'));
+            $emailTemplate->setTemplateCode($this->getDefaultTemplateCode($translator, $templateTypeId));
+            $emailTemplate->setThankYouCode($translator->trans('default_template_thank_you'));
             $linkVariable = new EmailTemplateVariable();
             $linkVariable->setType('link');
             $linkVariable->setValue('');
@@ -43,5 +43,25 @@ class TemplateManager {
         }
 
         return $emailTemplate;
+    }
+
+    /**
+     * Hardcoded method for default text
+     *
+     * @param TranslatorInterface $translator
+     * @param $templateType
+     * @return string
+     */
+    protected function getDefaultTemplateCode(TranslatorInterface $translator, $templateType)
+    {
+        switch($templateType)
+        {
+            case(self::EMAIL_TEMPLATE_TYPE):
+                return $translator->trans('default_template_body');
+                break;
+            case(self::THANKYOU_TEMPLATE_TYPE):
+                return $translator->trans('default_template_thank_you_page');
+                break;
+        }
     }
 } 
