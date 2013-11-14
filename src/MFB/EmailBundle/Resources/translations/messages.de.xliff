@@ -51,6 +51,22 @@
                     ]]>
                 </target>
             </trans-unit>
+            <trans-unit id="4" resname="default_template_thank_you_page">
+                <source>
+                    <![CDATA[
+                        <p>
+                            Thank you for your time - we appreciate it!
+                        </p>
+                    ]]>
+                </source>
+                <target>
+                    <![CDATA[
+                        <p>
+                            Vielen Dank für Ihre Zeit - wir schätzen es!
+                        </p>
+                    ]]>
+                </target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
