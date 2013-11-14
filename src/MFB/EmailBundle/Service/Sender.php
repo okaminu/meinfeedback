@@ -99,7 +99,7 @@ class Sender
     }
 
 
-    public function sendFeedbackNotification(Account $account, Customer $customer, Feedback $feedback)
+    public function sendFeedbackNotification(Account $account, Customer $customer, $feedbackText, $feedbackRating)
     {
         $emailSubject = 'Feedback received on meinfeedback';
         $customerName = $customer->getEmail();
@@ -113,7 +113,8 @@ class Sender
             array(
                 'email_title' => $emailSubject,
                 'customerName' => $customerName,
-                'feedback' => $feedback
+                'feedbackText' => $feedbackText,
+                'feedbackRating' => $feedbackRating
             )
         );
         $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);

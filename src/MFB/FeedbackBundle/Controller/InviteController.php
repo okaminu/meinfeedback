@@ -49,44 +49,34 @@ class InviteController extends Controller
 
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
+        try {
+            $feedbackEntityManager = new FeedbackEntityManager(
+                $invite->getAccountId(),
+                $accountChannel->getId(),
+                $customer,
+                $request->get('feedback'),
+                $request->get('rating'),
+                new FeedbackEntity()
+            );
+            $feedbackEntityManager->saveFeedback(
+                $em,
+                $accountChannel->getRatingsEnabled()
+            );
 
-        if ($request->get('feedback') == '') {
+        } catch (\Exception $ex) {
             return $this->showFeedbackForm(
                 $request->get('token'),
                 $accountChannel,
                 $request->get('feedback'),
-                'Please leave a feedback'
+                $ex->getMessage()
             );
         }
-
-        $feedbackEntityManager = new FeedbackEntityManager(
-            $invite->getAccountId(),
-            $accountChannel->getId(),
-            $customer,
-            $request->get('feedback'),
-            $request->get('rating'),
-            new FeedbackEntity()
-        );
-
-        $feedbackEntity = $feedbackEntityManager->createEntity();
-
-        if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
-            return $this->showFeedbackForm(
-                $request->get('token'),
-                $accountChannel,
-                $request->get('feedback'),
-                'Please select star rating'
-            );
-        }
-
-        $em->persist($feedbackEntity);
-        $em->remove($invite);
-        $em->flush();
 
         $this->get('mfb_email.sender')->sendFeedbackNotification(
             $account,
             $customer,
-            $feedbackEntity
+            $request->get('feedback'),
+            $request->get('rating')
         );
 
         $templateManager = new TemplateManager();
@@ -103,6 +93,9 @@ class InviteController extends Controller
             ->setContent($templateEntity->getTemplateCode())
             ->setCustomer($customer)
             ->getTranslation();
+
+        $em->remove($invite);
+        $em->flush();
 
         return $this->render(
             'MFBFeedbackBundle:Invite:thank_you.html.twig',

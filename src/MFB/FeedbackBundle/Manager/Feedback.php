@@ -1,6 +1,7 @@
 <?php
 namespace MFB\FeedbackBundle\Manager;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 
@@ -51,5 +52,20 @@ class Feedback
 
         $feedback->setRating($rating);
         return $feedback;
+    }
+
+    public function saveFeedback(ObjectManager $em, $ratingsEnabled)
+    {
+        if ($this->feedbackContent == '') {
+            throw new \Exception('Please leave a feedback');
+        }
+        $feedbackEntity = $this->createEntity();
+
+        if (($ratingsEnabled == '1') && (is_null($feedbackEntity->getRating()))) {
+            throw new \Exception('Please select star rating');
+        }
+
+        $em->persist($feedbackEntity);
+        $em->flush();
     }
 }
