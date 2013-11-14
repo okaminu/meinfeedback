@@ -16,24 +16,28 @@ class Feedback
 
     private $customer;
 
+    private $feedbackEntity;
+
     public function __construct(
         $accountId,
         $channelId,
         Customer $customer,
         $feedbackContent,
-        $feedbackRating
+        $feedbackRating,
+        FeedbackEntity $feedbackEntity
     ) {
         $this->feedbackContent = $feedbackContent;
         $this->feedbackRating = $feedbackRating;
         $this->accountId = $accountId;
         $this->channelId = $channelId;
         $this->customer = $customer;
+        $this->feedbackEntity = $feedbackEntity;
     }
 
     public function createEntity()
     {
         $rating = null;
-        $feedback = new FeedbackEntity();
+        $feedback = $this->feedbackEntity;
         $feedback->setAccountId($this->accountId);
         $feedback->setChannelId($this->channelId);
         $feedback->setCustomer($this->customer);

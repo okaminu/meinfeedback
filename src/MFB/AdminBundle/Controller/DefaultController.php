@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 
 class DefaultController extends Controller
 {
@@ -114,13 +115,21 @@ class DefaultController extends Controller
                 $em->persist($invite);
                 $em->flush();
 
+                $serviceDateTime = null;
+                if ($serviceDate['year'] != "" &&
+                    $serviceDate['month'] != "" &&
+                    $serviceDate['day'] != "") {
+                    $serviceDateTime = new \DateTime(implode('-', $serviceDate));
+                }
+
                 $serviceEntityManager = new ServiceEntityManager(
                     $accountId,
                     $accountChannel->getId(),
                     $customer,
                     $serviceDescription,
-                    $serviceDate,
-                    $serviceIdReference
+                    $serviceDateTime,
+                    $serviceIdReference,
+                    new ServiceEntity()
                 );
 
                 $serviceEntity = $serviceEntityManager->createEntity();

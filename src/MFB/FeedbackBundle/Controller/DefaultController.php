@@ -2,8 +2,8 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\FeedbackBundle\Entity\Feedback;
-use MFB\ServiceBundle\Entity\Service;
+use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\AccountBundle\Entity\Account;
@@ -79,7 +79,8 @@ class DefaultController extends Controller
                     $accountChannel->getId(),
                     $customer,
                     $request->get('feedback'),
-                    $request->get('rating')
+                    $request->get('rating'),
+                    new FeedbackEntity()
                 );
 
                 $feedbackEntity = $feedbackEntityManager->createEntity();
@@ -94,13 +95,21 @@ class DefaultController extends Controller
                     );
                 }
 
+                $serviceDateTime = null;
+                if ($serviceDate['year'] != "" &&
+                    $serviceDate['month'] != "" &&
+                    $serviceDate['day'] != "") {
+                    $serviceDateTime = new \DateTime(implode('-', $serviceDate));
+                }
+
                 $serviceEntityManager = new ServiceEntityManager(
                     $account->getId(),
                     $accountChannel->getId(),
                     $customer,
                     $serviceDescription,
-                    $serviceDate,
-                    $serviceIdReference
+                    $serviceDateTime,
+                    $serviceIdReference,
+                    new ServiceEntity()
                 );
 
                 $serviceEntity = $serviceEntityManager->createEntity();
@@ -123,6 +132,7 @@ class DefaultController extends Controller
             }
             return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
         }
+        return $this->render('MFBFeedbackBundle:Invite:invalid_data.html.twig');
     }
 
 

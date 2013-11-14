@@ -18,13 +18,16 @@ class Service
 
     private $customer;
 
+    private $serviceEntity;
+
     public function __construct(
         $accountId,
         $channelId,
         Customer $customer,
         $serviceDescription,
         $serviceDate,
-        $serviceIdReference
+        $serviceIdReference,
+        ServiceEntity $service
     ) {
         $this->serviceDescription = $serviceDescription;
         $this->serviceDate = $serviceDate;
@@ -32,11 +35,12 @@ class Service
         $this->accountId = $accountId;
         $this->channelId = $channelId;
         $this->customer = $customer;
+        $this->serviceEntity = $service;
     }
 
     public function createEntity()
     {
-        $service = new ServiceEntity();
+        $service = $this->serviceEntity;
         $service->setAccountId($this->accountId);
         $service->setChannelId($this->channelId);
         $service->setCustomer($this->customer);
@@ -49,12 +53,10 @@ class Service
             $service->setServiceIdReference($this->serviceIdReference);
         }
 
-        $serviceDate = $this->serviceDate;
-        if ($serviceDate['year'] != "" &&
-            $serviceDate['month'] != "" &&
-            $serviceDate['day'] != "") {
-            $service->setDate(new \DateTime(implode('-', $serviceDate)));
+        if ($this->serviceDate) {
+            $service->setDate($this->serviceDate);
         }
+        $this->serviceEntity = $service;
         return $service;
     }
 }
