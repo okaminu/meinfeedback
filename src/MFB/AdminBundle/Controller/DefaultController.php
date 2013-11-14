@@ -191,7 +191,8 @@ class DefaultController extends Controller
         return $this->render('MFBAdminBundle:Default:customer.html.twig', array(
                 'entity' => $customer,
                 'form'   => $form->createView(),
-                'added_email' => $request->get('added_email')
+                'added_email' => $request->get('added_email'),
+                'feedback' => $request->get('feedback')
             ));
     }
 }
