@@ -9,7 +9,7 @@ Customer Form: 	Kundenformular
 Customers email*: 	Ihre Email-Adresse
 Gender: 	Geschlecht
 Male: 	Männlich
-Femail: 	Weiblich
+Female: 	Weiblich
 First name: 	Vorname
 Last name: 	Familienname
 Salutation: 	Grußformel (Hallo, Lieber, Hi)
@@ -18,7 +18,11 @@ Logout: 	Abmelden
 Dashboard: 	Dashboard
 Account Set-Up: 	Einstellungen
 Places setting: 	Firmendaten
+Thank you page template: „Vielen Dank“ Email
 Anonymous says:: 	Mein Feedback:
 Firma*: 	Firma*
 Berlinstraße 31,  10090, Berlin*: 	Berlinstraße 31,  10090 Berlin
 
+Anonymous: Feedback anonymisieren
+Customer id reference: Kunden ID
+Service id reference: Service ID
