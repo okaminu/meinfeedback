@@ -48,6 +48,7 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
+        $errorMessage = null;
         $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
@@ -76,15 +77,7 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             try {
 
-                if ($request->get('feedback') == '') {
-                    return $this->showFeedbackForm(
-                        $account->getId(),
-                        $accountChannel,
-                        $form->createView(),
-                        $request->get('feedback'),
-                        'Please leave a feedback'
-                    );
-                }
+                $em->persist($customer);
 
                 $feedbackEntityManager = new FeedbackEntityManager(
                     $account->getId(),
@@ -95,17 +88,10 @@ class DefaultController extends Controller
                     new FeedbackEntity()
                 );
 
-                $feedbackEntity = $feedbackEntityManager->createEntity();
-
-                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
-                    return $this->showFeedbackForm(
-                        $account->getId(),
-                        $accountChannel,
-                        $form->createView(),
-                        $request->get('feedback'),
-                        'Please select star rating'
-                    );
-                }
+                $feedbackEntityManager->saveFeedback(
+                    $em,
+                    $accountChannel->getRatingsEnabled()
+                );
 
                 $serviceDateTime = null;
                 if ($serviceDate['year'] != "" &&
@@ -125,8 +111,6 @@ class DefaultController extends Controller
                 );
 
                 $serviceEntity = $serviceEntityManager->createEntity();
-                $em->persist($customer);
-                $em->persist($feedbackEntity);
                 $em->persist($serviceEntity);
 
                 $em->flush();
@@ -134,8 +118,10 @@ class DefaultController extends Controller
                 $this->get('mfb_email.sender')->sendFeedbackNotification(
                     $account,
                     $customer,
-                    $feedbackEntity
+                    $request->get('feedback'),
+                    $request->get('rating')
                 );
+
                 $templateManager = new TemplateManager();
                 $templateEntity = $templateManager->getTemplate(
                     $account->getId(),
@@ -165,25 +151,28 @@ class DefaultController extends Controller
                 } else {
                     $form->addError(new FormError($ex->getMessage()));
                 }
+            } catch (\Exception $ex){
+                $errorMessage = $ex->getMessage();
             }
             return $this->showFeedbackForm(
                 $account->getId(),
                 $accountChannel,
                 $form->createView(),
-                $request->get('feedback')
+                $request->get('feedback'),
+                $errorMessage
             );
         }
-        return $this->render('MFBFeedbackBundle:Invite:invalid_data.html.twig');
+        return $this->render('MFBFeedbackBundle:Default:invalid_data.html.twig');
     }
 
-    private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $starErrorMessage = false)
+    private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $errorMessage = false)
     {
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
                 'accountId' => $accountId,
                 'accountChannel' => $accountChannel,
-                'errorMessage' => $starErrorMessage,
+                'errorMessage' => $errorMessage,
                 'feedback' => $feedback,
                 'form' => $formView
             )

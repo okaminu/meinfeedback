@@ -58,6 +58,7 @@ class InviteController extends Controller
                 $request->get('rating'),
                 new FeedbackEntity()
             );
+
             $feedbackEntityManager->saveFeedback(
                 $em,
                 $accountChannel->getRatingsEnabled()

@@ -99,12 +99,12 @@ class DefaultController extends Controller
             array('accountId'=>$accountId)
         );
 
-        if ($accountChannel === null)
-        {
+        if ($accountChannel === null) {
             return $this->render(
                 'MFBAdminBundle:Default:error.html.twig',
                 array(
-                    'errorMessage' => $this->get('translator')->trans('No account data found. Please fill Account setup form.')
+                    'errorMessage' =>
+                        $this->get('translator')->trans('No account data found. Please fill Account setup form.')
                 )
             );
         }
