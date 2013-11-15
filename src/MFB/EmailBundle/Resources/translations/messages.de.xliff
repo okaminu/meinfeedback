@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="1" resname="default_template_subject">
                 <source>default_template_subject</source>
-                <target>Bitte bewerten Sie _company_name_</target>
+                <target>Lieber Kunde</target>
             </trans-unit>
             <trans-unit id="2" resname="default_template_body">
                 <source>
@@ -13,18 +13,7 @@
                 <target>
                     <![CDATA[
                         <p>
-                            Hallo!
-                        </p>
-                        <p>
-                            Da wir ständig versuchen, unsere Dienstleistungen zu verbessern und die beste
-                            Shopping-Erlebnis für Sie, würden wir aufrichtig schätzen Ihre Meinung und freuen
-                            uns über Ihr Feedback zu unserer Leistung als Verkäufer und Ihre allgemeine Erfahrung.
-                        </p>
-                        <p>
-                            Folgen Sie einfach den unten stehenden Link auf Ihr Feedback einreichen: #LINK#
-                        </p>
-                        <p>
-                            Vielen Dank für Ihre Zeit - wir schätzen es!
+                            Bitte klicken Sie auf diesen link #LINK# um Ihr Feedback abzugeben
                         </p>
                     ]]>
                 </target>
@@ -43,10 +32,7 @@
                 <target>
                     <![CDATA[
                         <p>
-                            Vielen Dank für Ihre Zeit - wir schätzen es!
-                        </p>
-                        <p>
-                            Ihr _company_name_ Team
+                            Mit freundlichen Grüßen
                         </p>
                     ]]>
                 </target>
@@ -62,7 +48,10 @@
                 <target>
                     <![CDATA[
                         <p>
-                            Vielen Dank für Ihre Zeit - wir schätzen es!
+                            Lieber #FIRSTNAME# <br>
+                        </p>
+                        <p>
+                            Vielen Dank, dass Sie sich die Zeit genommen haben, uns Ihr Feedback zu geben!
                         </p>
                     ]]>
                 </target>
