@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\FeedbackException;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -151,7 +152,7 @@ class DefaultController extends Controller
                 } else {
                     $form->addError(new FormError($ex->getMessage()));
                 }
-            } catch (\Exception $ex){
+            } catch (FeedbackException $ex){
                 $errorMessage = $ex->getMessage();
             }
             return $this->showFeedbackForm(

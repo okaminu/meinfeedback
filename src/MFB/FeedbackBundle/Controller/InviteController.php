@@ -4,6 +4,7 @@ namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
+use MFB\FeedbackBundle\FeedbackException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
@@ -64,7 +65,7 @@ class InviteController extends Controller
                 $accountChannel->getRatingsEnabled()
             );
 
-        } catch (\Exception $ex) {
+        } catch (FeedbackException $ex) {
             return $this->showFeedbackForm(
                 $request->get('token'),
                 $accountChannel,
