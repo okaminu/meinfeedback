@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
 
 class DefaultController extends Controller
 {
@@ -88,12 +89,7 @@ class DefaultController extends Controller
         $customer = new Customer();
         $customer->setAccountId($accountId);
 
-        $form = $this->createForm(new CustomerType(), $customer, array(
-                'action' => $this->generateUrl('mfb_add_customer'),
-                'method' => 'POST',
-            ));
-
-        $form->add('salutation', 'text', array('required' => false));
+        $form = $this->getCustomerForm($customer);
 
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId'=>$accountId)
@@ -116,46 +112,19 @@ class DefaultController extends Controller
                 $em->persist($customer);
                 $em->flush();
 
-                $invite = new FeedbackInvite();
-                $invite->setAccountId($customer->getAccountId());
-                $invite->setCustomerId($customer->getId());
-                $invite->setChannelId($accountChannel->getId());
-                $invite->updatedTimestamps();
-                $em->persist($invite);
-                $em->flush();
+                $invite = $this->saveFeedbackInvite($customer, $accountChannel, $em);
 
-                $serviceDateTime = null;
-                if ($serviceDate['year'] != "" &&
-                    $serviceDate['month'] != "" &&
-                    $serviceDate['day'] != "") {
-                    $serviceDateTime = new \DateTime(implode('-', $serviceDate));
-                }
-
-                $serviceEntityManager = new ServiceEntityManager(
+                $serviceEntity = $this->saveService(
+                    $serviceDate,
                     $accountId,
                     $accountChannel->getId(),
                     $customer,
                     $serviceDescription,
-                    $serviceDateTime,
                     $serviceIdReference,
-                    new ServiceEntity()
+                    $em
                 );
 
-                $serviceEntity = $serviceEntityManager->createEntity();
-
-                $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
-                    array(
-                        'accountId' => $accountId,
-                        'name' => 'AccountChannel',
-                    )
-                );
-                if (!$emailTemplate) {
-                    $emailTemplate = new EmailTemplate();
-                    $emailTemplate->setTitle($this->get('translator')->trans('Please leave feedback'));
-                    $emailTemplate->setTemplateCode(
-                        $this->get('translator')->trans('default_account_channel_template')
-                    );
-                }
+                $emailTemplate = $this->getEmailTemplate($em, $accountId);
 
                 $inviteUrl  = $this->generateUrl(
                     'mfb_feedback_create_with_invite',
@@ -163,8 +132,6 @@ class DefaultController extends Controller
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                $em->persist($serviceEntity);
-                $em->flush();
 
                 $this->get('mfb_email.sender')->createForAccountChannel(
                     $customer,
@@ -194,5 +161,113 @@ class DefaultController extends Controller
                 'added_email' => $request->get('added_email'),
                 'feedback' => $request->get('feedback')
             ));
+    }
+
+    /**
+     * @param $em
+     * @param $accountId
+     * @return EmailTemplate
+     */
+    private function getEmailTemplate($em, $accountId)
+    {
+        $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
+            array(
+                'accountId' => $accountId,
+                'name' => 'AccountChannel',
+            )
+        );
+
+        if (!$emailTemplate) {
+            $emailTemplate = new EmailTemplate();
+            $emailTemplate->setTitle($this->get('translator')->trans('Please leave feedback'));
+            $emailTemplate->setTemplateCode(
+                $this->get('translator')->trans('default_account_channel_template')
+            );
+        }
+        return $emailTemplate;
+    }
+
+    /**
+     * @param $customer
+     * @param $accountChannel
+     * @param $em
+     * @return FeedbackInvite
+     */
+    private function saveFeedbackInvite($customer, $accountChannel, $em)
+    {
+        $emailEntity = new FeedbackInviteManager(
+            $customer->getAccountId(),
+            $accountChannel->getId(),
+            $customer->getId(),
+            new FeedbackInvite()
+        );
+
+        $invite = $emailEntity->createEntity($customer, $accountChannel);
+        $em->persist($invite);
+        $em->flush();
+        return $invite;
+    }
+
+    /**
+     * @param $serviceDate
+     * @param $accountId
+     * @param $accountChannelId
+     * @param $customer
+     * @param $serviceDescription
+     * @param $serviceIdReference
+     * @param $em
+     * @return ServiceEntity
+     */
+    private function saveService(
+        $serviceDate,
+        $accountId,
+        $accountChannelId,
+        $customer,
+        $serviceDescription,
+        $serviceIdReference,
+        $em
+    ) {
+        $serviceDateTime = null;
+        if ($serviceDate['year'] != "" &&
+            $serviceDate['month'] != "" &&
+            $serviceDate['day'] != ""
+        ) {
+            $serviceDateTime = new \DateTime(implode('-', $serviceDate));
+        }
+
+        $serviceEntityManager = new ServiceEntityManager(
+            $accountId,
+            $accountChannelId,
+            $customer,
+            $serviceDescription,
+            $serviceDateTime,
+            $serviceIdReference,
+            new ServiceEntity()
+        );
+
+        $serviceEntity = $serviceEntityManager->createEntity();
+
+        $em->persist($serviceEntity);
+        $em->flush();
+        return $serviceEntity;
+    }
+
+    /**
+     * @param $customer
+     * @return \Symfony\Component\Form\Form
+     */
+    private function getCustomerForm($customer)
+    {
+        $form = $this->createForm(
+            new CustomerType(),
+            $customer,
+            array(
+                'action' => $this->generateUrl('mfb_add_customer'),
+                'method' => 'POST',
+            )
+        );
+
+        $form->add('salutation', 'text', array('required' => false));
+        return $form;
     }
 }

@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\AccountBundle\Entity\Account;
-use MFB\Template\ThankYouTemplate;
 use MFB\Template\Manager\TemplateManager;
 
 use MFB\Template\Placeholder\PlaceholderContainer;
@@ -45,9 +44,7 @@ class InviteController extends Controller
 
         /** @var Account $account */
         $account = $em->find('MFBAccountBundle:Account', $invite->getAccountId());
-
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
-
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
         try {
@@ -81,20 +78,7 @@ class InviteController extends Controller
             $request->get('rating')
         );
 
-        $templateManager = new TemplateManager();
-        $templateEntity = $templateManager->getTemplate(
-            $invite->getAccountId(),
-            $templateManager::THANKYOU_TEMPLATE_TYPE,
-            'ThankYouPage',
-            $em,
-            $this->get('translator')
-        );
-
-        $template = new ThankYouTemplate();
-        $templateText = $template
-            ->setContent($templateEntity->getTemplateCode())
-            ->setCustomer($customer)
-            ->getTranslation();
+        $templateText = $this->getThankYouText($em, $invite, $customer);
 
         $em->remove($invite);
         $em->flush();
@@ -120,5 +104,23 @@ class InviteController extends Controller
                 'feedback' => $feedback,
             )
         );
+    }
+
+    /**
+     * @param $em
+     * @param $invite
+     * @param $customer
+     * @return mixed
+     */
+    protected function getThankYouText($em, $invite, $customer)
+    {
+        $templateManager = new TemplateManager();
+        $templateText = $templateManager->getThankYouText(
+            $em,
+            $invite->getAccountId(),
+            $customer,
+            $this->get('translator')
+        );
+        return $templateText;
     }
 }

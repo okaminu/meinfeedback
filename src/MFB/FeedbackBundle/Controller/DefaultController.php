@@ -15,7 +15,6 @@ use Symfony\Component\Form\FormError;
 use Doctrine\DBAL\DBALException;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
-use MFB\Template\ThankYouTemplate;
 use MFB\Template\Manager\TemplateManager;
 
 class DefaultController extends Controller
@@ -80,39 +79,17 @@ class DefaultController extends Controller
 
                 $em->persist($customer);
 
-                $feedbackEntityManager = new FeedbackEntityManager(
-                    $account->getId(),
-                    $accountChannel->getId(),
-                    $customer,
-                    $request->get('feedback'),
-                    $request->get('rating'),
-                    new FeedbackEntity()
-                );
+                $this->saveFeedback($request, $account, $accountChannel, $customer, $em);
 
-                $feedbackEntityManager->saveFeedback(
-                    $em,
-                    $accountChannel->getRatingsEnabled()
-                );
-
-                $serviceDateTime = null;
-                if ($serviceDate['year'] != "" &&
-                    $serviceDate['month'] != "" &&
-                    $serviceDate['day'] != "") {
-                    $serviceDateTime = new \DateTime(implode('-', $serviceDate));
-                }
-
-                $serviceEntityManager = new ServiceEntityManager(
-                    $account->getId(),
+                $this->saveService(
+                    $serviceDate,
+                    $account,
                     $accountChannel->getId(),
                     $customer,
                     $serviceDescription,
-                    $serviceDateTime,
                     $serviceIdReference,
-                    new ServiceEntity()
+                    $em
                 );
-
-                $serviceEntity = $serviceEntityManager->createEntity();
-                $em->persist($serviceEntity);
 
                 $em->flush();
 
@@ -123,20 +100,7 @@ class DefaultController extends Controller
                     $request->get('rating')
                 );
 
-                $templateManager = new TemplateManager();
-                $templateEntity = $templateManager->getTemplate(
-                    $account->getId(),
-                    $templateManager::THANKYOU_TEMPLATE_TYPE,
-                    'ThankYouPage',
-                    $em,
-                    $this->get('translator')
-                );
-
-                $template = new ThankYouTemplate();
-                $templateText = $template
-                    ->setContent($templateEntity->getTemplateCode())
-                    ->setCustomer($customer)
-                    ->getTranslation();
+                $templateText = $this->getThankYouText($em, $account, $customer);
 
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
@@ -177,6 +141,88 @@ class DefaultController extends Controller
                 'feedback' => $feedback,
                 'form' => $formView
             )
+        );
+    }
+
+    /**
+     * @param $em
+     * @param $account
+     * @param $customer
+     * @return mixed
+     */
+    protected function getThankYouText($em, $account, $customer)
+    {
+        $templateManager = new TemplateManager();
+        $templateText = $templateManager->getThankYouText(
+            $em,
+            $account->getId(),
+            $customer,
+            $this->get('translator')
+        );
+        return $templateText;
+    }
+
+    /**
+     * @param $serviceDate
+     * @param $account
+     * @param $accountChannelId
+     * @param $customer
+     * @param $serviceDescription
+     * @param $serviceIdReference
+     * @param $em
+     */
+    protected function saveService(
+        $serviceDate,
+        $account,
+        $accountChannelId,
+        $customer,
+        $serviceDescription,
+        $serviceIdReference,
+        $em
+    ) {
+        $serviceDateTime = null;
+        if ($serviceDate['year'] != "" &&
+            $serviceDate['month'] != "" &&
+            $serviceDate['day'] != ""
+        ) {
+            $serviceDateTime = new \DateTime(implode('-', $serviceDate));
+        }
+
+        $serviceEntityManager = new ServiceEntityManager(
+            $account->getId(),
+            $accountChannelId,
+            $customer,
+            $serviceDescription,
+            $serviceDateTime,
+            $serviceIdReference,
+            new ServiceEntity()
+        );
+
+        $serviceEntity = $serviceEntityManager->createEntity();
+        $em->persist($serviceEntity);
+    }
+
+    /**
+     * @param Request $request
+     * @param $account
+     * @param $accountChannel
+     * @param $customer
+     * @param $em
+     */
+    protected function saveFeedback(Request $request, $account, $accountChannel, $customer, $em)
+    {
+        $feedbackEntityManager = new FeedbackEntityManager(
+            $account->getId(),
+            $accountChannel->getId(),
+            $customer,
+            $request->get('feedback'),
+            $request->get('rating'),
+            new FeedbackEntity()
+        );
+
+        $feedbackEntityManager->saveFeedback(
+            $em,
+            $accountChannel->getRatingsEnabled()
         );
     }
 }
