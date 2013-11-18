@@ -16,11 +16,11 @@
 
             <div style="padding:20px; width:550px;">
                Customer {{ customerName }}
-                {% if feedback.rating %}
-                has given you a {{ feedback.rating }} star rating and
+                {% if feedbackRating %}
+                has given you a {{ feedbackRating }} star rating and
                 {% endif %}
                 has written the following feedback: <br>
-                {{ feedback.content }}
+                {{ feedbackText }}
 
             </div>
             <div style="clear:both"></div>

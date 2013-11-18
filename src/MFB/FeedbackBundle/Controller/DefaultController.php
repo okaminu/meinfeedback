@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\FeedbackException;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,6 @@ use Symfony\Component\Form\FormError;
 use Doctrine\DBAL\DBALException;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
-use MFB\Template\ThankYouTemplate;
 use MFB\Template\Manager\TemplateManager;
 
 class DefaultController extends Controller
@@ -48,6 +48,7 @@ class DefaultController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
+        $errorMessage = null;
         $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
@@ -76,80 +77,30 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             try {
 
-                if ($request->get('feedback') == '') {
-                    return $this->showFeedbackForm(
-                        $account->getId(),
-                        $accountChannel,
-                        $form->createView(),
-                        $request->get('feedback'),
-                        'Please leave a feedback'
-                    );
-                }
+                $em->persist($customer);
 
-                $feedbackEntityManager = new FeedbackEntityManager(
-                    $account->getId(),
-                    $accountChannel->getId(),
-                    $customer,
-                    $request->get('feedback'),
-                    $request->get('rating'),
-                    new FeedbackEntity()
-                );
+                $this->saveFeedback($request, $account, $accountChannel, $customer, $em);
 
-                $feedbackEntity = $feedbackEntityManager->createEntity();
-
-                if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
-                    return $this->showFeedbackForm(
-                        $account->getId(),
-                        $accountChannel,
-                        $form->createView(),
-                        $request->get('feedback'),
-                        'Please select star rating'
-                    );
-                }
-
-                $serviceDateTime = null;
-                if ($serviceDate['year'] != "" &&
-                    $serviceDate['month'] != "" &&
-                    $serviceDate['day'] != "") {
-                    $serviceDateTime = new \DateTime(implode('-', $serviceDate));
-                }
-
-                $serviceEntityManager = new ServiceEntityManager(
-                    $account->getId(),
+                $this->saveService(
+                    $serviceDate,
+                    $account,
                     $accountChannel->getId(),
                     $customer,
                     $serviceDescription,
-                    $serviceDateTime,
                     $serviceIdReference,
-                    new ServiceEntity()
+                    $em
                 );
-
-                $serviceEntity = $serviceEntityManager->createEntity();
-                $em->persist($customer);
-                $em->persist($feedbackEntity);
-                $em->persist($serviceEntity);
 
                 $em->flush();
 
                 $this->get('mfb_email.sender')->sendFeedbackNotification(
                     $account,
                     $customer,
-                    $feedbackEntity
-                );
-                $templateManager = new TemplateManager();
-                $templateEntity = $templateManager->getTemplate(
-                    $account->getId(),
-                    $templateManager::THANKYOU_TEMPLATE_TYPE,
-                    'ThankYouPage',
-                    $em,
-                    $this->get('translator')
+                    $request->get('feedback'),
+                    $request->get('rating')
                 );
 
-                $template = new ThankYouTemplate();
-                $templateText = $template
-                    ->setContent($templateEntity->getTemplateCode())
-                    ->setCustomer($customer)
-                    ->getTranslation();
+                $templateText = $this->getThankYouText($em, $account, $customer);
 
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
@@ -165,28 +116,113 @@ class DefaultController extends Controller
                 } else {
                     $form->addError(new FormError($ex->getMessage()));
                 }
+            } catch (FeedbackException $ex){
+                $errorMessage = $ex->getMessage();
             }
             return $this->showFeedbackForm(
                 $account->getId(),
                 $accountChannel,
                 $form->createView(),
-                $request->get('feedback')
+                $request->get('feedback'),
+                $errorMessage
             );
         }
-        return $this->render('MFBFeedbackBundle:Invite:invalid_data.html.twig');
+        return $this->render('MFBFeedbackBundle:Default:invalid_data.html.twig');
     }
 
-    private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $starErrorMessage = false)
+    private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $errorMessage = false)
     {
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
                 'accountId' => $accountId,
                 'accountChannel' => $accountChannel,
-                'errorMessage' => $starErrorMessage,
+                'errorMessage' => $errorMessage,
                 'feedback' => $feedback,
                 'form' => $formView
             )
+        );
+    }
+
+    /**
+     * @param $em
+     * @param $account
+     * @param $customer
+     * @return mixed
+     */
+    protected function getThankYouText($em, $account, $customer)
+    {
+        $templateManager = new TemplateManager();
+        $templateText = $templateManager->getThankYouText(
+            $em,
+            $account->getId(),
+            $customer,
+            $this->get('translator')
+        );
+        return $templateText;
+    }
+
+    /**
+     * @param $serviceDate
+     * @param $account
+     * @param $accountChannelId
+     * @param $customer
+     * @param $serviceDescription
+     * @param $serviceIdReference
+     * @param $em
+     */
+    protected function saveService(
+        $serviceDate,
+        $account,
+        $accountChannelId,
+        $customer,
+        $serviceDescription,
+        $serviceIdReference,
+        $em
+    ) {
+        $serviceDateTime = null;
+        if ($serviceDate['year'] != "" &&
+            $serviceDate['month'] != "" &&
+            $serviceDate['day'] != ""
+        ) {
+            $serviceDateTime = new \DateTime(implode('-', $serviceDate));
+        }
+
+        $serviceEntityManager = new ServiceEntityManager(
+            $account->getId(),
+            $accountChannelId,
+            $customer,
+            $serviceDescription,
+            $serviceDateTime,
+            $serviceIdReference,
+            new ServiceEntity()
+        );
+
+        $serviceEntity = $serviceEntityManager->createEntity();
+        $em->persist($serviceEntity);
+    }
+
+    /**
+     * @param Request $request
+     * @param $account
+     * @param $accountChannel
+     * @param $customer
+     * @param $em
+     */
+    protected function saveFeedback(Request $request, $account, $accountChannel, $customer, $em)
+    {
+        $feedbackEntityManager = new FeedbackEntityManager(
+            $account->getId(),
+            $accountChannel->getId(),
+            $customer,
+            $request->get('feedback'),
+            $request->get('rating'),
+            new FeedbackEntity()
+        );
+
+        $feedbackEntityManager->saveFeedback(
+            $em,
+            $accountChannel->getRatingsEnabled()
         );
     }
 }

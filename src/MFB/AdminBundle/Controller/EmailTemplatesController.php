@@ -30,8 +30,7 @@ class EmailTemplatesController extends Controller
         $editForm = $this->createEditForm($emailTemplate);
 
         //dirty quick around for two forms handling
-        if ($request->get('email_template', null) == true)
-        {
+        if ($request->get('email_template', null) == true) {
             $editForm->handleRequest($request);
             if ($editForm->isValid()) {
                 $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
@@ -59,8 +58,7 @@ class EmailTemplatesController extends Controller
         $variables = $this->get('mfb_email.variables')->getVariables($emailTemplate);
 
         //dirty quick around for two forms handling
-        if ($request->get('thankyou_template', null) == true)
-        {
+        if ($request->get('thankyou_template', null) == true) {
             $thankYouForm->handleRequest($request);
             if ($thankYouForm->isValid()) {
                 $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));

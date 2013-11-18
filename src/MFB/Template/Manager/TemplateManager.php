@@ -6,6 +6,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
+use MFB\Template\ThankYouTemplate;
 
 class TemplateManager {
 
@@ -63,5 +64,23 @@ class TemplateManager {
                 return $translator->trans('default_template_thank_you_page');
                 break;
         }
+    }
+
+    public function getThankYouText($em, $accountId, $customer, $translator)
+    {
+        $templateEntity = $this->getTemplate(
+            $accountId,
+            $this::THANKYOU_TEMPLATE_TYPE,
+            'ThankYouPage',
+            $em,
+            $translator
+        );
+
+        $template = new ThankYouTemplate();
+        $templateText = $template
+            ->setContent($templateEntity->getTemplateCode())
+            ->setCustomer($customer)
+            ->getTranslation();
+        return $templateText;
     }
 } 

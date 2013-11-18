@@ -44,9 +44,24 @@ class AccountChannel
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="street", type="string", length=128)
      */
-    private $address;
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="place", type="string", length=128)
+     */
+    private $place;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=128)
+     */
+    private $city;
+
 
     /**
      * @var smallint
@@ -112,30 +127,6 @@ class AccountChannel
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     * @return AccountChannel
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string 
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-
-    /**
      * Set ratingsEnabled
      *
      * @param integer $ratingsEnabled
@@ -179,5 +170,74 @@ class AccountChannel
     public function getHomepageUrl()
     {
         return $this->homepageUrl;
+    }
+
+    /**
+     * Set street
+     *
+     * @param string $street
+     * @return AccountChannel
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+    
+        return $this;
+    }
+
+    /**
+     * Get street
+     *
+     * @return string 
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set place
+     *
+     * @param string $place
+     * @return AccountChannel
+     */
+    public function setPlace($place)
+    {
+        $this->place = $place;
+    
+        return $this;
+    }
+
+    /**
+     * Get place
+     *
+     * @return string 
+     */
+    public function getPlace()
+    {
+        return $this->place;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     * @return AccountChannel
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string 
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

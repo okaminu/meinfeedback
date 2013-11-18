@@ -4,11 +4,11 @@ namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
+use MFB\FeedbackBundle\FeedbackException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\AccountBundle\Entity\Account;
-use MFB\Template\ThankYouTemplate;
 use MFB\Template\Manager\TemplateManager;
 
 use MFB\Template\Placeholder\PlaceholderContainer;
@@ -44,65 +44,44 @@ class InviteController extends Controller
 
         /** @var Account $account */
         $account = $em->find('MFBAccountBundle:Account', $invite->getAccountId());
-
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
-
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
+        try {
+            $feedbackEntityManager = new FeedbackEntityManager(
+                $invite->getAccountId(),
+                $accountChannel->getId(),
+                $customer,
+                $request->get('feedback'),
+                $request->get('rating'),
+                new FeedbackEntity()
+            );
 
-        if ($request->get('feedback') == '') {
+            $feedbackEntityManager->saveFeedback(
+                $em,
+                $accountChannel->getRatingsEnabled()
+            );
+
+        } catch (FeedbackException $ex) {
             return $this->showFeedbackForm(
                 $request->get('token'),
                 $accountChannel,
                 $request->get('feedback'),
-                'Please leave a feedback'
+                $ex->getMessage()
             );
         }
-
-        $feedbackEntityManager = new FeedbackEntityManager(
-            $invite->getAccountId(),
-            $accountChannel->getId(),
-            $customer,
-            $request->get('feedback'),
-            $request->get('rating'),
-            new FeedbackEntity()
-        );
-
-        $feedbackEntity = $feedbackEntityManager->createEntity();
-
-        if (($accountChannel->getRatingsEnabled() == '1') && (is_null($feedbackEntity->getRating()))) {
-            return $this->showFeedbackForm(
-                $request->get('token'),
-                $accountChannel,
-                $request->get('feedback'),
-                'Please select star rating'
-            );
-        }
-
-        $em->persist($feedbackEntity);
-        $em->remove($invite);
-        $em->flush();
 
         $this->get('mfb_email.sender')->sendFeedbackNotification(
             $account,
             $customer,
-            $feedbackEntity
+            $request->get('feedback'),
+            $request->get('rating')
         );
 
-        $templateManager = new TemplateManager();
-        $templateEntity = $templateManager->getTemplate(
-            $invite->getAccountId(),
-            $templateManager::THANKYOU_TEMPLATE_TYPE,
-            'ThankYouPage',
-            $em,
-            $this->get('translator')
-        );
+        $templateText = $this->getThankYouText($em, $invite, $customer);
 
-        $template = new ThankYouTemplate();
-        $templateText = $template
-            ->setContent($templateEntity->getTemplateCode())
-            ->setCustomer($customer)
-            ->getTranslation();
+        $em->remove($invite);
+        $em->flush();
 
         return $this->render(
             'MFBFeedbackBundle:Invite:thank_you.html.twig',
@@ -125,5 +104,23 @@ class InviteController extends Controller
                 'feedback' => $feedback,
             )
         );
+    }
+
+    /**
+     * @param $em
+     * @param $invite
+     * @param $customer
+     * @return mixed
+     */
+    protected function getThankYouText($em, $invite, $customer)
+    {
+        $templateManager = new TemplateManager();
+        $templateText = $templateManager->getThankYouText(
+            $em,
+            $invite->getAccountId(),
+            $customer,
+            $this->get('translator')
+        );
+        return $templateText;
     }
 }

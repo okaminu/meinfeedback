@@ -19,8 +19,14 @@
                 {{ form_errors(form.name) }}
             </div>
             <div>
-                {{ form_widget(form.address, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Berlinstraße 31, 10090, Berlin*'} }) }}
-                {{ form_errors(form.address) }}
+                {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Straße*'} }) }}
+                {{ form_errors(form.street) }}
+
+                {{ form_widget(form.place, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'PLZ*'} }) }}
+                {{ form_errors(form.place) }}
+
+                {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Stadt*'} }) }}
+                {{ form_errors(form.city) }}
             </div>
 
             <div>
