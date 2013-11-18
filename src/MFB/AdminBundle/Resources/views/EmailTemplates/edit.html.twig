@@ -1,5 +1,5 @@
 {% extends 'MFBAdminBundle::base.html.twig' %}
-
+{% import "MeinFeedbackHomeBundle::macros.html.twig" as tooltips %}
 
 {% block content %}
     <div>
@@ -26,6 +26,20 @@
                 </div>
                 <div class="add-variable">
                     <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': entity.id }) }}" class="iframe"> {% trans %} Add Variable {% endtrans %}</a>
+
+                    {{ tooltips.tooltip(
+                    'Was sind Variablen',
+                    '<p>Variablen sind Platzhalter, welche man an Stelle der tatsächlichen Information in eine Mailvorlage einfügt.</p>
+                        <p>Ein kurzes Beispiel für die Anwendung einer Variable:</p>
+
+                        <p>Stellen Sie sich vor, Sie möchten folgendes in Ihrer Mail schreiben: „Lieber Jan Musterfeedback,“</p>
+
+                        <p>Nun würden Sie folgendes in Ihrer Mailvorlage schreiben: #SAL# #FIRSTNAME# #LASTNAME#,</p>
+
+                        <p>#SAL# = Die Anrede oder Grußformel  = Lieber</p>
+                        <p>#FIRSTNAME# = Der Vorname des Kunden = Jan</p>
+                        <p>#LASTNAME#  = Der Nachname des Kunden = Musterfeedback</p>'
+                    ) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" name="email_template" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">

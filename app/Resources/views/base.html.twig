@@ -9,6 +9,7 @@
         {% stylesheets
         '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/acprofile.css'
+        '@MeinFeedbackHomeBundle/Resources/public/css/jquery.qtip.min.css'
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
         {% endstylesheets %}
@@ -32,9 +33,11 @@
     <!--Has to be in head, to lazy load images.
     Minimize in production. -->
     {% javascripts
+    '@MeinFeedbackHomeBundle/Resources/public/js/jquery.qtip.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/lazyload.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/bootstrap.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/lightbox.min.js'
+    '@MeinFeedbackHomeBundle/Resources/public/js/main.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/main.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -44,5 +47,11 @@
 
 <body id="top" data-spy="scroll" data-target=".navbar">
     {% block body %}{% endblock %}
+
+    {% javascripts
+    '@MeinFeedbackHomeBundle/Resources/public/js/qtip.config.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 </body>
 </html>
