@@ -41,6 +41,13 @@ class MainWidgetDirector implements WidgetDirectorInterface {
             ->setPositionY(214)
             ->setFontColorCode(108, 108, 108);
 
+        $this->builder->cloneElement('text')
+            ->setText('Jetzt Feedback geben')
+            ->setPositionX(9)
+            ->setPositionY(273)
+            ->setFontSize(10)
+            ->setFontColorCode(108, 108, 108);
+
         $this->builder->getElement('comment')
             ->setText($lastFeedbacks)
             ->setBoxWidth(170)

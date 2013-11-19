@@ -6,9 +6,10 @@ namespace MFB\WidgetBundle\Builder\Elements;
 use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-class ImageTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface {
+class ImageTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface
+{
 
-    protected  static $last_line_padding = 20;
+    protected static $last_line_padding = 20;
 
     protected $text;
 
@@ -19,6 +20,8 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface, Te
     protected $positionX;
 
     protected $positionY;
+
+    protected $fontSize = 8;
 
     public function __construct($resources)
     {
@@ -71,7 +74,13 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface, Te
      */
     public function getFontSize()
     {
-        return 8;
+        return $this->fontSize;
+    }
+
+    public function setFontSize($size)
+    {
+        $this->fontSize = $size;
+        return $this;
     }
 
     public function getBaseLineModifier()
