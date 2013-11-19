@@ -11,6 +11,7 @@ use MFB\WidgetBundle\Builder\ImageBuilder;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use MFB\FeedbackBundle\Repository\FeedbackSpecification;
 
 class DefaultController extends Controller
 {
@@ -40,7 +41,11 @@ class DefaultController extends Controller
             4
         );
 
-        $feedbackCount = $em->getRepository('MFBFeedbackBundle:Feedback')->getFeedbackCount($accountChannel->getId());
+        $criteria = new FeedbackSpecification();
+        $criteria->setChannelId($accountChannel->getId());
+        $criteria->setIsEnabled('1');
+
+        $feedbackCount = $em->getRepository('MFBFeedbackBundle:Feedback')->getFeedbackCount($criteria);
 
         $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
         $query->setParameter(1, $accountChannel->getId());
