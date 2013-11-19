@@ -237,4 +237,14 @@ class EmailTemplate
     }
 
 
+
+    /**
+     * Remove variables
+     *
+     * @param \MFB\EmailBundle\Entity\EmailTemplateVariable $variables
+     */
+    public function removeVariable(\MFB\EmailBundle\Entity\EmailTemplateVariable $variables)
+    {
+        $this->variables->removeElement($variables);
+    }
 }

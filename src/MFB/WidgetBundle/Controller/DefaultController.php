@@ -34,24 +34,19 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('No feedback yet. Sorry.');
         }
 
-        $lastFeedbacks = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
-            array(
-                'accountId' => $account->getId(),
-                'channelId' => $accountChannel->getId()
-            ),
-            array('id'=>'DESC'),
+        $lastFeedbacks  =  $em->getRepository('MFBFeedbackBundle:Feedback')->getLastEnabledFeedbacks(
+            $account->getId(),
+            $accountChannel->getId(),
             4
         );
 
-        $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1');
-        $query->setParameter(1, $accountChannel->getId());
-        $feedbackCount = $query->getSingleScalarResult();
+        $feedbackCount = $em->getRepository('MFBFeedbackBundle:Feedback')->getFeedbackCount($accountChannel->getId());
 
-        $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.rating IS NOT NULL');
+        $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
         $query->setParameter(1, $accountChannel->getId());
         $feedbackRatingCount = $query->getSingleScalarResult();
 
-        $query = $em->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1');
+        $query = $em->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
         $query->setParameter(1, $accountChannel->getId());
         $feedbackRatingAverage = round($query->getSingleScalarResult(), 1);
 

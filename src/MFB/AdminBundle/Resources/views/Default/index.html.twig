@@ -6,8 +6,15 @@
 
     <h3 style="margin-top: 50px; margin-left: 20px">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
+
+
     <div style="padding:10px">
 
+
+        <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
+        <div style="width: 700px">
+            <div style="float: right">Active?</div>
+        </div>
         {% for feedback in feedbackList %}
 
             {%  if feedback.rating %}
@@ -22,8 +29,6 @@
             <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
                 <tbody>
                     <tr>
-
-
                     <td width="80%" style="padding:10px;">
                         <span class="comment-text left" itemprop="description">
                             {{ feedback.content }}
@@ -33,15 +38,25 @@
                         <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
                             <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
                         </time>
+
+                    </td>
+                    <td>
+                        <div style="float: right"><input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}></div>
                     </td>
                 </tr>
-                </tbody></table>
+                </tbody>
+            </table>
+
+
+
             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
             <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
+
             {% else %}
             {% trans %} No feedback yet. {% endtrans %}
 
-        {% endfor %}
-
+            {% endfor %}
+            <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
+        </form>
     </div>
 {% endblock %}

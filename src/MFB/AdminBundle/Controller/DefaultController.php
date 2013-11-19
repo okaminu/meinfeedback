@@ -9,6 +9,8 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
+use MFB\FeedbackBundle\Form\FeedbackType;
+use MFB\FeedbackBundle\Manager\Feedback;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +21,7 @@ use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
@@ -32,13 +34,21 @@ class DefaultController extends Controller
                 array('id'=>'DESC')
             );
 
+
+        if ($request->getMethod() == 'POST') {
+            $this->batchActivate($feedbackList, $request, $em);
+        }
+
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackList'=>$feedbackList
+                'feedbackList'=>$feedbackList,
             )
         );
     }
+
+
+
     public function locationAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -269,5 +279,20 @@ class DefaultController extends Controller
 
         $form->add('salutation', 'text', array('required' => false));
         return $form;
+    }
+
+    public function batchActivate($feedbackList, Request $request, $em)
+    {
+        $activates = $request->request->get('activate');
+        foreach ($feedbackList as $feedback) {
+            $feedback->setIsEnabled(false);
+
+            if (array_key_exists($feedback->getId(), $activates)) {
+                $feedback->setIsEnabled(true);
+            }
+            $em->persist($feedback);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('mfb_admin_homepage'));
     }
 }

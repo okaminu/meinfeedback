@@ -47,4 +47,4 @@ class MainWidgetDirector implements WidgetDirectorInterface {
 
         return $this->builder->createImage();
     }
-} 
+}

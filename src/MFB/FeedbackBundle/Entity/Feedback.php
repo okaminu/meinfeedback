@@ -10,7 +10,8 @@ use MFB\EmailBundle\Entity\EmailTemplate;
  *
  * @ORM\Table()
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="MFB\FeedbackBundle\Repository\FeedbackRepository")
+ *
  */
 class Feedback
 {
@@ -73,6 +74,13 @@ class Feedback
      * @ORM\Column(name="rating", type="integer", nullable=true)
      */
     private $rating = NULL;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_enabled", columnDefinition="TINYINT DEFAULT 0 NOT NULL")
+     */
+    private $isEnabled;
 
 
     /**
@@ -249,4 +257,21 @@ class Feedback
     {
         return $this->customer;
     }
+
+    /**
+     * @param int $isEnabled
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
 }

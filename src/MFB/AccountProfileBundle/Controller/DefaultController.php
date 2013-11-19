@@ -29,7 +29,8 @@ class DefaultController extends Controller
         $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
             array(
                 'accountId' => $account->getId(),
-                'channelId' => $accountChannel->getId()
+                'channelId' => $accountChannel->getId(),
+                'isEnabled' => 1
             ),
             array('id'=>'DESC')
         );
