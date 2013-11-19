@@ -58,7 +58,9 @@ class Sender
                   "#SERVICE_DATE#" => $date,
                   "#REFERENCE_ID#" => $service->getServiceIdReference(),
                   "#SERVICE_NAME#" => $service->getDescription(),
-                  "#HOMEPAGE#" => $channel->getHomepageUrl()
+                  "#HOMEPAGE#" => $channel->getHomepageUrl(),
+                  "#SERVICE_ID#" => $service->getServiceIdReference(),
+                  "#CUSTOMER_ID#" => $customer->getCustomerIdReference()
             )
         );
 

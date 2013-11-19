@@ -18,7 +18,7 @@ class Variables
      */
     private $allVariables = array(
         'link', 'firstname', 'lastname', 'sal', 'homepage',
-        'service_name', 'service_date', 'reference_id'
+        'service_name', 'service_date', 'reference_id', 'customer_id', 'service_id'
     );
 
     public function __construct(TranslatorInterface $translator)

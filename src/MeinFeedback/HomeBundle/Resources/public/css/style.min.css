@@ -1204,6 +1204,7 @@ td.zwischenheadline { background-color:#5aff6a; color:#fff; text-align:left; tex
 .breite270 { width:270px; margin:0 auto;}
 .breite180 { width:180px; margin:0 auto; height: 50px}
 .breite210 { width:210px; margin:0 auto; height: 50px; padding: 0px 18px 0px 10px;}
+.breite130 { width:130px; margin:0 auto; height: 40px; padding: 0px 18px 0px 10px;}
 textarea, input {font-family:Open Sans,Source Sans Pro,Helvetica,Arial,sans-serif;font-weight:400;}
 .closed { display:none; }
 .open { display:table-row; }
@@ -1337,12 +1338,13 @@ a.footer_link:hover {
 
 .gender label{
     display:inline;
-    width: 60px !important;
+    margin-left: 6px;
+    margin-right: 40px;
 }
 
 .gender input{
     display:inline;
-    width: 60px !important;
+    width: 25px !important;
 }
 
 

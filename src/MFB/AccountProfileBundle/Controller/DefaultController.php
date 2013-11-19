@@ -38,6 +38,7 @@ class DefaultController extends Controller
             'MFBAccountProfileBundle:Default:index.html.twig',
             array(
                 'account_channel_name' => $accountChannel->getName(),
+                'account_id' => $account->getId(),
                 'feedbackList'=>$feedbackList
             )
         );
