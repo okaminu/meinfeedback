@@ -24,10 +24,14 @@ class MainWidgetDirector implements WidgetDirectorInterface {
             ->setPositionX(10)
             ->setLastLine(214)
             ->addText($feedbackCount . " Bewertungen")
-            ->addText($feedbackCount . " Ratings")
-            ->addText($feedbackRatingAverage ." Average")
             ->setFontColorCode(108, 108, 108)
         ;
+
+        if ($feedbackRatingCount != 0) {
+            $this->builder->getElement('repeatText')
+                ->addText($feedbackRatingCount . " Ratings")
+                ->addText($feedbackRatingAverage ." Average");
+        }
 
         /** @var Feedback $lastFeedback */
         $lastFeedback = reset($lastFeedbacks);
