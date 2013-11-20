@@ -31,7 +31,7 @@ class DefaultController extends Controller
 
         /** @var AccountChannel $accountChannel */
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$account->getId())
+            array('accountId' => $account->getId())
         );
 
         if (!$accountChannel) {

@@ -5,6 +5,8 @@ namespace MFB\FeedbackBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
+use MFB\FeedbackBundle\Specification\SpecificationInterface;
+use MFB\FeedbackBundle\Specification as Spec;
 
 /**
  * FeedbackRepository
@@ -16,76 +18,89 @@ class FeedbackRepository extends EntityRepository implements FeedbackRepositoryI
 {
     protected $qb;
 
-    public function getLastEnabledFeedbacks($accountId, $accountChannelId, $num = 4)
+    public function getLastEnabledFeedbacks(SpecificationInterface $specification, $num = 4)
     {
-
-        return $this->getEntityManager()->getRepository('MFBFeedbackBundle:Feedback')->findBy(
-            array(
-                'accountId' => $accountId,
-                'channelId' => $accountChannelId,
-                'isEnabled' => 1
-            ),
-            array('id'=>'DESC'),
-            $num
+        return $this->match(
+            new Spec\LimitLastN(
+                $specification,
+                $num
+            )
         );
     }
 
-    public function getFeedbacks($criteria)
+    public function getFeedbackCount(SpecificationInterface $spec)
     {
-        $query = $this->getEntityManager()->createQuery(
-            'SELECT COUNT(fb.id)
-            FROM MFBFeedbackBundle:Feedback fb
-            WHERE fb.isEnabled = 1'
+        return $this->match(
+            new Spec\AsSingleScalar($spec)
         );
-        //$query->setParameter('channelId', $accountChannelId);
-
-
-        return $this->match($query, $criteria);
     }
-
-    public function getFeedbackCount(FeedbackSpecification $criteria)
-    {
-        $this->queryBuilder();
-        $this->qb->select('count(fb.id)');
-        return $this->match($criteria)->getResult(Query::HYDRATE_SINGLE_SCALAR);
-    }
-
 
     /**
-     * @param FeedbackSpecification $criteria
-     * @return mixed
+     * @todo this is not working correctly
+     * @param SpecificationInterface $spec
+     * @return array
      */
-    public function match(FeedbackSpecification $criteria)
+    public function getRatingsAverage(SpecificationInterface $spec)
     {
 
-        if ($criteria->getChannelId() !== null) {
-            $this->matchChannelId($criteria);
+        return $this->match(
+            new Spec\AsSingleScalar($spec, 'avg')
+        );
+    }
+
+    /**
+     * @todo this is not working correctly
+     * @param SpecificationInterface $spec
+     * @return array
+     */
+    public function getFeedbacksWithRatings(SpecificationInterface $spec)
+    {
+        return $this->match(
+            new Spec\AsSingleScalar($spec)
+        );
+    }
+
+    public function getRatingCount($accountChannel)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
+        $query->setParameter(1, $accountChannel->getId());
+        return  $query->getSingleScalarResult();
+    }
+
+    public function getPlainRatingsAverage($accountChannel)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
+        $query->setParameter(1, $accountChannel->getId());
+        return round($query->getSingleScalarResult(), 1);
+    }
+
+    /**
+     * Matcher by specified specification
+     *
+     * @param SpecificationInterface $specification
+     * @return array
+     */
+    public function match(SpecificationInterface $specification)
+    {
+        $dqAlias  = 'fb';
+        $qb = $this->createQueryBuilder($dqAlias);
+
+        if ($specification instanceof Spec\AsInterface) {
+            $specification->select($qb, $dqAlias);
         }
 
-        if ($criteria->getIsEnabled() !== null) {
-            $this->matchIsEnabled($criteria);
+        if ($specification instanceof Spec\OrderInterface) {
+            $specification->orderBy($qb, $dqAlias);
         }
 
-        return $this->qb->getQuery();
-    }
+        $expr = $specification->match($qb, $dqAlias);
+        $query = $qb->where($expr)->getQuery();
 
-    protected function matchIsEnabled(FeedbackSpecification $criteria)
-    {
-        $this->qb
-            ->andWhere('fb.isEnabled = :isEnabled')
-            ->setParameter('isEnabled', $criteria->getIsEnabled());
-    }
+        $specification->modifyQuery($query);
 
-    private function matchChannelId(FeedbackSpecification $criteria)
-    {
-        $this->qb
-            ->andWhere('fb.channelId = :channelId')
-            ->setParameter('channelId', $criteria->getChannelId());
-    }
-
-    protected function queryBuilder()
-    {
-        $this->qb = $this->createQueryBuilder('fb');
+        return $query->getResult($query->getHydrationMode());
     }
 
 }
