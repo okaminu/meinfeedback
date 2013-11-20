@@ -26,7 +26,8 @@
                             {{ errorMessage }}
                         </div>
                     {% endif %}
-                    {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490', 'placeholder': 'Customers email*'} }) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email*'} }) }}
+                    <div class="mandatoryFieldMark" style="float: right">*</div>
                     <div class="errorMessage">
                     {{ form_errors(form.email) }}
                     </div>
@@ -40,12 +41,13 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
                         <input type="hidden" value="0" name="rating" class="rating"/>
 
                     {% endif %}
 
-                <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
-
+                <textarea class="spaceForMandatoryMark" rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
+                    <div class="mandatoryFieldMark" style="float: right">*</div>
                 {{ form_label(form.anonymous) }}
                 <div style="display:block; width:50px">
                     {{ form_widget(form.anonymous) }}
@@ -63,6 +65,7 @@
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
                     {{ form_end(form) }}
+                    <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
                 </form>
             </div>
 

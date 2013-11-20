@@ -1393,7 +1393,7 @@ a.footer_link:hover {
 }
 
 .spaceForMandatoryMark{
-    width: 93%
+    width: 93% !important;
 }
 
 
