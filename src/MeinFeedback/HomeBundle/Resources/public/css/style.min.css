@@ -1362,6 +1362,7 @@ a.footer_link:hover {
     margin: 0;
     position: relative;
 }
+
 .stars_rating
 {
     padding-bottom: 10px;
@@ -1389,6 +1390,10 @@ a.footer_link:hover {
 }
 .formular .emptyMark{
     margin-right:10px
+}
+
+.spaceForMandatoryMark{
+    width: 93%
 }
 
 

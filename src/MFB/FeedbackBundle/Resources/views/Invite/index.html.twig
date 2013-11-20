@@ -37,16 +37,18 @@
                             {% endfor %}
                         </div>
                     </div>
+                        <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
                     <input type="hidden" value="0" name="rating" class="rating"/>
 
                 {% endif %}
 
-
-                <textarea rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
-
+                <textarea class="spaceForMandatoryMark" rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
+                    <div class="mandatoryFieldMark" style="float: right">*</div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
+                    <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
+
                 </form>
             </div>
 
