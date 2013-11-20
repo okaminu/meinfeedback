@@ -1,11 +1,11 @@
 {% extends "::base.html.twig" %}
-
+{% import "MeinFeedbackHomeBundle::macros.html.twig" as tooltips %}
 {% block title %}Welcome to MeinFeedback{% endblock %}
 
 {% block body %}
 
     <div class="formular_left">
-        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">Widget</div>
+        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300; text-align: center">Widget</div>
         <div class="widgetDisplay">
             <img src="{{ testWidgetImage }}" usemap="#widgetmap">
             <map name="widgetmap">
@@ -20,6 +20,12 @@
         {% raw %} <area shape="rect" coords="0,0,270,265" href=" {% endraw %} {{ widgetLink }} {% raw %} " target="_blank"/>
         <area shape="rect" coords="0,270,270,300" href="{% endraw %} {{ inviteUrl }} {% raw %} " target="_blank"/>
      </map> {% endraw %}</textarea>
+        </div>
+        <div>
+            <div style="width: 25px; float:right; margin-right: 100px">
+            {{ tooltips.tooltip('What is the widget code?',
+            "It is a code snippet which could be used in your website to display the feedbacks and ratings ", 'positionBottomLeft') }}
+            </div>
         </div>
     </div>
 

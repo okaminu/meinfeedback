@@ -13,7 +13,7 @@
 
         <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
         <div style="width: 700px">
-            <div style="float: right">Active?</div>
+            <div style="float: right">{% trans %} Active {% endtrans %}</div>
         </div>
         {% for feedback in feedbackList %}
 

@@ -1,5 +1,5 @@
-{% macro tooltip(title, content) %}
-    <a class="tip" rel='service_tip' title='{{ title }}'><img  src="{{ asset('bundles/meinfeedbackhome/images/icons/information-circled.png') }}" width="24" height="24"/></a>
+{% macro tooltip(title, content, position) %}
+    <a class="tip {{ position }}" rel='service_tip' title='{{ title }}'><img  src="{{ asset('bundles/meinfeedbackhome/images/icons/information-circled.png') }}" width="24" height="24"/></a>
     <div tracking="false"
          role="alert" aria-live="polite" aria-atomic="false" aria-describedby="qtip-0-content" style="display: none">
         {{ content | raw }}
