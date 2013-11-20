@@ -1373,3 +1373,23 @@ a.footer_link:hover {
 .inner-page .tip {
     padding-left: 10px;
 }
+
+.mandatoryFieldMark{
+    color:red;
+}
+.mandatoryFieldText{
+    color:red;
+    font-size: 14px;
+}
+
+.formular .locationFieldMark{
+    bottom:13px;
+    display: inline-block;
+    position: relative;
+}
+.formular .emptyMark{
+    margin-right:10px
+}
+
+
+

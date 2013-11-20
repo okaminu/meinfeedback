@@ -17,7 +17,10 @@
             <div>
                 {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Firma*'} }) }}
                 {{ form_errors(form.name) }}
+                <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
+
+
             <div>
                 {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Straße*'} }) }}
                 {{ form_errors(form.street) }}
@@ -27,10 +30,11 @@
 
                 {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Stadt*'} }) }}
                 {{ form_errors(form.city) }}
+                <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
 
             <div>
-                {{ form_widget(form.homepageUrl, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'homepage.de'} }) }}
+                {{ form_widget(form.homepageUrl, {'attr': {'class': 'required fr_input_txt fr_97_5pro emptyMark breite490', 'placeholder': 'homepage.de'} }) }}
                 {{ form_errors(form.homepageUrl) }}
             </div>
 
@@ -44,6 +48,7 @@
 
             {{ form_end(form) }}
 
+            <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
         </div>
 
     </div>
