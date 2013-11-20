@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use MFB\FeedbackBundle\Specification\SpecificationInterface;
 use MFB\FeedbackBundle\Specification as Spec;
-
+use Doctrine\ORM\NoResultException;
 /**
  * FeedbackRepository
  *
@@ -35,6 +35,54 @@ class FeedbackRepository extends EntityRepository implements FeedbackRepositoryI
         );
     }
 
+    public function getRatingCount($accountChannel)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
+        $query->setParameter(1, $accountChannel->getId());
+        return  $query->getSingleScalarResult();
+    }
+
+    public function getPlainRatingsAverage($accountChannel)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
+        $query->setParameter(1, $accountChannel->getId());
+        return round($query->getSingleScalarResult(), 1);
+    }
+
+    public function batchActivate($activateList, $inFeedbackList)
+    {
+        foreach ($inFeedbackList as $feedback) {
+            $feedback->setIsEnabled(false);
+
+            if (array_key_exists($feedback->getId(), $activateList)) {
+                $feedback->setIsEnabled(true);
+            }
+            $this->getEntityManager()->persist($feedback);
+        }
+        $this->getEntityManager()->flush();
+    }
+
+    public function activateFeedback($id, $accountId)
+    {
+        $feedback = $this->getEntityManager()->getRepository('MFBFeedbackBundle:Feedback')->findOneBy(
+            array(
+                'id' => $id,
+                'accountId' => $accountId
+            )
+        );
+        if (!$feedback) {
+            throw new NoResultException(
+                'No feedback found for id '.$id
+            );
+        }
+        $feedback->setIsEnabled(true);
+        $this->getEntityManager()->persist($feedback);
+        $this->getEntityManager()->flush();
+
+    }
+
     /**
      * @todo this is not working correctly
      * @param SpecificationInterface $spec
@@ -58,22 +106,6 @@ class FeedbackRepository extends EntityRepository implements FeedbackRepositoryI
         return $this->match(
             new Spec\AsSingleScalar($spec)
         );
-    }
-
-    public function getRatingCount($accountChannel)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
-        $query->setParameter(1, $accountChannel->getId());
-        return  $query->getSingleScalarResult();
-    }
-
-    public function getPlainRatingsAverage($accountChannel)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
-        $query->setParameter(1, $accountChannel->getId());
-        return round($query->getSingleScalarResult(), 1);
     }
 
     /**

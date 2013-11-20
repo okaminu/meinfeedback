@@ -16,6 +16,7 @@ use Doctrine\DBAL\DBALException;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\Template\Manager\TemplateManager;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends Controller
 {
@@ -79,7 +80,7 @@ class DefaultController extends Controller
 
                 $em->persist($customer);
 
-                $this->saveFeedback($request, $account, $accountChannel, $customer, $em);
+                $feedbackId = $this->saveFeedback($request, $account, $accountChannel, $customer, $em);
 
                 $this->saveService(
                     $serviceDate,
@@ -97,7 +98,12 @@ class DefaultController extends Controller
                     $account,
                     $customer,
                     $request->get('feedback'),
-                    $request->get('rating')
+                    $request->get('rating'),
+                    $this->get('router')->generate(
+                        'mfb_feedback_enable',
+                        array('feedbackId' => $feedbackId),
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    )
                 );
 
                 $templateText = $this->getThankYouText($em, $account, $customer);
@@ -208,6 +214,7 @@ class DefaultController extends Controller
      * @param $accountChannel
      * @param $customer
      * @param $em
+     * @return int
      */
     protected function saveFeedback(Request $request, $account, $accountChannel, $customer, $em)
     {
@@ -220,9 +227,17 @@ class DefaultController extends Controller
             new FeedbackEntity()
         );
 
-        $feedbackEntityManager->saveFeedback(
+        return $feedbackEntityManager->saveFeedback(
             $em,
             $accountChannel->getRatingsEnabled()
+        );
+    }
+
+    protected function getFeedbackEnableLink($id)
+    {
+        return $url = $this->generateUrl(
+            'mfb_feedback_enable',
+            array('feedback_id' => $id)
         );
     }
 }

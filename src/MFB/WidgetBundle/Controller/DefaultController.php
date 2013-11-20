@@ -49,8 +49,7 @@ class DefaultController extends Controller
         );
         $lastFeedbacks  = $this->getFeedbackRepo()->getLastEnabledFeedbacks($specification, 4);
         $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
-        $feedbackRatingAverage = $this->getFeedbackRepo()
-            ->getPlainRatingsAverage($accountChannel);
+        $feedbackRatingAverage = $this->getFeedbackRepo()->getPlainRatingsAverage($accountChannel);
         $feedbackRatingCount = $this->getFeedbackRepo()->getRatingCount($accountChannel);
 
         /**
@@ -83,10 +82,10 @@ class DefaultController extends Controller
         );
     }
 
+
     protected function getFeedbackRepo()
     {
-        $em = $this->getDoctrine()->getManager();
-        return $em->getRepository('MFBFeedbackBundle:Feedback');
+        return $this->getDoctrine()->getManager()->getRepository('MFBFeedbackBundle:Feedback');
     }
 
 }

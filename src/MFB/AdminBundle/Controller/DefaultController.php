@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
+use Doctrine\ORM\NoResultException;
 
 class DefaultController extends Controller
 {
@@ -27,27 +28,27 @@ class DefaultController extends Controller
         $accountId = $token->getUser()->getId();
 
         $em = $this->getDoctrine()->getManager();
-            $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
-                array(
-                    'accountId' => $accountId
-                ),
-                array('id'=>'DESC')
-            );
+        $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
+            array(
+                'accountId' => $accountId
+            ),
+            array('id' => 'DESC')
+        );
 
 
         if ($request->getMethod() == 'POST') {
-            $this->batchActivate($feedbackList, $request, $em);
+            $activates = $request->request->get('activate');
+            $em->getRepository('MFBFeedbackBundle:Feedback')->batchActivate($activates, $feedbackList, $em);
+            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackList'=>$feedbackList,
+                'feedbackList' => $feedbackList,
             )
         );
     }
-
-
 
     public function locationAction(Request $request)
     {
@@ -56,16 +57,20 @@ class DefaultController extends Controller
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
 
-        $entity = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId'=>$accountId));
+        $entity = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId' => $accountId));
         if (!$entity) {
             $entity = new AccountChannel();
             $entity->setAccountId($accountId);
         }
 
-        $form = $this->createForm(new AccountChannelType(), $entity, array(
+        $form = $this->createForm(
+            new AccountChannelType(),
+            $entity,
+            array(
                 'action' => $this->generateUrl('mfb_location'),
                 'method' => 'POST',
-            ));
+            )
+        );
 
         $form->handleRequest($request);
 
@@ -78,10 +83,13 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('mfb_location'));
         }
 
-        return $this->render('MFBAdminBundle:Default:location.html.twig', array(
+        return $this->render(
+            'MFBAdminBundle:Default:location.html.twig',
+            array(
                 'entity' => $entity,
-                'form'   => $form->createView(),
-            ));
+                'form' => $form->createView(),
+            )
+        );
     }
 
     public function customerAction(Request $request)
@@ -102,7 +110,7 @@ class DefaultController extends Controller
         $form = $this->getCustomerForm($customer);
 
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$accountId)
+            array('accountId' => $accountId)
         );
 
         if ($accountChannel === null) {
@@ -136,7 +144,7 @@ class DefaultController extends Controller
 
                 $emailTemplate = $this->getEmailTemplate($em, $accountId);
 
-                $inviteUrl  = $this->generateUrl(
+                $inviteUrl = $this->generateUrl(
                     'mfb_feedback_create_with_invite',
                     array('token' => $invite->getToken()),
                     UrlGeneratorInterface::ABSOLUTE_URL
@@ -165,12 +173,43 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('MFBAdminBundle:Default:customer.html.twig', array(
+        return $this->render(
+            'MFBAdminBundle:Default:customer.html.twig',
+            array(
                 'entity' => $customer,
-                'form'   => $form->createView(),
+                'form' => $form->createView(),
                 'added_email' => $request->get('added_email'),
                 'feedback' => $request->get('feedback')
-            ));
+            )
+        );
+    }
+
+    public function enableAction($feedbackId)
+    {
+        $token = $this->get('security.context')->getToken();
+        $accountId = $token->getUser()->getId();
+
+        try {
+            $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('MFBFeedbackBundle:Feedback')
+                ->activateFeedback($feedbackId, $accountId);
+
+        } catch (NoResultException $e) {
+            throw $this->createNotFoundException('Feedback was not found.');
+        }
+
+        $message = $this->get('translator')->trans(
+            'Feedback %feedback% was activated',
+            array('%feedback%' => $feedbackId)
+        );
+
+        $this->getRequest()->getSession()->getFlashBag()->add('success', $message);
+
+        return $this->redirect(
+            $this->generateUrl('mfb_admin_homepage')
+        );
     }
 
     /**
@@ -281,18 +320,5 @@ class DefaultController extends Controller
         return $form;
     }
 
-    public function batchActivate($feedbackList, Request $request, $em)
-    {
-        $activates = $request->request->get('activate');
-        foreach ($feedbackList as $feedback) {
-            $feedback->setIsEnabled(false);
 
-            if (array_key_exists($feedback->getId(), $activates)) {
-                $feedback->setIsEnabled(true);
-            }
-            $em->persist($feedback);
-            $em->flush();
-        }
-        return $this->redirect($this->generateUrl('mfb_admin_homepage'));
-    }
 }

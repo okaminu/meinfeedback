@@ -68,5 +68,7 @@ class Feedback
 
         $em->persist($feedbackEntity);
         $em->flush();
+
+        return $feedbackEntity->getId();
     }
 }
