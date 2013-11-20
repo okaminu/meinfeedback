@@ -6,17 +6,25 @@ use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback;
-//use MFB\WidgetBundle\Generator\ImageBuilder;
 use MFB\WidgetBundle\Builder\ImageBuilder;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use MFB\FeedbackBundle\Repository\FeedbackSpecification;
+use MFB\FeedbackBundle\Specification as Spec;
 
 class DefaultController extends Controller
 {
     public function indexAction($accountId)
     {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'image/png');
+        $response->setContent($this->widgetImage($accountId));
+        return $response;
+    }
 
+    protected function widgetImage($accountId)
+    {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -34,30 +42,29 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('No feedback yet. Sorry.');
         }
 
-        $lastFeedbacks  =  $em->getRepository('MFBFeedbackBundle:Feedback')->getLastEnabledFeedbacks(
-            $account->getId(),
-            $accountChannel->getId(),
-            4
+        $specification = new Spec\AndX(
+            new Spec\FilterAccountId($account->getId()),
+            new Spec\FilterChannelId($accountChannel->getId()),
+            new Spec\FilterIsEnabled()
         );
+        $lastFeedbacks  = $this->getFeedbackRepo()->getLastEnabledFeedbacks($specification, 4);
+        $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
+        $feedbackRatingAverage = $this->getFeedbackRepo()
+            ->getPlainRatingsAverage($accountChannel);
+        $feedbackRatingCount = $this->getFeedbackRepo()->getRatingCount($accountChannel);
 
-        $feedbackCount = $em->getRepository('MFBFeedbackBundle:Feedback')->getFeedbackCount($accountChannel->getId());
-
-        $query = $em->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
-        $query->setParameter(1, $accountChannel->getId());
-        $feedbackRatingCount = $query->getSingleScalarResult();
-
-        $query = $em->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
-        $query->setParameter(1, $accountChannel->getId());
-        $feedbackRatingAverage = round($query->getSingleScalarResult(), 1);
+        /**
+         * @todo Use a specifications. Currently both are giving wrong numbers.
+         * getRatingsAverage giving wrong number
+         * getFeedbacksWithRatings needs only for it added FilterWithRating
+         */
+//        $feedbackRatingAverage = $this->getFeedbackRepo()->getRatingsAverage($specification);
+//        $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbacksWithRatings($specification);
 
         $imageBuilder = new ImageBuilder($this->resources());
         $imageDirector = new MainWidgetDirector($imageBuilder);
-        $imageBlob = $imageDirector->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
+        return $imageDirector->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
 
-        $response = new Response();
-        $response->headers->set('Content-Type', 'image/png');
-        $response->setContent($imageBlob);
-        return $response;
     }
 
     protected function resources()
@@ -76,5 +83,10 @@ class DefaultController extends Controller
         );
     }
 
+    protected function getFeedbackRepo()
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $em->getRepository('MFBFeedbackBundle:Feedback');
+    }
 
 }

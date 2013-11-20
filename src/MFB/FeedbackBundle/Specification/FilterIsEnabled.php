@@ -1,0 +1,23 @@
+<?php
+
+namespace MFB\FeedbackBundle\Specification;
+
+use \Doctrine\ORM\QueryBuilder;
+use \Doctrine\ORM\Query;
+
+class FilterIsEnabled implements SpecificationInterface
+{
+
+
+    public function match(QueryBuilder $qb, $dqlAlias)
+    {
+        $qb->setParameter('isEnabled', 1);
+
+        return $qb->expr()->eq($dqlAlias . '.isEnabled', ':isEnabled');
+    }
+
+    public function modifyQuery(Query $query)
+    {
+        /* empty ***/
+    }
+}
