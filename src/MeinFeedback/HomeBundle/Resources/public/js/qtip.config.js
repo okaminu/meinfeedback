@@ -1,4 +1,20 @@
-$('.tip').each(function() { // Grab all elements with a title attribute,and set "this"
+$('.tip').each(function() {
+    bottomLeft = {
+            my: 'top right',
+            at: 'bottom left'
+                };
+
+    bottomRight = {
+        my: 'top left',
+        at: 'bottom right'
+    };
+    boxPosition = bottomRight;
+
+    if($(this).hasClass('positionBottomLeft')){
+        boxPosition = bottomLeft
+    }
+
+
     $(this).qtip({ //
         content: {
             text: $(this).next(), // WILL work, because .each() sets "this" to refer to each element
@@ -7,11 +23,11 @@ $('.tip').each(function() { // Grab all elements with a title attribute,and set 
                 button: 'Close' // Close button
             }
         },
+        position: boxPosition,
         style: 'qtip-light qtip-shadow',
         show: 'click',
         hide: {
-            event: 'click',
-            inactive: 1500
+            event: 'click'
         }
     });
 });
