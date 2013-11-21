@@ -1,5 +1,44 @@
 $(document).ready(function() {
 
+popupSmallParams = {
+    type:'iframe',
+    mainClass : 'mfp-fad-small',
+    disableOn: function() {
+        if($(window).width() < 500) {
+            return false;
+        }
+        return true; },
+    preloader: true,
+    callbacks: {
+        open: function() {
+            $('.navbar').fadeOut('slow');
+        },
+        close: function() {
+            $('.navbar').fadeIn('slow');
+        }
+    }
+};
+
+popupFullParams = {
+    type:'iframe',
+    mainClass : 'mfp-fad',
+    disableOn: function() {
+        if($(window).width() < 500) {
+            return false;
+        }
+        return true; },
+    preloader: true,
+    callbacks: {
+        open: function() {
+            $('.navbar').fadeOut('slow');
+        },
+        close: function() {
+            $('.navbar').fadeIn('slow');
+        }
+    }
+};
+
+
 // Lazy loading.
 $("img.lazy").lazyload({ 
   // The image starts loading 200 px before it is in viewport
@@ -50,27 +89,8 @@ tLoading: 'Loading',
 
 // Lightbox video/maps
 
-$(' .iframe').magnificPopup({
-  type:'iframe',
-  mainClass: 'mfp-fad',
-     disableOn: function() {
-    if($(window).width() < 500) {
-      return false;
-    }
-    return true; },
-     preloader: true,
-
- callbacks: {
-    open: function() {
-      $('.navbar').fadeOut('slow');
-    },
-    close: function() {
-     $('.navbar').fadeIn('slow');
-    }
- }
-});
-
-//
+$(' .iframe-small').magnificPopup(popupSmallParams);
+$(' .iframe').magnificPopup(popupFullParams);
 
 
 // .scroll class for link scrolling.
