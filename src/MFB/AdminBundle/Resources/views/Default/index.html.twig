@@ -1,5 +1,13 @@
 {% extends "MFBAdminBundle::base.html.twig" %}
 
+{% block javascripts %}
+    <script>
+         var  initial_vars = {"sort_feedback_uri": "{{ path("mfb_feedback_sort") }}" }
+    </script>
+    {{ parent() }}
+    <script src="//code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+{% endblock %}
+
 {% block title %}{% trans %} Welcome to MeinFeedback {% endtrans %}{% endblock %}
 
 {% block content %}
@@ -17,51 +25,57 @@
 
     <div style="padding:10px">
 
-        {% if  feedbackList|length > 0 %}
-
-        <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
-        <div style="width: 700px">
-            <div style="float: right">{% trans %} Active {% endtrans %}</div>
-        </div>
-        {% for feedback in feedbackList %}
-
-            {%  if feedback.rating %}
-            <div class="stars_rating">
-                <div class="stars_gray_small">
-                    <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
-                </div>
-                <div class="clearfix"></div>
+            {% if  feedbackList|length > 0 %}
+            <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
+            <div style="width: 700px">
+                <div style="float: right">{% trans %} Active {% endtrans %}</div>
             </div>
-            {% endif %}
 
-            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                <tbody>
-                    <tr>
-                    <td width="80%" style="padding:10px;">
-                        <span class="comment-text left" itemprop="description">
-                            {{ feedback.content }}
-                        </span>
-                    </td>
-                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                        <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
-                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
-                        </time>
+            <ul id="sortable">
 
-                    </td>
-                    <td>
-                        <div style="float: right"><input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}></div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            {% for feedback in feedbackList %}
 
-            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-            <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
+                {%  if feedback.rating %}
+                <li class="ui-state-default" id="item_order_{{ feedback.getId }}">
+                    <div class="stars_rating">
+                        <div class="stars_gray_small">
+                            <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {% endif %}
 
+                    <table border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                        <tbody>
+                            <tr>
+                            <td width="80%" style="padding:10px;">
+                                <span class="comment-text left" itemprop="description">
+                                    {{ feedback.content }}
+                                </span>
+                            </td>
+                            <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
+                                    <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
+                                </time>
 
-        {% endfor %}
-            <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
-        </form>
+                            </td>
+                            <td>
+                                <div class="fr input-block">
+                                    <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
+                    <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
+
+                </li>
+            {% endfor %}
+                </ul>
+                <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
+            </form>
         {% else %}
             {% trans %} No feedbacks yet. {% endtrans %}
         {% endif %}

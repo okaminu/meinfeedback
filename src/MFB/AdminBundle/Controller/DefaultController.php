@@ -24,17 +24,12 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
-
+        $accountId = $this->get('security.context')->getToken()->getUser()->getId();
         $em = $this->getDoctrine()->getManager();
-        $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
-            array(
-                'accountId' => $accountId
-            ),
-            array('id' => 'DESC')
-        );
 
+        $feedbackList = $em
+            ->getRepository('MFBFeedbackBundle:Feedback')
+            ->findSortedByAccountId($accountId);
 
         if ($request->getMethod() == 'POST') {
             $activates = $request->request->get('activate');
@@ -184,41 +179,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * Enable Feedback by feedback link
-     *
-     * @param $feedbackId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    public function enableAction($feedbackId)
-    {
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
-
-        try {
-            $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('MFBFeedbackBundle:Feedback')
-                ->activateFeedback($feedbackId, $accountId);
-
-        } catch (NoResultException $e) {
-            throw $this->createNotFoundException('Feedback was not found.');
-        }
-
-        $message = $this->get('translator')->trans(
-            'Feedback %feedback% was activated',
-            array('%feedback%' => $feedbackId)
-        );
-
-        $this->getRequest()->getSession()->getFlashBag()->add('success', $message);
-
-        return $this->redirect(
-            $this->generateUrl('mfb_admin_homepage')
-        );
-    }
-
-    /**
      * @param $em
      * @param $accountId
      * @return EmailTemplate
@@ -325,6 +285,7 @@ class DefaultController extends Controller
         $form->add('salutation', 'text', array('required' => false));
         return $form;
     }
+
 
 
 }

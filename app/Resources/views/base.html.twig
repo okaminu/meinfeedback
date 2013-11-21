@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     {% block stylesheets %}
+        <link rel="stylesheet" href="http://necolas.github.com/normalize.css/2.0.1/normalize.css">
         {% stylesheets
+        '@MeinFeedbackHomeBundle/Resources/public/css/normalize.css'
+        '@MeinFeedbackHomeBundle/Resources/public/css/sortable.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/acprofile.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/jquery.qtip.min.css'
@@ -22,6 +25,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     {% block javascripts %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <script>
         if (typeof jQuery == 'undefined') {
             {% javascripts '@MeinFeedbackHomeBundle/Resources/public/js/jquery-1.9.1.min.js' %}

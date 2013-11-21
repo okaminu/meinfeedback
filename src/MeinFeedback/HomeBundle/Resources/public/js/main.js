@@ -106,3 +106,20 @@ $('#menu a').click(function (e) {
           $('.btn-nav').click();
       });
 });
+
+$(function() {
+    $( "#sortable" ).sortable({
+        placeholder: "ui-sortable-placeholder",
+        axis: 'y',
+        stop: function (event, ui) {
+            $.post(initial_vars.sort_feedback_uri, { item_order_str: $(this).sortable("serialize") });
+            //var data = $(this).sortable('toArray').toString();
+//            var data = $(this).sortable('serialize', { key: "sort", attribute: "class" });
+//            $.ajax({
+//                data: data,
+//                type: 'POST',
+//                url: initial_vars.sort_feedback_uri
+//            });
+        }
+    });
+});

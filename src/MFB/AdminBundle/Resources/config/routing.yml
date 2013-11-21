@@ -42,3 +42,13 @@ mfb_feedback_enable:
     pattern: /enableFeedback/{feedbackId}
     defaults: { _controller: MFBAdminBundle:Default:enable}
     requirements: { _method: get }
+
+mfb_feedback_enable:
+    pattern: /enableFeedback/{feedbackId}
+    defaults: { _controller: MFBAdminBundle:Widget:enable}
+    requirements: { _method: get }
+
+mfb_feedback_sort:
+    pattern:  /sortFeedback
+    defaults: { _controller: MFBAdminBundle:Widget:sort }
+    requirements: { _method: post }

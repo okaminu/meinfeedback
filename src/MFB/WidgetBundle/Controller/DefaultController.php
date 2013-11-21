@@ -46,7 +46,7 @@ class DefaultController extends Controller
             new Spec\FilterChannelId($accountChannel->getId()),
             new Spec\FilterIsEnabled()
         );
-        $lastFeedbacks  = $this->getFeedbackRepo()->getLastEnabledFeedbacks($specification, 4);
+        $lastFeedbacks  = $this->getFeedbackRepo()->findSortedFeedbacks($specification);
         $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
 
         $withRatingsSpecification = new Spec\AndX(

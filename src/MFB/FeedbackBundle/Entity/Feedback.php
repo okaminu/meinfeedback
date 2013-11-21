@@ -73,7 +73,7 @@ class Feedback
      *
      * @ORM\Column(name="rating", type="integer", nullable=true)
      */
-    private $rating = NULL;
+    private $rating = null;
 
     /**
      * @var integer
@@ -81,6 +81,13 @@ class Feedback
      * @ORM\Column(name="is_enabled", type="integer", nullable=false, options={"default" : 0})
      */
     private $isEnabled = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sort", type="integer", nullable=true)
+     */
+    private $sort = null;
 
 
     /**
@@ -272,6 +279,22 @@ class Feedback
     public function getIsEnabled()
     {
         return $this->isEnabled;
+    }
+
+    /**
+     * @param int $sort
+     */
+    public function setSort($sort)
+    {
+        $this->sort = $sort;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort()
+    {
+        return $this->sort;
     }
 
 }

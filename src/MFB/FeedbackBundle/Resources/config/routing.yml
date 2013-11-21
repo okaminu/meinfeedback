@@ -15,3 +15,4 @@ mfb_feedback_save_with_invite:
     pattern:  /saveFeedback/invite/{token}
     defaults: { _controller: MFBFeedbackBundle:Invite:save }
     requirements: { _method: post }
+

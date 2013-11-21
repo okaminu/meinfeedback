@@ -43,3 +43,8 @@ font-size: 14px;
 	font-size: 12px;
 }
 
+.input-block {
+    float: right;
+    padding-right: 20px;
+}
+
