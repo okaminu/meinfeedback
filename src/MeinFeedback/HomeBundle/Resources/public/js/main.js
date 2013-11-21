@@ -43,9 +43,7 @@ tLoading: 'Loading',
     close: function() {
      $('.navbar').fadeIn('slow');
     }
-	
   }
-
 });
 
 // Lightbox video/maps
