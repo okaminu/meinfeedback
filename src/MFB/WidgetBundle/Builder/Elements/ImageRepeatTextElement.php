@@ -52,7 +52,7 @@ class ImageRepeatTextElement extends AbstractImageBase implements ElementInterfa
 
     public function getFont()
     {
-        return $this->getRecource('arialFontFile');
+        return $this->getResource('arialFontFile');
     }
 
     public function getFontSize()

@@ -7,5 +7,6 @@ interface ElementInterface
     public function getName();
 
     public function render();
+
 }
  

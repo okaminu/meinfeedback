@@ -21,7 +21,7 @@ class ImageBaseElement implements ElementInterface {
 
     protected function createBase()
     {
-        $this->image = imagecreatefrompng($this->getRecource('widgetTemplate'));
+        $this->image = imagecreatefrompng($this->getResource('widgetTemplate'));
     }
 
     public function render()
@@ -34,7 +34,7 @@ class ImageBaseElement implements ElementInterface {
      * @param $name
      * @return mixed
      */
-    public function getRecource($name)
+    public function getResource($name)
     {
         return $this->resources[$name];
     }

@@ -179,7 +179,7 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
 
     public function getFontType()
     {
-        return $this->getRecource('lucidaFontFile');
+        return $this->getResource('lucidaFontFile');
     }
 
     /**
