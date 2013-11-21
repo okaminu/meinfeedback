@@ -35,8 +35,13 @@ class MainWidgetDirector implements WidgetDirectorInterface {
 
         /** @var Feedback $lastFeedback */
         $lastFeedback = reset($lastFeedbacks);
+        $date = '';
+        if (!empty($lastFeedback)) {
+            $date =  $lastFeedback->getCreatedAt()->format('d.m.Y');
+        }
+
         $this->builder->getElement('text')
-            ->setText($lastFeedback->getCreatedAt()->format('d.m.Y'))
+            ->setText($date)
             ->setPositionX(120)
             ->setPositionY(214)
             ->setFontColorCode(108, 108, 108);

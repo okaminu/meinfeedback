@@ -17,6 +17,7 @@
 
     <div style="padding:10px">
 
+        {% if  feedbackList|length > 0 %}
 
         <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
         <div style="width: 700px">
@@ -54,16 +55,15 @@
                 </tbody>
             </table>
 
-
-
             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
             <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
 
-            {% else %}
-            {% trans %} No feedback yet. {% endtrans %}
 
-            {% endfor %}
+        {% endfor %}
             <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
         </form>
+        {% else %}
+            {% trans %} No feedbacks yet. {% endtrans %}
+        {% endif %}
     </div>
 {% endblock %}
