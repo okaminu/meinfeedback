@@ -6,26 +6,18 @@ namespace MFB\WidgetBundle\Builder;
 
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 
-use MFB\WidgetBundle\Builder\Elements\ImageBaseElement;
-use MFB\WidgetBundle\Builder\Elements\ImageRepeatTextElement;
-use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
-use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
+use MFB\WidgetBundle\Builder\ElementComposite;
 
-
-class ImageBuilder implements BuilderInterface{
-
-    protected $layout;
-
+class ImageBuilder implements BuilderInterface
+{
     protected $resources;
+
+    protected $elementComposite;
 
     public function __construct($resources)
     {
         $this->setResources($resources);
-    }
-
-    public function getLayout()
-    {
-        return $this->layout;
+        $this->elementComposite = new ElementComposite();
     }
 
     /**
@@ -36,37 +28,13 @@ class ImageBuilder implements BuilderInterface{
      */
     public function addElement(ElementInterface $block)
     {
-        $this->layout[$block->getName()] = $block;
+        $this->elementComposite->add($block);
         return $this;
-    }
-
-    public function getElement($element)
-    {
-        return $this->layout[$element];
-    }
-
-    /**
-     * Clone element
-     *
-     * @param $element
-     * @return mixed
-     *
-     * @todo this needs a smarter way
-     */
-    public function cloneElement($element)
-    {
-        $clone =  clone $this->layout[$element];
-        $this->layout[$clone->getName() . md5(time())] = $clone;
-        return $clone;
     }
 
     public function createImage()
     {
-        $base = null;
-        foreach ( $this->layout as $element)
-        {
-            $base = $element->render($base);
-        }
+        $base = $this->elementComposite->render();
 
         ob_start();
         imagepng($base);
@@ -76,21 +44,10 @@ class ImageBuilder implements BuilderInterface{
         return $imageBlob;
     }
 
-    /**
-     * Get layout filled by objects
-     * @return mixed
-     */
-    public function getFilledLayout()
+    public function getLayout()
     {
-        $this
-            ->addElement(new ImageBaseElement($this->resources))
-            ->addElement(new ImageTextElement($this->resources))
-            ->addElement(new ImageRepeatTextElement($this->resources))
-            ->addElement(new ImageCommentElement($this->resources));
-
-        return $this->getLayout();
+        return $this->elementComposite;
     }
-
     /**
      * @param mixed $resources
      */
@@ -99,6 +56,10 @@ class ImageBuilder implements BuilderInterface{
         $this->resources = $resources;
     }
 
+    public function getResources()
+    {
+        return $this->resources;
+    }
 
 
-} 
+}

@@ -27,7 +27,9 @@ $('.tip').each(function() {
         style: 'qtip-light qtip-shadow',
         show: 'click',
         hide: {
-            event: 'click'
+            delay: 2000,
+            fixed: true,
+            when:'mouseout'
         }
     });
 });

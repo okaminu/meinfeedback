@@ -44,7 +44,7 @@ abstract class AbstractImageBase {
      * @param $name
      * @return mixed
      */
-    public function getRecource($name)
+    public function getResource($name)
     {
         return $this->resources[$name];
     }
@@ -60,9 +60,9 @@ abstract class AbstractImageBase {
     /**
      * @return mixed
      */  /**
- * @param $positionX
- * @return $this
- */
+    * @param $positionX
+    * @return $this
+    */
     public function setPositionX($positionX)
     {
         $this->positionX = $positionX;

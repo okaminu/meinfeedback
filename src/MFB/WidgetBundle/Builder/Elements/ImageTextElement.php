@@ -90,7 +90,7 @@ class ImageTextElement extends AbstractImageBase implements ElementInterface, Te
 
     public function getFont()
     {
-        return $this->getRecource('arialFontFile');
+        return $this->getResource('arialFontFile');
     }
 
     /**
