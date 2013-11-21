@@ -100,8 +100,7 @@ class Sender
         $this->mailer->send($message);
     }
 
-
-    public function sendFeedbackNotification(Account $account, Customer $customer, $feedbackText, $feedbackRating)
+    public function sendFeedbackNotification(Account $account, Customer $customer, $feedbackText, $feedbackRating, $feedbackEnableLink)
     {
         $emailSubject = 'Feedback received on meinfeedback';
         $customerName = $customer->getEmail();
@@ -116,7 +115,8 @@ class Sender
                 'email_title' => $emailSubject,
                 'customerName' => $customerName,
                 'feedbackText' => $feedbackText,
-                'feedbackRating' => $feedbackRating
+                'feedbackRating' => $feedbackRating,
+                'enabaleFeedbackLink' => $feedbackEnableLink
             )
         );
         $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);

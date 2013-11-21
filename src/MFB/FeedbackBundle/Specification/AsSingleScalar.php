@@ -8,12 +8,21 @@ use \Doctrine\ORM\Query;
 class AsSingleScalar implements SpecificationInterface, AsInterface
 {
     private $parent;
-    private $type;
+    private $function;
+    private $column;
 
-    public function __construct(SpecificationInterface $parent, $type = 'count')
+    /**
+     * Select Single Scalar with function constructor
+     *
+     * @param SpecificationInterface $parent
+     * @param string $function
+     * @param string $column to apply mysql function
+     */
+    public function __construct(SpecificationInterface $parent, $function = 'count', $column = 'id')
     {
         $this->parent = $parent;
-        $this->type = $type;
+        $this->function = $function;
+        $this->column = $column;
     }
 
     public function modifyQuery(Query $query)
@@ -28,6 +37,6 @@ class AsSingleScalar implements SpecificationInterface, AsInterface
 
     public function select(QueryBuilder $qb, $dqlAlias)
     {
-        return $qb->select($this->type . '(' . $dqlAlias . '.id)');
+        return $qb->select($this->function . '(' . $dqlAlias . '.' . $this->column .')');
     }
 }

@@ -39,32 +39,12 @@ class WidgetController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $testWidgetLink = $this->generateUrl(
-            'mfb_account_profile_homepage',
-            array('accountId' => 12),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-        $testWidgetImage = $this->generateUrl(
-            'mfb_widget_account_channel',
-            array('accountId' => 12),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $testInviteUrl = $this->generateUrl(
-            'mfb_feedback_create',
-            array('accountId' => 12),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
         return $this->render(
             'MFBAdminBundle:Widget:index.html.twig',
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
-                'inviteUrl' => $inviteUrl,
-                'testWidgetLink' => $testWidgetLink,
-                'testWidgetImage' => $testWidgetImage,
-                'testInviteUrl' => $testInviteUrl,
+                'inviteUrl' => $inviteUrl
             )
         );
     }

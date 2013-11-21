@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\Template\Manager\TemplateManager;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use MFB\Template\Placeholder\PlaceholderContainer;
 
@@ -57,7 +58,7 @@ class InviteController extends Controller
                 new FeedbackEntity()
             );
 
-            $feedbackEntityManager->saveFeedback(
+            $feedbackId = $feedbackEntityManager->saveFeedback(
                 $em,
                 $accountChannel->getRatingsEnabled()
             );
@@ -75,7 +76,12 @@ class InviteController extends Controller
             $account,
             $customer,
             $request->get('feedback'),
-            $request->get('rating')
+            $request->get('rating'),
+            $this->get('router')->generate(
+                'mfb_feedback_enable',
+                array('feedbackId' => $feedbackId),
+                UrlGeneratorInterface::ABSOLUTE_URL
+            )
         );
 
         $templateText = $this->getThankYouText($em, $invite, $customer);

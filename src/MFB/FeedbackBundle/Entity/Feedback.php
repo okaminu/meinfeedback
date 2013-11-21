@@ -78,9 +78,9 @@ class Feedback
     /**
      * @var integer
      *
-     * @ORM\Column(name="is_enabled", columnDefinition="TINYINT DEFAULT 0 NOT NULL")
+     * @ORM\Column(name="is_enabled", type="integer", nullable=false, options={"default" : 0})
      */
-    private $isEnabled;
+    private $isEnabled = 0;
 
 
     /**

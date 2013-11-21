@@ -10,7 +10,6 @@ use MFB\WidgetBundle\Builder\ImageBuilder;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use MFB\FeedbackBundle\Repository\FeedbackSpecification;
 use MFB\FeedbackBundle\Specification as Spec;
 
 class DefaultController extends Controller
@@ -49,17 +48,15 @@ class DefaultController extends Controller
         );
         $lastFeedbacks  = $this->getFeedbackRepo()->getLastEnabledFeedbacks($specification, 4);
         $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
-        $feedbackRatingAverage = $this->getFeedbackRepo()
-            ->getPlainRatingsAverage($accountChannel);
-        $feedbackRatingCount = $this->getFeedbackRepo()->getRatingCount($accountChannel);
 
-        /**
-         * @todo Use a specifications. Currently both are giving wrong numbers.
-         * getRatingsAverage giving wrong number
-         * getFeedbacksWithRatings needs only for it added FilterWithRating
-         */
-//        $feedbackRatingAverage = $this->getFeedbackRepo()->getRatingsAverage($specification);
-//        $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbacksWithRatings($specification);
+        $withRatingsSpecification = new Spec\AndX(
+            new Spec\FilterAccountId($account->getId()),
+            new Spec\FilterChannelId($accountChannel->getId()),
+            new Spec\FilterIsEnabled(),
+            new Spec\FilterWithRating()
+        );
+        $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbackCount($withRatingsSpecification);
+        $feedbackRatingAverage = round($this->getFeedbackRepo()->getRatingsAverage($withRatingsSpecification), 1);
 
         $imageBuilder = new ImageBuilder($this->resources());
         $imageDirector = new MainWidgetDirector($imageBuilder);
@@ -83,10 +80,10 @@ class DefaultController extends Controller
         );
     }
 
+
     protected function getFeedbackRepo()
     {
-        $em = $this->getDoctrine()->getManager();
-        return $em->getRepository('MFBFeedbackBundle:Feedback');
+        return $this->getDoctrine()->getManager()->getRepository('MFBFeedbackBundle:Feedback');
     }
 
 }
