@@ -150,7 +150,6 @@ class DefaultController extends Controller
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-
                 $this->get('mfb_email.sender')->createForAccountChannel(
                     $customer,
                     $accountChannel,
@@ -184,6 +183,13 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * Enable Feedback by feedback link
+     *
+     * @param $feedbackId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function enableAction($feedbackId)
     {
         $token = $this->get('security.context')->getToken();

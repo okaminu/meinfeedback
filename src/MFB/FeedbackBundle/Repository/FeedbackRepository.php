@@ -28,27 +28,27 @@ class FeedbackRepository extends EntityRepository implements FeedbackRepositoryI
         );
     }
 
+    /**
+     * @param SpecificationInterface $spec
+     * @return array
+     */
+    public function getRatingsAverage(SpecificationInterface $spec)
+    {
+
+        return $this->match(
+            new Spec\AsSingleScalar($spec, 'avg', 'rating')
+        );
+    }
+
+    /**
+     * @param SpecificationInterface $spec
+     * @return array
+     */
     public function getFeedbackCount(SpecificationInterface $spec)
     {
         return $this->match(
             new Spec\AsSingleScalar($spec)
         );
-    }
-
-    public function getRatingCount($accountChannel)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(fb.id) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1 AND fb.rating  IS NOT NULL');
-        $query->setParameter(1, $accountChannel->getId());
-        return  $query->getSingleScalarResult();
-    }
-
-    public function getPlainRatingsAverage($accountChannel)
-    {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT AVG(fb.rating) FROM MFBFeedbackBundle:Feedback fb WHERE fb.channelId = ?1 AND fb.isEnabled = 1');
-        $query->setParameter(1, $accountChannel->getId());
-        return round($query->getSingleScalarResult(), 1);
     }
 
     public function batchActivate($activateList, $inFeedbackList)
@@ -80,33 +80,9 @@ class FeedbackRepository extends EntityRepository implements FeedbackRepositoryI
         $feedback->setIsEnabled(true);
         $this->getEntityManager()->persist($feedback);
         $this->getEntityManager()->flush();
-
     }
 
-    /**
-     * @todo this is not working correctly
-     * @param SpecificationInterface $spec
-     * @return array
-     */
-    public function getRatingsAverage(SpecificationInterface $spec)
-    {
 
-        return $this->match(
-            new Spec\AsSingleScalar($spec, 'avg')
-        );
-    }
-
-    /**
-     * @todo this is not working correctly
-     * @param SpecificationInterface $spec
-     * @return array
-     */
-    public function getFeedbacksWithRatings(SpecificationInterface $spec)
-    {
-        return $this->match(
-            new Spec\AsSingleScalar($spec)
-        );
-    }
 
     /**
      * Matcher by specified specification
