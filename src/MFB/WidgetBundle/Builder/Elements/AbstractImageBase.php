@@ -3,6 +3,7 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
+use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 abstract class AbstractImageBase {
@@ -100,9 +101,9 @@ abstract class AbstractImageBase {
         return $this->resources;
     }
 
-    public function setFontColorCode($red, $green, $blue)
+    public function setFontColorCode(Color $color)
     {
-        $this->fontColorCode = array($red, $green, $blue);
+        $this->fontColorCode = array($color->getRed(), $color->getGreen(), $color->getBlue());
         return $this;
     }
 

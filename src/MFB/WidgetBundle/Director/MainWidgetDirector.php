@@ -1,6 +1,4 @@
 <?php
-
-
 namespace MFB\WidgetBundle\Director;
 
 use MFB\WidgetBundle\Builder\BuilderInterface;
@@ -8,6 +6,7 @@ use MFB\WidgetBundle\Builder\Elements\ImageBaseElement;
 use MFB\WidgetBundle\Builder\Elements\ImageRepeatTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
+use MFB\WidgetBundle\Entity\Color;
 
 class MainWidgetDirector implements WidgetDirectorInterface
 {
@@ -18,15 +17,21 @@ class MainWidgetDirector implements WidgetDirectorInterface
         $this->builder = $builder;
     }
 
-    public function build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage)
-    {
+    public function build(
+        $lastFeedbacks,
+        $feedbackCount,
+        $feedbackRatingCount,
+        $feedbackRatingAverage,
+        Color $textColor,
+        Color $backgroundColor
+    ) {
         $this->builder->addElement(new ImageBaseElement($this->builder->getResources()));
 
         $repText = new ImageRepeatTextElement($this->builder->getResources());
         $repText->setPositionX(10)
             ->setLastLine(214)
             ->addText($feedbackCount . " Bewertungen")
-            ->setFontColorCode(108, 108, 108);
+            ->setFontColorCode($textColor);
 
         if ($feedbackRatingCount != 0) {
             $repText->addText($feedbackRatingCount . " Ratings");
@@ -43,9 +48,9 @@ class MainWidgetDirector implements WidgetDirectorInterface
 
         $text = new ImageTextElement($this->builder->getResources());
         $text->setText($date)
-             ->setPositionX(120)
-             ->setPositionY(214)
-             ->setFontColorCode(108, 108, 108);
+            ->setPositionX(120)
+            ->setPositionY(214)
+            ->setFontColorCode($textColor);
         $this->builder->addElement($text);
 
 
@@ -54,7 +59,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
             ->setPositionX(9)
             ->setPositionY(273)
             ->setFontSize(10)
-            ->setFontColorCode(108, 108, 108);
+            ->setFontColorCode($textColor);
         $this->builder->addElement($text);
 
         $comment = new ImageCommentElement($this->builder->getResources());
@@ -63,7 +68,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
             ->setBoxHeight(180)
             ->setPositionX(10)
             ->setPositionY(25)
-            ->setFontColorCode(230, 230, 230);
+            ->setFontColorCode(new Color('E6E6E6'));
         $this->builder->addElement($comment);
 
         return $this->builder->createImage();

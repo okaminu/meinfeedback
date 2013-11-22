@@ -8,9 +8,11 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\WidgetBundle\Builder\ImageBuilder;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
+use MFB\WidgetBundle\Entity\Color;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use MFB\FeedbackBundle\Specification as Spec;
+use MFB\WidgetBundle\Entity\Widget as WidgetEntity;
 
 class DefaultController extends Controller
 {
@@ -32,7 +34,6 @@ class DefaultController extends Controller
         if (!$account) {
             throw $this->createNotFoundException('Account does not exits');
         }
-
         /** @var AccountChannel $accountChannel */
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId'=>$account->getId())
@@ -40,6 +41,20 @@ class DefaultController extends Controller
         if (!$accountChannel) {
             throw $this->createNotFoundException('No feedback yet. Sorry.');
         }
+
+        $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
+            array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
+        );
+        if (!$widget) {
+            $widget = new WidgetEntity();
+            $widget->setAccountId($account->getId());
+            $widget->setChannelId($accountChannel->getId());
+            $widget->setTextColorCode('6c6c6c');
+            $widget->setBackgroundColorCode('ff0000');
+            $em->persist($widget);
+            $em->flush();
+        }
+
 
         $specification = new Spec\AndX(
             new Spec\FilterAccountId($account->getId()),
@@ -60,7 +75,14 @@ class DefaultController extends Controller
 
         $imageBuilder = new ImageBuilder($this->resources());
         $imageDirector = new MainWidgetDirector($imageBuilder);
-        return $imageDirector->build($lastFeedbacks, $feedbackCount, $feedbackRatingCount, $feedbackRatingAverage);
+        return $imageDirector->build(
+            $lastFeedbacks,
+            $feedbackCount,
+            $feedbackRatingCount,
+            $feedbackRatingAverage,
+            new Color($widget->getTextColorCode()),
+            new Color($widget->getBackgroundColorCode())
+        );
 
     }
 
