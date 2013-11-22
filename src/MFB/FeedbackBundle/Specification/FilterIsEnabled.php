@@ -4,6 +4,7 @@ namespace MFB\FeedbackBundle\Specification;
 
 use \Doctrine\ORM\QueryBuilder;
 use \Doctrine\ORM\Query;
+use MFB\FeedbackBundle\Entity\Feedback;
 
 class FilterIsEnabled implements SpecificationInterface
 {
@@ -20,4 +21,10 @@ class FilterIsEnabled implements SpecificationInterface
     {
         /* empty ***/
     }
+
+    public function supports($className)
+    {
+        return ($className instanceof Feedback);
+    }
+
 }

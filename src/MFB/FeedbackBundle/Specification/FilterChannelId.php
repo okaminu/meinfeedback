@@ -4,6 +4,7 @@ namespace MFB\FeedbackBundle\Specification;
 
 use \Doctrine\ORM\QueryBuilder;
 use \Doctrine\ORM\Query;
+use MFB\FeedbackBundle\Entity\Feedback;
 
 class FilterChannelId implements SpecificationInterface
 {
@@ -21,5 +22,13 @@ class FilterChannelId implements SpecificationInterface
         return $qb->expr()->eq($dqlAlias . '.channelId', ':channelId');
     }
 
-    public function modifyQuery(Query $query) { /* empty ***/ }
+    public function modifyQuery(Query $query)
+    {
+        /* empty ***/
+    }
+
+    public function supports($className)
+    {
+        return ($className instanceof Feedback);
+    }
 }

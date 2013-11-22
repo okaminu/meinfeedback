@@ -30,4 +30,9 @@ class AsArray implements SpecificationInterface, AsInterface
 
     }
 
+    public function supports($className)
+    {
+        return true;
+    }
+
 }

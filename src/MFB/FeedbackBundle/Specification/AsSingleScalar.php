@@ -39,4 +39,9 @@ class AsSingleScalar implements SpecificationInterface, AsInterface
     {
         return $qb->select($this->function . '(' . $dqlAlias . '.' . $this->column .')');
     }
+
+    public function supports($className)
+    {
+        return true;
+    }
 }

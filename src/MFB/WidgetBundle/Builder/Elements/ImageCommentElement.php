@@ -8,6 +8,7 @@ use MFB\WidgetBundle\Builder\Elements\RatingStarsElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 use MFB\WidgetBundle\Entity\Color;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class ImageCommentElement extends AbstractImageBase  implements ElementInterface {
 
@@ -156,15 +157,19 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
 
     protected function getTextElement($feedback)
     {
-        $textElement = new ImageTextElement( $this->getResources() );
+        $textElement = new ImageTextElement($this->getResources());
 
-        $commentAdded = $this->wrap(
-            $this->getFontSize(),
-            $this->getFontType(),
-            '"'. trim($feedback->getContent()) . '"',
-            $this->getBoxWidth(),
-            $this->getBoxHeight()
-        );
+        try {
+            $commentAdded = $this->wrap(
+                $this->getFontSize(),
+                $this->getFontType(),
+                '"'. trim($feedback->getContent()) . '"',
+                $this->getBoxWidth(),
+                $this->getBoxHeight()
+            );
+        } catch (Exception $e) {
+
+        }
 
         return $textElement
             ->setText($commentAdded)
@@ -191,7 +196,6 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     {
         return self::$baselineModifier;
     }
-
 
     protected function getSpacerHeight()
     {
@@ -246,14 +250,16 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
 
             $teststring = $ret.' '.$word;
             $testboxString = imagettfbbox($fontSize, 0, $fontFace, $teststring);
+            if ($testboxString[3] > $maxHeight) {
+                return substr($ret, 0, 230) . '...';
+            }
+
             if ($testboxString[2] > $width) {
                 $ret.=($ret==""?"":"\n").$word;
             } else {
                 $ret.=($ret==""?"":' ').$word;
             }
-            if ($testboxString[3] > $maxHeight) {
-                throw new \Exception('too large text');
-            }
+
         }
 
         return $ret;

@@ -4,6 +4,7 @@ namespace MFB\FeedbackBundle\Specification;
 
 use \Doctrine\ORM\QueryBuilder;
 use \Doctrine\ORM\Query;
+use MFB\FeedbackBundle\Entity\Feedback;
 
 class FilterAccountId implements SpecificationInterface
 {
@@ -22,4 +23,9 @@ class FilterAccountId implements SpecificationInterface
     }
 
     public function modifyQuery(Query $query) { /* empty ***/ }
+
+    public function supports($className)
+    {
+        return ($className instanceof Feedback);
+    }
 }

@@ -109,15 +109,19 @@ class FeedbackRepository extends EntityRepository
     }
 
 
-
     /**
      * Matcher by specified specification
      *
      * @param SpecificationInterface $specification
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function match(SpecificationInterface $specification)
     {
+        if (!$specification->supports($this->getEntityName())) {
+            throw new \InvalidArgumentException("Specification not supported by this repository.");
+        }
+
         $dqAlias  = 'fb';
         $qb = $this->createQueryBuilder($dqAlias);
 

@@ -34,5 +34,8 @@ class LimitLastN implements SpecificationInterface, OrderInterface
         $qb->orderBy($dqlAlias.'.id', 'desc');
     }
 
-
+    public function supports($className)
+    {
+        return true;
+    }
 }

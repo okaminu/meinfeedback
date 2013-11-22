@@ -19,4 +19,11 @@ interface SpecificationInterface
      * @param \Doctrine\ORM\Query $query
      ***/
     public function modifyQuery(Query $query);
+
+    /**
+     * Check if specification supports given entity
+     * @param string $className
+     * @return bool
+     ***/
+    public function supports($className);
 }

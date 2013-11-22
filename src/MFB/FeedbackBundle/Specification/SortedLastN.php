@@ -46,4 +46,9 @@ class SortedLastN implements SpecificationInterface, OrderInterface
 
         $qb->orderBy($dqlAlias.'.'. $this->sortColumn, $this->sortDirection);
     }
+
+    public function supports($className)
+    {
+        return true;
+    }
 }
