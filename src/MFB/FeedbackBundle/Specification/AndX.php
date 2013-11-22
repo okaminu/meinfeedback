@@ -34,4 +34,8 @@ class AndX implements SpecificationInterface
         }
     }
 
+    public function supports($className)
+    {
+        return true;
+    }
 }
