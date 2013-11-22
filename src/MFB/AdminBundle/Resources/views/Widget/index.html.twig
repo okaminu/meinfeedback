@@ -22,10 +22,20 @@
              </map> {% endverbatim %}</textarea>
         </div>
         <div>
-            <div style="width: 25px; float:right; margin-right: 100px">
+            <div style="width: 30px; float:right; margin-right: 100px">
             {{ tooltips.tooltip('What is the widget code?',
             "It is a code snippet which could be used in your website to display the feedbacks and ratings ", 'positionBottomLeft') }}
             </div>
+        </div>
+        <div style="margin: 15px 0px 0px 25px">
+            <button id="picker">Change Text color</button>
+            <input value="" name="textColor" id="textColor" type="hidden"/>
+            {{ form_start(form) }}
+                {{ form_widget(form.textColorCode, {'attr': {'class': 'textColor'} }) }}
+                <div style="width:250px; padding-top:10px;">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">
+                </div>
+            {{ form_end(form) }}
         </div>
     </div>
 

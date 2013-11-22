@@ -45,16 +45,6 @@ class DefaultController extends Controller
         $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
         );
-        if (!$widget) {
-            $widget = new WidgetEntity();
-            $widget->setAccountId($account->getId());
-            $widget->setChannelId($accountChannel->getId());
-            $widget->setTextColorCode('6c6c6c');
-            $widget->setBackgroundColorCode('ff0000');
-            $em->persist($widget);
-            $em->flush();
-        }
-
 
         $specification = new Spec\AndX(
             new Spec\FilterAccountId($account->getId()),
