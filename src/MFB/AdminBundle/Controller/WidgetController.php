@@ -15,13 +15,56 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use MFB\FeedbackBundle\Entity\Feedback;
+use MFB\WidgetBundle\Entity\Widget as WidgetEntity;
+use MFB\WidgetBundle\Form\WidgetType;
 
 class WidgetController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
+
+        $account = $em->find('MFBAccountBundle:Account', $accountId);
+        if (!$account) {
+            throw $this->createNotFoundException('Account does not exits');
+        }
+        /** @var AccountChannel $accountChannel */
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('accountId'=>$account->getId())
+        );
+        if (!$accountChannel) {
+            throw $this->createNotFoundException('No feedback yet. Sorry.');
+        }
+
+        $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
+            array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
+        );
+
+        if (!$widget) {
+            $widget = new WidgetEntity();
+            $widget->setAccountId($account->getId());
+            $widget->setChannelId($accountChannel->getId());
+            $widget->setTextColorCode('6c6c6c');
+            $widget->setBackgroundColorCode('ff0000');
+            $em->persist($widget);
+            $em->flush();
+        }
+
+        $form = $this->createForm(new WidgetType(), $widget, array(
+                'action' => $this->generateUrl('mfb_widget'),
+                'method' => 'POST',
+            ));
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->persist($widget);
+            $em->flush();
+        }
+
 
         $widgetLink = $this->generateUrl(
             'mfb_account_profile_homepage',
@@ -46,7 +89,8 @@ class WidgetController extends Controller
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
-                'inviteUrl' => $inviteUrl
+                'inviteUrl' => $inviteUrl,
+                'form' => $form->createView()
             )
         );
     }

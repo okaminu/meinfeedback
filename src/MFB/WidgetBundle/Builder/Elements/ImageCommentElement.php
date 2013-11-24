@@ -7,6 +7,7 @@ use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
 use MFB\WidgetBundle\Builder\Elements\RatingStarsElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
+use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 class ImageCommentElement extends AbstractImageBase  implements ElementInterface {
@@ -174,7 +175,7 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
             ->setText($commentAdded)
             ->setPositionX($this->getPositionX())
             ->setPositionY($this->getPositionY())
-            ->setFontColorCode(230, 230, 230);
+            ->setFontColorCode(new Color('E6E6E6'));
     }
 
     public function getFontSize()

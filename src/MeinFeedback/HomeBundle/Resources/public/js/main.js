@@ -46,6 +46,13 @@ tLoading: 'Loading',
   }
 });
 
+    $('#picker').colpick({
+        onChange:function(hsb,hex,rgb,fromSetColor) {
+            $('.textColor').val(hex);
+        },
+        color: $('.textColor').val()
+    });
+
 // Lightbox video/maps
 
 $(' .iframe-small').magnificPopup(popupSmallParams);
@@ -102,3 +109,6 @@ $(function() {
         }
     });
 });
+
+
+
