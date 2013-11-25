@@ -60,7 +60,6 @@ class FeedbackRepository extends EntityRepository
      */
     public function getRatingsAverage(SpecificationInterface $spec)
     {
-
         return $this->match(
             new Spec\AsSingleScalar($spec, 'avg', 'rating')
         );
