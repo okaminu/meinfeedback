@@ -3,10 +3,7 @@
 
 namespace MFB\WidgetBundle\Builder;
 
-
 use MFB\WidgetBundle\Builder\Elements\ElementInterface;
-
-use MFB\WidgetBundle\Builder\ElementComposite;
 
 class ImageBuilder implements BuilderInterface
 {
@@ -14,10 +11,10 @@ class ImageBuilder implements BuilderInterface
 
     protected $elementComposite;
 
-    public function __construct($resources)
+    public function __construct($resources, ElementComposite $composite)
     {
-        $this->setResources($resources);
-        $this->elementComposite = new ElementComposite();
+        $this->setResources($resources->getResources());
+        $this->elementComposite = $composite;
     }
 
     /**

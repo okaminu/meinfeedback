@@ -1,7 +1,21 @@
 parameters:
-#    mfb_widget.example.class: MFB\WidgetBundle\Example
+    mfb_widget.service.class: MFB\WidgetBundle\Service\Widget
+    mfb_widget.resources.class: MFB\WidgetBundle\Service\Resources
+    mfb_widget.composite.class: MFB\WidgetBundle\Builder\ElementComposite
+    mfb_widget.imagebuilder.class: MFB\WidgetBundle\Builder\ImageBuilder
 
 services:
-#    mfb_widget.example:
-#        class: %mfb_widget.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mfb_widget.service:
+        class: %mfb_widget.service.class%
+        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_widget.imagebuilder"]
+
+    mfb_widget.resources:
+        class: %mfb_widget.resources.class%
+        arguments: ['@service_container']
+
+    mfb_widget.imagebuilder:
+        class: %mfb_widget.imagebuilder.class%
+        arguments: ["@mfb_widget.resources", "@mfb_widget.composite"]
+
+    mfb_widget.composite:
+        class: %mfb_widget.composite.class%

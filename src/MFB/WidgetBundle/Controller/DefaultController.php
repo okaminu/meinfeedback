@@ -19,8 +19,11 @@ class DefaultController extends Controller
     public function indexAction($accountId)
     {
         $response = new Response();
+
+        $widget = $this->get('mfb_widget.service')->createMainWidget($accountId);
+
         $response->headers->set('Content-Type', 'image/png');
-        $response->setContent($this->widgetImage($accountId));
+        $response->setContent($widget);
         return $response;
     }
 
@@ -28,19 +31,10 @@ class DefaultController extends Controller
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-
         /** @var Account $account */
-        $account = $em->find('MFBAccountBundle:Account', $accountId);
-        if (!$account) {
-            throw $this->createNotFoundException('Account does not exits');
-        }
+        $account = $em->getRepository('MFBAccountBundle:Account')->findAccountByAccountId($accountId);
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$account->getId())
-        );
-        if (!$accountChannel) {
-            throw $this->createNotFoundException('No feedback yet. Sorry.');
-        }
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findAccountChannelByAccount($account);
 
         $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
@@ -63,7 +57,7 @@ class DefaultController extends Controller
         $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbackCount($withRatingsSpecification);
         $feedbackRatingAverage = round($this->getFeedbackRepo()->getRatingsAverage($withRatingsSpecification), 1);
 
-        $imageBuilder = new ImageBuilder($this->resources());
+        $imageBuilder = $this->get('mfb_widget.imagebuilder');
         $imageDirector = new MainWidgetDirector($imageBuilder);
         return $imageDirector->build(
             $lastFeedbacks,
