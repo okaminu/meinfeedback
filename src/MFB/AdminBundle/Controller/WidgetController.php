@@ -167,7 +167,7 @@ class WidgetController extends Controller
         $widget->setAccountId($account->getId());
         $widget->setChannelId($accountChannel->getId());
         $widget->setTextColorCode('6c6c6c');
-        $widget->setBackgroundColorCode('ff0000');
+        $widget->setBackgroundColorCode('5AFF6A');
         $em->persist($widget);
         $em->flush();
         return $widget;

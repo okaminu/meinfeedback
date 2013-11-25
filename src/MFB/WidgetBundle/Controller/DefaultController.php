@@ -80,6 +80,7 @@ class DefaultController extends Controller
     {
         return array(
             'widgetTemplate' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/n1.png'),
+            'widgetLowerFragment' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/lowerFragment.png'),
             'arialFontFile' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Arial_Bold.ttf'),
             'lucidaFontFile' => $this->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Lucida_Grande.ttf'),
             'stars' => array(

@@ -25,7 +25,9 @@ class MainWidgetDirector implements WidgetDirectorInterface
         Color $textColor,
         Color $backgroundColor
     ) {
-        $this->builder->addElement(new ImageBaseElement($this->builder->getResources()));
+        $baseImage = new ImageBaseElement($this->builder->getResources());
+        $baseImage->setBackgroundColor($backgroundColor);
+        $this->builder->addElement($baseImage);
 
         $repText = new ImageRepeatTextElement($this->builder->getResources());
         $repText->setPositionX(10)
