@@ -52,7 +52,12 @@ tLoading: 'Loading',
         },
         color: $('.textColor').val()
     });
-
+    $('.colpick_submit').click(function(){
+        $('.colpick_full').addClass('hide');
+    });
+    $('#picker').click(function(){
+        $('.colpick_full').removeClass('hide');
+    });
 // Lightbox video/maps
 
 $(' .iframe-small').magnificPopup(popupSmallParams);

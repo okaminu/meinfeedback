@@ -1403,3 +1403,7 @@ a.footer_link:hover {
 .box-comment {
     width: 700px;
 }
+
+.hide{
+    display:none !important;
+}
