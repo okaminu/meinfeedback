@@ -10,6 +10,7 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use Doctrine\ORM\EntityManager;
 use MFB\WidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Entity\Color;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Widget
@@ -23,11 +24,13 @@ class Widget
 
     protected $imageBuilder;
 
-    public function __construct(EntityManager $em, BuilderInterface $imageBuilder)
+    public function __construct(EntityManager $em, BuilderInterface $imageBuilder, ContainerInterface $container)
     {
         $this->em = $em;
 
         $this->imageBuilder = $imageBuilder;
+
+        $this->container = $container;
     }
 
     /**
@@ -41,9 +44,9 @@ class Widget
         /** @var EntityManager $em */
         $em = $this->em;
         /** @var Account $account */
-        $account = $em->getRepository('MFBAccountBundle:Account')->findAccountByAccountId($accountId);
+        $account = $this->container->get("mfb_account.manager")->findAccountByAccountId($accountId);
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findAccountChannelByAccount($account);
+        $accountChannel = $this->container->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 
         $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
@@ -84,12 +87,11 @@ class Widget
      */
     public function feedbackSpecification($account, $accountChannel)
     {
-        $specification = new Spec\AndX(
+        return new Spec\AndX(
             new Spec\FilterAccountId($account->getId()),
             new Spec\FilterChannelId($accountChannel->getId()),
             new Spec\FilterIsEnabled()
         );
-        return $specification;
     }
 
     /**
@@ -99,13 +101,12 @@ class Widget
      */
     public function getFeedbackWithRatingSpecification($account, $accountChannel)
     {
-        $withRatingsSpecification = new Spec\AndX(
+        return new Spec\AndX(
             new Spec\FilterAccountId($account->getId()),
             new Spec\FilterChannelId($accountChannel->getId()),
             new Spec\FilterIsEnabled(),
             new Spec\FilterWithRating()
         );
-        return $withRatingsSpecification;
     }
 
 } 
