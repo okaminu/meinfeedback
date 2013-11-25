@@ -57,16 +57,9 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         /** @var Account $account */
-        $account = $em->find('MFBAccountBundle:Account', $request->get('accountId'));
-        if (!$account) {
-            throw $this->createNotFoundException('Account does not exist');
-        }
-
+        $account = $em->getRepository('MFBAccountBundle:Account')->findAccountByAccountId($request->get('accountId'));
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $request->get('accountChannelId'));
-        if (!$accountChannel) {
-            throw $this->createNotFoundException('Channel does not exist');
-        }
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findAccountChannelByAccount($account);
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
@@ -106,12 +99,11 @@ class DefaultController extends Controller
                     )
                 );
 
-                $templateText = $this->getThankYouText($em, $account, $customer);
-
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
                     array(
-                        'thankyou_text' => $templateText,
+                        'thankyou_text' => $this->getThankYouText($em, $account, $customer),
+                        'channel_homepage' => $accountChannel->getHomepageUrl()
                     )
                 );
 
