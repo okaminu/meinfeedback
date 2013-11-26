@@ -14,3 +14,19 @@ mfb_account_create:
     pattern:  /create
     defaults: { _controller: "MFBAccountBundle:Register:create" }
     requirements: { _method: post }
+
+mfb_account_reset_request:
+    pattern: /request
+    defaults: { _controller: MFBAccountBundle:Reset:requestPassword }
+
+mfb_account_send_email:
+    pattern: /send
+    defaults: { _controller: MFBAccountBundle:Reset:sendEmail }
+
+mfb_account_reset:
+    pattern: /reset/{token}
+    defaults: { _controller: MFBAccountBundle:Reset:reset }
+
+mfb_account_check:
+    pattern: /check
+    defaults: { _controller: MFBAccountBundle:Reset:checkEmail }

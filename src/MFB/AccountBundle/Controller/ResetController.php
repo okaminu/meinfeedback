@@ -1,0 +1,53 @@
+<?php
+
+namespace MFB\AccountBundle\Controller;
+
+use MFB\AccountBundle\Entity\Account;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+class ResetController extends Controller
+{
+
+
+    public function requestPasswordAction()
+    {
+        return $this->render(
+            'MFBAccountBundle:Reset:request.html.twig'
+        );
+    }
+
+    public function sendEmailAction(Request $request)
+    {
+
+        $newPassword = false;
+        $username = $request->request->get('username');
+
+        /** @var $account Account */
+        $account = $this->get('mfb_account.manager')->findAccountByUsernameOrEmail($username);
+
+        if (null == $account) {
+            return $this->render('MFBAccountBundle:Reset:request.html.twig', array('invalid_username' => $username));
+        }
+
+        $encoder = $this->get('security.encoder_factory')->getEncoder($account);
+        $account->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
+        $tokenGenerator = $this->container->get('mfb_account.util.token_generator');
+        $newPassword = $tokenGenerator->generatePassword();
+        $account->setPassword($encoder->encodePassword($newPassword, $account->getSalt()));
+
+        $this->get('mfb_email.sender')->sendResettingEmailMessage($account, $newPassword);
+
+        $this->get('mfb_account.manager')->updateAccount($account);
+
+        return $this->render(
+            'MFBAccountBundle:Reset:sendEmail.html.twig'
+        );
+    }
+
+
+    public function checkEmailAction(Request $request)
+    {
+
+    }
+}

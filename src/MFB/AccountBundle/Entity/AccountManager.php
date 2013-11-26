@@ -17,5 +17,30 @@ class AccountManager extends EntityRepository
         return $account;
     }
 
+    public function findAccountByUsernameOrEmail($username)
+    {
+        /** @var Account $account */
+        $account = $this->getEntityManager()->getRepository('MFBAccountBundle:Account')->findOneBy(
+            array('email' => $username)
+        );
+        return $account;
+    }
+
+    public function hasNonExpiredRequest(Account $account, $time)
+    {
+        return $account->getPasswordRequestedAt() instanceof \DateTime &&
+        $account->getPasswordRequestedAt()->getTimestamp() + $time > time();
+    }
+
+    public function getResetToken(Account $account)
+    {
+        return $account->getResetToken();
+    }
+
+    public function updateAccount(Account $account)
+    {
+        $this->getEntityManager()->persist($account);
+        $this->getEntityManager()->flush();
+    }
 
 }

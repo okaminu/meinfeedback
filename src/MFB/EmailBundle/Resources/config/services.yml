@@ -5,7 +5,7 @@ parameters:
 services:
     mfb_email.sender:
         class: %mfb_email.sender.class%
-        arguments: [@mailer, @templating]
+        arguments: [@mailer, @templating, @router, @translator]
 
     mfb_email.variables:
         class: %mfb_email.variables.class%

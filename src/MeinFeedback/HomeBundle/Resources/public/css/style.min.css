@@ -1403,3 +1403,12 @@ a.footer_link:hover {
 .box-comment {
     width: 700px;
 }
+
+.control-group {
+    text-align: left;
+}
+
+.control-group label{
+    display: none;
+}
+

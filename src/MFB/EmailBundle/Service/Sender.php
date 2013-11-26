@@ -126,25 +126,26 @@ class Sender
     }
 
     /**
-     * Send an email with password reset link
+     * Send email with new password
+     *
      * @param Account $account
+     * @param $newPassword
+     * @throws \ErrorException
      */
-    public function sendResettingEmailMessage(Account $account)
+    public function sendResettingEmailMessage(Account $account, $newPassword)
     {
-        $url = $this->router->generate(
-            'mfb_account_reset',
-            array('token' => $account->getResetToken()),
-            true
-        );
+        if (!$newPassword) {
+            throw new \ErrorException('New password not set!');
+        }
 
-        $emailSubject = $this->translator->trans('Password reset link');
+        $emailSubject = $this->translator->trans('Your new password');
 
         $rendered = $this->twig->render(
-            "MFBEmailBundle:Default:ResetPasswordEmail.html.twig",
+            "MFBEmailBundle:Default:ResetSendPasswordEmail.html.twig",
             array(
                 'email_title' => $emailSubject,
                 'account' => $account,
-                'confirmationUrl' => $url
+                'new_password' => $newPassword
             )
         );
 

@@ -1,6 +1,7 @@
 parameters:
      mfb_account.account.class: MFB\AccountBundle\Entity\Account
      mfb_account.manager.class: MFB\AccountBundle\Entity\AccountManager
+     mfb_account.util.token_generator.class: MFB\AccountBundle\Util\TokenGenerator
 
 services:
      mfb_account.manager:
@@ -8,3 +9,6 @@ services:
         factory_service: "doctrine.orm.default_entity_manager"
         factory_method: "getRepository"
         arguments: ["%mfb_account.account.class%"]
+
+     mfb_account.util.token_generator:
+        class:  %mfb_account.util.token_generator.class%

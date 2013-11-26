@@ -1,0 +1,27 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Request a new password.{% endblock %}
+
+{% block body %}
+<div class="formular" xmlns="http://www.w3.org/1999/html">
+    <h3>{% trans %} Send new password {% endtrans %}</h3>
+    <div class="kontaktform remind-password">
+        <form action="{{ path("mfb_account_send_email") }}" method="post">
+            <div class="control-group">
+                <label for="username">{{ 'Username'|trans }}</label>
+                <div class="controls">
+                    {% if invalid_username is defined %}
+                        <p class="alert alert-error">{{ 'Entered username %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
+                    {% endif %}
+                    <input type="text" id="username" name="username" required="required" placeholder="Username"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="{{ 'Submit'|trans }}" type="submit">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
