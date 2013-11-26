@@ -62,14 +62,12 @@ tLoading: 'Loading',
 
     $('.colpick_submit').click(function(){
         $('.colpick_full').addClass('hide');
+        $('.widgetColorForm').submit();
     });
-    $('#pickerText').click(function(){
+    $('#pickerText, #pickerBackground').click(function(){
         $('.colpick_full').removeClass('hide');
     });
 
-    $('#pickerBackground').click(function(){
-        $('.colpick_full').removeClass('hide');
-    });
 
 // Lightbox video/maps
 
