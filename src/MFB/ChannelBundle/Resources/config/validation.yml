@@ -1,0 +1,4 @@
+MFB\ChannelBundle\Entity\AccountChannel:
+  properties:
+    homepageUrl:
+      - Url : ~
