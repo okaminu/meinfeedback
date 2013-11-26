@@ -3,6 +3,15 @@
 {% block title %}MeinFeedback{% endblock %}
 
 {% block body %}
+    {%  if homepage %}
+        <script>
+            var delay = 3000;
+            setTimeout(function(){ window.location = '{{ 'http://' ~ homepage }}';}, delay);
+        </script>
+        <div class="alert alert-info">
+            {% trans %} Soon you will be redirected to merchant website automatically. {% endtrans %}
+        </div>
+    {% endif %}
     <div>
         <div class="row-fluid inner-page contact">
             <div class="span6">

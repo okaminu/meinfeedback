@@ -2,18 +2,18 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
+use MFB\AccountBundle\Entity\Account;
+use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
+use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
+use MFB\Template\Manager\TemplateManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
-use MFB\AccountBundle\Entity\Account;
-use MFB\Template\Manager\TemplateManager;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-use MFB\Template\Placeholder\PlaceholderContainer;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class InviteController extends Controller
 {
@@ -48,6 +48,7 @@ class InviteController extends Controller
 
         /** @var Account $account */
         $account = $em->find('MFBAccountBundle:Account', $invite->getAccountId());
+        /** @var AccountChannel $accountChannel */
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
@@ -88,15 +89,17 @@ class InviteController extends Controller
             )
         );
 
-        $templateText = $this->getThankYouText($em, $invite, $customer);
-
         $em->remove($invite);
         $em->flush();
+
+        $return_url = $accountChannel->getHomepageUrl()
+            ? $accountChannel->getHomepageUrl() : $this->generateUrl('mfb_account_profile_homepage');
 
         return $this->render(
             'MFBFeedbackBundle:Invite:thank_you.html.twig',
             array(
-                'thankyou_text' => $templateText,
+                'thankyou_text' => $this->getThankYouText($em, $account, $customer),
+                'homepage' => $return_url
             )
         );
 

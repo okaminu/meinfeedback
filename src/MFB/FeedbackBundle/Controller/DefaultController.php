@@ -2,21 +2,21 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
-use MFB\FeedbackBundle\FeedbackEvents;
-use MFB\FeedbackBundle\FeedbackException;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\DBALException;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
-use Symfony\Component\Form\FormError;
-use Doctrine\DBAL\DBALException;
-use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
+use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\FeedbackEvents;
+use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\Template\Manager\TemplateManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends Controller
@@ -62,9 +62,9 @@ class DefaultController extends Controller
         $dispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
 
         /** @var Account $account */
-        $account = $em->getRepository('MFBAccountBundle:Account')->findAccountByAccountId($request->get('accountId'));
+        $account = $this->get("mfb_account.manager")->findAccountByAccountId($request->get('accountId'));
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findAccountChannelByAccount($account);
+        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
@@ -106,11 +106,14 @@ class DefaultController extends Controller
                     )
                 );
 
+                $return_url = $accountChannel->getHomepageUrl()
+                    ? $accountChannel->getHomepageUrl() : $this->generateUrl('mfb_account_profile_homepage');
+
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
                     array(
                         'thankyou_text' => $this->getThankYouText($em, $account, $customer),
-                        'channel_homepage' => $accountChannel->getHomepageUrl()
+                        'homepage' => $return_url
                     )
                 );
 
