@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -55,6 +56,10 @@ class DefaultController extends Controller
         $serviceDescription = $requestForm['serviceDescription'];
         $serviceDate = $requestForm['serviceDate'];
         $em = $this->getDoctrine()->getManager();
+        $dispatcher = $this->container->get('event_dispatcher');
+
+
+        $dispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
 
         /** @var Account $account */
         $account = $em->find('MFBAccountBundle:Account', $request->get('accountId'));
@@ -93,6 +98,8 @@ class DefaultController extends Controller
                 );
 
                 $em->flush();
+
+                $dispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE);
 
                 $this->get('mfb_email.sender')->sendFeedbackNotification(
                     $account,

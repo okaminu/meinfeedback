@@ -4,6 +4,7 @@ namespace MFB\FeedbackBundle\Controller;
 
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
+use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,8 @@ class InviteController extends Controller
     public function saveAction(Request $request)
     {
         $rating = null;
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch(FeedbackEvents::INVITE_INITIALIZE);
         $em = $this->getDoctrine()->getManager();
 
         /** @var FeedbackInvite $invite */
@@ -72,6 +75,7 @@ class InviteController extends Controller
             );
         }
 
+        $dispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE);
         $this->get('mfb_email.sender')->sendFeedbackNotification(
             $account,
             $customer,
