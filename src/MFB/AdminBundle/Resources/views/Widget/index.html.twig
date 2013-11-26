@@ -28,12 +28,13 @@
             </div>
         </div>
         <div style="margin: 15px 0px 0px 25px">
-            <button id="picker">Change Text color</button>
-            <input value="" name="textColor" id="textColor" type="hidden"/>
-            {{ form_start(form) }}
+            <button id="pickerText">Change Text color</button>
+            <button id="pickerBackground">Change Background color</button>
+            {{ form_start(form, {'attr' : {'class' : 'widgetColorForm'} } ) }}
                 {{ form_widget(form.textColorCode, {'attr': {'class': 'textColor'} }) }}
+                {{ form_widget(form.backgroundColorCode, {'attr': {'class': 'backgroundColor'} }) }}
                 <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Update colors {% endtrans %}" type="submit">
                 </div>
             {{ form_end(form) }}
         </div>

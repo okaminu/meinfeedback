@@ -46,12 +46,28 @@ tLoading: 'Loading',
   }
 });
 
-    $('#picker').colpick({
+    $('#pickerText').colpick({
         onChange:function(hsb,hex,rgb,fromSetColor) {
             $('.textColor').val(hex);
         },
         color: $('.textColor').val()
     });
+
+    $('#pickerBackground').colpick({
+        onChange:function(hsb,hex,rgb,fromSetColor) {
+            $('.backgroundColor').val(hex);
+        },
+        color: $('.backgroundColor').val()
+    });
+
+    $('.colpick_submit').click(function(){
+        $('.colpick_full').addClass('hide');
+        $('.widgetColorForm').submit();
+    });
+    $('#pickerText, #pickerBackground').click(function(){
+        $('.colpick_full').removeClass('hide');
+    });
+
 
 // Lightbox video/maps
 

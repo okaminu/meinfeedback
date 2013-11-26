@@ -19,6 +19,7 @@ use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
 use Doctrine\ORM\NoResultException;
+use MFB\CustomerBundle\CustomerEvents;
 
 class DefaultController extends Controller
 {
@@ -89,6 +90,9 @@ class DefaultController extends Controller
 
     public function customerAction(Request $request)
     {
+        $disptacher = $this->container->get('event_dispatcher');
+        $disptacher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
+
         $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
         $serviceDescription = $requestForm['serviceDescription'];
@@ -136,6 +140,8 @@ class DefaultController extends Controller
                     $serviceIdReference,
                     $em
                 );
+
+                $disptacher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE);
 
                 $emailTemplate = $this->getEmailTemplate($em, $accountId);
 

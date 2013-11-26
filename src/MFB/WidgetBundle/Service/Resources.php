@@ -19,6 +19,8 @@ class Resources
         return array(
             'widgetTemplate' => $this->container->
                     get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/n1.png'),
+            'widgetLowerFragment' => $this->container->
+                    get('kernel')->locateResource('@MFBWidgetBundle/Resources/widgets/lowerFragment.png'),
             'arialFontFile' => $this->container
                     ->get('kernel')->locateResource('@MFBWidgetBundle/Resources/fonts/Arial_Bold.ttf'),
             'lucidaFontFile' => $this->container

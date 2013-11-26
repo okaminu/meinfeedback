@@ -44,13 +44,7 @@ class WidgetController extends Controller
         );
 
         if (!$widget) {
-            $widget = new WidgetEntity();
-            $widget->setAccountId($account->getId());
-            $widget->setChannelId($accountChannel->getId());
-            $widget->setTextColorCode('6c6c6c');
-            $widget->setBackgroundColorCode('ff0000');
-            $em->persist($widget);
-            $em->flush();
+            $widget = $this->createDefaultWidget($account, $accountChannel, $em);
         }
 
         $form = $this->createForm(new WidgetType(), $widget, array(
@@ -159,6 +153,24 @@ class WidgetController extends Controller
         );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * @param $account
+     * @param $accountChannel
+     * @param $em
+     * @return WidgetEntity
+     */
+    public function createDefaultWidget($account, $accountChannel, $em)
+    {
+        $widget = new WidgetEntity();
+        $widget->setAccountId($account->getId());
+        $widget->setChannelId($accountChannel->getId());
+        $widget->setTextColorCode('6c6c6c');
+        $widget->setBackgroundColorCode('5AFF6A');
+        $em->persist($widget);
+        $em->flush();
+        return $widget;
     }
 
 

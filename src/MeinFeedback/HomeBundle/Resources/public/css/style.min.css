@@ -1404,6 +1404,10 @@ a.footer_link:hover {
     width: 700px;
 }
 
+.hide{
+    display:none !important;
+}
+
 .control-group {
     text-align: left;
 }
