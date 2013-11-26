@@ -2,14 +2,15 @@
 namespace MFB\EmailBundle\Service;
 
 
-use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
-use MFB\ServiceBundle\Entity\Service;
 use MFB\EmailBundle\Entity\EmailTemplate;
+use MFB\ServiceBundle\Entity\Service;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-
+use Symfony\Component\Routing\RouterInterface;
 
 class Sender
 {
@@ -23,10 +24,12 @@ class Sender
      */
     protected $twig;
 
-    public function __construct(\Swift_Mailer $mailer, TwigEngine $twig)
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $twig, RouterInterface $router, Translator $translator)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->router = $router;
+        $this->translator = $translator;
     }
 
     public function createForAccountChannel(
@@ -102,7 +105,7 @@ class Sender
 
     public function sendFeedbackNotification(Account $account, Customer $customer, $feedbackText, $feedbackRating, $feedbackEnableLink)
     {
-        $emailSubject = 'Feedback received on meinfeedback';
+        $emailSubject = $this->translator->trans('Feedback received on meinfeedback');
         $customerName = $customer->getEmail();
 
         if (($customer->getFirstName()) && ($customer->getLastName())) {
@@ -122,5 +125,29 @@ class Sender
         $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);
     }
 
+    /**
+     * Send an email with password reset link
+     * @param Account $account
+     */
+    public function sendResettingEmailMessage(Account $account)
+    {
+        $url = $this->router->generate(
+            'mfb_account_reset',
+            array('token' => $account->getResetToken()),
+            true
+        );
 
+        $emailSubject = $this->translator->trans('Password reset link');
+
+        $rendered = $this->twig->render(
+            "MFBEmailBundle:Default:ResetPasswordEmail.html.twig",
+            array(
+                'email_title' => $emailSubject,
+                'account' => $account,
+                'confirmationUrl' => $url
+            )
+        );
+
+        $this->sendEmail($account->getEmail(), $emailSubject, $rendered);
+    }
 }
