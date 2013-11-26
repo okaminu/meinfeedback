@@ -39,6 +39,11 @@
                 <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
 
+            <div>
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'fr_input_txt fr_97_5pro breite490', 'placeholder': '+567000000'} }) }}
+                {{ form_errors(form.phoneNumber) }}
+            </div>
+
             <div style="margin: 10px 0px">
                 {{ form_label(form.ratingsEnabled) }}
                 {{ form_widget(form.ratingsEnabled) }}

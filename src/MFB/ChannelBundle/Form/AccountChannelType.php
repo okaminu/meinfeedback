@@ -21,6 +21,7 @@ class AccountChannelType extends AbstractType
             ->add('place')
             ->add('city')
             ->add('homepageUrl')
+            ->add('phoneNumber')
             ->add(
                 'ratingsEnabled',
                 'choice',

@@ -79,6 +79,13 @@ class AccountChannel
      **/
     private $country;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=128, nullable=true)
+     */
+    private $phoneNumber;
+
 
     /**
      * Get id
@@ -272,5 +279,28 @@ class AccountChannel
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     * @return AccountChannel
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string 
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
     }
 }
