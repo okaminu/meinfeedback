@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AccountChannelType extends AbstractType
 {
+
         /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -27,6 +28,10 @@ class AccountChannelType extends AbstractType
                     'choices' => array('1' => 'Enabled', '0' => 'Disabled')
                 )
             )
+            ->add('country', 'entity', array(
+                    'class' => 'MFBCountryBundle:Country',
+                    'property' => 'name',
+                ))
         ;
     }
     

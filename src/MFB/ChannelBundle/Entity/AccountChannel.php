@@ -72,6 +72,15 @@ class AccountChannel
     private $ratingsEnabled = 0;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="MFB\CountryBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     **/
+    private $country;
+
+
+    /**
      * Get id
      *
      * @return integer 
@@ -240,5 +249,28 @@ class AccountChannel
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param \MFB\CountryBundle\Entity\Country $country
+     * @return AccountChannel
+     */
+    public function setCountry(\MFB\CountryBundle\Entity\Country $country = null)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return \MFB\CountryBundle\Entity\Country 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

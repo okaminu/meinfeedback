@@ -45,6 +45,12 @@
                 {{ form_errors(form.ratingsEnabled) }}
             </div>
 
+            <div style="margin: 10px 0px">
+                {{ form_label(form.country) }}
+                {{ form_widget(form.country) }}
+                {{ form_errors(form.country) }}
+            </div>
+
             <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
 
             {{ form_end(form) }}
