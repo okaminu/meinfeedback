@@ -38,7 +38,7 @@ class AccountChannel
     /**
      * @var string
      *
-     * @ORM\Column(name="homepageUrl", type="string", length=128, nullable=true)
+     * @ORM\Column(name="homepageUrl", type="string", length=128)
      */
     private $homepageUrl;
 

@@ -6,7 +6,7 @@
     {%  if homepage %}
         <script>
             var delay = 3000;
-            setTimeout(function(){ window.location = '{{ 'http://' ~ homepage }}';}, delay);
+            setTimeout(function(){ window.location = '{{ homepage }}';}, delay);
         </script>
         <div class="alert alert-info">
             {% trans %} Soon you will be redirected to merchant website automatically. {% endtrans %}
