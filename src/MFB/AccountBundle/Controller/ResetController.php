@@ -20,7 +20,6 @@ class ResetController extends Controller
     public function sendEmailAction(Request $request)
     {
 
-        $newPassword = false;
         $username = $request->request->get('username');
 
         /** @var $account Account */
@@ -32,8 +31,7 @@ class ResetController extends Controller
 
         $encoder = $this->get('security.encoder_factory')->getEncoder($account);
         $account->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
-        $tokenGenerator = $this->container->get('mfb_account.util.token_generator');
-        $newPassword = $tokenGenerator->generatePassword();
+        $newPassword = $this->container->get('mfb_account.util.token_generator')->generatePassword();
         $account->setPassword($encoder->encodePassword($newPassword, $account->getSalt()));
 
         $this->get('mfb_email.sender')->sendResettingEmailMessage($account, $newPassword);
@@ -46,8 +44,4 @@ class ResetController extends Controller
     }
 
 
-    public function checkEmailAction(Request $request)
-    {
-
-    }
 }

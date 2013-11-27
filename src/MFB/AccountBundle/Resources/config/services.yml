@@ -2,6 +2,9 @@ parameters:
      mfb_account.account.class: MFB\AccountBundle\Entity\Account
      mfb_account.manager.class: MFB\AccountBundle\Entity\AccountManager
      mfb_account.util.token_generator.class: MFB\AccountBundle\Util\TokenGenerator
+     mfb_account.util.encoder.class: MFB\AccountBundle\Util\Encoder
+     mfb_account.change_password.form.factory.class: MFB\AccountBundle\Form\Factory\FormFactory
+     mfb_account.change_password.form.type.class: MFB\AccountBundle\Form\Type\ChangePasswordFormType
 
 services:
      mfb_account.manager:
@@ -12,3 +15,17 @@ services:
 
      mfb_account.util.token_generator:
         class:  %mfb_account.util.token_generator.class%
+
+     mfb_account.encoder:
+        class: %mfb_account.util.encoder.class%
+        arguments: ["@security.encoder_factory", "@security.secure_random"]
+
+     mfb_account.change_password.form.factory:
+        class: %mfb_account.change_password.form.factory.class%
+        arguments: ["@form.factory", "change_password", "@mfb_account.change_password.form.type"]
+
+     mfb_account.change_password.form.type:
+        class: %mfb_account.change_password.form.type.class%
+        arguments: ["%mfb_account.account.class%"]
+        tags:
+            - { name: form.type, alias: mfb_account_change_password }

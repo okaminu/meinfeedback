@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<div class="formular">
+    <h3>{% trans %} Success {% endtrans %}</h3>
+    <div class="alert alert-success">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+                {{ flashMessage }}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

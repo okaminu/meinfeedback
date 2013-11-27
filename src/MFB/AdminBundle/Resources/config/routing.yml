@@ -52,3 +52,11 @@ mfb_feedback_sort:
     pattern:  /sortFeedback
     defaults: { _controller: MFBAdminBundle:Widget:sort }
     requirements: { _method: post }
+
+mfb_admin_success:
+    pattern:  /success
+    defaults: { _controller: MFBAdminBundle:Default:success }
+
+mfb_admin_change_password:
+    pattern: /changePassword
+    defaults: { _controller: MFBAdminBundle:Default:changePassword }

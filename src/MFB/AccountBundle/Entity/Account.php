@@ -5,9 +5,7 @@ namespace MFB\AccountBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\Role;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Account
@@ -51,6 +49,13 @@ class Account implements AdvancedUserInterface
      * @Assert\NotBlank()
      */
     private $password;
+
+    /**
+     * Plain password. Used for validation. Must not be persisted.
+     *
+     * @var string
+     */
+    protected $plainPassword;
 
     /**
      * @var string
@@ -151,6 +156,23 @@ class Account implements AdvancedUserInterface
     {
         return $this->password;
     }
+
+    /**
+     * @param string $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
 
     /**
      * Returns the roles granted to the user.

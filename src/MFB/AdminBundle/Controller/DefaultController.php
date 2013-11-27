@@ -5,21 +5,20 @@ namespace MFB\AdminBundle\Controller;
 use Doctrine\DBAL\DBALException;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
+use MFB\CustomerBundle\CustomerEvents;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use MFB\FeedbackBundle\Form\FeedbackType;
-use MFB\FeedbackBundle\Manager\Feedback;
+use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
-use Doctrine\ORM\NoResultException;
-use MFB\CustomerBundle\CustomerEvents;
 
 class DefaultController extends Controller
 {
@@ -181,6 +180,52 @@ class DefaultController extends Controller
                 'added_email' => $request->get('added_email'),
                 'feedback' => $request->get('feedback')
             )
+        );
+    }
+
+    /**
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $account = $this->get('security.context')->getToken()->getUser();
+
+        $form = $this->get("mfb_account.change_password.form.factory")->createForm();
+
+        $form->setData($account);
+
+        if ($request->isMethod('POST')) {
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+
+                $this->get('mfb_account.encoder')->encodePassword($account);
+                $this->get('mfb_account.manager')->updateAccount($account);
+
+                /** var SessionInterface $session  */
+                $this->getRequest()->getSession()->getFlashBag()->add('success', 'Password successfully changed');
+                return $this->redirect($this->generateUrl('mfb_admin_success'));
+            }
+        }
+
+        return $this->render(
+            'MFBAccountBundle:ChangePassword:changePassword.html.twig',
+            array(
+                'form' => $form->createView()
+            )
+        );
+
+    }
+
+
+    public function successAction()
+    {
+        return $this->render(
+            'MFBAccountBundle:Default:success.html.twig',
+            array('message' => 'Password successfully changed')
         );
     }
 

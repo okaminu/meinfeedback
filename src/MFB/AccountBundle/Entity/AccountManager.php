@@ -7,6 +7,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AccountManager extends EntityRepository
 {
+
+
     public function findAccountByAccountId($accountId)
     {
         /** @var Account $account */
@@ -42,5 +44,19 @@ class AccountManager extends EntityRepository
         $this->getEntityManager()->persist($account);
         $this->getEntityManager()->flush();
     }
+
+
+//    public function updatePassword(Account $account)
+//    {
+//        if (0 !== strlen($password = $account->getPlainPassword())) {
+//            /** @var EncoderFactoryInterface $encoder */
+//            $encoder = $this->getEncoderFactory()->getEncoder($account);
+//            $account->setSalt(base64_encode($this->getSecureRandom()->nextBytes(20)));
+//            $account->setPassword($encoder->encodePassword($password, $account->getSalt()));
+//        }
+//    }
+
+
+
 
 }

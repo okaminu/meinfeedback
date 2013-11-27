@@ -1412,6 +1412,7 @@ a.footer_link:hover {
     text-align: left;
 }
 
+#change_password label,
 .control-group label{
     display: none;
 }
