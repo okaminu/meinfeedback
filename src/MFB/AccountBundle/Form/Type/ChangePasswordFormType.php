@@ -58,7 +58,7 @@ class ChangePasswordFormType extends AbstractType
                         'placeholder' => 'Repeat new password'
                     )
                 ),
-                'invalid_message' => 'mfb_account.password.mismatch',
+                'invalid_message' => 'Your passwords should match.',
 
             )
         );
