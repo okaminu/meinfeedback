@@ -8,7 +8,8 @@ use MFB\AccountBundle\Entity\Account;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Util\SecureRandomInterface;
 
-class Encoder {
+class Encoder
+{
 
     private $encoderFactory;
 
@@ -62,4 +63,4 @@ class Encoder {
     {
         return $this->secure_random;
     }
-} 
+}
