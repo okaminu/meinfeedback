@@ -79,10 +79,10 @@ class WidgetController extends Controller
         );
 
         $base = $request->getSchemeAndHttpHost();
-        $darkIconLink = $base.$this->get('templating.helper.assets')
+        $lightIconLink = $base.$this->get('templating.helper.assets')
                 ->getUrl('bundles/meinfeedbackhome/images/mf_light_de.png');
 
-        $lightIconLink = $base.$this->get('templating.helper.assets')
+        $darkIconLink = $base.$this->get('templating.helper.assets')
                 ->getUrl('bundles/meinfeedbackhome/images/mf_dark_de.png');
 
         return $this->render(
