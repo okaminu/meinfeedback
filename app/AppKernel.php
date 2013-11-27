@@ -27,7 +27,8 @@ class AppKernel extends Kernel
             new MFB\WidgetBundle\MFBWidgetBundle(),
             new MFB\ReskribeBundle\MFBReskribeBundle(),
             new MFB\ServiceBundle\MFBServiceBundle(),
-            new \Sensio\Bundle\BuzzBundle\SensioBuzzBundle()
+            new \Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
+            new MFB\CountryBundle\MFBCountryBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

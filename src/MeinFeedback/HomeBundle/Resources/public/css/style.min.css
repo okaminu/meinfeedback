@@ -1142,7 +1142,7 @@ button::-moz-focus-inner{padding:0;border:0;}
 .mfp-arrow-right:before,.mfp-arrow-right .mfp-b{border-left:20px solid white;}
 .mfp-iframe-holder{padding-top:40px;padding-bottom:40px;}
 .mfp-iframe-holder .mfp-content{line-height:0;width:100%;max-width:900px;}
-.mfp-fad-small .mfp-iframe-holder .mfp-content{line-height:0;width:60%;max-width:900px;}
+.mfp-fad-small .mfp-iframe-holder .mfp-content{line-height:0;width:70%;max-width:900px;}
 .mfp-fad-small .mfp-iframe-scaler{padding-top:70%}
 .mfp-iframe-scaler{width:100%;height:0;overflow:hidden;padding-top:56.25%;}
 .mfp-iframe-scaler iframe{position:absolute;top:-3px;left:0;width:100%;height:100%;box-shadow:0 0 8px rgba(0, 0, 0, 0.6);background:black;}

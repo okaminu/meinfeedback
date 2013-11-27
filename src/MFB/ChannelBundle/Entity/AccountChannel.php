@@ -38,7 +38,7 @@ class AccountChannel
     /**
      * @var string
      *
-     * @ORM\Column(name="homepageUrl", type="string", length=128, nullable=true)
+     * @ORM\Column(name="homepageUrl", type="string", length=128)
      */
     private $homepageUrl;
 
@@ -70,6 +70,22 @@ class AccountChannel
      * @ORM\Column(name="ratings_enabled", type="smallint")
      */
     private $ratingsEnabled = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="MFB\CountryBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     **/
+    private $country;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=128, nullable=true)
+     */
+    private $phoneNumber;
+
 
     /**
      * Get id
@@ -240,5 +256,51 @@ class AccountChannel
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param \MFB\CountryBundle\Entity\Country $country
+     * @return AccountChannel
+     */
+    public function setCountry(\MFB\CountryBundle\Entity\Country $country = null)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return \MFB\CountryBundle\Entity\Country 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     * @return AccountChannel
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string 
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
     }
 }

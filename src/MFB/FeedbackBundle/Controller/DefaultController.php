@@ -106,8 +106,7 @@ class DefaultController extends Controller
                     )
                 );
 
-                $return_url = $accountChannel->getHomepageUrl()
-                    ? $accountChannel->getHomepageUrl() : $this->generateUrl('mfb_account_profile_homepage');
+                $return_url = $this->getReturnUrl($accountChannel);
 
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
@@ -233,6 +232,24 @@ class DefaultController extends Controller
             $em,
             $accountChannel->getRatingsEnabled()
         );
+    }
+
+    /**
+     * @param $accountChannel
+     * @return string
+     */
+    protected function getReturnUrl($accountChannel)
+    {
+        $return_url = $this->generateUrl(
+            'mfb_account_profile_homepage',
+            array('accountId' => $accountChannel->getAccountId()),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        if ($accountChannel->getHomepageUrl()) {
+            $return_url = $accountChannel->getHomepageUrl();
+        }
+        return $return_url;
     }
 
     protected function getFeedbackEnableLink($id)

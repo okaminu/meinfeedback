@@ -92,13 +92,12 @@ class InviteController extends Controller
         $em->remove($invite);
         $em->flush();
 
-        $return_url = $accountChannel->getHomepageUrl()
-            ? $accountChannel->getHomepageUrl() : $this->generateUrl('mfb_account_profile_homepage');
+        $return_url = $this->getReturnUrl($accountChannel);
 
         return $this->render(
             'MFBFeedbackBundle:Invite:thank_you.html.twig',
             array(
-                'thankyou_text' => $this->getThankYouText($em, $account, $customer),
+                'thankyou_text' => $this->getThankYouText($em, $customer),
                 'homepage' => $return_url
             )
         );
@@ -121,19 +120,36 @@ class InviteController extends Controller
 
     /**
      * @param $em
-     * @param $invite
      * @param $customer
      * @return mixed
      */
-    protected function getThankYouText($em, $invite, $customer)
+    protected function getThankYouText($em, $customer)
     {
         $templateManager = new TemplateManager();
         $templateText = $templateManager->getThankYouText(
             $em,
-            $invite->getAccountId(),
+            $customer->getAccountId(),
             $customer,
             $this->get('translator')
         );
         return $templateText;
+    }
+
+    /**
+     * @param $accountChannel
+     * @return string
+     */
+    protected function getReturnUrl($accountChannel)
+    {
+        $return_url = $this->generateUrl(
+            'mfb_account_profile_homepage',
+            array('accountId' => $accountChannel->getAccountId()),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        if ($accountChannel->getHomepageUrl()) {
+            $return_url = $accountChannel->getHomepageUrl();
+        }
+        return $return_url;
     }
 }
