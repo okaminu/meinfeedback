@@ -2,11 +2,11 @@
 
 namespace MFB\AccountBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
 use MFB\AccountBundle\Entity\Account;
-use MFB\AccountBundle\Form\AccountType;
+use MFB\AccountBundle\Form\Type\AccountType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
 
 
 class RegisterController extends Controller
