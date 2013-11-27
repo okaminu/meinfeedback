@@ -78,12 +78,21 @@ class WidgetController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
+        $base = $request->getSchemeAndHttpHost();
+        $darkIconLink = $base.$this->get('templating.helper.assets')
+                ->getUrl('bundles/meinfeedbackhome/images/mf_light_de.png');
+
+        $lightIconLink = $base.$this->get('templating.helper.assets')
+                ->getUrl('bundles/meinfeedbackhome/images/mf_dark_de.png');
+
         return $this->render(
             'MFBAdminBundle:Widget:index.html.twig',
             array(
                 'widgetLink' => $widgetLink,
                 'widgetImage' => $widgetImage,
                 'inviteUrl' => $inviteUrl,
+                'darkIcon' => $darkIconLink,
+                'lightIcon' => $lightIconLink,
                 'form' => $form->createView()
             )
         );

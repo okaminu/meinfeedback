@@ -5,39 +5,15 @@
 {% block body %}
 
     <div class="formular_left">
-        <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300; text-align: center">{% trans %} Widget {% endtrans %}</div>
-        <div class="widgetDisplay">
-            <img src="{{ widgetImage }}" usemap="#widgetmap">
-            <map name="widgetmap">
-                <area shape="rect" coords="0,0,270,265" href="{{ widgetLink }}" target="_blank"/>
-                <area shape="rect" coords="0,270,270,300" href="{{ inviteUrl }}" target="_blank"/>
-            </map>
-        </div>
+        {% include 'MFBAdminBundle:Widget:widget.html.twig' %}
 
-        <div class="widgetCode">
-            <textarea>{% verbatim %} <img src=" {% endverbatim %} {{ widgetImage }} {% verbatim %} " usemap="#widgetmap">
-            <map name="widgetmap"> {% endverbatim %}
-            {% verbatim %} <area shape="rect" coords="0,0,270,265" href=" {% endverbatim %} {{ widgetLink }} {% verbatim %} " target="_blank"/>
-            <area shape="rect" coords="0,270,270,300" href="{% endverbatim %} {{ inviteUrl }} {% verbatim %} " target="_blank"/>
-             </map> {% endverbatim %}</textarea>
-        </div>
-        <div>
-            <div style="width: 30px; float:right; margin-right: 100px">
-            {{ tooltips.tooltip('What is the widget code?',
-            "It is a code snippet which could be used in your website to display the feedbacks and ratings ", 'positionBottomLeft') }}
-            </div>
-        </div>
-        <div style="margin: 15px 0px 0px 25px">
-            <button id="pickerText">Change Text color</button>
-            <button id="pickerBackground">Change Background color</button>
-            {{ form_start(form, {'attr' : {'class' : 'widgetColorForm'} } ) }}
-                {{ form_widget(form.textColorCode, {'attr': {'class': 'textColor'} }) }}
-                {{ form_widget(form.backgroundColorCode, {'attr': {'class': 'backgroundColor'} }) }}
-                <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Update colors {% endtrans %}" type="submit">
-                </div>
-            {{ form_end(form) }}
-        </div>
+        {% set vars = {'title':  'Light Icon', 'iconImage': lightIcon } %}
+        {% include 'MFBAdminBundle:Widget:icon.html.twig' with vars %}
+
+        {% set vars = {'title':  'Dark Icon', 'iconImage': darkIcon } %}
+        {% include 'MFBAdminBundle:Widget:icon.html.twig' with vars%}
+
+
     </div>
 
 {% endblock %}

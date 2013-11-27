@@ -1339,6 +1339,22 @@ a.footer_link:hover {
     width: 400px;
 }
 
+.iconDisplay{
+    width:300px;
+    display: inline;
+    margin: 0px 30px;
+}
+
+.iconCode{
+    display: inline;
+    margin: 0px 30px;
+    float: right;
+}
+
+.iconCode textarea{
+    height: 50px;
+    width: 500px;
+}
 .gender label{
     display:inline;
     margin-left: 6px;

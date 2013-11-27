@@ -33,6 +33,7 @@ Enabled: An
 Disabled: Aus
 Active: Speichern
 indicates required fields: kennzeichnet Pflichtfelder
-Widget: Widget/Icon
+Widget: Widget
+Icon: Icon
 Update colors: Farben ändern
 Dear %customer%: Dear %customer%
