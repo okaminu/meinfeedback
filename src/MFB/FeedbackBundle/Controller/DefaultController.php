@@ -8,6 +8,7 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
@@ -92,19 +93,8 @@ class DefaultController extends Controller
 
                 $em->flush();
 
-                $dispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE);
-
-                $this->get('mfb_email.sender')->sendFeedbackNotification(
-                    $account,
-                    $customer,
-                    $request->get('feedback'),
-                    $request->get('rating'),
-                    $this->get('router')->generate(
-                        'mfb_feedback_enable',
-                        array('feedbackId' => $feedbackId),
-                        UrlGeneratorInterface::ABSOLUTE_URL
-                    )
-                );
+                $event = new CustomerAccountEvent($feedbackId, $account, $customer, $request);
+                $dispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
 
                 $return_url = $this->getReturnUrl($accountChannel);
 

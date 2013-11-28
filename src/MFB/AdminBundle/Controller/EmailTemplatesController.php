@@ -6,9 +6,9 @@ use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Form\EmailTemplateType;
 use MFB\EmailBundle\Form\ThankYouTemplateType;
+use MFB\Template\Manager\TemplateManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MFB\Template\Manager\TemplateManager;
 
 class EmailTemplatesController extends Controller
 {
@@ -118,8 +118,6 @@ class EmailTemplatesController extends Controller
             $this->generateUrl('mfb_admin_list_possible_variables', array('emailTemplateId' => $emailTemplateId))
         );
     }
-
-
 
     /**
      * Creates a form to edit a EmailTemplate entity.

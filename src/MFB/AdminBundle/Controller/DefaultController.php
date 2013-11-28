@@ -103,13 +103,13 @@ class DefaultController extends Controller
         $customer = new Customer();
         $customer->setAccountId($accountId);
 
-        $form = $this->getCustomerForm($customer);
-
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId' => $accountId)
         );
 
         $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
+
+        $form = $this->getCustomerForm($customer);
 
         if ($accountChannel === null) {
             return $this->render(

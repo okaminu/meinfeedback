@@ -6,13 +6,14 @@ use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
+use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\Template\Manager\TemplateManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class InviteController extends Controller
@@ -76,18 +77,9 @@ class InviteController extends Controller
             );
         }
 
-        $dispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE);
-        $this->get('mfb_email.sender')->sendFeedbackNotification(
-            $account,
-            $customer,
-            $request->get('feedback'),
-            $request->get('rating'),
-            $this->get('router')->generate(
-                'mfb_feedback_enable',
-                array('feedbackId' => $feedbackId),
-                UrlGeneratorInterface::ABSOLUTE_URL
-            )
-        );
+        $event = new CustomerAccountEvent($feedbackId, $account, $customer, $request);
+
+        $dispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);
 
         $em->remove($invite);
         $em->flush();
