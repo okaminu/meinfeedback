@@ -17,7 +17,7 @@
                     </li>
                     <li><a title="Account setup" href="{{ path('mfb_location') }}" class="scroll fadeto brand-4 iframe-small" rel="nofollow">{% trans %} Account Set-Up {% endtrans %}</a></li>
                     <li{% if app.request.get('_route') == 'mfb_admin_edit_email_template' %} class="active"{% endif %}>
-                        <a title="Template setup" href="{{ path('mfb_admin_edit_email_template') }}" class="scroll fadeto brand-1" rel="nofollow">{% trans %} Templates Set-Up {% endtrans %}</a>
+                        <a title="Template setup" href="{{ path('mfb_admin_select_variables') }}" class="scroll fadeto brand-1" rel="nofollow">{% trans %} Templates Set-Up {% endtrans %}</a>
                     </li>
                     <li><a title="Add customer" href="{{ path('mfb_add_customer') }}" class="scroll fadeto brand-4 iframe-small" rel="nofollow">{% trans %} Add Customer {% endtrans %}</a></li>
                     <li><a title="Widget" href="{{ path('mfb_widget') }}" class="scroll fadeto brand-4 iframe" rel="nofollow"> {% trans %} Widget / Icon{% endtrans %}</a></li>

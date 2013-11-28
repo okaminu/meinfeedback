@@ -6,6 +6,7 @@ use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Form\EmailTemplateType;
 use MFB\EmailBundle\Form\ThankYouTemplateType;
+use MFB\EmailBundle\Form\VariableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\Template\Manager\TemplateManager;
@@ -14,6 +15,43 @@ use MFB\Template\Interfaces\TemplateManagerInterface;
 class EmailTemplatesController extends Controller
 {
 
+
+    public function selectVariablesAction(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $templateManager = new TemplateManager();
+        /**
+         * @var EmailTemplate $emailTemplate
+         */
+        $emailTemplate =$this->getEmailTemplate(
+            $templateManager,
+            $templateManager::EMAIL_TEMPLATE_TYPE,
+            $this->getUserId()
+        );
+
+        $form = $this->createForm(
+            new VariableType(),
+            $emailTemplate,
+            array(
+                'action' => $this->generateUrl('mfb_admin_select_variables'),
+                'method' => 'PUT'
+            )
+        );
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $entityManager->persist($emailTemplate);
+            $entityManager->flush();
+            return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
+        }
+        return $this->render(
+            'MFBAdminBundle:EmailTemplates:selectVariables.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
+
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -21,8 +59,7 @@ class EmailTemplatesController extends Controller
     public function editAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
+        $accountId = $this->getUserId();
 
         $templateManager = new TemplateManager();
         $emailTemplate =$this->getEmailTemplate($templateManager, $templateManager::EMAIL_TEMPLATE_TYPE, $accountId);
@@ -48,8 +85,7 @@ class EmailTemplatesController extends Controller
     public function thankYouEditAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
+        $accountId = $this->getUserId();
 
         $templateManager = new TemplateManager();
         $thankYouTemplate = $this->getThankYouTemplate(
@@ -237,5 +273,15 @@ class EmailTemplatesController extends Controller
             $this->get('translator')
         );
         return $thankYouTemplate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        $token = $this->get('security.context')->getToken();
+        $accountId = $token->getUser()->getId();
+        return $accountId;
     }
 }

@@ -1433,3 +1433,17 @@ a.footer_link:hover {
     display: none;
 }
 
+.navLogo{
+    margin-top: 70px;
+}
+
+.sectionTitle{
+    padding:20px 10px 15px 0;
+    font-size: 24px;
+    font-weight:300;
+}
+
+.hidden{
+    display:none;
+}
+

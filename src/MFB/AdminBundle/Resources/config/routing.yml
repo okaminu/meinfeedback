@@ -22,6 +22,10 @@ mfb_widget:
     pattern: /widget
     defaults: { _controller: MFBAdminBundle:Widget:index }
 
+mfb_admin_select_variables:
+    pattern: /select_variables
+    defaults: { _controller: MFBAdminBundle:EmailTemplates:selectVariables}
+
 mfb_admin_edit_email_template:
     pattern: /edit_template
     defaults: { _controller: MFBAdminBundle:EmailTemplates:edit }

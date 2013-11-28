@@ -36,11 +36,13 @@ class TemplateManager implements TemplateManagerInterface
             $emailTemplate->setTitle($translator->trans('default_template_subject'));
             $emailTemplate->setTemplateCode($this->getDefaultTemplateCode($translator, $templateTypeId));
             $emailTemplate->setThankYouCode($translator->trans('default_template_thank_you'));
-            $linkVariable = new EmailTemplateVariable();
-            $linkVariable->setType('link');
-            $linkVariable->setValue('');
-            $linkVariable->setEmailTemplate($emailTemplate);
-            $emailTemplate->addVariable($linkVariable);
+
+            $emailTemplate = $this->addVariable($emailTemplate, 'link');
+            $emailTemplate = $this->addVariable($emailTemplate, 'lastname');
+            $emailTemplate = $this->addVariable($emailTemplate, 'email');
+            $emailTemplate = $this->addVariable($emailTemplate, 'salutation');
+            $emailTemplate = $this->addVariable($emailTemplate, 'homepage');
+
             $em->persist($emailTemplate);
             $em->flush();
         }
@@ -84,5 +86,19 @@ class TemplateManager implements TemplateManagerInterface
             ->setCustomer($customer)
             ->getTranslation();
         return $templateText;
+    }
+
+    /**
+     * @param EmailTemplate $emailTemplate
+     * @param $type
+     * @return mixed
+     */
+    private function addVariable($emailTemplate, $type)
+    {
+        $variable = new EmailTemplateVariable();
+        $variable->setType($type);
+        $variable->setEmailTemplate($emailTemplate);
+        $emailTemplate->addVariable($variable);
+        return $emailTemplate;
     }
 } 
