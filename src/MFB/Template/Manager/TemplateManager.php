@@ -2,13 +2,15 @@
 
 namespace MFB\Template\Manager;
 
+use MFB\Template\Interfaces\TemplateManagerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\Template\ThankYouTemplate;
 
-class TemplateManager {
+class TemplateManager implements TemplateManagerInterface
+{
 
     const EMAIL_TEMPLATE_TYPE = 1;
     const THANKYOU_TEMPLATE_TYPE = 2;
