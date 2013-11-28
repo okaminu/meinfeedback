@@ -29,11 +29,11 @@ class EmailTemplateVariable
     private $type;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="is_active", type="integer", options={"default" : 0})
+     * @ORM\Column(name="is_active", type="boolean", options={"default" : 0})
      */
-    private $isActive;
+    private $isActive = 0;
 
 
     /**

@@ -1447,3 +1447,11 @@ a.footer_link:hover {
     display:none;
 }
 
+.variableSelection input{
+    width: 5%;
+}
+
+.returnToVariables{
+    margin: 20px 0px;
+}
+

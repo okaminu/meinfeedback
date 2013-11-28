@@ -15,7 +15,7 @@ class EmailTemplateVariableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('isActive', 'choice', array('choices' => array('0' => 'Disable', '1' => 'Enable')))
+            ->add('isActive', 'checkbox', array('required' => false))
             ->add('type', 'hidden')
         ;
     }

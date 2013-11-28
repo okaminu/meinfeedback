@@ -15,10 +15,15 @@ class TemplateManager implements TemplateManagerInterface
     const EMAIL_TEMPLATE_TYPE = 1;
     const THANKYOU_TEMPLATE_TYPE = 2;
 
+    /**
+     * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
+     */
+    private $emailTemplate;
+
     public function getTemplate($accountId, $templateTypeId, $name, ObjectManager $em, TranslatorInterface $translator)
     {
 
-        $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
+        $this->emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
             array(
                 'accountId' => $accountId,
                 'name' => $name,
@@ -26,28 +31,35 @@ class TemplateManager implements TemplateManagerInterface
             )
         );
 
-        if (!$emailTemplate) {
+        if (!$this->emailTemplate) {
 
-            $emailTemplate = new EmailTemplate();
-            $emailTemplate->setAccountId($accountId);
-            $emailTemplate->setName($name);
-            $emailTemplate->setTemplateTypeId($templateTypeId);
+            $this->emailTemplate = new EmailTemplate();
+            $this->emailTemplate->setAccountId($accountId);
+            $this->emailTemplate->setName($name);
+            $this->emailTemplate->setTemplateTypeId($templateTypeId);
 
-            $emailTemplate->setTitle($translator->trans('default_template_subject'));
-            $emailTemplate->setTemplateCode($this->getDefaultTemplateCode($translator, $templateTypeId));
-            $emailTemplate->setThankYouCode($translator->trans('default_template_thank_you'));
+            $this->emailTemplate->setTitle($translator->trans('default_template_subject'));
+            $this->emailTemplate->setTemplateCode($this->getDefaultTemplateCode($translator, $templateTypeId));
+            $this->emailTemplate->setThankYouCode($translator->trans('default_template_thank_you'));
 
-            $emailTemplate = $this->addVariable($emailTemplate, 'link');
-            $emailTemplate = $this->addVariable($emailTemplate, 'lastname');
-            $emailTemplate = $this->addVariable($emailTemplate, 'email');
-            $emailTemplate = $this->addVariable($emailTemplate, 'salutation');
-            $emailTemplate = $this->addVariable($emailTemplate, 'homepage');
 
-            $em->persist($emailTemplate);
+            $this->addVariable('link', 1);
+            $this->addVariable('lastname', 1);
+            $this->addVariable('email', 1);
+            $this->addVariable('salutation', 1);
+            $this->addVariable('homepage', 1);
+            $this->addVariable('firstname');
+            $this->addVariable('service_name');
+            $this->addVariable('service_date');
+            $this->addVariable('reference_id');
+            $this->addVariable('customer_id');
+            $this->addVariable('service_id');
+
+            $em->persist($this->emailTemplate);
             $em->flush();
         }
 
-        return $emailTemplate;
+        return $this->emailTemplate;
     }
 
     /**
@@ -89,16 +101,16 @@ class TemplateManager implements TemplateManagerInterface
     }
 
     /**
-     * @param EmailTemplate $emailTemplate
      * @param $type
-     * @return mixed
+     * @param $isActive
      */
-    private function addVariable($emailTemplate, $type)
+    private function addVariable($type, $isActive = 0)
     {
+
         $variable = new EmailTemplateVariable();
         $variable->setType($type);
-        $variable->setEmailTemplate($emailTemplate);
-        $emailTemplate->addVariable($variable);
-        return $emailTemplate;
+        $variable->setIsActive($isActive);
+        $variable->setEmailTemplate($this->emailTemplate);
+        $this->emailTemplate->addVariable($variable);
     }
 } 

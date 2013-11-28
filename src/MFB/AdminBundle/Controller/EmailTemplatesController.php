@@ -29,6 +29,14 @@ class EmailTemplatesController extends Controller
             $this->getUserId()
         );
 
+        $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
+
+        $filteredVariables = $emailTemplate->getVariables()->filter(function($entry) use ($typesToFilter){
+                return in_array($entry->getType(), $typesToFilter);
+            });
+
+        $emailTemplate->setVariables($filteredVariables);
+
         $form = $this->createForm(
             new VariableType(),
             $emailTemplate,
