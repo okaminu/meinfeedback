@@ -3,13 +3,13 @@ namespace MFB\EmailBundle\Service;
 
 
 use MFB\AccountBundle\Entity\Account;
-use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
+use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\EmailBundle\Entity\EmailTemplate;
-use MFB\ServiceBundle\Entity\Service;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Routing\RouterInterface;
 
 class Sender
@@ -32,13 +32,13 @@ class Sender
         $this->translator = $translator;
     }
 
-    public function createForAccountChannel(
-        Customer $customer,
-        AccountChannel $channel,
-        EmailTemplate $template,
-        $inviteUrl,
-        Service $service
-    ) {
+    public function createForAccountChannel(EmailTemplate $template, NewCustomerEvent $event)
+    {
+        $customer = $event->getCustomer();
+        $inviteUrl = $event->getInviteUrl();
+        $service = $event->getService();
+        $channel = $event->getChannel();
+
         $message = new \Swift_Message();
         $message_title = $template->getTitle();
 

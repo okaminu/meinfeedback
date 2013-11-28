@@ -7,8 +7,8 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\CustomerEvents;
 use MFB\CustomerBundle\Entity\Customer;
+use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\CustomerBundle\Form\CustomerType;
-use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use MFB\FeedbackBundle\Form\FeedbackType;
 use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
@@ -89,8 +89,7 @@ class DefaultController extends Controller
 
     public function customerAction(Request $request)
     {
-        $disptacher = $this->container->get('event_dispatcher');
-        $disptacher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
+        $dispatcher = $this->container->get('event_dispatcher');
 
         $requestForm = $request->get('mfb_customerbundle_customer');
         $serviceIdReference = $requestForm['serviceIdReference'];
@@ -101,7 +100,6 @@ class DefaultController extends Controller
 
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
-
         $customer = new Customer();
         $customer->setAccountId($accountId);
 
@@ -110,6 +108,8 @@ class DefaultController extends Controller
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId' => $accountId)
         );
+
+        $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
 
         if ($accountChannel === null) {
             return $this->render(
@@ -130,7 +130,13 @@ class DefaultController extends Controller
 
                 $invite = $this->saveFeedbackInvite($customer, $accountChannel, $em);
 
-                $serviceEntity = $this->saveService(
+                $inviteUrl = $this->generateUrl(
+                    'mfb_feedback_create_with_invite',
+                    array('token' => $invite->getToken()),
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
+
+                $service = $this->saveService(
                     $serviceDate,
                     $accountId,
                     $accountChannel->getId(),
@@ -140,23 +146,8 @@ class DefaultController extends Controller
                     $em
                 );
 
-                $disptacher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE);
-
-                $emailTemplate = $this->getEmailTemplate($em, $accountId);
-
-                $inviteUrl = $this->generateUrl(
-                    'mfb_feedback_create_with_invite',
-                    array('token' => $invite->getToken()),
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                );
-
-                $this->get('mfb_email.sender')->createForAccountChannel(
-                    $customer,
-                    $accountChannel,
-                    $emailTemplate,
-                    $inviteUrl,
-                    $serviceEntity
-                );
+                $event = new NewCustomerEvent($customer, $accountChannel, $service, $inviteUrl);
+                $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE, $event);
 
                 return $this->redirect(
                     $this->generateUrl('mfb_add_customer', array('added_email' => $customer->getEmail()))
@@ -229,29 +220,7 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $em
-     * @param $accountId
-     * @return EmailTemplate
-     */
-    private function getEmailTemplate($em, $accountId)
-    {
-        $emailTemplate = $em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
-            array(
-                'accountId' => $accountId,
-                'name' => 'AccountChannel',
-            )
-        );
 
-        if (!$emailTemplate) {
-            $emailTemplate = new EmailTemplate();
-            $emailTemplate->setTitle($this->get('translator')->trans('Please leave feedback'));
-            $emailTemplate->setTemplateCode(
-                $this->get('translator')->trans('default_account_channel_template')
-            );
-        }
-        return $emailTemplate;
-    }
 
     /**
      * @param $customer
@@ -311,11 +280,11 @@ class DefaultController extends Controller
             new ServiceEntity()
         );
 
-        $serviceEntity = $serviceEntityManager->createEntity();
+        $service = $serviceEntityManager->createEntity();
 
-        $em->persist($serviceEntity);
+        $em->persist($service);
         $em->flush();
-        return $serviceEntity;
+        return $service;
     }
 
     /**

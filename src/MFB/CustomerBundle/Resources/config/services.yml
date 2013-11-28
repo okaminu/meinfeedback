@@ -1,7 +1,9 @@
 parameters:
-#    mfb_customer.example.class: MFB\CustomerBundle\Example
+    mfb_customer.event_listener.new_customer.class: MFB\CustomerBundle\EventListener\NewCustomerListener
 
 services:
-#    mfb_customer.example:
-#        class: %mfb_customer.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mfb_customer.listener.new_customer:
+        class: %mfb_customer.event_listener.new_customer.class%
+        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_email.sender", "@translator"]
+        tags:
+            - { name: kernel.event_listener, event: customer.create.complete, method: onCreateCustomerComplete}
