@@ -69,6 +69,54 @@ class EmailTemplatesController extends Controller
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
             $emailTemplate->setTemplateTypeId(2);
+
+            $selectedVariables = $emailTemplate->getVariables()->filter(
+                function($entity){
+                    return $entity->getIsActive() == true;
+                }
+            );
+
+            $values = $selectedVariables->getValues();
+
+            $templateCode = $emailTemplate->getTemplateCode();
+            $thankYouCode = $emailTemplate->getThankYouCode();
+
+            $fullMailCode = $templateCode.$thankYouCode;
+
+            $variables = array(
+                'link' => '#LINK#',
+                'lastname' => '#LASTNAME#',
+                'salutation' => '#SAL#',
+                'email' => '#EMAIL#',
+                'homepage' => '#HOMEPAGE#',
+                'firstname' => '#FIRSTNAME#',
+                'service_name' => '#SERVICE_NAME#',
+                'service_date' => '#SERVICE_DATE#',
+                'reference_id' => '#REFERENCE_ID#',
+                'customer_id' => '#CUSTOMER_ID#',
+                'service_id' => '#SERVICE_ID#'
+            );
+
+
+            $notUsedVariables = array();
+            foreach($values as $value){
+                $typeCode = $variables[$value->getType()];
+                $count = substr_count($fullMailCode, $typeCode);
+                if($count == 0){
+                    $notUsedVariables[] = $typeCode;
+                }
+            }
+
+            if(count($notUsedVariables) > 0){
+                $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
+                //saving to database
+                return $this->showEmailTemplate($accountId, $showErrors);
+            }
+
+            $emailTemplate->setTemplateCode($this->plain2html($templateCode));
+            $emailTemplate->setThankYouCode($this->plain2html($thankYouCode));
+
+            $emailTemplate->setTemplateTypeId(TemplateManager::EMAIL_TEMPLATE_TYPE);
             $em->persist($emailTemplate);
             $em->flush();
         }
@@ -105,9 +153,10 @@ class EmailTemplatesController extends Controller
 
     /**
      * @param $accountId
+     * @param $errors
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showEmailTemplate($accountId)
+    public function showEmailTemplate($accountId, $errors = null)
     {
         /** @var EmailTemplate $emailTemplate  */
         $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
@@ -126,6 +175,7 @@ class EmailTemplatesController extends Controller
         return $this->render(
             'MFBAdminBundle:EmailTemplates:edit.html.twig',
             array(
+                'errors' => $errors,
                 'variables' => $variables,
                 'entity' => $emailTemplate,
                 'form' => $editForm->createView(),
@@ -223,6 +273,25 @@ class EmailTemplatesController extends Controller
             $text .= "<p>{$paragraph}</p>\n";
         }
         return $text;
+    }
+
+    /**
+     * @param TemplateManagerInterface $templateManager
+     * @param $type
+     * @param $accountId
+     * @return mixed
+     */
+    private function getEmailTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $emailTemplate = $templateManager->getTemplate(
+            $accountId,
+            $type,
+            'AccountChannel',
+            $em,
+            $this->get('translator')
+        );
+        return $emailTemplate;
     }
 
     /**

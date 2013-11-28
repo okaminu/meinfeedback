@@ -58,18 +58,12 @@ class Template
             $this->emailTemplate->setTitle($this->translator->trans('default_template_subject'));
             $this->emailTemplate->setTemplateCode($this->getDefaultTemplateCode($name));
             $this->emailTemplate->setThankYouCode($this->translator->trans('default_template_thank_you'));
-            $linkVariable = new EmailTemplateVariable();
-            $linkVariable->setType('link');
-            $linkVariable->setValue('');
-            $linkVariable->setEmailTemplate($this->emailTemplate);
-            $this->emailTemplate->addVariable($linkVariable);
 
-
-            $this->addVariable('link', 1);
-            $this->addVariable('lastname', 1);
-            $this->addVariable('email', 1);
-            $this->addVariable('salutation', 1);
-            $this->addVariable('homepage', 1);
+            $this->addVariable('link', true);
+            $this->addVariable('lastname', true);
+            $this->addVariable('email', true);
+            $this->addVariable('salutation', true);
+            $this->addVariable('homepage', true);
             $this->addVariable('firstname');
             $this->addVariable('service_name');
             $this->addVariable('service_date');
@@ -171,7 +165,7 @@ class Template
      * @param $type
      * @param $isActive
      */
-    private function addVariable($type, $isActive = 0)
+    private function addVariable($type, $isActive = false)
     {
 
         $variable = new EmailTemplateVariable();

@@ -19,12 +19,11 @@
                 {{ form_errors(form) }}
                 <div>
 
-                    <div>
+                    <div style="width:300px">
                         {{ form_errors(form.email) }}
                         {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490 spaceForMandatoryMark',
-                        'placeholder': 'Customers email*' } }) }}
+                        'placeholder': 'Customers email*'} }) }}
                         <div class="mandatoryFieldMark" style="float: right">*</div>
-
                     </div>
                     {{ form_label(form.anonymous) }}
                     <div style="display:block; width:50px">
