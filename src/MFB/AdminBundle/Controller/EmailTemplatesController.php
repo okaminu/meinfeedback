@@ -277,7 +277,7 @@ class EmailTemplatesController extends Controller
         $thankYouCode = $emailTemplate->getThankYouCode();
         $fullMailCode = $templateCode . $thankYouCode;
 
-        $activeValues = $this->getActiveVariables($emailTemplate);
+        $activeValues = $this->getVariables($emailTemplate, true);
 
         $variables = $this->getAllVariables();
 
@@ -294,29 +294,14 @@ class EmailTemplatesController extends Controller
 
     /**
      * @param $emailTemplate TODO: this needs to be moved to email service
+     * @param $active
      * @return mixed
      */
-    private function getActiveVariables($emailTemplate)
+    private function getVariables($emailTemplate, $active)
     {
         $selectedVariables = $emailTemplate->getVariables()->filter(
-            function ($entity) {
-                return $entity->getIsActive() == true;
-            }
-        );
-
-        $values = $selectedVariables->getValues();
-        return $values;
-    }
-
-    /**
-     * @param $emailTemplate TODO: this needs to be moved to email service
-     * @return mixed
-     */
-    private function getInactiveVariables($emailTemplate)
-    {
-        $selectedVariables = $emailTemplate->getVariables()->filter(
-            function ($entity) {
-                return $entity->getIsActive() == false;
+            function ($entity) use($active){
+                return $entity->getIsActive() == $active;
             }
         );
 
@@ -346,7 +331,7 @@ class EmailTemplatesController extends Controller
     {
         /** @var EmailTemplate $emailTemplate  */
         $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
-        $inactiveVariables = $this->getInactiveVariables($emailTemplate);
+        $inactiveVariables = $this->getVariables($emailTemplate, false);
         $allValues = $this->getAllVariables();
         $unwantedValueCodes = array();
 
