@@ -62,16 +62,9 @@ class EmailTemplatesController extends Controller
         $accountId = $this->getUserId();
 
         $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
-        $templateManager = new TemplateManager();
-
-        /**
-         * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
-         */
-        $emailTemplate =$this->getEmailTemplate($templateManager, $templateManager::EMAIL_TEMPLATE_TYPE, $accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
@@ -117,7 +110,7 @@ class EmailTemplatesController extends Controller
             if(count($notUsedVariables) > 0){
                 $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
                 //saving to database
-                return $this->showEmailTemplate($templateManager, $accountId, $showErrors);
+                return $this->showEmailTemplate($accountId, $showErrors);
             }
 
             $emailTemplate->setTemplateCode($this->plain2html($templateCode));
@@ -280,6 +273,25 @@ class EmailTemplatesController extends Controller
             $text .= "<p>{$paragraph}</p>\n";
         }
         return $text;
+    }
+
+    /**
+     * @param TemplateManagerInterface $templateManager
+     * @param $type
+     * @param $accountId
+     * @return mixed
+     */
+    private function getEmailTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $emailTemplate = $templateManager->getTemplate(
+            $accountId,
+            $type,
+            'AccountChannel',
+            $em,
+            $this->get('translator')
+        );
+        return $emailTemplate;
     }
 
     /**
