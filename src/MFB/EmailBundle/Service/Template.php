@@ -159,7 +159,7 @@ class Template
         return array(
             'AccountChannel' => array(
                 'templateTypeId' => self::EMAIL_TEMPLATE_TYPE,
-                'default_text' => 'default_template_thank_you_page'
+                'default_text' => 'default_template_email_page'
             ),
             'ThankYou' => array(
                 'templateTypeId' => self::THANKYOU_TEMPLATE_TYPE,
