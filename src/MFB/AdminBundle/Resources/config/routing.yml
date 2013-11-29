@@ -38,10 +38,6 @@ mfb_admin_list_possible_variables:
     pattern: /template/{emailTemplateId}/list_variables
     defaults: { _controller: MFBAdminBundle:EmailTemplates:listPossibleVariables }
 
-mfb_admin_add_variable:
-    pattern: /template/{emailTemplateId}/add_variable/{variableType}
-    defaults: { _controller: MFBAdminBundle:EmailTemplates:addVariable }
-
 mfb_feedback_enable:
     pattern: /enableFeedback/{feedbackId}
     defaults: { _controller: MFBAdminBundle:Default:enable}

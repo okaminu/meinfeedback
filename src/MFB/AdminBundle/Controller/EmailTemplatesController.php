@@ -9,6 +9,7 @@ use MFB\EmailBundle\Form\ThankYouTemplateType;
 use MFB\EmailBundle\Form\VariableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use MFB\EmailBundle\Service\Template;
 
 class EmailTemplatesController extends Controller
 {
@@ -23,7 +24,8 @@ class EmailTemplatesController extends Controller
 
         $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
 
-        $filteredVariables = $emailTemplate->getVariables()->filter(function($entry) use ($typesToFilter){
+        $filteredVariables = $emailTemplate->getVariables()->filter(
+            function($entry) use ($typesToFilter){
                 return in_array($entry->getType(), $typesToFilter);
             });
 
@@ -43,6 +45,8 @@ class EmailTemplatesController extends Controller
         if ($form->isValid()) {
             $entityManager->persist($emailTemplate);
             $entityManager->flush();
+
+            $this->addUnusedVairablesToTemplate($entityManager);
             return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
         }
         return $this->render(
@@ -61,6 +65,9 @@ class EmailTemplatesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
+        /**
+         * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
+         */
         $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
@@ -68,55 +75,19 @@ class EmailTemplatesController extends Controller
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
-            $emailTemplate->setTemplateTypeId(2);
+            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
 
-            $selectedVariables = $emailTemplate->getVariables()->filter(
-                function($entity){
-                    return $entity->getIsActive() == true;
-                }
-            );
-
-            $values = $selectedVariables->getValues();
-
-            $templateCode = $emailTemplate->getTemplateCode();
-            $thankYouCode = $emailTemplate->getThankYouCode();
-
-            $fullMailCode = $templateCode.$thankYouCode;
-
-            $variables = array(
-                'link' => '#LINK#',
-                'lastname' => '#LASTNAME#',
-                'salutation' => '#SAL#',
-                'email' => '#EMAIL#',
-                'homepage' => '#HOMEPAGE#',
-                'firstname' => '#FIRSTNAME#',
-                'service_name' => '#SERVICE_NAME#',
-                'service_date' => '#SERVICE_DATE#',
-                'reference_id' => '#REFERENCE_ID#',
-                'customer_id' => '#CUSTOMER_ID#',
-                'service_id' => '#SERVICE_ID#'
-            );
-
-
-            $notUsedVariables = array();
-            foreach($values as $value){
-                $typeCode = $variables[$value->getType()];
-                $count = substr_count($fullMailCode, $typeCode);
-                if($count == 0){
-                    $notUsedVariables[] = $typeCode;
-                }
-            }
+            $notUsedVariables = $this->getUnusedVariables($emailTemplate);
 
             if(count($notUsedVariables) > 0){
                 $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
-                //saving to database
                 return $this->showEmailTemplate($accountId, $showErrors);
             }
 
-            $emailTemplate->setTemplateCode($this->plain2html($templateCode));
-            $emailTemplate->setThankYouCode($this->plain2html($thankYouCode));
+            $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
+            $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
 
-            $emailTemplate->setTemplateTypeId(TemplateManager::EMAIL_TEMPLATE_TYPE);
+            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
             $em->persist($emailTemplate);
             $em->flush();
         }
@@ -134,6 +105,9 @@ class EmailTemplatesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
+        /**
+         * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
+         */
         $thankYouTemplate = $this->get('mfb_email.template')->getThankYouTemplate($accountId);
 
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
@@ -141,7 +115,7 @@ class EmailTemplatesController extends Controller
         $thankYouForm->handleRequest($request);
         if ($thankYouForm->isValid()) {
             $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));
-            $thankYouTemplate->setTemplateTypeId(2);
+            $thankYouTemplate->setTemplateTypeId(Template::THANKYOU_TEMPLATE_TYPE);
             $em->persist($thankYouTemplate);
             $em->flush();
 
@@ -198,23 +172,6 @@ class EmailTemplatesController extends Controller
                 'emailTemplateId' => $emailTemplateId,
                 'variables' => $variables
             )
-        );
-    }
-
-    public function addVariableAction($emailTemplateId, $variableType)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $em->find('MFBEmailBundle:EmailTemplate', $emailTemplateId);
-
-        $linkVariable = new EmailTemplateVariable();
-        $linkVariable->setType($variableType);
-        $linkVariable->setValue('');
-        $linkVariable->setEmailTemplate($emailTemplate);
-        $em->persist($linkVariable);
-        $em->flush();
-
-        return $this->redirect(
-            $this->generateUrl('mfb_admin_list_possible_variables', array('emailTemplateId' => $emailTemplateId))
         );
     }
 
@@ -275,24 +232,6 @@ class EmailTemplatesController extends Controller
         return $text;
     }
 
-    /**
-     * @param TemplateManagerInterface $templateManager
-     * @param $type
-     * @param $accountId
-     * @return mixed
-     */
-    private function getEmailTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $templateManager->getTemplate(
-            $accountId,
-            $type,
-            'AccountChannel',
-            $em,
-            $this->get('translator')
-        );
-        return $emailTemplate;
-    }
 
     /**
      * @return mixed
@@ -303,4 +242,82 @@ class EmailTemplatesController extends Controller
         $accountId = $token->getUser()->getId();
         return $accountId;
     }
+
+    /**
+     * @return array TODO: this needs to be moved to email service configuration
+     */
+    private function getAllVariables()
+    {
+        $variables = array(
+            'link' => '#LINK#',
+            'lastname' => '#LASTNAME#',
+            'salutation' => '#SAL#',
+            'email' => '#EMAIL#',
+            'homepage' => '#HOMEPAGE#',
+            'firstname' => '#FIRSTNAME#',
+            'service_name' => '#SERVICE_NAME#',
+            'service_date' => '#SERVICE_DATE#',
+            'reference_id' => '#REFERENCE_ID#',
+            'customer_id' => '#CUSTOMER_ID#',
+            'service_id' => '#SERVICE_ID#'
+        );
+        return $variables;
+    }
+
+    /**
+     * Gets a list of unused variables TODO: this needs to be moved to email service
+     * @param $emailTemplate
+     * @return array
+     */
+    private function getUnusedVariables($emailTemplate)
+    {
+        $templateCode = $emailTemplate->getTemplateCode();
+        $thankYouCode = $emailTemplate->getThankYouCode();
+        $fullMailCode = $templateCode . $thankYouCode;
+
+        $activeValues = $this->getActiveVariables($emailTemplate);
+
+        $variables = $this->getAllVariables();
+
+        $notUsedVariables = array();
+        foreach ($activeValues as $value) {
+            $typeCode = $variables[$value->getType()];
+            $count = substr_count($fullMailCode, $typeCode);
+            if ($count == 0) {
+                $notUsedVariables[] = $typeCode;
+            }
+        }
+        return $notUsedVariables;
+    }
+
+    /**
+     * @param $emailTemplate TODO: this needs to be moved to email service
+     * @return mixed
+     */
+    private function getActiveVariables($emailTemplate)
+    {
+        $selectedVariables = $emailTemplate->getVariables()->filter(
+            function ($entity) {
+                return $entity->getIsActive() == true;
+            }
+        );
+
+        $values = $selectedVariables->getValues();
+        return $values;
+    }
+
+    /**
+     * @param $entityManager TODO: this needs to be moved to email service
+     */
+    private function addUnusedVairablesToTemplate($entityManager)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
+        $missingVariables = $this->getUnusedVariables($emailTemplate);
+        $templateWithMissingVars = $emailTemplate->getTemplateCode() .implode('<br>', $missingVariables);
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithMissingVars));
+        $entityManager->persist($emailTemplate);
+        $entityManager->flush();
+    }
+
 }
