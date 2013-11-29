@@ -1,6 +1,6 @@
 <?php
 
-namespace MFB\Template\Placeholder;
+namespace MFB\EmailBundle\Placeholder;
 
 interface PlaceholderInterface
 {

@@ -6,10 +6,10 @@ use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Form\EmailTemplateType;
 use MFB\EmailBundle\Form\ThankYouTemplateType;
+use MFB\Template\Interfaces\TemplateManagerInterface;
+use MFB\Template\Manager\TemplateManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MFB\Template\Manager\TemplateManager;
-use MFB\Template\Interfaces\TemplateManagerInterface;
 
 class EmailTemplatesController extends Controller
 {
@@ -51,19 +51,14 @@ class EmailTemplatesController extends Controller
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
 
-        $templateManager = new TemplateManager();
-        $thankYouTemplate = $this->getThankYouTemplate(
-            $templateManager,
-            $templateManager::THANKYOU_TEMPLATE_TYPE,
-            $accountId
-        );
+
 
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
 
         $thankYouForm->handleRequest($request);
         if ($thankYouForm->isValid()) {
             $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));
-            $thankYouTemplate->setTemplateTypeId(TemplateManager::THANKYOU_TEMPLATE_TYPE);
+            $thankYouTemplate->setTemplateTypeId(TemplateManager::ThankYouPage);
             $em->persist($thankYouTemplate);
             $em->flush();
 
@@ -83,7 +78,7 @@ class EmailTemplatesController extends Controller
         $emailTemplate =$this->getEmailTemplate($templateManager, $templateManager::EMAIL_TEMPLATE_TYPE, $accountId);
         $thankYouTemplate = $this->getThankYouTemplate(
             $templateManager,
-            $templateManager::THANKYOU_TEMPLATE_TYPE,
+            $templateManager::ThankYouPage,
             $accountId
         );
 

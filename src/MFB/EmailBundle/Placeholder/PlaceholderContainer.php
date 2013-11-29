@@ -1,12 +1,9 @@
 <?php
 
 
-namespace MFB\Template\Placeholder;
+namespace MFB\EmailBundle\Placeholder;
 
-use MFB\Template\Placeholder\Holders\PlaceholderGeneric;
-use MFB\Template\Placeholder\Holders\PlaceholderLink;
-use MFB\Template\Placeholder\Holders\PlaceholderName;
-use MFB\Template\Placeholder\Holders\PlaceholderUnsubscribe;
+use MFB\EmailBundle\Placeholder\Holders\PlaceholderGeneric;
 
 class PlaceholderContainer
 {
