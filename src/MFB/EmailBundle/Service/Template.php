@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
-use MFB\EmailBundle\Template\ThankYouTemplate;
+use MFB\EmailBundle\Template\TemplateFactory;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class Template
@@ -116,9 +116,8 @@ class Template
             $name
         );
 
-        //todo Create Factory
-        $templateClass = $name . 'Template';
-        $template = new $templateClass();
+        $templateFactory =new TemplateFactory();
+        $template = $templateFactory->get($name);
 
         return $template
             ->setContent($templateEntity->getTemplateCode())
