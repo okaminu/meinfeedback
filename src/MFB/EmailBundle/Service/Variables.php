@@ -17,7 +17,7 @@ class Variables
      * @var array
      */
     private $allVariables = array(
-        'link', 'firstname', 'lastname', 'sal', 'homepage',
+        'link', 'firstname', 'lastname', 'sal', 'homepage', 'email',
         'service_name', 'service_date', 'reference_id', 'customer_id', 'service_id'
     );
 
