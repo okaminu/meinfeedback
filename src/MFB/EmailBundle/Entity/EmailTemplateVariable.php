@@ -29,9 +29,17 @@ class EmailTemplateVariable
     private $type;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_active", type="boolean", options={"default" : 0})
+     */
+    private $isActive = 0;
+
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=255)
+     * @ORM\Column(name="value", type="string", length=255, nullable=true)
      */
     private $value;
 
@@ -40,6 +48,7 @@ class EmailTemplateVariable
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      **/
     private $emailTemplate;
+
 
     /**
      * Get id
@@ -113,4 +122,27 @@ class EmailTemplateVariable
         return $this->emailTemplate;
     }
 
+
+    /**
+     * Set isActive
+     *
+     * @param integer $isActive
+     * @return EmailTemplateVariable
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return integer 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
 }
