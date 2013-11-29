@@ -8,6 +8,7 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Template\TemplateFactory;
+use MFB\EmailBundle\Template\ThankYouTemplate;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class Template
@@ -119,12 +120,17 @@ class Template
             ->getTranslation();
     }
 
+    /**
+     * Get thank you text
+     *
+     * @param Customer $customer
+     * @return mixed
+     *
+     * @deprecated Use getText instead
+     */
     public function getThankYouText(Customer $customer)
     {
-        $templateEntity = $this->getTemplate(
-            $customer->getAccountId(),
-            'ThankYou'
-        );
+        $templateEntity = $this->getThankYouTemplate($customer->getAccountId());
 
         $template = new ThankYouTemplate();
         $templateText = $template
@@ -152,7 +158,7 @@ class Template
         return array(
             'AccountChannel' => array(
                 'templateTypeId' => self::EMAIL_TEMPLATE_TYPE,
-                'default_text' => 'default_template_email_page'
+                'default_text' => 'default_template_body'
             ),
             'ThankYou' => array(
                 'templateTypeId' => self::THANKYOU_TEMPLATE_TYPE,
