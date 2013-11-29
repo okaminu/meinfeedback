@@ -6,6 +6,11 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\FeedbackException;
 
+/**
+ * Class Feedback
+ * @package MFB\FeedbackBundle\Manager
+ * @deprecated We should leave symfony handle joins
+ */
 class Feedback
 {
     private $feedbackContent;

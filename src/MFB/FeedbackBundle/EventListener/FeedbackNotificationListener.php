@@ -7,7 +7,7 @@ use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class CreateFeedbackListener
+class FeedbackNotificationListener
 {
     private $sender;
 
@@ -32,7 +32,8 @@ class CreateFeedbackListener
                 'mfb_feedback_enable',
                 array('feedbackId' => $event->getFeedbackId()),
                 UrlGeneratorInterface::ABSOLUTE_URL
-            )
+            ),
+            $event->getInvite()
         );
 
     }

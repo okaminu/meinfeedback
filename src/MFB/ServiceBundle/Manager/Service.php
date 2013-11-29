@@ -4,6 +4,11 @@ namespace MFB\ServiceBundle\Manager;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 
+/**
+ * Class Service
+ * @package MFB\ServiceBundle\Manager
+ * @deprecated We should leave symfony handle joins
+ */
 class Service
 {
     private $serviceDescription;

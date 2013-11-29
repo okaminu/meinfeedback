@@ -9,8 +9,8 @@ use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
-use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 
+use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -76,7 +76,7 @@ class InviteController extends Controller
             );
         }
 
-        $event = new CustomerAccountEvent($feedbackId, $account, $customer, $request);
+        $event = new CustomerAccountEvent($feedbackId, $account, $customer, $request, $invite);
 
         $dispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);
 

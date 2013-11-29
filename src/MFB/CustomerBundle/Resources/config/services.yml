@@ -1,6 +1,6 @@
 parameters:
     mfb_customer.event_listener.new_customer.class: MFB\CustomerBundle\EventListener\NewCustomerListener
-    mfb_customer.event_listener.create_feedback.class: MFB\FeedbackBundle\EventListener\CreateFeedbackListener
+    mfb_customer.event_listener.create_feedback.class: MFB\FeedbackBundle\EventListener\FeedbackNotificationListener
 
 services:
     mfb_customer.listener.new_customer:

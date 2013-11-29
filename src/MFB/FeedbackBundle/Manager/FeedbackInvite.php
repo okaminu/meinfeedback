@@ -3,6 +3,11 @@ namespace MFB\FeedbackBundle\Manager;
 
 use MFB\FeedbackBundle\Entity\FeedbackInvite as FeedbackInviteEntity;
 
+/**
+ * Class FeedbackInvite
+ * @package MFB\FeedbackBundle\Manager
+ * @deprecated We should leave symfony handle joins
+ */
 class FeedbackInvite
 {
     private $accountId;
