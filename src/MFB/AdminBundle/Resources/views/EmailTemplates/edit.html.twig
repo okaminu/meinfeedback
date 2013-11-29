@@ -8,6 +8,11 @@
                 <div class="sectionTitle">
                     {% trans %} Email template {% endtrans %}
                 </div>
+
+                <div class="errors alert-error">
+                    {{ errors }}
+                </div>
+
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
 
