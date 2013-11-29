@@ -2,6 +2,7 @@
 
 namespace MFB\EmailBundle\Template;
 
+use MFB\CustomerBundle\Entity\Customer;
 use MFB\EmailBundle\Placeholder\PlaceholderContainer;
 
 class ThankYouTemplate
@@ -42,6 +43,12 @@ class ThankYouTemplate
         $this->getPlaceholder('sal')
             ->setUserDataValue(
                 $this->getCustomer()->getSalutation()
+            )
+        ;
+
+        $this->getPlaceholder('email')
+            ->setUserDataValue(
+                $this->getCustomer()->getEmail()
             )
         ;
 
@@ -105,7 +112,7 @@ class ThankYouTemplate
     }
 
     /**
-     * @return mixed
+     * @return Customer
      */
     public function getCustomer()
     {
