@@ -22,6 +22,13 @@
                 das folgende Feedback gegeben: <br>
                 {{ feedbackText }}
 
+                {% if invite is defined %}
+                <p>
+                    {% trans %} Feedback is created from invite link. {% endtrans %} <br/>
+                    {% trans %} Invite was sent: {% endtrans %}  {{ invite.createdAt|date('c') }}
+                </p>
+                {% endif %}
+
                 <p>{% trans %} Currently feedback is disabled. Enable it by pressing this link: {% endtrans %}<br/>
                 <a href="{{ enabaleFeedbackLink }}">{{ enabaleFeedbackLink }}</a></p>
 

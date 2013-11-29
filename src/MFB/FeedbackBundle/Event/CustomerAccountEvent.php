@@ -12,17 +12,17 @@ class CustomerAccountEvent extends Event
 {
     private $feedbackId;
     private $account;
-
     private $customer;
-
     private $request;
+    private $invite;
 
-    public function __construct($feedbackId, Account $account, Customer $customer, Request $request)
+    public function __construct($feedbackId, Account $account, Customer $customer, Request $request, $invite = null)
     {
         $this->feedbackId = $feedbackId;
         $this->account = $account;
         $this->customer = $customer;
         $this->request = $request;
+        $this->invite = $invite;
     }
 
     /**
@@ -57,5 +57,17 @@ class CustomerAccountEvent extends Event
         return $this->request;
     }
 
+    /**
+     * @return null
+     */
+    public function getInvite()
+    {
+        return $this->invite;
+    }
+
+    public function hasInvite()
+    {
+        return null === $this->invite;
+    }
 
 }
