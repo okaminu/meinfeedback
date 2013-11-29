@@ -9,6 +9,7 @@ use MFB\EmailBundle\Form\ThankYouTemplateType;
 use MFB\EmailBundle\Form\VariableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use MFB\EmailBundle\Service\Template;
 
 class EmailTemplatesController extends Controller
 {
@@ -68,7 +69,7 @@ class EmailTemplatesController extends Controller
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
-            $emailTemplate->setTemplateTypeId(2);
+            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
 
             $selectedVariables = $emailTemplate->getVariables()->filter(
                 function($entity){
@@ -116,7 +117,7 @@ class EmailTemplatesController extends Controller
             $emailTemplate->setTemplateCode($this->plain2html($templateCode));
             $emailTemplate->setThankYouCode($this->plain2html($thankYouCode));
 
-            $emailTemplate->setTemplateTypeId(TemplateManager::EMAIL_TEMPLATE_TYPE);
+            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
             $em->persist($emailTemplate);
             $em->flush();
         }
@@ -141,7 +142,7 @@ class EmailTemplatesController extends Controller
         $thankYouForm->handleRequest($request);
         if ($thankYouForm->isValid()) {
             $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));
-            $thankYouTemplate->setTemplateTypeId(2);
+            $thankYouTemplate->setTemplateTypeId(Template::THANKYOU_TEMPLATE_TYPE);
             $em->persist($thankYouTemplate);
             $em->flush();
 
@@ -198,23 +199,6 @@ class EmailTemplatesController extends Controller
                 'emailTemplateId' => $emailTemplateId,
                 'variables' => $variables
             )
-        );
-    }
-
-    public function addVariableAction($emailTemplateId, $variableType)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $em->find('MFBEmailBundle:EmailTemplate', $emailTemplateId);
-
-        $linkVariable = new EmailTemplateVariable();
-        $linkVariable->setType($variableType);
-        $linkVariable->setValue('');
-        $linkVariable->setEmailTemplate($emailTemplate);
-        $em->persist($linkVariable);
-        $em->flush();
-
-        return $this->redirect(
-            $this->generateUrl('mfb_admin_list_possible_variables', array('emailTemplateId' => $emailTemplateId))
         );
     }
 
@@ -275,24 +259,6 @@ class EmailTemplatesController extends Controller
         return $text;
     }
 
-    /**
-     * @param TemplateManagerInterface $templateManager
-     * @param $type
-     * @param $accountId
-     * @return mixed
-     */
-    private function getEmailTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $templateManager->getTemplate(
-            $accountId,
-            $type,
-            'AccountChannel',
-            $em,
-            $this->get('translator')
-        );
-        return $emailTemplate;
-    }
 
     /**
      * @return mixed
