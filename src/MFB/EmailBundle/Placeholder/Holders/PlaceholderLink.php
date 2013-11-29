@@ -21,7 +21,8 @@ class PlaceholderLink implements PlaceholderInterface
     }
 
     /**
-     * @param mixed $accountId
+     * @param $accountId
+     * @return $this
      */
     public function setAccountId($accountId)
     {
@@ -30,7 +31,8 @@ class PlaceholderLink implements PlaceholderInterface
     }
 
     /**
-     * @param string $baseUrl
+     * @param $baseUrl
+     * @return $this
      */
     public function setBaseUrl($baseUrl)
     {
@@ -39,7 +41,8 @@ class PlaceholderLink implements PlaceholderInterface
     }
 
     /**
-     * @param mixed $orderId
+     * @param $orderId
+     * @return $this
      */
     public function setOrderId($orderId)
     {

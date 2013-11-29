@@ -67,19 +67,8 @@ class PlaceholderContainer
         $cont->setPlaceholders(new PlaceholderGeneric('homepage_url'));
         $cont->setPlaceholders(new PlaceholderGeneric('gender'));
         $cont->setPlaceholders(new PlaceholderGeneric('sal'));
+        $cont->setPlaceholders(new PlaceholderGeneric('email'));
 
-//        $cont->setPlaceholders(new PlaceholderLink());
-//        $cont->setPlaceholders(new PlaceholderName());
-//        $cont->setPlaceholders(new PlaceholderGeneric('first_name'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('last_name'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('company_name'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('selling_channel'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('date'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('order_date'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('product_name'));
-//        $cont->setPlaceholders(new PlaceholderGeneric('product_names'));
-//        $cont->setPlaceholders(new PlaceholderUnsubscribe());
-//        $cont->setPlaceholders(new PlaceholderGeneric('email'));
         return $cont;
     }
 }

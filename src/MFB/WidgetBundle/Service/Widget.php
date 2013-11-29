@@ -3,12 +3,12 @@
 
 namespace MFB\WidgetBundle\Service;
 
-use MFB\WidgetBundle\Director\MainWidgetDirector;
-use MFB\FeedbackBundle\Specification as Spec;
+use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
-use Doctrine\ORM\EntityManager;
+use MFB\FeedbackBundle\Specification as Spec;
 use MFB\WidgetBundle\Builder\BuilderInterface;
+use MFB\WidgetBundle\Director\MainWidgetDirector;
 use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -109,4 +109,4 @@ class Widget
         );
     }
 
-} 
+}
