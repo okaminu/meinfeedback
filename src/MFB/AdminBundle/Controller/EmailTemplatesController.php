@@ -24,7 +24,8 @@ class EmailTemplatesController extends Controller
 
         $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
 
-        $filteredVariables = $emailTemplate->getVariables()->filter(function($entry) use ($typesToFilter){
+        $filteredVariables = $emailTemplate->getVariables()->filter(
+            function($entry) use ($typesToFilter){
                 return in_array($entry->getType(), $typesToFilter);
             });
 
@@ -44,6 +45,8 @@ class EmailTemplatesController extends Controller
         if ($form->isValid()) {
             $entityManager->persist($emailTemplate);
             $entityManager->flush();
+
+            $this->addUnusedVairablesToTemplate($entityManager);
             return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
         }
         return $this->render(
@@ -78,7 +81,6 @@ class EmailTemplatesController extends Controller
 
             if(count($notUsedVariables) > 0){
                 $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
-                //saving to database
                 return $this->showEmailTemplate($accountId, $showErrors);
             }
 
@@ -303,4 +305,19 @@ class EmailTemplatesController extends Controller
         $values = $selectedVariables->getValues();
         return $values;
     }
+
+    /**
+     * @param $entityManager TODO: this needs to be moved to email service
+     */
+    private function addUnusedVairablesToTemplate($entityManager)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
+        $missingVariables = $this->getUnusedVariables($emailTemplate);
+        $templateWithMissingVars = $emailTemplate->getTemplateCode() .implode('<br>', $missingVariables);
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithMissingVars));
+        $entityManager->persist($emailTemplate);
+        $entityManager->flush();
+    }
+
 }

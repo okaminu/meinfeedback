@@ -42,7 +42,9 @@ class Template
 
         $templateTypeId = $this->getTemplateIdByName($name);
 
-        $this->emailTemplate = $this->em->getRepository('MFBEmailBundle:EmailTemplate')->findOneBy(
+        $repo = $this->em->getRepository('MFBEmailBundle:EmailTemplate');
+        $repo->clear();
+        $this->emailTemplate = $repo->findOneBy(
             array(
                 'accountId' => $accountId,
                 'name' => $name
