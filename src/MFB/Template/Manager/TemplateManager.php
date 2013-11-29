@@ -2,12 +2,12 @@
 
 namespace MFB\Template\Manager;
 
-use MFB\Template\Interfaces\TemplateManagerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
+use MFB\Template\Interfaces\TemplateManagerInterface;
 use MFB\Template\ThankYouTemplate;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TemplateManager implements TemplateManagerInterface
 {
@@ -61,6 +61,8 @@ class TemplateManager implements TemplateManagerInterface
 
         return $this->emailTemplate;
     }
+
+
 
     /**
      * Hardcoded method for default text

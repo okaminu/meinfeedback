@@ -9,8 +9,6 @@ use MFB\EmailBundle\Form\ThankYouTemplateType;
 use MFB\EmailBundle\Form\VariableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MFB\Template\Manager\TemplateManager;
-use MFB\Template\Interfaces\TemplateManagerInterface;
 
 class EmailTemplatesController extends Controller
 {
@@ -19,15 +17,9 @@ class EmailTemplatesController extends Controller
     public function selectVariablesAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $templateManager = new TemplateManager();
-        /**
-         * @var EmailTemplate $emailTemplate
-         */
-        $emailTemplate =$this->getEmailTemplate(
-            $templateManager,
-            $templateManager::EMAIL_TEMPLATE_TYPE,
-            $this->getUserId()
-        );
+
+        /** @var EmailTemplate $emailTemplate  */
+        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
 
         $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
 
@@ -69,20 +61,19 @@ class EmailTemplatesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
-        $templateManager = new TemplateManager();
-        $emailTemplate =$this->getEmailTemplate($templateManager, $templateManager::EMAIL_TEMPLATE_TYPE, $accountId);
+        $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
-            $emailTemplate->setTemplateTypeId(TemplateManager::EMAIL_TEMPLATE_TYPE);
+            $emailTemplate->setTemplateTypeId(2);
             $em->persist($emailTemplate);
             $em->flush();
         }
 
-        return $this->showEmailTemplate($templateManager, $accountId);
+        return $this->showEmailTemplate($accountId);
     }
 
 
@@ -95,36 +86,32 @@ class EmailTemplatesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
-
+        $thankYouTemplate = $this->get('mfb_email.template')->getThankYouTemplate($accountId);
 
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
 
         $thankYouForm->handleRequest($request);
         if ($thankYouForm->isValid()) {
             $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));
-            $thankYouTemplate->setTemplateTypeId(TemplateManager::ThankYouPage);
+            $thankYouTemplate->setTemplateTypeId(2);
             $em->persist($thankYouTemplate);
             $em->flush();
 
             return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
         }
 
-        return $this->showEmailTemplate($templateManager, $accountId);
+        return $this->showEmailTemplate($accountId);
     }
 
     /**
-     * @param $templateManager
      * @param $accountId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showEmailTemplate($templateManager, $accountId)
+    public function showEmailTemplate($accountId)
     {
-        $emailTemplate =$this->getEmailTemplate($templateManager, $templateManager::EMAIL_TEMPLATE_TYPE, $accountId);
-        $thankYouTemplate = $this->getThankYouTemplate(
-            $templateManager,
-            $templateManager::ThankYouPage,
-            $accountId
-        );
+        /** @var EmailTemplate $emailTemplate  */
+        $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
+        $thankYouTemplate = $this->get('mfb_email.template')->getThankYouTemplate($accountId);
 
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
         $editForm = $this->createEditForm($emailTemplate);
@@ -180,8 +167,6 @@ class EmailTemplatesController extends Controller
             $this->generateUrl('mfb_admin_list_possible_variables', array('emailTemplateId' => $emailTemplateId))
         );
     }
-
-
 
     /**
      * Creates a form to edit a EmailTemplate entity.
@@ -257,25 +242,6 @@ class EmailTemplatesController extends Controller
             $this->get('translator')
         );
         return $emailTemplate;
-    }
-
-    /**
-     * @param TemplateManagerInterface $templateManager
-     * @param $type
-     * @param $accountId
-     * @return mixed
-     */
-    private function getThankYouTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $thankYouTemplate = $templateManager->getTemplate(
-            $accountId,
-            $type,
-            'ThankYouPage',
-            $em,
-            $this->get('translator')
-        );
-        return $thankYouTemplate;
     }
 
     /**

@@ -1,6 +1,7 @@
 parameters:
     mfb_email.sender.class: MFB\EmailBundle\Service\Sender
     mfb_email.variables.class: MFB\EmailBundle\Service\Variables
+    mfb_email.template.class: MFB\EmailBundle\Service\Template
 
 services:
     mfb_email.sender:
@@ -10,4 +11,7 @@ services:
     mfb_email.variables:
         class: %mfb_email.variables.class%
         arguments: [@translator]
-#        arguments: [@service_id, "plain_value", %parameter%]
+
+    mfb_email.template:
+        class: %mfb_email.template.class%
+        arguments: [@doctrine.orm.default_entity_manager, @translator]

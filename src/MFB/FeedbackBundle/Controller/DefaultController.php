@@ -14,7 +14,6 @@ use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
-use MFB\Template\Manager\TemplateManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,7 +100,7 @@ class DefaultController extends Controller
                 return $this->render(
                     'MFBFeedbackBundle:Invite:thank_you.html.twig',
                     array(
-                        'thankyou_text' => $this->getThankYouText($em, $account, $customer),
+                        'thankyou_text' => $this->get('mfb_email.template')->getText($customer, 'ThankYou'),
                         'homepage' => $return_url
                     )
                 );
@@ -141,25 +140,7 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $em
-     * @param $account
-     * @param $customer
-     * @return mixed
-     */
-    protected function getThankYouText($em, $account, $customer)
-    {
-        $templateManager = new TemplateManager();
-        $templateText = $templateManager->getThankYouText(
-            $em,
-            $account->getId(),
-            $customer,
-            $this->get('translator')
-        );
-        return $templateText;
-    }
-
-    /**
+     /**
      * @param $serviceDate
      * @param $account
      * @param $accountChannelId
