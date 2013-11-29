@@ -1,8 +1,8 @@
 <?php
 
-namespace MFB\Template\Placeholder\Holders;
+namespace MFB\EmailBundle\Placeholder\Holders;
 
-use MFB\Template\Placeholder\PlaceholderInterface;
+use MFB\EmailBundle\Placeholder\PlaceholderInterface;
 
 class PlaceholderUnsubscribe implements PlaceholderInterface
 {

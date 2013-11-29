@@ -1,10 +1,11 @@
 <?php
 
-namespace MFB\Template;
+namespace MFB\EmailBundle\Template;
 
-use MFB\Template\Placeholder\PlaceholderContainer;
+use MFB\EmailBundle\Placeholder\PlaceholderContainer;
 
-class ThankYouTemplate {
+class ThankYouTemplate
+{
 
     protected $template;
 

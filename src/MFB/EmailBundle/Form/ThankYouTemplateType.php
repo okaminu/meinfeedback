@@ -41,5 +41,4 @@ class ThankYouTemplateType extends AbstractType
         return 'mfb_emailbundle_emailtemplate';
     }
 
-   
 }
