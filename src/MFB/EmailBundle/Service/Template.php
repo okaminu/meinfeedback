@@ -151,7 +151,7 @@ class Template
     public function getDefaultTemplateCode($name)
     {
         $map = $this->templatesMap();
-        return $map[$name]['default_text'];
+        return $this->translator->trans($map[$name]['default_text']);
     }
 
     private function templatesMap()

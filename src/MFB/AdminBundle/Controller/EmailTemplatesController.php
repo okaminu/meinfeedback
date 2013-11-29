@@ -226,25 +226,6 @@ class EmailTemplatesController extends Controller
     }
 
     /**
-     * @param TemplateManagerInterface $templateManager
-     * @param $type
-     * @param $accountId
-     * @return mixed
-     */
-    private function getEmailTemplate(TemplateManagerInterface $templateManager, $type, $accountId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $templateManager->getTemplate(
-            $accountId,
-            $type,
-            'AccountChannel',
-            $em,
-            $this->get('translator')
-        );
-        return $emailTemplate;
-    }
-
-    /**
      * @return mixed
      */
     public function getUserId()
