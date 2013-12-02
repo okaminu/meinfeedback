@@ -1,11 +1,11 @@
 <div style="margin-top: 10px">
 <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300; text-align: center">{{ title }}</div>
 <div class="iconDisplay">
-    <a href={{ url('mein_feedback_home_homepage') }} target='_blank'><img src="{{ iconImage }}"></a>
+    <a href="{{ widgetLink }}" target='_blank'><img src="{{ iconImage }}"></a>
 </div>
 
 <div class="iconCode">
-    <textarea>{% verbatim %} <a target='_blank' href={% endverbatim %}{{ url('mein_feedback_home_homepage') }}{% verbatim %}>
+    <textarea>{% verbatim %} <a target='_blank' href={% endverbatim %}{{ widgetLink }}{% verbatim %}>
             <img src="{% endverbatim %}{{ iconImage }}{% verbatim %}"> </a>{% endverbatim %}
     </textarea>
 </div>
