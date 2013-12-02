@@ -20,13 +20,16 @@ class Template
 
     private $emailTemplate;
 
+    private $allVariables;
+
     const EMAIL_TEMPLATE_TYPE = 1;
     const THANKYOU_TEMPLATE_TYPE = 2;
 
-    public function __construct(ObjectManager $em, TranslatorInterface $translator)
+    public function __construct(ObjectManager $em, TranslatorInterface $translator, $variables)
     {
         $this->em = $em;
         $this->translator = $translator;
+        $this->allVariables = $variables;
     }
 
     public function createTemplate($accountId, $templateType)
@@ -62,17 +65,15 @@ class Template
             $this->emailTemplate->setTemplateCode($this->getDefaultTemplateCode($name));
             $this->emailTemplate->setThankYouCode($this->translator->trans('default_template_thank_you'));
 
-            $this->addVariable('link', true);
-            $this->addVariable('lastname', true);
-            $this->addVariable('email', true);
-            $this->addVariable('salutation', true);
-            $this->addVariable('homepage', true);
-            $this->addVariable('firstname');
-            $this->addVariable('service_name');
-            $this->addVariable('service_date');
-            $this->addVariable('reference_id');
-            $this->addVariable('customer_id');
-            $this->addVariable('service_id');
+            foreach($this->allVariables['mandatory'] as $key => $value)
+            {
+                $this->addVariable($key, true);
+            }
+
+            foreach($this->allVariables['optional'] as $key => $value)
+            {
+                $this->addVariable($key);
+            }
 
             $this->em->persist($this->emailTemplate);
             $this->em->flush();
@@ -187,20 +188,7 @@ class Template
      */
     private function getAllVariables()
     {
-        $variables = array(
-            'link' => '#LINK#',
-            'lastname' => '#LASTNAME#',
-            'salutation' => '#SAL#',
-            'email' => '#EMAIL#',
-            'homepage' => '#HOMEPAGE#',
-            'firstname' => '#FIRSTNAME#',
-            'service_name' => '#SERVICE_NAME#',
-            'service_date' => '#SERVICE_DATE#',
-            'reference_id' => '#REFERENCE_ID#',
-            'customer_id' => '#CUSTOMER_ID#',
-            'service_id' => '#SERVICE_ID#'
-        );
-        return $variables;
+        return array_merge($this->allVariables['mandatory'], $this->allVariables['optional']);
     }
 
     /**

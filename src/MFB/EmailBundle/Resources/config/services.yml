@@ -2,6 +2,20 @@ parameters:
     mfb_email.sender.class: MFB\EmailBundle\Service\Sender
     mfb_email.variables.class: MFB\EmailBundle\Service\Variables
     mfb_email.template.class: MFB\EmailBundle\Service\Template
+    mfb_email.variables.values:
+      mandatory:
+        link: '#LINK#'
+        lastname: '#LASTNAME#'
+        salutation: '#SAL#'
+        email: '#EMAIL#'
+        homepage: '#HOMEPAGE#'
+      optional:
+        firstname: '#FIRSTNAME#'
+        service_name: '#SERVICE_NAME#'
+        service_date: '#SERVICE_DATE#'
+        reference_id: '#REFERENCE_ID#'
+        customer_id: '#CUSTOMER_ID#'
+        service_id: '#SERVICE_ID#'
 
 services:
     mfb_email.sender:
@@ -14,4 +28,4 @@ services:
 
     mfb_email.template:
         class: %mfb_email.template.class%
-        arguments: [@doctrine.orm.default_entity_manager, @translator]
+        arguments: [@doctrine.orm.default_entity_manager, @translator, %mfb_email.variables.values%]
