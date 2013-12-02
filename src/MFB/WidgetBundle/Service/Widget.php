@@ -24,13 +24,17 @@ class Widget
 
     protected $imageBuilder;
 
-    public function __construct(EntityManager $em, BuilderInterface $imageBuilder, ContainerInterface $container)
+    protected $params;
+
+    public function __construct(EntityManager $em, BuilderInterface $imageBuilder, ContainerInterface $container, $params)
     {
         $this->em = $em;
 
         $this->imageBuilder = $imageBuilder;
 
         $this->container = $container;
+
+        $this->params = $params;
     }
 
     /**
@@ -59,6 +63,8 @@ class Widget
         $withRatingsSpecification = $this->getFeedbackWithRatingSpecification($account, $accountChannel);
         $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbackCount($withRatingsSpecification);
         $feedbackRatingAverage = round($this->getFeedbackRepo()->getRatingsAverage($withRatingsSpecification), 1);
+
+        $this->filterComments($lastFeedbacks);
 
         $imageDirector = new MainWidgetDirector($this->imageBuilder);
         return $imageDirector->build(
@@ -107,6 +113,24 @@ class Widget
             new Spec\FilterIsEnabled(),
             new Spec\FilterWithRating()
         );
+    }
+
+    /**
+     * @param $lastFeedbacks
+     */
+    private function filterComments($lastFeedbacks)
+    {
+        foreach ($lastFeedbacks as $feedback) {
+            $filteredText = $feedback->getContent();
+            $textArray = explode(' ', $feedback->getContent());
+
+            if (count($textArray) > $this->params['widgetWordCount']) {
+                $filteredTextArray = array_slice($textArray, 0, $this->params['widgetWordCount']);
+                $filteredTextArray[] = $this->params['lastWordEnding'];
+                $filteredText = implode(' ', $filteredTextArray);
+            }
+            $feedback->setContent($filteredText);
+        }
     }
 
 }
