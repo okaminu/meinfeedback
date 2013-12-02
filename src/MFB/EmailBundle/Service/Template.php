@@ -175,11 +175,119 @@ class Template
      */
     private function addVariable($type, $isActive = false)
     {
-
         $variable = new EmailTemplateVariable();
         $variable->setType($type);
         $variable->setIsActive($isActive);
         $variable->setEmailTemplate($this->emailTemplate);
         $this->emailTemplate->addVariable($variable);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAllVariables()
+    {
+        $variables = array(
+            'link' => '#LINK#',
+            'lastname' => '#LASTNAME#',
+            'salutation' => '#SAL#',
+            'email' => '#EMAIL#',
+            'homepage' => '#HOMEPAGE#',
+            'firstname' => '#FIRSTNAME#',
+            'service_name' => '#SERVICE_NAME#',
+            'service_date' => '#SERVICE_DATE#',
+            'reference_id' => '#REFERENCE_ID#',
+            'customer_id' => '#CUSTOMER_ID#',
+            'service_id' => '#SERVICE_ID#'
+        );
+        return $variables;
+    }
+
+    /**
+     * Gets a list of unused variables
+     * @param $emailTemplate
+     * @return array
+     */
+    public function getMandatoryAndUnusedVariables($emailTemplate)
+    {
+        $templateCode = $emailTemplate->getTemplateCode();
+        $thankYouCode = $emailTemplate->getThankYouCode();
+        $fullMailCode = $templateCode . $thankYouCode;
+
+        $activeValues = $this->getVariables($emailTemplate, true);
+
+        $variables = $this->getAllVariables();
+
+        $notUsedVariables = array();
+        foreach ($activeValues as $value) {
+            $typeCode = $variables[$value->getType()];
+            $count = substr_count($fullMailCode, $typeCode);
+            if ($count == 0) {
+                $notUsedVariables[] = $typeCode;
+            }
+        }
+        return $notUsedVariables;
+    }
+
+    /**
+     * @param $emailTemplate
+     * @param $active
+     * @return mixed
+     */
+    private function getVariables($emailTemplate, $active)
+    {
+        $selectedVariables = $emailTemplate->getVariables()->filter(
+            function ($entity) use($active){
+                return $entity->getIsActive() == $active;
+            }
+        );
+
+        $values = $selectedVariables->getValues();
+        return $values;
+    }
+
+    public function addMandatoryVariables($emailTemplate)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $missingVariables = $this->getMandatoryAndUnusedVariables($emailTemplate);
+
+        $templateWithMissingVars = $emailTemplate->getTemplateCode() .implode('<br>', $missingVariables);
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithMissingVars));
+        $this->em->persist($emailTemplate);
+        $this->em->flush();
+    }
+
+    public function removesUnwantedVariables($emailTemplate)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $inactiveVariables = $this->getVariables($emailTemplate, false);
+        $allValues = $this->getAllVariables();
+        $unwantedValueCodes = array();
+
+        foreach ($inactiveVariables as $variable) {
+            $unwantedValueCodes[] = $allValues[$variable->getType()];
+        }
+
+        $templateWithoutVars = str_replace($unwantedValueCodes, '', $emailTemplate->getTemplateCode());
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithoutVars));
+        $this->em->persist($emailTemplate);
+        $this->em->flush();
+    }
+
+    public function html2plain($html)
+    {
+        $converter = new \MFB\HtmlToText\Converter();
+        return $converter->html2text($html);
+    }
+
+    public function plain2html($text)
+    {
+        $paragraphs = preg_split('#\s*\n\s*\n\s*#', $text);
+        $text = '';
+        foreach ($paragraphs as $paragraph) {
+            $paragraph = str_replace("\n", "<br/>", $paragraph);
+            $text .= "<p>{$paragraph}</p>\n";
+        }
+        return $text;
     }
 }
