@@ -14,10 +14,10 @@
 
     <h3 style="margin-top: 90px; margin-left: 20px">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
-    {% if feedbackAverage > 0 %}
-        <div style="margin-left: 20px">Active feedback average: {{ feedbackAverage }}</div>
+    {% if ratingAverage > 0 %}
+        <div style="margin-left: 20px">Active ratings average: {{ ratingAverage }}</div>
     {% endif %}
-    <div style="margin-left: 20px">Total active feedbacks: {{ feedbackCount }}</div>
+    <div style="margin-left: 20px">Total active ratings: {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">

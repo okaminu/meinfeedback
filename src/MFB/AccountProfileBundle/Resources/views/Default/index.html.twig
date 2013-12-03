@@ -19,10 +19,10 @@
     <!-- Home Page -->
 
     <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks für {{ account_channel_name }}</h3>
-    {% if feedbackAverage > 0 %}
-        <div style="margin-left: 20px">Average: {{ feedbackAverage }}</div>
+    {% if ratingAverage > 0 %}
+        <div style="margin-left: 20px">Ratings average: {{ ratingAverage }}</div>
     {% endif %}
-    <div style="margin-left: 20px">Total feedbacks: {{ feedbackCount }}</div>
+    <div style="margin-left: 20px">Total ratings: {{ ratingCount }}</div>
 
     <div class="feedbackDisplayForm">
         {% for feedback in feedbackList %}

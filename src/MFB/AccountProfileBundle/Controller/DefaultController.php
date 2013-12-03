@@ -32,9 +32,8 @@ class DefaultController extends Controller
         $feedbackSpecification = $preBuiltSpec->getFeedbackSpecification();
         $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
 
-
         $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
-        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackSpecification);
+        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackRatingSpecification);
         $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
 
         $feedbackList = $feedbackRepo->findSortedFeedbacks($feedbackSpecification, 'DESC', 100);
@@ -45,8 +44,8 @@ class DefaultController extends Controller
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
                 'feedbackList'=>$feedbackList,
-                'feedbackCount' => $feedbackCount,
-                'feedbackAverage' => $feedbackRatingAverage
+                'ratingCount' => $feedbackCount,
+                'ratingAverage' => $feedbackRatingAverage
             )
         );
     }

@@ -35,14 +35,11 @@ class DefaultController extends Controller
         );
 
         $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
-        $feedbackSpecification = $preBuiltSpec->getFeedbackSpecification();
         $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
 
-
         $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
-        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackSpecification);
+        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackRatingSpecification);
         $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
-
 
         $feedbackList = $em
             ->getRepository('MFBFeedbackBundle:Feedback')
@@ -58,8 +55,8 @@ class DefaultController extends Controller
             'MFBAdminBundle:Default:index.html.twig',
             array(
                 'feedbackList' => $feedbackList,
-                'feedbackCount' => $feedbackCount,
-                'feedbackAverage' => $feedbackRatingAverage
+                'ratingCount' => $feedbackCount,
+                'ratingAverage' => $feedbackRatingAverage
             )
         );
     }
