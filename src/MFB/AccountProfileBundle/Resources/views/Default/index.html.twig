@@ -22,7 +22,8 @@
 
     <div style="padding:10px">
         {% for feedback in feedbackList %}
-
+            <div style="margin:20px 10px">
+            <div class="username">Anonymous says:</div>
             {%  if feedback.rating %}
                 <div class="stars_rating">
                     <div class="stars_gray_small">
@@ -41,14 +42,12 @@
                     </td>
 
                     <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                        <time itemprop="datePublished" datetime="{{ feedback.createdAt|date('c') }}">
-                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
-                        </time>
+                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
                     </td>
                 </tr>
                 </tbody></table>
             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-            <div class="username">Anonymous says:</div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

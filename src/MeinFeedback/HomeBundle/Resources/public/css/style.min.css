@@ -1463,3 +1463,9 @@ a.footer_link:hover {
     margin:5px 40px;
 }
 
+.activeFeedbackTitle{
+    float: right;
+    position:relative;
+    top:30px;
+}
+

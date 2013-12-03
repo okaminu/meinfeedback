@@ -16,6 +16,7 @@
 .ui-sortable li.ui-state-default {
     position: relative;
     cursor: pointer;
+    margin: 25px 0px;
 }
 .ui-sortable li.ui-state-default:first-child {
     border-top: 0;

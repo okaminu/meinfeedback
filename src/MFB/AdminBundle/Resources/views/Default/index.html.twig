@@ -23,17 +23,18 @@
         </div>
     {% endfor %}
 
-    <div style="padding:10px">
+    <div>
 
             {% if  feedbackList|length > 0 %}
             <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
                 <div style="width: 740px">
-                    <div style="float: right">{% trans %} Show {% endtrans %}</div>
+                    <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
                 <ul id="sortable">
                 {% for feedback in feedbackList %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}">
+                        <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
 
                         {%  if feedback.rating %}
                             <div class="stars_rating">
@@ -53,7 +54,7 @@
                                     </span>
                                 </td>
                                 <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                                        <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('Y-m-d') }}</span>
+                                        <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
                                 </td>
                                 <td>
                                     <div class="fr input-block">
@@ -65,12 +66,11 @@
                         </table>
 
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
-                        <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
 
                     </li>
                 {% endfor %}
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
                 </ul>
-                <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
             </form>
         {% else %}
             {% trans %} No feedbacks yet. {% endtrans %}
