@@ -5,6 +5,7 @@ namespace MFB\AccountProfileBundle\Controller;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 
 class DefaultController extends Controller
 {
@@ -22,24 +23,30 @@ class DefaultController extends Controller
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId'=>$account->getId())
         );
+
         if (!$accountChannel) {
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
         }
 
-        $feedbackList = $em->getRepository('MFBFeedbackBundle:Feedback')->findBy(
-            array(
-                'accountId' => $account->getId(),
-                'channelId' => $accountChannel->getId(),
-                'isEnabled' => 1
-            ),
-            array('id'=>'DESC')
-        );
+        $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
+        $feedbackSpecification = $preBuiltSpec->getFeedbackSpecification();
+        $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
+
+
+        $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
+        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackSpecification);
+        $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
+
+        $feedbackList = $feedbackRepo->findSortedFeedbacks($feedbackSpecification, 'DESC', 100);
+
         return $this->render(
             'MFBAccountProfileBundle:Default:index.html.twig',
             array(
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
-                'feedbackList'=>$feedbackList
+                'feedbackList'=>$feedbackList,
+                'feedbackCount' => $feedbackCount,
+                'feedbackAverage' => $feedbackRatingAverage
             )
         );
     }

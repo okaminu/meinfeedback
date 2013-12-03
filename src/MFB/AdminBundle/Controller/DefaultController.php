@@ -19,13 +19,30 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 
 class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        $accountId = $this->get('security.context')->getToken()->getUser()->getId();
+        $account = $this->get('security.context')->getToken()->getUser();
+        $accountId = $account->getId();
         $em = $this->getDoctrine()->getManager();
+
+        /** @var AccountChannel $accountChannel */
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('accountId'=>$accountId)
+        );
+
+        $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
+        $feedbackSpecification = $preBuiltSpec->getFeedbackSpecification();
+        $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
+
+
+        $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
+        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackSpecification);
+        $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
+
 
         $feedbackList = $em
             ->getRepository('MFBFeedbackBundle:Feedback')
@@ -41,6 +58,8 @@ class DefaultController extends Controller
             'MFBAdminBundle:Default:index.html.twig',
             array(
                 'feedbackList' => $feedbackList,
+                'feedbackCount' => $feedbackCount,
+                'feedbackAverage' => $feedbackRatingAverage
             )
         );
     }

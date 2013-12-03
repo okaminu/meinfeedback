@@ -11,6 +11,7 @@ use MFB\WidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 
 /**
  * Class Widget
@@ -26,14 +27,15 @@ class Widget
 
     protected $params;
 
-    public function __construct(EntityManager $em, BuilderInterface $imageBuilder, ContainerInterface $container, $params)
-    {
+    public function __construct(
+        EntityManager $em,
+        BuilderInterface $imageBuilder,
+        ContainerInterface $container,
+        $params
+    ) {
         $this->em = $em;
-
         $this->imageBuilder = $imageBuilder;
-
         $this->container = $container;
-
         $this->params = $params;
     }
 
@@ -56,11 +58,12 @@ class Widget
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
         );
 
-        $specification = $this->feedbackSpecification($account, $accountChannel);
+        $prebuiltSpec = new PreBuiltSpecification($account, $accountChannel);
+        $specification = $prebuiltSpec->getFeedbackSpecification();
         $lastFeedbacks  = $this->getFeedbackRepo()->findSortedFeedbacks($specification);
         $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
 
-        $withRatingsSpecification = $this->getFeedbackWithRatingSpecification($account, $accountChannel);
+        $withRatingsSpecification = $prebuiltSpec->getFeedbackWithRatingSpecification();
         $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbackCount($withRatingsSpecification);
         $feedbackRatingAverage = round($this->getFeedbackRepo()->getRatingsAverage($withRatingsSpecification), 1);
 
@@ -86,34 +89,6 @@ class Widget
         return $this->em->getRepository('MFBFeedbackBundle:Feedback');
     }
 
-    /**
-     * @param $account
-     * @param $accountChannel
-     * @return Spec\AndX
-     */
-    public function feedbackSpecification($account, $accountChannel)
-    {
-        return new Spec\AndX(
-            new Spec\FilterAccountId($account->getId()),
-            new Spec\FilterChannelId($accountChannel->getId()),
-            new Spec\FilterIsEnabled()
-        );
-    }
-
-    /**
-     * @param $account
-     * @param $accountChannel
-     * @return Spec\AndX
-     */
-    public function getFeedbackWithRatingSpecification($account, $accountChannel)
-    {
-        return new Spec\AndX(
-            new Spec\FilterAccountId($account->getId()),
-            new Spec\FilterChannelId($accountChannel->getId()),
-            new Spec\FilterIsEnabled(),
-            new Spec\FilterWithRating()
-        );
-    }
 
     /**
      * @param $lastFeedbacks

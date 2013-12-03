@@ -28,18 +28,19 @@ class FeedbackRepository extends EntityRepository
     }
 
     /**
-     * Find sorted enabled feed
      * @param SpecificationInterface $specification
+     * @param string $sortRule
+     * @param int $limit
      * @return array
      */
-    public function findSortedFeedbacks(SpecificationInterface $specification)
+    public function findSortedFeedbacks(SpecificationInterface $specification, $sortRule = 'ASC', $limit = 4)
     {
         return $this->match(
             new Spec\SortedLastN(
                 $specification,
                 'sort',
-                'ASC',
-                4
+                $sortRule,
+                $limit
             )
         );
     }
