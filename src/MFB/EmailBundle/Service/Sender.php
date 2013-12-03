@@ -64,7 +64,8 @@ class Sender
                   "#SERVICE_NAME#" => $service->getDescription(),
                   "#HOMEPAGE#" => $channel->getHomepageUrl(),
                   "#SERVICE_ID#" => $service->getServiceIdReference(),
-                  "#CUSTOMER_ID#" => $customer->getCustomerIdReference()
+                  "#CUSTOMER_ID#" => $customer->getCustomerIdReference(),
+                  "#EMAIL#" => $customer->getEmail()
             )
         );
 

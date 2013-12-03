@@ -19,8 +19,10 @@ class EmailTemplatesController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
 
+        $emailTemplateService = $this->get('mfb_email.template');
+
         /** @var EmailTemplate $emailTemplate  */
-        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
+        $emailTemplate =$emailTemplateService->getEmailTemplate($this->getUserId());
 
         $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
 
@@ -46,8 +48,9 @@ class EmailTemplatesController extends Controller
             $entityManager->persist($emailTemplate);
             $entityManager->flush();
 
-            $this->removesUnwantedVariables($entityManager);
-            $this->addMandatoryVariables($entityManager);
+            $emailTemplate =$emailTemplateService->getEmailTemplate($this->getUserId());
+            $emailTemplateService->removesUnwantedVariables($emailTemplate);
+            $emailTemplateService->addMandatoryVariables($emailTemplate);
 
             return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
         }
@@ -67,10 +70,12 @@ class EmailTemplatesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
+        $emailTemplateService = $this->get('mfb_email.template');
+
         /**
          * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
          */
-        $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
+        $emailTemplate = $emailTemplateService->getEmailTemplate($accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
         $editForm->handleRequest($request);
@@ -79,7 +84,7 @@ class EmailTemplatesController extends Controller
             $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
             $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
 
-            $notUsedVariables = $this->getMandatoryAndUnusedVariables($emailTemplate);
+            $notUsedVariables = $emailTemplateService->getMandatoryAndUnusedVariables($emailTemplate);
 
             if(count($notUsedVariables) > 0){
                 $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
@@ -225,15 +230,8 @@ class EmailTemplatesController extends Controller
 
     private function plain2html($text)
     {
-        $paragraphs = preg_split('#\s*\n\s*\n\s*#', $text);
-        $text = '';
-        foreach ($paragraphs as $paragraph) {
-            $paragraph = str_replace("\n", "<br/>", $paragraph);
-            $text .= "<p>{$paragraph}</p>\n";
-        }
-        return $text;
+        return $this->get('mfb_email.template')->plain2html($text);
     }
-
 
     /**
      * @return mixed
@@ -243,120 +241,5 @@ class EmailTemplatesController extends Controller
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
         return $accountId;
-    }
-
-    /**
-     * @return array TODO: this needs to be moved to email service configuration
-     */
-    private function getAllVariables()
-    {
-        $variables = array(
-            'link' => '#LINK#',
-            'lastname' => '#LASTNAME#',
-            'salutation' => '#SAL#',
-            'email' => '#EMAIL#',
-            'homepage' => '#HOMEPAGE#',
-            'firstname' => '#FIRSTNAME#',
-            'service_name' => '#SERVICE_NAME#',
-            'service_date' => '#SERVICE_DATE#',
-            'reference_id' => '#REFERENCE_ID#',
-            'customer_id' => '#CUSTOMER_ID#',
-            'service_id' => '#SERVICE_ID#'
-        );
-        return $variables;
-    }
-
-    /**
-     * Gets a list of unused variables TODO: this needs to be moved to email service
-     * @param $emailTemplate
-     * @return array
-     */
-    private function getMandatoryAndUnusedVariables($emailTemplate)
-    {
-        $templateCode = $emailTemplate->getTemplateCode();
-        $thankYouCode = $emailTemplate->getThankYouCode();
-        $fullMailCode = $templateCode . $thankYouCode;
-
-        $activeValues = $this->getActiveVariables($emailTemplate);
-
-        $variables = $this->getAllVariables();
-
-        $notUsedVariables = array();
-        foreach ($activeValues as $value) {
-            $typeCode = $variables[$value->getType()];
-            $count = substr_count($fullMailCode, $typeCode);
-            if ($count == 0) {
-                $notUsedVariables[] = $typeCode;
-            }
-        }
-        return $notUsedVariables;
-    }
-
-    /**
-     * @param $emailTemplate TODO: this needs to be moved to email service
-     * @return mixed
-     */
-    private function getActiveVariables($emailTemplate)
-    {
-        $selectedVariables = $emailTemplate->getVariables()->filter(
-            function ($entity) {
-                return $entity->getIsActive() == true;
-            }
-        );
-
-        $values = $selectedVariables->getValues();
-        return $values;
-    }
-
-    /**
-     * @param $emailTemplate TODO: this needs to be moved to email service
-     * @return mixed
-     */
-    private function getInactiveVariables($emailTemplate)
-    {
-        $selectedVariables = $emailTemplate->getVariables()->filter(
-            function ($entity) {
-                return $entity->getIsActive() == false;
-            }
-        );
-
-        $values = $selectedVariables->getValues();
-        return $values;
-    }
-
-    /**
-     * @param $entityManager TODO: this needs to be moved to email service
-     */
-    private function addMandatoryVariables($entityManager)
-    {
-        /** @var EmailTemplate $emailTemplate  */
-        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
-        $missingVariables = $this->getMandatoryAndUnusedVariables($emailTemplate);
-
-        $templateWithMissingVars = $emailTemplate->getTemplateCode() .implode('<br>', $missingVariables);
-        $emailTemplate->setTemplateCode($this->plain2html($templateWithMissingVars));
-        $entityManager->persist($emailTemplate);
-        $entityManager->flush();
-    }
-
-    /**
-     * @param $entityManager TODO: this needs to be moved to email service
-     */
-    private function removesUnwantedVariables($entityManager)
-    {
-        /** @var EmailTemplate $emailTemplate  */
-        $emailTemplate =$this->get('mfb_email.template')->getEmailTemplate($this->getUserId());
-        $inactiveVariables = $this->getInactiveVariables($emailTemplate);
-        $allValues = $this->getAllVariables();
-        $unwantedValueCodes = array();
-
-        foreach ($inactiveVariables as $variable) {
-            $unwantedValueCodes[] = $allValues[$variable->getType()];
-        }
-
-        $templateWithoutVars = str_replace($unwantedValueCodes, '', $emailTemplate->getTemplateCode());
-        $emailTemplate->setTemplateCode($this->plain2html($templateWithoutVars));
-        $entityManager->persist($emailTemplate);
-        $entityManager->flush();
     }
 }

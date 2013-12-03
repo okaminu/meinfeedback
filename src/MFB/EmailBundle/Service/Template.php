@@ -20,13 +20,16 @@ class Template
 
     private $emailTemplate;
 
+    private $allVariables;
+
     const EMAIL_TEMPLATE_TYPE = 1;
     const THANKYOU_TEMPLATE_TYPE = 2;
 
-    public function __construct(ObjectManager $em, TranslatorInterface $translator)
+    public function __construct(ObjectManager $em, TranslatorInterface $translator, $variables)
     {
         $this->em = $em;
         $this->translator = $translator;
+        $this->allVariables = $variables;
     }
 
     public function createTemplate($accountId, $templateType)
@@ -62,17 +65,15 @@ class Template
             $this->emailTemplate->setTemplateCode($this->getDefaultTemplateCode($name));
             $this->emailTemplate->setThankYouCode($this->translator->trans('default_template_thank_you'));
 
-            $this->addVariable('link', true);
-            $this->addVariable('lastname', true);
-            $this->addVariable('email', true);
-            $this->addVariable('salutation', true);
-            $this->addVariable('homepage', true);
-            $this->addVariable('firstname');
-            $this->addVariable('service_name');
-            $this->addVariable('service_date');
-            $this->addVariable('reference_id');
-            $this->addVariable('customer_id');
-            $this->addVariable('service_id');
+            foreach($this->allVariables['mandatory'] as $key => $value)
+            {
+                $this->addVariable($key, true);
+            }
+
+            foreach($this->allVariables['optional'] as $key => $value)
+            {
+                $this->addVariable($key);
+            }
 
             $this->em->persist($this->emailTemplate);
             $this->em->flush();
@@ -175,11 +176,106 @@ class Template
      */
     private function addVariable($type, $isActive = false)
     {
-
         $variable = new EmailTemplateVariable();
         $variable->setType($type);
         $variable->setIsActive($isActive);
         $variable->setEmailTemplate($this->emailTemplate);
         $this->emailTemplate->addVariable($variable);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAllVariables()
+    {
+        return array_merge($this->allVariables['mandatory'], $this->allVariables['optional']);
+    }
+
+    /**
+     * Gets a list of unused variables
+     * @param $emailTemplate
+     * @return array
+     */
+    public function getMandatoryAndUnusedVariables($emailTemplate)
+    {
+        $templateCode = $emailTemplate->getTemplateCode();
+        $thankYouCode = $emailTemplate->getThankYouCode();
+        $fullMailCode = $templateCode . $thankYouCode;
+
+        $activeValues = $this->getVariables($emailTemplate, true);
+
+        $variables = $this->getAllVariables();
+
+        $notUsedVariables = array();
+        foreach ($activeValues as $value) {
+            $typeCode = $variables[$value->getType()];
+            $count = substr_count($fullMailCode, $typeCode);
+            if ($count == 0) {
+                $notUsedVariables[] = $typeCode;
+            }
+        }
+        return $notUsedVariables;
+    }
+
+    /**
+     * @param $emailTemplate
+     * @param $active
+     * @return mixed
+     */
+    private function getVariables($emailTemplate, $active)
+    {
+        $selectedVariables = $emailTemplate->getVariables()->filter(
+            function ($entity) use($active){
+                return $entity->getIsActive() == $active;
+            }
+        );
+
+        $values = $selectedVariables->getValues();
+        return $values;
+    }
+
+    public function addMandatoryVariables($emailTemplate)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $missingVariables = $this->getMandatoryAndUnusedVariables($emailTemplate);
+
+        $templateWithMissingVars = $emailTemplate->getTemplateCode() .implode('<br>', $missingVariables);
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithMissingVars));
+        $this->em->persist($emailTemplate);
+        $this->em->flush();
+    }
+
+    public function removesUnwantedVariables($emailTemplate)
+    {
+        /** @var EmailTemplate $emailTemplate  */
+        $inactiveVariables = $this->getVariables($emailTemplate, false);
+        $allValues = $this->getAllVariables();
+        $unwantedValueCodes = array();
+
+        foreach ($inactiveVariables as $variable) {
+            $unwantedValueCodes[] = $allValues[$variable->getType()];
+        }
+
+        $templateWithoutVars = str_replace($unwantedValueCodes, '', $emailTemplate->getTemplateCode());
+        $emailTemplate->setTemplateCode($this->plain2html($templateWithoutVars));
+        $this->em->persist($emailTemplate);
+        $this->em->flush();
+    }
+
+    public function html2plain($html)
+    {
+        $converter = new \MFB\HtmlToText\Converter();
+        return $converter->html2text($html);
+    }
+
+    public function plain2html($text)
+    {
+        $paragraphs = preg_split('#\s*\n\s*\n\s*#', $text);
+        $text = '';
+        foreach ($paragraphs as $paragraph) {
+            $paragraph = str_replace("\n", "<br/>", $paragraph);
+            $text .= "<p>{$paragraph}</p>\n";
+        }
+        return $text;
     }
 }
