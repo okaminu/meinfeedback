@@ -1456,3 +1456,10 @@ a.footer_link:hover {
     margin: 20px 0px;
 }
 
+.navbar .companyName{
+    color:white;
+    disply:block;
+    float:right;
+    margin:5px 40px;
+}
+

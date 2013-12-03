@@ -26,6 +26,9 @@
                 </ul>
             </div>
         </div>
+        <div class="companyName">
+            {{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}
+        </div>
     </header>
     {% block content %}{% endblock %}
 {% endblock %}
