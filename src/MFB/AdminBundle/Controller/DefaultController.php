@@ -164,7 +164,6 @@ class DefaultController extends Controller
                 'entity' => $customer,
                 'form' => $form->createView(),
                 'added_email' => $request->get('added_email'),
-                'feedback' => $request->get('feedback')
             )
         );
     }
@@ -203,7 +202,6 @@ class DefaultController extends Controller
                 'form' => $form->createView()
             )
         );
-
     }
 
 

@@ -48,7 +48,10 @@ class DefaultController extends Controller
         $service->setAccountId($account->getId());
         $service->setChannelId($accountChannel->getId());
 
-        $form = $this->getFeedbackForm($customer, $service, $feedback);
+        $customer->addService($service);
+        $service->setCustomer($customer);
+        $feedback->setCustomer($customer);
+        $form = $this->getFeedbackForm($feedback);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
@@ -76,7 +79,10 @@ class DefaultController extends Controller
         $service->setAccountId($account->getId());
         $service->setChannelId($accountChannel->getId());
 
-        $form = $this->getFeedbackForm($customer, $service, $feedback);
+        $customer->addService($service);
+        $service->setCustomer($customer);
+        $feedback->setCustomer($customer);
+        $form = $this->getFeedbackForm($feedback);
 
         $form->handleRequest($request);
 
@@ -105,31 +111,23 @@ class DefaultController extends Controller
                 } else {
                     $form->addError(new FormError($ex->getMessage()));
                 }
-
             }
-        } else {
-            $errors = $form->getErrors();
-            $errorMessage = $errors[0]->getMessage();
         }
 
         return $this->showFeedbackForm(
             $account->getId(),
             $accountChannel,
-            $form->createView(),
-            $request->get('feedback'),
-            $errorMessage
+            $form->createView()
         );
     }
 
-    private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $errorMessage = false)
+    private function showFeedbackForm($accountId, $accountChannel, $formView)
     {
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
                 'accountId' => $accountId,
                 'accountChannel' => $accountChannel,
-                'errorMessage' => $errorMessage,
-                'feedback' => $feedback,
                 'form' => $formView
             )
         );
@@ -162,17 +160,18 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $customer
-     * @param $service
      * @param $feedback
      * @return \Symfony\Component\Form\Form
      */
-    private function getFeedbackForm(Customer $customer, Service $service, Feedback $feedback)
+    private function getFeedbackForm(Feedback $feedback)
     {
-        $customer->addService($service);
-        $service->setCustomer($customer);
-        $feedback->setCustomer($customer);
-        $form = $this->createForm(new FeedbackType(), $feedback);
+        $form = $this->createForm(new FeedbackType(), $feedback, array(
+            'action' => $this->generateUrl('mfb_feedback_save', array(
+                        'accountId' => $feedback->getAccountId(),
+                        'accountChannelId' => $feedback->getChannelId()
+                    )),
+                'method' => 'POST',
+            ));
         return $form;
     }
 }

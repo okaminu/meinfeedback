@@ -20,12 +20,10 @@
                 </div>
 
 
-                <form method="post" action="{{ path('mfb_feedback_save', {'accountId': accountId, 'accountChannelId': accountChannel.getId}) }}">
-                    {% if errorMessage %}
+                {{ form_start(form) }}
                         <div class="errorMessage">
-                            {{ errorMessage }}
+                            {{ form_errors(form) }}
                         </div>
-                    {% endif %}
 
                     {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email*'} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
