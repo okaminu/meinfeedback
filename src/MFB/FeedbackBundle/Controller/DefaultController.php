@@ -42,12 +42,11 @@ class DefaultController extends Controller
         }
 
         $feedback = new Feedback();
-        $feedback->setChannelId($account->getId());
-        $feedback->setAccountId($accountChannel->getId());
+        $feedback->setChannelId($accountChannel->getId());
+        $feedback->setAccountId($account->getId());
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-
 
         $service = new Service();
         $service->setAccountId($account->getId());
@@ -70,10 +69,9 @@ class DefaultController extends Controller
         /** @var AccountChannel $accountChannel */
         $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 
-
         $feedback = new Feedback();
-        $feedback->setChannelId($account->getId());
-        $feedback->setAccountId($accountChannel->getId());
+        $feedback->setChannelId($accountChannel->getId());
+        $feedback->setAccountId($account->getId());
 
         $customer = new Customer();
         $customer->setAccountId($account->getId());
