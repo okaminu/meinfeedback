@@ -2,6 +2,7 @@
 
 namespace MFB\FeedbackBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MFB\EmailBundle\Entity\EmailTemplate;
 
@@ -41,7 +42,7 @@ class Feedback
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="MFB\CustomerBundle\Entity\Customer")
+     * @ORM\ManyToOne(targetEntity="MFB\CustomerBundle\Entity\Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      **/
     private $customer;

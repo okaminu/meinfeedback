@@ -5,6 +5,7 @@ namespace MFB\CustomerBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use MFB\ServiceBundle\Form\ServiceType;
 
 class CustomerType extends AbstractType
 {
@@ -31,14 +32,7 @@ class CustomerType extends AbstractType
             )
             ->add('firstName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => false))
-            ->add('serviceDate', 'date', array(
-                    'required' => false,
-                    'mapped' => false,
-                    'input' => 'datetime',
-                    'widget' => 'choice',
-                    'data'  => new \DateTime('now')))
-            ->add('serviceDescription', 'text', array('required' => false, 'mapped' => false))
-            ->add('serviceIdReference', 'text', array('required' => false, 'mapped' => false))
+            ->add('service', 'collection', array('type' => new ServiceType()))
         ;
     }
     

@@ -3,6 +3,7 @@
 namespace MFB\CustomerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Customer
@@ -76,6 +77,18 @@ class Customer
      * @ORM\Column(name="customer_id_reference", type="string", length=255, nullable=true)
      */
     private $customerIdReference;
+
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\Service", mappedBy="Customer",cascade={"persist"})
+     */
+    private $service;
+
+    public function __construct()
+    {
+        $this->service = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -241,5 +254,38 @@ class Customer
     public function getCustomerIdReference()
     {
         return $this->customerIdReference;
+    }
+
+    /**
+     * Add service
+     *
+     * @param \MFB\ServiceBundle\Entity\Service $service
+     * @return Customer
+     */
+    public function addService(\MFB\ServiceBundle\Entity\Service $service)
+    {
+        $this->service[] = $service;
+    
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param \MFB\ServiceBundle\Entity\Service $service
+     */
+    public function removeService(\MFB\ServiceBundle\Entity\Service $service)
+    {
+        $this->service->removeElement($service);
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }

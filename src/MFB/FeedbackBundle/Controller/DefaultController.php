@@ -8,16 +8,16 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
-use MFB\FeedbackBundle\Manager\Feedback as FeedbackEntityManager;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
+use MFB\FeedbackBundle\Form\FeedbackType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use MFB\ServiceBundle\Entity\Service;
 
 class DefaultController extends Controller
 {
@@ -40,25 +40,28 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Account does not have any channels');
         }
 
+        $feedback = new Feedback();
+        $feedback->setChannelId($account->getId());
+        $feedback->setAccountId($accountChannel->getId());
+
         $customer = new Customer();
         $customer->setAccountId($account->getId());
-        $form = $this->createForm(new CustomerType(), $customer);
+
+
+        $service = new Service();
+        $service->setAccountId($account->getId());
+        $service->setChannelId($accountChannel->getId());
+
+        $form = $this->getFeedbackForm($customer, $service, $feedback);
 
         return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
     }
 
     public function saveAction(Request $request)
     {
-        $rating = null;
-        $errorMessage = null;
-        $requestForm = $request->get('mfb_customerbundle_customer');
-        $serviceIdReference = $requestForm['serviceIdReference'];
-        $serviceDescription = $requestForm['serviceDescription'];
-        $serviceDate = $requestForm['serviceDate'];
         $em = $this->getDoctrine()->getManager();
         $dispatcher = $this->container->get('event_dispatcher');
-
-
+        $errorMessage = null;
         $dispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
 
         /** @var Account $account */
@@ -66,33 +69,28 @@ class DefaultController extends Controller
         /** @var AccountChannel $accountChannel */
         $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 
+
+        $feedback = new Feedback();
+        $feedback->setChannelId($account->getId());
+        $feedback->setAccountId($accountChannel->getId());
+
         $customer = new Customer();
         $customer->setAccountId($account->getId());
 
-        $form = $this->createForm(new CustomerType(), $customer);
+        $service = new Service();
+        $service->setAccountId($account->getId());
+        $service->setChannelId($accountChannel->getId());
+
+        $form = $this->getFeedbackForm($customer, $service, $feedback);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
-
-                $em->persist($customer);
-
-                $feedbackId = $this->saveFeedback($request, $account, $accountChannel, $customer, $em);
-
-                $this->saveService(
-                    $serviceDate,
-                    $account,
-                    $accountChannel->getId(),
-                    $customer,
-                    $serviceDescription,
-                    $serviceIdReference,
-                    $em
-                );
-
+                $em->persist($feedback);
                 $em->flush();
 
-                $event = new CustomerAccountEvent($feedbackId, $account, $customer, $request);
+                $event = new CustomerAccountEvent($feedback->getId(), $account, $customer, $request);
                 $dispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
 
                 $return_url = $this->getReturnUrl($accountChannel);
@@ -105,15 +103,8 @@ class DefaultController extends Controller
                     )
                 );
 
-            } catch (DBALException $ex) {
-                $ex = $ex->getPrevious();
-                if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
-                    $form->get('email')->addError(new FormError('Email already exists'));
-                } else {
-                    $form->addError(new FormError($ex->getMessage()));
-                }
-            } catch (FeedbackException $ex){
-                $errorMessage = $ex->getMessage();
+            } catch (\Exception $ex) {
+                $errorMessage = 'Email already exists';
             }
             return $this->showFeedbackForm(
                 $account->getId(),
@@ -137,71 +128,6 @@ class DefaultController extends Controller
                 'feedback' => $feedback,
                 'form' => $formView
             )
-        );
-    }
-
-     /**
-     * @param $serviceDate
-     * @param $account
-     * @param $accountChannelId
-     * @param $customer
-     * @param $serviceDescription
-     * @param $serviceIdReference
-     * @param $em
-     */
-    protected function saveService(
-        $serviceDate,
-        $account,
-        $accountChannelId,
-        $customer,
-        $serviceDescription,
-        $serviceIdReference,
-        $em
-    ) {
-        $serviceDateTime = null;
-        if ($serviceDate['year'] != "" &&
-            $serviceDate['month'] != "" &&
-            $serviceDate['day'] != ""
-        ) {
-            $serviceDateTime = new \DateTime(implode('-', $serviceDate));
-        }
-
-        $serviceEntityManager = new ServiceEntityManager(
-            $account->getId(),
-            $accountChannelId,
-            $customer,
-            $serviceDescription,
-            $serviceDateTime,
-            $serviceIdReference,
-            new ServiceEntity()
-        );
-
-        $serviceEntity = $serviceEntityManager->createEntity();
-        $em->persist($serviceEntity);
-    }
-
-    /**
-     * @param Request $request
-     * @param $account
-     * @param $accountChannel
-     * @param $customer
-     * @param $em
-     * @return int
-     */
-    protected function saveFeedback(Request $request, $account, $accountChannel, $customer, $em)
-    {
-        $feedbackEntityManager = new FeedbackEntityManager(
-            $account->getId(),
-            $accountChannel->getId(),
-            $customer,
-            $request->get('feedback'),
-            $request->get('rating'),
-            new FeedbackEntity()
-        );
-
-        return $feedbackEntityManager->saveFeedback(
-            $em,
-            $accountChannel->getRatingsEnabled()
         );
     }
 
@@ -229,5 +155,20 @@ class DefaultController extends Controller
             'mfb_feedback_enable',
             array('feedback_id' => $id)
         );
+    }
+
+    /**
+     * @param $customer
+     * @param $service
+     * @param $feedback
+     * @return \Symfony\Component\Form\Form
+     */
+    private function getFeedbackForm(Customer $customer, Service $service, Feedback $feedback)
+    {
+        $customer->addService($service);
+        $service->setCustomer($customer);
+        $feedback->setCustomer($customer);
+        $form = $this->createForm(new FeedbackType(), $feedback);
+        return $form;
     }
 }

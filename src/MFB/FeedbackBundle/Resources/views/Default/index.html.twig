@@ -26,10 +26,11 @@
                             {{ errorMessage }}
                         </div>
                     {% endif %}
-                    {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email*'} }) }}
+
+                    {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email*'} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
                     <div class="errorMessage">
-                    {{ form_errors(form.email) }}
+                    {{ form_errors(form.customer.email) }}
                     </div>
 
                     {% if accountChannel.getRatingsEnabled == 1 %}
@@ -42,24 +43,23 @@
                             </div>
                         </div>
                         <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                        <input type="hidden" value="0" name="rating" class="rating"/>
-
+                        {{ form_widget(form.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
                     {% endif %}
 
-                <textarea class="spaceForMandatoryMark" rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
+                    {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
-                {{ form_label(form.anonymous) }}
+                {{ form_label(form.customer.anonymous) }}
                 <div style="display:block; width:50px">
-                    {{ form_widget(form.anonymous) }}
+                    {{ form_widget(form.customer.anonymous) }}
                 </div>
-                {{ form_label(form.gender) }}
-                {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
-                {{ form_row(form.firstName) }}
-                {{ form_row(form.lastName) }}
-                {{ form_row(form.customerIdReference) }}
-                {{ form_row(form.serviceDate) }}
-                {{ form_row(form.serviceDescription) }}
-                {{ form_row(form.serviceIdReference) }}
+                {{ form_label(form.customer.gender) }}
+                {{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}
+                {{ form_row(form.customer.firstName) }}
+                {{ form_row(form.customer.lastName) }}
+                {{ form_row(form.customer.customerIdReference) }}
+                {{ form_row(form.customer.service.0.date) }}
+                {{ form_row(form.customer.service.0.description) }}
+                {{ form_row(form.customer.service.0.serviceIdReference) }}
 
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
