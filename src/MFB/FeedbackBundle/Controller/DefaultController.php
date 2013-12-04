@@ -2,21 +2,15 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use Doctrine\DBAL\DBALException;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\CustomerBundle\Entity\Customer;
-use MFB\CustomerBundle\Form\CustomerType;
-use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
-use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Form\FeedbackType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Entity\Service;
 
