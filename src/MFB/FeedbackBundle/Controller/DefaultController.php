@@ -53,7 +53,13 @@ class DefaultController extends Controller
         $feedback->setCustomer($customer);
         $form = $this->getFeedbackForm($feedback);
 
-        return $this->showFeedbackForm($account->getId(), $accountChannel, $form->createView());
+        return $this->render(
+            'MFBFeedbackBundle:Default:index.html.twig',
+            array(
+                'form' => $form->createView(),
+                'accountChannel' => $accountChannel
+            )
+        );
     }
 
     public function saveAction(Request $request)
@@ -114,21 +120,11 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->showFeedbackForm(
-            $account->getId(),
-            $accountChannel,
-            $form->createView()
-        );
-    }
-
-    private function showFeedbackForm($accountId, $accountChannel, $formView)
-    {
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
-                'accountId' => $accountId,
-                'accountChannel' => $accountChannel,
-                'form' => $formView
+                'form' => $form->createView(),
+                'accountChannel' => $accountChannel
             )
         );
     }

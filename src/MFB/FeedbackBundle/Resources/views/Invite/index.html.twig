@@ -19,14 +19,10 @@
                     Please leave feedback about {{ accountChannel.getName }}
                 </div>
 
-                <form method="post" action="{{ path('mfb_feedback_save_with_invite', {'token': token}) }}">
-
-                {% if errorMessage %}
-                    <div style="clear: both"></div>
-                    <div class="errorMessage">
-                        {{ errorMessage }}
-                    </div>
-                {% endif %}
+                {{ form_start(form) }}
+                <div class="errorMessage">
+                    {{ form_errors(form) }}
+                </div>
 
                 {% if accountChannel.getRatingsEnabled == 1 %}
                     <div class="stars_gray">
@@ -37,19 +33,17 @@
                             {% endfor %}
                         </div>
                     </div>
-                        <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                    <input type="hidden" value="0" name="rating" class="rating"/>
-
+                    <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
+                    {{ form_widget(form.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
                 {% endif %}
 
-                <textarea class="spaceForMandatoryMark" rows="6" name="feedback" placeholder="Feedback">{{ feedback }}</textarea>
-                    <div class="mandatoryFieldMark" style="float: right">*</div>
+                {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
+                <div class="mandatoryFieldMark" style="float: right">*</div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
                 </div>
                     <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
-
-                </form>
+                {{ form_end(form) }}
             </div>
 
         </div>
