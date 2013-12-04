@@ -4,7 +4,6 @@ namespace MFB\FeedbackBundle\Controller;
 
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
-use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
@@ -12,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\FeedbackBundle\Entity\Feedback;
-use MFB\FeedbackBundle\Form\FeedbackType;
 use MFB\FeedbackBundle\Form\FeedbackInviteType;
 
 class InviteController extends Controller
