@@ -1,0 +1,6 @@
+MFB\FeedbackBundle\Entity\Feedback:
+  properties:
+    rating:
+      - GreaterThan :
+          value: 0
+          message: "Please Select Star Rating"

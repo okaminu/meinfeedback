@@ -16,6 +16,7 @@ use MFB\FeedbackBundle\Form\FeedbackType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Entity\Service;
 
@@ -106,15 +107,18 @@ class DefaultController extends Controller
             } catch (\Exception $ex) {
                 $errorMessage = 'Email already exists';
             }
-            return $this->showFeedbackForm(
-                $account->getId(),
-                $accountChannel,
-                $form->createView(),
-                $request->get('feedback'),
-                $errorMessage
-            );
+        } else {
+            $errors = $form->getErrors();
+            $errorMessage = $errors[0]->getMessage();
         }
-        return $this->render('MFBFeedbackBundle:Default:invalid_data.html.twig');
+
+        return $this->showFeedbackForm(
+            $account->getId(),
+            $accountChannel,
+            $form->createView(),
+            $request->get('feedback'),
+            $errorMessage
+        );
     }
 
     private function showFeedbackForm($accountId, $accountChannel, $formView, $feedback = '', $errorMessage = false)
