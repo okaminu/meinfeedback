@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\ServiceBundle\Entity\Service;
+use Doctrine\DBAL\DBALException;
+use Symfony\Component\Form\FormError;
 
 class DefaultController extends Controller
 {
@@ -96,8 +98,14 @@ class DefaultController extends Controller
                     )
                 );
 
-            } catch (\Exception $ex) {
-                $errorMessage = 'Email already exists';
+            } catch (DBALException $ex) {
+                $ex = $ex->getPrevious();
+                if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
+                    $form->get('customer')->get('email')->addError(new FormError('Email already exists'));
+                } else {
+                    $form->addError(new FormError($ex->getMessage()));
+                }
+
             }
         } else {
             $errors = $form->getErrors();

@@ -35,9 +35,9 @@
                     {{ form_row(form.firstName) }}
                     {{ form_row(form.lastName) }}
                     {{ form_row(form.customerIdReference) }}
-                    {{ form_row(form.serviceDate) }}
-                    {{ form_row(form.serviceDescription) }}
-                    {{ form_row(form.serviceIdReference) }}
+                    {{ form_row(form.service.0.date) }}
+                    {{ form_row(form.service.0.description) }}
+                    {{ form_row(form.service.0.serviceIdReference) }}
                     {{ form_row(form.salutation) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">

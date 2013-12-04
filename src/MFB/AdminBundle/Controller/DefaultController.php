@@ -10,16 +10,13 @@ use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
-use MFB\FeedbackBundle\Form\FeedbackType;
-use MFB\FeedbackBundle\Manager\FeedbackInvite as FeedbackInviteManager;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use MFB\ServiceBundle\Manager\Service as ServiceEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
+use MFB\ServiceBundle\Entity\Service;
 
 class DefaultController extends Controller
 {
@@ -73,7 +70,6 @@ class DefaultController extends Controller
             $entity = new AccountChannel();
             $entity->setAccountId($accountId);
         }
-
         $form = $this->createForm(
             new AccountChannelType(),
             $entity,
@@ -82,15 +78,12 @@ class DefaultController extends Controller
                 'method' => 'POST',
             )
         );
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
 
             $em->persist($entity);
             $em->flush();
-
-
             return $this->redirect($this->generateUrl('mfb_location'));
         }
 
@@ -107,26 +100,14 @@ class DefaultController extends Controller
     {
         $dispatcher = $this->container->get('event_dispatcher');
 
-        $requestForm = $request->get('mfb_customerbundle_customer');
-        $serviceIdReference = $requestForm['serviceIdReference'];
-        $serviceDescription = $requestForm['serviceDescription'];
-        $serviceDate = $requestForm['serviceDate'];
-
         $em = $this->getDoctrine()->getManager();
 
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
-        $customer = new Customer();
-        $customer->setAccountId($accountId);
 
         $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId' => $accountId)
         );
-
-        $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
-
-        $form = $this->getCustomerForm($customer);
-
         if ($accountChannel === null) {
             return $this->render(
                 'MFBAdminBundle:Default:error.html.twig',
@@ -136,6 +117,15 @@ class DefaultController extends Controller
                 )
             );
         }
+        $customer = new Customer();
+        $customer->setAccountId($accountId);
+
+        $service = new Service();
+        $service->setAccountId($accountId);
+        $service->setChannelId($accountChannel->getId());
+
+        $form = $this->getCustomerForm($customer, $service);
+        $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
 
         $form->handleRequest($request);
 
@@ -144,22 +134,12 @@ class DefaultController extends Controller
                 $em->persist($customer);
                 $em->flush();
 
-                $invite = $this->saveFeedbackInvite($customer, $accountChannel, $em);
+                $invite = $this->saveFeedbackInvite($accountId, $customer, $accountChannel, $em);
 
                 $inviteUrl = $this->generateUrl(
                     'mfb_feedback_create_with_invite',
                     array('token' => $invite->getToken()),
                     UrlGeneratorInterface::ABSOLUTE_URL
-                );
-
-                $service = $this->saveService(
-                    $serviceDate,
-                    $accountId,
-                    $accountChannel->getId(),
-                    $customer,
-                    $serviceDescription,
-                    $serviceIdReference,
-                    $em
                 );
 
                 $event = new NewCustomerEvent($customer, $accountChannel, $service, $inviteUrl);
@@ -178,7 +158,6 @@ class DefaultController extends Controller
 
             }
         }
-
         return $this->render(
             'MFBAdminBundle:Default:customer.html.twig',
             array(
@@ -238,10 +217,13 @@ class DefaultController extends Controller
 
     /**
      * @param $customer
+     * @param $service
      * @return \Symfony\Component\Form\Form
      */
-    private function getCustomerForm($customer)
+    private function getCustomerForm(Customer $customer, Service $service)
     {
+        $customer->addService($service);
+        $service->setCustomer($customer);
         $form = $this->createForm(
             new CustomerType(),
             $customer,
@@ -255,6 +237,24 @@ class DefaultController extends Controller
         return $form;
     }
 
+    /**
+     * @param $accountId
+     * @param $customer
+     * @param $accountChannel
+     * @param $em
+     * @return FeedbackInvite
+     */
+    private function saveFeedbackInvite($accountId, $customer, $accountChannel, $em)
+    {
+        $invite = new FeedbackInvite();
+        $invite->setAccountId($accountId);
+        $invite->setCustomerId($customer->getId());
+        $invite->setChannelId($accountChannel->getId());
+        $invite->updatedTimestamps();
+        $em->persist($invite);
+        $em->flush();
+        return $invite;
+    }
 
 
 }
