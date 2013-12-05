@@ -1407,6 +1407,7 @@ a.footer_link:hover {
     bottom:13px;
     display: inline-block;
     position: relative;
+    width:5px;
 }
 .formular .emptyMark{
     margin-right:10px
@@ -1471,4 +1472,8 @@ a.footer_link:hover {
 
 .feedbackDisplayForm{
     padding:0px 10px 10px 10px;
+}
+
+.feedbackInput{
+    width:300px
 }

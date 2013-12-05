@@ -1,12 +1,12 @@
 Templates Set-Up: 	E-Mail-Vorlagen
-Title*: 	Betreff
-Text*: 	Text*
+Title: 	Betreff
+Text: 	Text
 Add Variable: 	Variable hinzufügen
-Thank you text*: 	Text für Danksagung
+Thank you text: 	Text für Danksagung
 save: 	Speichern
 Add Customer: 	Neuer Kunde
 Customer Form: 	Kundenformular
-Customers email*: 	Ihre Email-Adresse
+Customers email: 	Ihre Email-Adresse
 Gender: 	Geschlecht
 Male: 	Männlich
 Female: 	Weiblich
@@ -19,14 +19,14 @@ Dashboard: 	Dashboard
 Account Set-Up: 	Einstellungen
 Places setting: 	Firmendaten
 Thank you page template: „Vielen Dank“ Email
-Firma*: 	Firma*
-Berlinstraße 31,  10090, Berlin*: 	Berlinstraße 31,  10090 Berlin
+Firma: 	Firma
+Berlin: 	Berlinstraße 31,  10090 Berlin
 Service Date: Kaufdatum/Tag der Leistungserbringung
 Service Desc: Produkt/Dienstleistung
 
 Anonymous: Feedback anonymisieren
 Customer id reference: Kunden ID
-Service id reference: Service ID
+Service id reference: Rechnungsnummer / Auftragsnummer
 Service description: Produkt/Dienstleistung
 Service date: Kaufdatum/Tag der Leistungserbringung
 Ratings enabled: Sterne

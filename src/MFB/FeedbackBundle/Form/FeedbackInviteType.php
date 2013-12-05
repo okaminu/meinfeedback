@@ -18,6 +18,7 @@ class FeedbackInviteType extends AbstractType
         $builder
             ->add('content', 'textarea')
             ->add('rating', 'hidden')
+            ->add('save', 'button', array('label' => 'Send'));
         ;
     }
     

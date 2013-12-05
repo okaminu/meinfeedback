@@ -3,7 +3,11 @@
 {% block title %}MeinFeedback{% endblock %}
 
 {% block body %}
-
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
+        </div>
+    </header>
     {% javascripts '@MFBFeedbackBundle/Resources/public/js/main.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -33,6 +37,7 @@
                             {% endfor %}
                         </div>
                     </div>
+
                     <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
                     {{ form_widget(form.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
                 {% endif %}
@@ -40,7 +45,7 @@
                 {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
                 <div class="mandatoryFieldMark" style="float: right">*</div>
                 <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
+                    {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
                     <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
                 {{ form_end(form) }}

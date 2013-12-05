@@ -15,20 +15,20 @@
             {#<form id="" action="assets/img/joker.png" enctype="multipart/form-data" class="form-inline">#}
 
             <div>
-                {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Firma*'} }) }}
+                {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro breite490', 'placeholder': 'Firma'} }) }}
                 {{ form_errors(form.name) }}
                 <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
 
 
             <div>
-                {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Straße*'} }) }}
+                {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Straße'} }) }}
                 {{ form_errors(form.street) }}
 
-                {{ form_widget(form.place, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'PLZ*'} }) }}
+                {{ form_widget(form.place, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'PLZ'} }) }}
                 {{ form_errors(form.place) }}
 
-                {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Stadt*'} }) }}
+                {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_input3', 'placeholder': 'Stadt'} }) }}
                 {{ form_errors(form.city) }}
                 <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
@@ -40,8 +40,9 @@
             </div>
 
             <div>
-                {{ form_widget(form.phoneNumber, {'attr': {'class': 'fr_input_txt fr_97_5pro breite490', 'placeholder': '+567000000'} }) }}
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'fr_input_txt fr_97_5pro breite490', 'placeholder': 'Telefon'} }) }}
                 {{ form_errors(form.phoneNumber) }}
+                <div class="locationFieldMark"></div>
             </div>
 
             <div style="margin: 10px 0px">

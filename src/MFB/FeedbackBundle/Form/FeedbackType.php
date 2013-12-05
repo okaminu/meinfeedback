@@ -19,6 +19,7 @@ class FeedbackType extends AbstractType
             ->add('content', 'textarea')
             ->add('rating', 'hidden')
             ->add('customer', new CustomerType())
+            ->add('save', 'button', array('label' => 'Send'));
         ;
     }
     

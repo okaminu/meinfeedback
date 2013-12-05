@@ -1,9 +1,13 @@
 {% extends "::base.html.twig" %}
-
+{% import "MeinFeedbackHomeBundle::macros.html.twig" as tooltips %}
 {% block title %}MeinFeedback{% endblock %}
 
 {% block body %}
-
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
+        </div>
+    </header>
     {% javascripts '@MFBFeedbackBundle/Resources/public/js/main.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -19,13 +23,12 @@
                     Please leave feedback about {{ accountChannel.getName }}
                 </div>
 
-
                 {{ form_start(form) }}
-                        <div class="errorMessage">
-                            {{ form_errors(form) }}
-                        </div>
+                    <div class="errorMessage">
+                        {{ form_errors(form) }}
+                    </div>
 
-                    {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email*'} }) }}
+                    {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
                     <div class="errorMessage">
                     {{ form_errors(form.customer.email) }}
@@ -46,21 +49,29 @@
 
                     {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
+
+                <div style="width: 92%">
                 {{ form_label(form.customer.anonymous) }}
-                <div style="display:block; width:50px">
-                    {{ form_widget(form.customer.anonymous) }}
+                <div style="display:block; width:80px;">
+                    {{ form_widget(form.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
+                    <div style="float:right; position:relative; top:10px">
+                        {{ tooltips.tooltip('What anonymous feedback?',
+                        "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
+                    </div>
                 </div>
                 {{ form_label(form.customer.gender) }}
                 {{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}
-                {{ form_row(form.customer.firstName) }}
+                {{ form_row(form.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
                 {{ form_row(form.customer.lastName) }}
                 {{ form_row(form.customer.customerIdReference) }}
                 {{ form_row(form.customer.service.0.date) }}
                 {{ form_row(form.customer.service.0.description) }}
                 {{ form_row(form.customer.service.0.serviceIdReference) }}
+                </div>
+
 
                 <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="Send" type="submit">
+                    {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
                     {{ form_end(form) }}
                     <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
