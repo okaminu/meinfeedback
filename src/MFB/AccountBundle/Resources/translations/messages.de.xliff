@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="de" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>reset.password.text</source>
+                <target>
+                <![CDATA[
+                    <p>Lieber Kunde,</p>
+                    <p>Sie haben ein neues Passwort für meinfeedback.net angefordert.</p>
+                    <p>Ihr Benutzername : %accountEmail% </p>
+                    <p>Ihr neues Passwort: %new_password% </p>
+                    <p>Falls Sie kein neues Passwort angefordert haben, können Sie diese Mail ignorieren.</p>
+                    <p>Mit freundlichen Grüße,</p>
+                    <p>Ihr MeinFeedback.net Team</p>
+                    ]]>
+                </target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
