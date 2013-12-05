@@ -26,7 +26,7 @@
                 {% if invite is not null %}
                 <p>
                     {% trans %} Feedback is created from invite link. {% endtrans %} <br/>
-                    {% trans %} Invite was sent: {% endtrans %}  {{ invite.createdAt|date('c') }}
+                    {% trans %} Invite was sent: {% endtrans %}  {{ invite.createdAt|date('Y-m-d H:i') }}
                 </p>
                 {% else %}
                     {% trans %} Feedback is created from widget link. {% endtrans %} <br/>

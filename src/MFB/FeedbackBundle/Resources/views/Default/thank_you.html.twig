@@ -3,13 +3,19 @@
 {% block title %}MeinFeedback{% endblock %}
 
 {% block body %}
+    <header class="navbar navbar-fixed-top">
+        <div class="inner-page">
+            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
+        </div>
+    </header>
+    <div class="row-fluid inner-page thankyou">
     {%  if homepage %}
         <script>
             var delay = 3000;
             setTimeout(function(){ window.location = '{{ homepage }}';}, delay);
         </script>
         <div class="alert alert-info">
-            {% trans %} Soon you will be redirected to merchant website automatically. {% endtrans %}
+            {% trans %} Your are being redirected {% endtrans %}
         </div>
     {% endif %}
     <div>
@@ -21,6 +27,7 @@
             </div>
 
         </div>
+    </div>
     </div>
 {% endblock %}
 
