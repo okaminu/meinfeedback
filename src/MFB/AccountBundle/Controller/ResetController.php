@@ -16,15 +16,11 @@ class ResetController extends Controller
 
     public function sendEmailAction(Request $request)
     {
-
         $username = $request->request->get('username');
-
         $account = $this->get('mfb_account.service')->findByEmail($username);
-
         if (null == $account) {
             return $this->render('MFBAccountBundle:Reset:request.html.twig', array('invalid_username' => $username));
         }
-
         $encoder = $this->get('security.encoder_factory')->getEncoder($account);
         $account->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
         $newPassword = $this->container->get('mfb_account.util.token_generator')->generatePassword();

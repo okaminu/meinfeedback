@@ -190,8 +190,10 @@ class DefaultController extends Controller
                 $this->get('mfb_account.encoder')->encodePassword($account);
                 $this->get('mfb_account.service')->addAccount($account);
 
+                $passwordChanged = $this->get('translator')->trans("Password changed");
+
                 /** var SessionInterface $session  */
-                $this->getRequest()->getSession()->getFlashBag()->add('success', 'Password successfully changed');
+                $this->getRequest()->getSession()->getFlashBag()->add('success', $passwordChanged);
                 return $this->redirect($this->generateUrl('mfb_admin_success'));
             }
         }
