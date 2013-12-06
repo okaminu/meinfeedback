@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+$('.redirectUrl').val(window.parent.document.URL);
+
 // Lazy loading.
 $("img.lazy").lazyload({ 
   // The image starts loading 200 px before it is in viewport

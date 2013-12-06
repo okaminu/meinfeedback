@@ -84,7 +84,7 @@ class DefaultController extends Controller
 
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('mfb_location'));
+            return $this->redirect($form->get('redirect')->getData());
         }
 
         return $this->render(

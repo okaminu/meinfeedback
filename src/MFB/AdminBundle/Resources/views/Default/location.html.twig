@@ -9,7 +9,7 @@
         <div class="places">
 
 
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr':{'target':'_top'} }) }}
             {{ form_errors(form) }}
 
             {#<form id="" action="assets/img/joker.png" enctype="multipart/form-data" class="form-inline">#}
@@ -59,6 +59,7 @@
 
             <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
 
+            {{ form_widget(form.redirect, {'attr':{'class': 'redirectUrl'} }) }}
             {{ form_end(form) }}
 
             <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
