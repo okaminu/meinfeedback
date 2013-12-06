@@ -70,7 +70,7 @@ class DefaultController extends Controller
         $dispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
 
         /** @var Account $account */
-        $account = $this->get("mfb_account.manager")->findAccountByAccountId($request->get('accountId'));
+        $account = $this->get("mfb_account.service")->findByAccountId($request->get('accountId'));
         /** @var AccountChannel $accountChannel */
         $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 

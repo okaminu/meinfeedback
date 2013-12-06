@@ -2,14 +2,11 @@
 
 namespace MFB\AccountBundle\Controller;
 
-use MFB\AccountBundle\Entity\Account;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ResetController extends Controller
 {
-
-
     public function requestPasswordAction()
     {
         return $this->render(
@@ -22,8 +19,7 @@ class ResetController extends Controller
 
         $username = $request->request->get('username');
 
-        /** @var $account Account */
-        $account = $this->get('mfb_account.manager')->findAccountByUsernameOrEmail($username);
+        $account = $this->get('mfb_account.service')->findByEmail($username);
 
         if (null == $account) {
             return $this->render('MFBAccountBundle:Reset:request.html.twig', array('invalid_username' => $username));
@@ -35,8 +31,7 @@ class ResetController extends Controller
         $account->setPassword($encoder->encodePassword($newPassword, $account->getSalt()));
 
         $this->get('mfb_email.sender')->sendResettingEmailMessage($account, $newPassword);
-
-        $this->get('mfb_account.manager')->updateAccount($account);
+        $this->get('mfb_account.service')->addAccount($account);
 
         return $this->render(
             'MFBAccountBundle:Reset:sendEmail.html.twig'

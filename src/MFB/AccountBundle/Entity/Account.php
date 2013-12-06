@@ -15,7 +15,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table()
  * @ORM\Entity
  * @UniqueEntity(fields="email", message="Email already taken")
- * @ORM\Entity(repositoryClass="MFB\AccountBundle\Entity\AccountManager")
  */
 class Account implements AdvancedUserInterface
 {

@@ -66,8 +66,9 @@ class ChangePasswordFormType extends AbstractType
             'save',
             'submit',
             array(
+                'label' => 'Change password',
                 'attr' => array(
-                    "class" => "btn btn-left orange abstandoben breite180"
+                    "class" => "btn btn-left orange abstandoben breite210"
                 )
             )
         );

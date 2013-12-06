@@ -50,7 +50,7 @@ class Widget
         /** @var EntityManager $em */
         $em = $this->em;
         /** @var Account $account */
-        $account = $this->container->get("mfb_account.manager")->findAccountByAccountId($accountId);
+        $account = $this->container->get("mfb_account.service")->findByAccountId($accountId);
         /** @var AccountChannel $accountChannel */
         $accountChannel = $this->container->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
 
