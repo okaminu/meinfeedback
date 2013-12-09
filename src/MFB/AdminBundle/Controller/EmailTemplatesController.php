@@ -78,8 +78,10 @@ class EmailTemplatesController extends Controller
         $emailTemplate = $emailTemplateService->getEmailTemplate($accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
+
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
+            $this->setTemporaryTemplate($emailTemplate->getTemplateCode());
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
             $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
 
@@ -144,10 +146,17 @@ class EmailTemplatesController extends Controller
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
         $editForm = $this->createEditForm($emailTemplate);
 
-        $variables = $this->get('mfb_email.variables')->getVariables($emailTemplate);
-        $editForm->get('templateCode')->setData($this->html2plain($emailTemplate->getTemplateCode()));
+        $templateCode = $this->html2plain($emailTemplate->getTemplateCode());
+        $temporaryTemplateCode = $this->getTemporaryTemplate();
+        if ($temporaryTemplateCode) {
+            $templateCode = $temporaryTemplateCode;
+        }
 
-        $thankYouForm->get('templateCode')->setData($this->html2plain($thankYouTemplate->getTemplateCode()));
+        $variables = $this->get('mfb_email.variables')->getVariables($emailTemplate);
+        $editForm->get('templateCode')->setData($templateCode);
+
+        $savedTemplate = $this->html2plain($thankYouTemplate->getTemplateCode());
+        $thankYouForm->get('templateCode')->setData($savedTemplate);
         $thankyou_variables = $this->get('mfb_email.variables')->getVariables($thankYouTemplate);
 
         return $this->render(
@@ -235,5 +244,26 @@ class EmailTemplatesController extends Controller
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
         return $accountId;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getTemporaryTemplate()
+    {
+        $temporaryTemplateCodeArray = $this->getRequest()->getSession()->getFlashBag()->get('templateCode');
+        $temporaryTemplateCode = array_pop($temporaryTemplateCodeArray);
+        return $temporaryTemplateCode;
+    }
+
+    /**
+     * @param $templateCode
+     */
+    private function setTemporaryTemplate($templateCode)
+    {
+        $this->getRequest()->getSession()->getFlashBag()->set(
+            'templateCode',
+            $templateCode
+        );
     }
 }
