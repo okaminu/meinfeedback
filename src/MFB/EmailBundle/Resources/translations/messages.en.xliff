@@ -52,8 +52,8 @@
                 </target>
             </trans-unit>
             <trans-unit id="4" resname="email_variable_desc_link">
-                <source>Link there customer can write his feedback</source>
-                <target>Link there customer can write his feedback</target>
+                <source>Link to leave feedback</source>
+                <target>Link to leave feedback</target>
             </trans-unit>
             <trans-unit id="5" resname="email_variable_example_link">
                 <source>http://meinfeedback.net/write/a1245c45bf</source>

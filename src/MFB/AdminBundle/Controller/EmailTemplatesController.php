@@ -166,10 +166,7 @@ class EmailTemplatesController extends Controller
 
     public function listPossibleVariablesAction($emailTemplateId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $emailTemplate = $em->find('MFBEmailBundle:EmailTemplate', $emailTemplateId);
-
-        $variables = $this->get('mfb_email.variables')->getPossibleVariables($emailTemplate);
+        $variables = $this->get('mfb_email.variables')->getSelectedVariables($emailTemplateId);
         return $this->render(
             'MFBAdminBundle:EmailTemplates:possibleVariablesList.html.twig',
             array(

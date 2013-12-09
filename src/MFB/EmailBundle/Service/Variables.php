@@ -2,6 +2,7 @@
 namespace MFB\EmailBundle\Service;
 
 
+use Doctrine\ORM\EntityManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -13,32 +14,38 @@ class Variables
      */
     private $translator;
 
-    /**
-     * @var array
-     */
-    private $allVariables = array(
-        'link', 'firstname', 'lastname', 'sal', 'homepage', 'email',
-        'service_name', 'service_date', 'reference_id', 'customer_id', 'service_id'
-    );
+    private $entityManager;
 
-    public function __construct(TranslatorInterface $translator)
+    private $mandatoryVariables;
+
+    private $optionalVariables;
+
+
+    public function __construct(TranslatorInterface $translator, EntityManager $entityManager, $variables)
     {
         $this->translator = $translator;
+        $this->entityManager = $entityManager;
+        $this->mandatoryVariables = $variables['mandatory'];
+        $this->optionalVariables = $variables['optional'];
     }
 
     protected function getAllVariables()
     {
-        if ($this->allVariables !== null) {
-            return $this->allVariables;
-        }
-        $this->allVariables = array(
-
+        $allVariables = array_merge(
+            array_keys($this->mandatoryVariables),
+            array_keys($this->optionalVariables)
         );
-
-        return $this->allVariables;
+        return $allVariables;
     }
 
-
+    protected function getAllVariableCodes()
+    {
+        $allVariables = array_merge(
+            $this->mandatoryVariables,
+            $this->optionalVariables
+        );
+        return $allVariables;
+    }
     public function getVariables(EmailTemplate $template)
     {
         $variables = array();
@@ -48,33 +55,36 @@ class Variables
         return $this->decorateVariables($variables);
     }
 
-    public function getPossibleVariables(EmailTemplate $template)
+    public function getSelectedVariables($templateId)
     {
-        $variables = $this->allVariables;
-        foreach ($template->getVariables() as $emailVariable) {
-            $key = array_search($emailVariable->getType(), $variables);
-            if (isset($variables[$key])) {
-                unset($variables[$key]);
-            }
+        $emailTemplateVariables = $this->entityManager->getRepository('MFBEmailBundle:EmailTemplateVariable')->findBy(
+            array(
+                'emailTemplate' => $templateId, 'isActive' => true
+            )
+        );
+        $variableNames = array();
+        foreach ($emailTemplateVariables as $variableEntity) {
+            $variableNames[] = $variableEntity->getType();
         }
-        return $this->decorateVariables($variables);
+        return $this->decorateVariables($variableNames);
     }
 
     private function decorateVariables($list)
     {
         $variables = array();
-        foreach ($list as $variable) {
+        $allVariables = $this->getAllVariableCodes();
+        foreach ($list as $variableName) {
             $variables[] = array(
-                'type' => strtolower($variable),
-                'name' => '#'.strtoupper($variable).'#',
+                'type' => strtolower($variableName),
+                'name' => $allVariables[$variableName],
                 'description' => $this->translator->trans(
-                    'email_variable_desc_'.strtolower($variable),
-                    array('email_variable_desc_'.strtolower($variable) => '')
+                    'email_variable_desc_'.strtolower($variableName),
+                    array('email_variable_desc_'.strtolower($variableName) => '')
                 ),
                 'example' => $this->translator->trans(
-                    'email_variable_example_'.strtolower($variable),
+                    'email_variable_example_'.strtolower($variableName),
                     array(
-                        'email_variable_example_'.strtolower($variable)=>''
+                        'email_variable_example_'.strtolower($variableName)=>''
                     )
                 )
             );

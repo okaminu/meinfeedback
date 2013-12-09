@@ -24,7 +24,7 @@ services:
 
     mfb_email.variables:
         class: %mfb_email.variables.class%
-        arguments: [@translator]
+        arguments: [@translator, @doctrine.orm.default_entity_manager, %mfb_email.variables.values%]
 
     mfb_email.template:
         class: %mfb_email.template.class%
