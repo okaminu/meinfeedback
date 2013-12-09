@@ -58,13 +58,6 @@ class EmailTemplate
     private $templateCode;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="thank_you_code", type="text")
-     */
-    private $thankYouCode;
-
-    /**
      * @ORM\OneToMany(targetEntity="EmailTemplateVariable", mappedBy="emailTemplate",cascade={"persist"})
      **/
     private $variables;
@@ -195,23 +188,6 @@ class EmailTemplate
     {
         return $this->templateCode;
     }
-
-    /**
-     * @param string $thankYouCode
-     */
-    public function setThankYouCode($thankYouCode)
-    {
-        $this->thankYouCode = $thankYouCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getThankYouCode()
-    {
-        return $this->thankYouCode;
-    }
-
     /**
      * @param ArrayCollection $variables
      */

@@ -63,7 +63,6 @@ class Template
 
             $this->emailTemplate->setTitle($this->translator->trans('default_template_subject'));
             $this->emailTemplate->setTemplateCode($this->getDefaultTemplateCode($name));
-            $this->emailTemplate->setThankYouCode($this->translator->trans('default_template_thank_you'));
 
             foreach($this->allVariables['mandatory'] as $key => $value)
             {
@@ -199,8 +198,7 @@ class Template
     public function getMandatoryAndUnusedVariables($emailTemplate)
     {
         $templateCode = $emailTemplate->getTemplateCode();
-        $thankYouCode = $emailTemplate->getThankYouCode();
-        $fullMailCode = $templateCode . $thankYouCode;
+        $fullMailCode = $templateCode;
 
         $activeValues = $this->getVariables($emailTemplate, true);
 

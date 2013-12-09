@@ -17,7 +17,6 @@ class EmailTemplateType extends AbstractType
         $builder
             ->add('title')
             ->add('templateCode')
-            ->add('thankYouCode')
         ;
     }
     

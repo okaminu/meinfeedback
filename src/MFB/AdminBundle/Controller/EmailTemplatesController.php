@@ -81,7 +81,6 @@ class EmailTemplatesController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
-            $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
             $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
 
             $notUsedVariables = $emailTemplateService->getMandatoryAndUnusedVariables($emailTemplate);
@@ -92,7 +91,6 @@ class EmailTemplatesController extends Controller
             }
 
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
-            $emailTemplate->setThankYouCode($this->plain2html($emailTemplate->getThankYouCode()));
 
             $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
             $em->persist($emailTemplate);
@@ -148,7 +146,6 @@ class EmailTemplatesController extends Controller
 
         $variables = $this->get('mfb_email.variables')->getVariables($emailTemplate);
         $editForm->get('templateCode')->setData($this->html2plain($emailTemplate->getTemplateCode()));
-        $editForm->get('thankYouCode')->setData($this->html2plain($emailTemplate->getThankYouCode()));
 
         $thankYouForm->get('templateCode')->setData($this->html2plain($thankYouTemplate->getTemplateCode()));
         $thankyou_variables = $this->get('mfb_email.variables')->getVariables($thankYouTemplate);
