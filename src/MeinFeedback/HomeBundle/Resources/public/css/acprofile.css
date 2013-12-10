@@ -20,6 +20,12 @@ left: 50px;
 margin-top: -9px;
 }
 
+.comment-piece-top {
+    position: absolute;
+    left: 50px;
+    margin-top: -12px;
+}
+
 .left {
 text-align: left;
 }

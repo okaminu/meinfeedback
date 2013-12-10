@@ -43,7 +43,9 @@
                 </div>
             {% endif %}
 
-            <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
+
+                <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
                 <tbody><tr>
                     <td width="80%" style="padding:10px;">
                 <span class="comment-text left" itemprop="description">
@@ -56,7 +58,6 @@
                     </td>
                 </tr>
                 </tbody></table>
-            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece.png') }}" width="14" height="12" class="comment-piece">
             </div>
         {% endfor %}
     </div>
