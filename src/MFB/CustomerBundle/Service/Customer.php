@@ -97,8 +97,8 @@ class Customer
     private function dispatchCreateCustomerEvent($customer)
     {
         $accountChannel = $this->getAccountChannel($customer->getAccountId());
-        $service = $customer->getService();
-        $event = new NewCustomerEvent($customer, $accountChannel, $service[0]);
+        $service = $customer->getService()->first();
+        $event = new NewCustomerEvent($customer, $accountChannel, $service);
         $this->eventDispacher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE, $event);
     }
 }
