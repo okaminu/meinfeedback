@@ -27,7 +27,13 @@
     <div class="feedbackDisplayForm">
         {% for feedback in feedbackList %}
             <div style="margin:20px 10px">
-            <div class="username">Anonymous says:</div>
+            <div class="username">
+                {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
+                    {{ feedback.getCustomer.getFirstName }}
+                {% else %}
+                    {% trans %} Anonymous says: {% endtrans %}
+                {% endif %}
+            </div>
             {%  if feedback.rating %}
                 <div class="stars_rating">
                     <div class="stars_gray_small">

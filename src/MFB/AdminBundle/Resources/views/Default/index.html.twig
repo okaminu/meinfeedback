@@ -38,7 +38,13 @@
                 <ul id="sortable">
                 {% for feedback in feedbackList %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}">
-                        <div class="username">{% trans %} Anonymous says: {% endtrans %}</div>
+                        <div class="username">
+                            {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
+                                {{ feedback.getCustomer.getFirstName }}
+                            {% else %}
+                                {% trans %} Anonymous says: {% endtrans %}
+                            {% endif %}
+                        </div>
 
                         {%  if feedback.rating %}
                             <div class="stars_rating">
