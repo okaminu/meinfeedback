@@ -1481,3 +1481,24 @@ a.footer_link:hover {
 .thankyou{
     margin-top: 10px;
 }
+
+.enable-comment{
+    height:48px;
+    width:55px;
+    display:inline-block;
+    margin-left:20px !important;
+}
+
+.enable-comment input{
+    margin-left: 25px;
+    height:40px
+}
+.admin.box-comment{
+    display:inline-block;
+    width:600px;
+}
+
+#sendOut.adminFeedback{
+    float: right;
+    margin-right:-50px;
+}

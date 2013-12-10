@@ -35,9 +35,9 @@
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
-                <ul id="sortable">
+                <ul id="sortable" style="width: 720px">
                 {% for feedback in feedbackList %}
-                    <li class="ui-state-default" id="item_order_{{ feedback.getId }}">
+                    <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
                         <div class="username">
                             {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
                                 {{ feedback.getCustomer.getFirstName }}
@@ -57,7 +57,7 @@
 
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
-                        <table border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                        <table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >
                             <tbody>
                                 <tr>
                                 <td width="80%" style="padding:10px;">
@@ -68,18 +68,16 @@
                                 <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
                                         <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
                                 </td>
-                                <td>
-                                    <div class="fr input-block">
-                                        <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
-                                    </div>
-                                </td>
                             </tr>
                             </tbody>
                         </table>
 
+                        <div class="fr input-block enable-comment box-comment">
+                            <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
+                        </div>
                     </li>
                 {% endfor %}
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
+                    <input id="sendOut" class="adminFeedback btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
                 </ul>
             </form>
         {% else %}
