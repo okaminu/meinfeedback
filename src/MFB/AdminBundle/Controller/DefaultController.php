@@ -2,12 +2,11 @@
 
 namespace MFB\AdminBundle\Controller;
 
-use Doctrine\DBAL\DBALException;
+
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\CustomerEvents;
 use MFB\CustomerBundle\Entity\Customer;
-use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\CustomerBundle\Form\CustomerType;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,19 +16,19 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 use MFB\ServiceBundle\Entity\Service;
+use Symfony\Component\Validator\Tests\Fixtures\ConstraintC;
+use MFB\AccountBundle\AccountException;
 
 class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        $account = $this->get('security.context')->getToken()->getUser();
+        $account = $this->getUserToken()->getUser();
         $accountId = $account->getId();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
 
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$accountId)
-        );
+        $accountChannel = $this->getAccountChannel($em, $accountId);
 
         $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
         $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
@@ -60,12 +59,12 @@ class DefaultController extends Controller
 
     public function locationAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
 
         $token = $this->get('security.context')->getToken();
         $accountId = $token->getUser()->getId();
 
-        $entity = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId' => $accountId));
+        $entity = $this->getAccountChannel($em, $accountId);
         if (!$entity) {
             $entity = new AccountChannel();
             $entity->setAccountId($accountId);
@@ -81,9 +80,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
-            $em->persist($entity);
-            $em->flush();
+            $this->saveEntity($em, $entity);
             return $this->redirect($form->get('redirect')->getData());
         }
 
@@ -96,74 +93,48 @@ class DefaultController extends Controller
         );
     }
 
-    public function customerAction(Request $request)
+    public function showCreateCustomerFormAction()
     {
-        $dispatcher = $this->container->get('event_dispatcher');
+        $accountId = $this->getUserToken()->getUser()->getId();
 
-        $em = $this->getDoctrine()->getManager();
+        $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
+        $form = $this->getCustomerForm($customer);
 
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
-
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        if ($accountChannel === null) {
-            return $this->render(
-                'MFBAdminBundle:Default:error.html.twig',
-                array(
-                    'errorMessage' =>
-                        $this->get('translator')->trans('No account data found. Please fill Account setup form.')
-                )
-            );
-        }
-        $customer = new Customer();
-        $customer->setAccountId($accountId);
-
-        $service = new Service();
-        $service->setAccountId($accountId);
-        $service->setChannelId($accountChannel->getId());
-
-        $form = $this->getCustomerForm($customer, $service);
-        $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            try {
-                $em->persist($customer);
-                $em->flush();
-
-                $invite = $this->saveFeedbackInvite($accountId, $customer, $accountChannel, $em);
-
-                $inviteUrl = $this->generateUrl(
-                    'mfb_feedback_create_with_invite',
-                    array('token' => $invite->getToken()),
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                );
-
-                $event = new NewCustomerEvent($customer, $accountChannel, $service, $inviteUrl);
-                $dispatcher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE, $event);
-
-                return $this->redirect(
-                    $this->generateUrl('mfb_add_customer', array('added_email' => $customer->getEmail()))
-                );
-            } catch (DBALException $ex) {
-                $ex = $ex->getPrevious();
-                if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
-                    $form->get('email')->addError(new FormError('Email already exists'));
-                } else {
-                    $form->addError(new FormError($ex->getMessage()));
-                }
-
-            }
-        }
         return $this->render(
             'MFBAdminBundle:Default:customer.html.twig',
             array(
-                'entity' => $customer,
-                'form' => $form->createView(),
-                'added_email' => $request->get('added_email'),
+                'customerEmail' => $customer->getEmail(),
+                'form' => $form->createView()
+            )
+        );
+    }
+
+    public function saveCustomerAction(Request $request)
+    {
+        $accountId = $this->getUserToken()->getUser()->getId();
+        $customerEmail = null;
+        try {
+            $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
+            $form = $this->getCustomerForm($customer);
+            $form->handleRequest($request);
+
+            if (!$form->isValid()) {
+                throw new \Exception('Not valid form');
+            }
+
+            $this->get('mfb_customer.service')->store($customer);
+            $customerEmail = $customer->getEmail();
+        } catch (AccountException $ax) {
+            $form->get('email')->addError(new FormError('Email already exists'));
+        } catch (\Exception $ex) {
+            $form->addError(new FormError($ex->getMessage()));
+        }
+
+        return $this->render(
+            'MFBAdminBundle:Default:customer.html.twig',
+            array(
+                'customerEmail' => $customerEmail,
+                'form' => $form->createView()
             )
         );
     }
@@ -175,7 +146,7 @@ class DefaultController extends Controller
      */
     public function changePasswordAction(Request $request)
     {
-        $account = $this->get('security.context')->getToken()->getUser();
+        $account = $this->getEntityManager();
 
         $form = $this->get("mfb_account.change_password.form.factory")->createForm();
 
@@ -217,18 +188,15 @@ class DefaultController extends Controller
 
     /**
      * @param $customer
-     * @param $service
      * @return \Symfony\Component\Form\Form
      */
-    private function getCustomerForm(Customer $customer, Service $service)
+    private function getCustomerForm(Customer $customer)
     {
-        $customer->addService($service);
-        $service->setCustomer($customer);
         $form = $this->createForm(
             new CustomerType(),
             $customer,
             array(
-                'action' => $this->generateUrl('mfb_add_customer'),
+                'action' => $this->generateUrl('mfb_save_customer'),
                 'method' => 'POST',
             )
         );
@@ -237,23 +205,29 @@ class DefaultController extends Controller
         return $form;
     }
 
+
     /**
-     * @param $accountId
-     * @param $customer
-     * @param $accountChannel
-     * @param $em
-     * @return FeedbackInvite
+     * @return null|\Symfony\Component\Security\Core\Authentication\Token\TokenInterface
      */
-    private function saveFeedbackInvite($accountId, $customer, $accountChannel, $em)
+    private function getUserToken()
     {
-        $invite = new FeedbackInvite();
-        $invite->setAccountId($accountId);
-        $invite->setCustomerId($customer->getId());
-        $invite->setChannelId($accountChannel->getId());
-        $invite->updatedTimestamps();
-        $em->persist($invite);
-        $em->flush();
-        return $invite;
+        return $this->get('security.context')->getToken();
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     */
+    private function getEntityManager()
+    {
+        return $this->getDoctrine()->getManager();
+    }
+
+    private function getAccountChannel($em, $accountId)
+    {
+        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('accountId' => $accountId)
+        );
+        return $accountChannel;
     }
 
 

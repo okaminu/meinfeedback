@@ -13,6 +13,7 @@ use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Routing\RouterInterface;
 
+
 class Sender
 {
     /**
@@ -33,13 +34,8 @@ class Sender
         $this->translator = $translator;
     }
 
-    public function createForAccountChannel(EmailTemplate $template, NewCustomerEvent $event)
+    public function createForAccountChannel(EmailTemplate $template, $channel, $customer, $service, $inviteUrl)
     {
-        $customer = $event->getCustomer();
-        $inviteUrl = $event->getInviteUrl();
-        $service = $event->getService();
-        $channel = $event->getChannel();
-
         $message = new \Swift_Message();
         $message_title = $template->getTitle();
 

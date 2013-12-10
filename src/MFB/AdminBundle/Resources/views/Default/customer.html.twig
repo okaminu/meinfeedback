@@ -6,9 +6,9 @@
 
     <!-- Contact Us -->
     <div>
-        {% if added_email %}
+        {% if customerEmail %}
         <div class="alert alert-success">
-            <strong>{% trans %} Well done! {% endtrans %}</strong> {% trans %} Customer added {% endtrans %} ({{ added_email }})
+            <strong>{% trans %} Well done! {% endtrans %}</strong> {% trans %} Customer added {% endtrans %} ({{ customerEmail }})
             <a href="#" class="close" data-dismiss="alert">&times;</a>
         </div>
         {% endif %}

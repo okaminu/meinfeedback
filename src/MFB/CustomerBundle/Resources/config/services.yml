@@ -1,11 +1,12 @@
 parameters:
     mfb_customer.event_listener.new_customer.class: MFB\CustomerBundle\EventListener\NewCustomerListener
     mfb_customer.event_listener.create_feedback.class: MFB\FeedbackBundle\EventListener\FeedbackNotificationListener
+    mfb_customer.service.class: MFB\CustomerBundle\Service\Customer
 
 services:
     mfb_customer.listener.new_customer:
         class: %mfb_customer.event_listener.new_customer.class%
-        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_email.sender", "@translator"]
+        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_email.sender", "@translator", "@router"]
         tags:
             - { name: kernel.event_listener, event: customer.create.complete, method: onCreateCustomerComplete}
 
@@ -15,3 +16,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: feedback.regular.complete, method: onRegularComplete}
             - { name: kernel.event_listener, event: feedback.invite.complete, method: onRegularComplete}
+
+    mfb_customer.service:
+      class: %mfb_customer.service.class%
+      arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher"]

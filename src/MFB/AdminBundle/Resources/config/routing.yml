@@ -14,9 +14,13 @@ mfb_location:
     pattern: /about_me
     defaults: { _controller: MFBAdminBundle:Default:location }
 
-mfb_add_customer:
-    pattern: /add_customer
-    defaults: { _controller: MFBAdminBundle:Default:customer }
+mfb_show_create_customer:
+    pattern: /show_create_customer
+    defaults: { _controller: MFBAdminBundle:Default:showCreateCustomerForm }
+
+mfb_save_customer:
+    pattern: /save_customer
+    defaults: { _controller: MFBAdminBundle:Default:saveCustomer }
 
 mfb_widget:
     pattern: /widget

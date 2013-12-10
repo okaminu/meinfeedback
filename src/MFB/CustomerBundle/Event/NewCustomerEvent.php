@@ -13,14 +13,12 @@ class NewCustomerEvent extends Event
     private $service;
     private $customer;
     private $channel;
-    private $inviteUrl;
 
-    public function __construct(Customer $customer, AccountChannel $channel, Service $service, $inviteUrl)
+    public function __construct(Customer $customer, AccountChannel $channel, Service $service)
     {
         $this->customer = $customer;
         $this->service = $service;
         $this->channel = $channel;
-        $this->inviteUrl = $inviteUrl;
     }
 
     /**
@@ -46,14 +44,4 @@ class NewCustomerEvent extends Event
     {
         return $this->channel;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getInviteUrl()
-    {
-        return $this->inviteUrl;
-    }
-
-
 }
