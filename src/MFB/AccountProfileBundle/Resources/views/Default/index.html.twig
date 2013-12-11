@@ -18,47 +18,59 @@
     </div>
     <!-- Home Page -->
 
-    <h3 style="margin-top: 50px; margin-left: 20px">aktuelle Feedbacks für {{ account_channel_name }}</h3>
-    {% if ratingAverage > 0 %}
-        <div style="margin-left: 20px">Ratings average: {{ ratingAverage }}</div>
-    {% endif %}
-    <div style="margin-left: 20px">Total ratings: {{ ratingCount }}</div>
+    <div style="margin-left: 20px">
+        <h3 style="margin-top: 50px;">Company profile</h3>
+        <div>Company name: {{ channelName }}</div>
+        <div>Homepage: <a href="{{ channelUrl }}">{{ channelUrl }}</a></div>
+        <div>Address: {{ channelAddress }}</div>
+        <div>Country: {{ channelCountry }}</div>
+        {% if channelPhoneNumber %}
+            <div style="">Phone number: {{ channelPhoneNumber }}</div>
+        {% endif %}
 
-    <div class="feedbackDisplayForm">
-        {% for feedback in feedbackList %}
-            <div style="margin:20px 10px">
-            <div class="username">
-                {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
-                    {{ feedback.getCustomer.getFirstName }}
-                {% else %}
-                    {% trans %} Anonymous says: {% endtrans %}
-                {% endif %}
-            </div>
-            {%  if feedback.rating %}
-                <div class="stars_rating">
-                    <div class="stars_gray_small">
-                        <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+        <h3 style="margin-top: 50px;">aktuelle Feedbacks für {{ account_channel_name }}</h3>
+        {% if ratingAverage > 0 %}
+            <div>Ratings average: {{ ratingAverage }}</div>
+        {% endif %}
+        <div>Total ratings: {{ ratingCount }}</div>
+
+        <div class="feedbackDisplayForm">
+            {% for feedback in feedbackList %}
+                <div style="margin:20px 0px">
+                    <div class="username">
+                        {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
+                            {{ feedback.getCustomer.getFirstName }}
+                        {% else %}
+                            {% trans %} Anonymous says: {% endtrans %}
+                        {% endif %}
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-            {% endif %}
+                    {%  if feedback.rating %}
+                        <div class="stars_rating">
+                            <div class="stars_gray_small">
+                                <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endif %}
 
-                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
+                    <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
-                <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                <tbody><tr>
-                    <td width="80%" style="padding:10px;">
+                    <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                        <tbody><tr>
+                            <td width="80%" style="padding:10px;">
                 <span class="comment-text left" itemprop="description">
                     {{ feedback.content }}
                 </span>
-                    </td>
+                            </td>
 
-                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                    </td>
-                </tr>
-                </tbody></table>
-            </div>
-        {% endfor %}
+                            <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
 {% endblock %}

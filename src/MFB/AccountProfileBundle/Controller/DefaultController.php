@@ -38,6 +38,7 @@ class DefaultController extends Controller
 
         $feedbackList = $feedbackRepo->findSortedFeedbacks($feedbackSpecification, 'DESC', 100);
 
+        $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
         return $this->render(
             'MFBAccountProfileBundle:Default:index.html.twig',
             array(
@@ -45,7 +46,12 @@ class DefaultController extends Controller
                 'account_id' => $account->getId(),
                 'feedbackList'=>$feedbackList,
                 'ratingCount' => $feedbackCount,
-                'ratingAverage' => $feedbackRatingAverage
+                'ratingAverage' => $feedbackRatingAverage,
+                'channelName' => $accountChannel->getName(),
+                'channelUrl' => $accountChannel->getHomepageUrl(),
+                'channelAddress' => $channelAddress,
+                'channelCountry' => $accountChannel->getCountry()->getName(),
+                'channelPhoneNumber' => $accountChannel->getPhoneNumber()
             )
         );
     }
