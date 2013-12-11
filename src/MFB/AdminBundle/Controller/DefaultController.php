@@ -23,7 +23,7 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        $account = $this->getUserToken()->getUser();
+        $account = $this->getCurrentUser();
         $accountId = $account->getId();
         $em = $this->getEntityManager();
 
@@ -61,8 +61,7 @@ class DefaultController extends Controller
     {
         $em = $this->getEntityManager();
 
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
+        $accountId = $this->getCurrentUser()->getId();
 
         $entity = $this->getAccountChannel($em, $accountId);
         if (!$entity) {
@@ -95,7 +94,7 @@ class DefaultController extends Controller
 
     public function showCreateCustomerFormAction()
     {
-        $accountId = $this->getUserToken()->getUser()->getId();
+        $accountId = $this->getCurrentUser()->getId();
 
         $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
         $form = $this->getCustomerForm($customer);
@@ -111,7 +110,7 @@ class DefaultController extends Controller
 
     public function saveCustomerAction(Request $request)
     {
-        $accountId = $this->getUserToken()->getUser()->getId();
+        $accountId = $this->getCurrentUser()->getId();
         $customerEmail = null;
         try {
             $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
@@ -146,7 +145,7 @@ class DefaultController extends Controller
      */
     public function changePasswordAction(Request $request)
     {
-        $account = $this->getEntityManager();
+        $account = $this->getCurrentUser();
 
         $form = $this->get("mfb_account.change_password.form.factory")->createForm();
 
@@ -205,13 +204,16 @@ class DefaultController extends Controller
         return $form;
     }
 
-
-    /**
-     * @return null|\Symfony\Component\Security\Core\Authentication\Token\TokenInterface
-     */
-    private function getUserToken()
+    private function saveEntity($em, $entity)
     {
-        return $this->get('security.context')->getToken();
+        $em->persist($entity);
+        $em->flush();
+    }
+
+
+    private function getCurrentUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
     }
 
     /**
