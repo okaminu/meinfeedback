@@ -17,16 +17,13 @@
             </div>
         {% endif %}
 
-        <div class="kontaktform">
-
             <form action="{{ path("mfb_admin_login_check") }}" method="post" id="login" class="form-inline" target="_top">
-                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld breite240"/>
-                <input type="password" id="password" name="_password"  class="log_feld breite240"  placeholder="Passwort"/>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld popupInput"/>
+                <input type="password" id="password" name="_password"  class="log_feld popupInput"  placeholder="Passwort"/>
                 <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
             </form>
             <p>&nbsp;</p>
             <p class="forget-password">Sie haben Ihr Passwort vergessen? Klicken Sie <a href="{{ path("mfb_account_reset_request") }}" title="Passwort vergessen" class="login_sublnk fright">hier</a> um ein neues anzufordern.</p>
 
-        </div>
     </div>
 {% endblock %}
