@@ -1506,3 +1506,10 @@ a.footer_link:hover {
     float: right;
     margin-right:-50px;
 }
+
+.writeFeedbackButton{
+    position: fixed;
+    z-index: 100;
+    right:30px;
+    top:50px;
+}
