@@ -33,7 +33,7 @@ class ChangePasswordFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => $constraint,
                 'attr' => array(
-                    'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite490',
+                    'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite400',
                     'placeholder' => 'Old password'
                 )
             )
@@ -47,14 +47,14 @@ class ChangePasswordFormType extends AbstractType
                 'first_options' => array(
                     'label' => 'form.new_password',
                     'attr' => array(
-                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite490',
+                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite400',
                         'placeholder' => 'New password'
                     )
                 ),
                 'second_options' => array(
                     'label' => 'form.new_password_confirmation',
                     'attr' => array(
-                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite490',
+                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro breite400',
                         'placeholder' => 'Repeat new password'
                     )
                 ),
