@@ -10,6 +10,8 @@ popupSmallParams = {
     callbacks: {
         open: function() {
             $('.navbar').fadeOut('slow');
+            resizeIframe();
+
         },
         close: function() {
             $('.navbar').fadeIn('slow');
@@ -35,3 +37,12 @@ popupFullParams = {
         }
     }
 };
+
+
+function resizeIframe(){
+    $('.mfp-content iframe').on('load', function(){
+        height = $(this).contents().find('body').height();
+        height+=100;
+        $('.mfp-content').css('height', height + 'px');
+    });
+}
