@@ -68,3 +68,7 @@ mfb_admin_change_password:
 mfb_admin_show_form_setup:
     pattern: /show_form_setup
     defaults: { _controller: MFBAdminBundle:FormSetup:show}
+
+mfb_admin_save_form_setup:
+    pattern: /save_form_setup
+    defaults: { _controller: MFBAdminBundle:FormSetup:save}

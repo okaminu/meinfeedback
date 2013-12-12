@@ -4,8 +4,18 @@
 
 {% block content %}
     <div>
-        <div class="row-fluid inner-page contact navLogo">
-    Testing in progess
+        <div class="row-fluid inner-page navLogo">
+            <div class="span12">
+                {{ form_start(form) }}
+
+                {{ form_row(form.name, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
+
+                <div style="width:250px; padding-top:10px;">
+                    {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
 

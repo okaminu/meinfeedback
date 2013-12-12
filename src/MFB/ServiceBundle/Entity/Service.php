@@ -35,12 +35,6 @@ class Service
      */
     private $channelId;
 
-    
-    /**
-     * @var string
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     */
-    private $description;
 
     /**
      * @var string
@@ -63,6 +57,16 @@ class Service
      * @ORM\Column(name="service_id_reference", type="string", nullable=true)
      */
     private $serviceIdReference;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceGroup")
+     * @ORM\JoinColumn(name="service_group_id", referencedColumnName="id")
+     **/
+    private $serviceGroup;
+
+
 
     /**
      * Get id
@@ -118,29 +122,6 @@ class Service
     public function getChannelId()
     {
         return $this->channelId;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Service
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -210,5 +191,28 @@ class Service
     public function getCustomer()
     {
         return $this->customer;
+    }
+
+    /**
+     * Set serviceGroup
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
+     * @return Service
+     */
+    public function setServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup = null)
+    {
+        $this->serviceGroup = $serviceGroup;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceGroup
+     *
+     * @return \MFB\ServiceBundle\Entity\ServiceGroup 
+     */
+    public function getServiceGroup()
+    {
+        return $this->serviceGroup;
     }
 }

@@ -20,8 +20,11 @@ class ServiceType extends AbstractType
                     'label' => 'Service Date',
                     'widget' => 'choice',
                     'data'  => new \DateTime('now')))
-            ->add('description', 'text', array('required' => false, 'label' => 'Service Desc'))
             ->add('serviceIdReference', 'text', array('required' => false))
+            ->add('serviceGroup', 'entity', array(
+                    'class' => 'MFBServiceBundle:ServiceGroup',
+                    'property' => 'name',
+                ))
         ;
     }
 

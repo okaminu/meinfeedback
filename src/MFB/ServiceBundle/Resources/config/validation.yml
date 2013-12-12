@@ -1,0 +1,4 @@
+MFB\ServiceBundle\Entity\ServiceGroup:
+    properties:
+        name:
+            - NotBlank: ~

@@ -1,7 +1,7 @@
 parameters:
-#    mfb_channel.example.class: MFB\ChannelBundle\Example
+  mfb_service.class: MFB\ServiceBundle\Service\Service
 
 services:
-#    mfb_channel.example:
-#        class: %mfb_channel.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+  mfb_service.service:
+    class: %mfb_service.class%
+    arguments: ["@doctrine.orm.default_entity_manager"]
