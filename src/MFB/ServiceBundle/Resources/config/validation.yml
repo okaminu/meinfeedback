@@ -2,3 +2,7 @@ MFB\ServiceBundle\Entity\ServiceGroup:
     properties:
         name:
             - NotBlank: ~
+MFB\ServiceBundle\Entity\ServiceProvider:
+    properties:
+        firstname:
+            - NotBlank: ~

@@ -69,6 +69,10 @@ mfb_admin_show_form_setup:
     pattern: /show_form_setup
     defaults: { _controller: MFBAdminBundle:FormSetup:show}
 
-mfb_admin_save_form_setup:
-    pattern: /save_form_setup
-    defaults: { _controller: MFBAdminBundle:FormSetup:save}
+mfb_admin_save_service_group:
+    pattern: /mfb_admin_save_service_group
+    defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceGroup}
+
+mfb_admin_save_service_provider:
+    pattern: /mfb_admin_save_service_provider
+    defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceProvider}
