@@ -9,9 +9,9 @@
             <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
             <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
 
-
             <div class="nav-collapse collapse">
                 <ul class="nav navigation" id="menu">
+                    <li ><a title="Company" class="scroll fadeto brand-4">{{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}</a></li>
                     <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
                         <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">{% trans %}Dashboard{% endtrans %}</a>
                     </li>
@@ -21,14 +21,16 @@
                     </li>
                     <li><a title="Add customer" href="{{ path('mfb_show_create_customer') }}" class="scroll fadeto brand-4 iframe-small" rel="nofollow">{% trans %} Add Customer {% endtrans %}</a></li>
                     <li><a title="Widget" href="{{ path('mfb_widget') }}" class="scroll fadeto brand-4 iframe" rel="nofollow"> {% trans %} Widget / Icon{% endtrans %}</a></li>
+                    <li{% if app.request.get('_route') == 'mfb_admin_show_form_setup' %} class="active"{% endif %}>
+                        <a title="Form setup" href="{{ path('mfb_admin_show_form_setup') }}" class="scroll fadeto brand-1" rel="nofollow"> {% trans %} Form setup{% endtrans %}</a>
+                    </li>
                     <li><a title="Change password" href="{{ path('mfb_admin_change_password') }}" class="scroll fadeto brand-4 iframe-small" rel="nofollow">{% trans %} Change password {% endtrans %}</a></li>
                     <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">{% trans %} Logout {% endtrans %}</a></li>
                 </ul>
             </div>
         </div>
-        <div class="companyName">
-            {{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}
-        </div>
+
+        <div class="companyName"></div>
     </header>
     {% block content %}{% endblock %}
 {% endblock %}

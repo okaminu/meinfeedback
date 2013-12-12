@@ -1466,6 +1466,7 @@ a.footer_link:hover {
     disply:block;
     float:right;
     margin:5px 40px;
+    height: 30px;
 }
 
 .activeFeedbackTitle{
