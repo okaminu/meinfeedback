@@ -15,8 +15,8 @@ class ServiceProviderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstname', 'text', array('label' => 'Firstname'))
-            ->add('lastname', 'text', array('label' => 'Lastname'))
+            ->add('firstname', 'text', array('label' => 'Firstname', 'required' => true))
+            ->add('lastname', 'text', array('label' => 'Lastname', 'required' => false))
         ;
     }
     
