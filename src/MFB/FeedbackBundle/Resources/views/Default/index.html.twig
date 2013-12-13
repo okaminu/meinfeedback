@@ -66,12 +66,17 @@
                 {{ form_row(form.service.customer.customerIdReference) }}
                 {{ form_row(form.service.date) }}
                 {{ form_row(form.service.serviceIdReference) }}
+                {{ form_row(form.service.serviceProvider) }}
+                {{ form_row(form.service.serviceGroup) }}
                 </div>
 
 
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
+
+                <div style="display: none">{{ form_rest(form) }}</div>
+
                     {{ form_end(form) }}
                     <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
                 </form>

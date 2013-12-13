@@ -8,6 +8,18 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ServiceType extends AbstractType
 {
+
+    private $serviceProvider;
+
+    private $serviceGroup;
+
+
+    public function __construct($serviceProvider, $serviceGroup)
+    {
+        $this->serviceGroup = $serviceGroup;
+
+        $this->serviceProvider = $serviceProvider;
+    }
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -25,11 +37,14 @@ class ServiceType extends AbstractType
             ->add('customer', new CustomerType())
             ->add('serviceGroup', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceGroup',
-                    'property' => 'name'
+                    'property' => 'name',
+                    'choices' => $this->serviceGroup
                 ))
             ->add('serviceProvider', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceProvider',
-                    'property' => 'firstname'
+                    'property' => 'firstname',
+                    'choices' => $this->serviceProvider
+
                 ))
         ;
     }

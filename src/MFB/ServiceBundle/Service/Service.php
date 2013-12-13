@@ -86,4 +86,20 @@ class Service
         return $serviceGroup;
     }
 
+    public function getServiceGroupEntity($accountChannelId)
+    {
+        $serviceGroup = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findBy(
+            array('channelId' => $accountChannelId)
+        );
+        return $serviceGroup;
+    }
+
+    public function getServiceProviderEntity($accountChannelId)
+    {
+        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
+            array('channelId' => $accountChannelId)
+        );
+        return $serviceProvider;
+    }
+
 }

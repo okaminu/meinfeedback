@@ -32,7 +32,6 @@ class CustomerType extends AbstractType
             )
             ->add('firstName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => false))
-            ->add('service', 'collection', array('type' => new ServiceType()))
         ;
     }
     
