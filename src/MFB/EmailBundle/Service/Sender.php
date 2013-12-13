@@ -4,7 +4,6 @@ namespace MFB\EmailBundle\Service;
 
 use MFB\AccountBundle\Entity\Account;
 use MFB\CustomerBundle\Entity\Customer;
-use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -101,8 +100,14 @@ class Sender
         $this->mailer->send($message);
     }
 
-    public function sendFeedbackNotification(Account $account, Customer $customer, $feedbackText, $feedbackRating, $feedbackEnableLink, FeedbackInvite $invite = null)
-    {
+    public function sendFeedbackNotification(
+        $email,
+        Customer $customer,
+        $feedbackText,
+        $feedbackRating,
+        $feedbackEnableLink,
+        FeedbackInvite $invite = null
+    ) {
         $emailSubject = $this->translator->trans('Feedback received on meinfeedback');
         $customerName = $customer->getEmail();
 
@@ -121,7 +126,7 @@ class Sender
                 'invite' => $invite
             )
         );
-        $this->sendEmail($account->getEmail(), $emailSubject, $emailBody);
+        $this->sendEmail($email, $emailSubject, $emailBody);
     }
 
     /**

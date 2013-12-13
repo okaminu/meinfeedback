@@ -21,13 +21,11 @@ class FeedbackNotificationListener
 
     public function onRegularComplete(CustomerAccountEvent $event)
     {
-        $request = $event->getRequest();
-
         $this->sender->sendFeedbackNotification(
-            $event->getAccount(),
+            $event->getEmail(),
             $event->getCustomer(),
-            $request->get('feedback'),
-            $request->get('rating'),
+            $event->getFeedbackText(),
+            $event->getFeedbackRating(),
             $this->router->generate(
                 'mfb_feedback_enable',
                 array('feedbackId' => $event->getFeedbackId()),

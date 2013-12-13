@@ -4,4 +4,4 @@ parameters:
 services:
   mfb_feedback.service:
     class: %mfb_feedback.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service", "@event_dispatcher"]

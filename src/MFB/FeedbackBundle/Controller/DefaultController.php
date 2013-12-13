@@ -2,19 +2,13 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\AccountBundle\Entity\Account;
-use MFB\ChannelBundle\Entity\AccountChannel;
-use MFB\CustomerBundle\Entity\Customer;
 use MFB\FeedbackBundle\Entity\Feedback;
-use MFB\FeedbackBundle\Event\CustomerAccountEvent;
-use MFB\FeedbackBundle\FeedbackEvents;
+use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Form\FeedbackType;
 use MFB\ServiceBundle\Form\ServiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\ServiceBundle\Entity\Service;
-use Doctrine\DBAL\DBALException;
 use Symfony\Component\Form\FormError;
 
 class DefaultController extends Controller
@@ -24,127 +18,31 @@ class DefaultController extends Controller
         $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
-
-        return $this->render(
-            'MFBFeedbackBundle:Default:index.html.twig',
-            array(
-                'accountChannel' => $accountChannel,
-                'form' => $form->createView()
-            )
-        );
+        return $this->showFeedbackFrom($accountChannel, $form);
     }
 
     public function saveFeedbackAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $dispatcher = $this->container->get('event_dispatcher');
-        $errorMessage = null;
-        $dispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
-
-        /** @var Account $account */
-        $account = $this->get("mfb_account.service")->findByAccountId($request->get('accountId'));
-        /** @var AccountChannel $accountChannel */
-        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account->getId());
-
-        $feedback = new Feedback();
-        $feedback->setChannelId($accountChannel->getId());
-        $feedback->setAccountId($account->getId());
-
-        $customer = new Customer();
-        $customer->setAccountId($account->getId());
-
-        $service = new Service();
-        $service->setAccountId($account->getId());
-        $service->setChannelId($accountChannel->getId());
-
-        $customer->addService($service);
-        $service->setCustomer($customer);
-        $feedback->setCustomer($customer);
-        $form = $this->getFeedbackForm($feedback, null, null);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            try {
-                $em->persist($feedback);
-                $em->flush();
-
-                $event = new CustomerAccountEvent($feedback->getId(), $account, $customer, $request);
-                $dispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
-
-                $return_url = $this->getReturnUrl($accountChannel);
-
-                return $this->render(
-                    'MFBFeedbackBundle:Invite:thank_you.html.twig',
-                    array(
-                        'thankyou_text' => $this->get('mfb_email.template')->getText($customer, 'ThankYou'),
-                        'homepage' => $return_url
-                    )
-                );
-
-            } catch (DBALException $ex) {
-                $ex = $ex->getPrevious();
-                if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
-                    $form->get('customer')->get('email')->addError(new FormError('Email already exists'));
-                } else {
-                    $form->addError(new FormError($ex->getMessage()));
-                }
-            }
-        }
-
-        return $this->render(
-            'MFBFeedbackBundle:Default:index.html.twig',
-            array(
-                'form' => $form->createView(),
-                'accountChannel' => $accountChannel
-            )
-        );
-    }
-
-    public function showCreateFeedbackFormActionCP()
-    {
-        $accountId = $this->getCurrentUser()->getId();
-
+        $accountId = $request->get('accountId');
+        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
-        $form = $this->getCustomerForm($customer);
-
-        return $this->render(
-            'MFBAdminBundle:Default:customer.html.twig',
-            array(
-                'customerEmail' => $customer->getEmail(),
-                'form' => $form->createView()
-            )
-        );
-    }
-
-    public function saveFeedbackActionCP(Request $request)
-    {
-        $accountId = $this->getCurrentUser()->getId();
-        $customerEmail = null;
+        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
         try {
-            $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
-            $form = $this->getCustomerForm($customer);
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
 
-            $this->get('mfb_customer.service')->store($customer);
-            $customerEmail = $customer->getEmail();
-        } catch (AccountException $ax) {
-            $form->get('email')->addError(new FormError('Email already exists'));
+            $this->get('mfb_feedback.service')->store($feedback);
+            return $this->showThankyouForm($accountChannel, $feedback);
+        } catch (FeedbackException $ax) {
+            $form->addError(new FormError($ax->getMessage()));
         } catch (\Exception $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->render(
-            'MFBAdminBundle:Default:customer.html.twig',
-            array(
-                'customerEmail' => $customerEmail,
-                'form' => $form->createView()
-            )
-        );
+        return $this->showFeedbackFrom($accountChannel, $form);
     }
 
 
@@ -193,5 +91,39 @@ class DefaultController extends Controller
                 'method' => 'POST'
             ));
         return $form;
+    }
+
+    /**
+     * @param $accountChannel
+     * @param $form
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function showFeedbackFrom($accountChannel, $form)
+    {
+        return $this->render(
+            'MFBFeedbackBundle:Default:index.html.twig',
+            array(
+                'accountChannel' => $accountChannel,
+                'form' => $form->createView()
+            )
+        );
+    }
+
+    /**
+     * @param $accountChannel
+     * @param $feedback
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function showThankyouForm($accountChannel, $feedback)
+    {
+        $return_url = $this->getReturnUrl($accountChannel);
+
+        return $this->render(
+            'MFBFeedbackBundle:Invite:thank_you.html.twig',
+            array(
+                'thankyou_text' => $this->get('mfb_email.template')->getText($feedback->getCustomer(), 'ThankYou'),
+                'homepage' => $return_url
+            )
+        );
     }
 }

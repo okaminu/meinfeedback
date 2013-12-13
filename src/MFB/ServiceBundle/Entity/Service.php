@@ -47,7 +47,7 @@ class Service
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="MFB\CustomerBundle\Entity\Customer")
+     * @ORM\ManyToOne(targetEntity="MFB\CustomerBundle\Entity\Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      **/
     private $customer;

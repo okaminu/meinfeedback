@@ -3,25 +3,25 @@
 
 namespace MFB\FeedbackBundle\Event;
 
-use MFB\AccountBundle\Entity\Account;
 use MFB\CustomerBundle\Entity\Customer;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\HttpFoundation\Request;
 
 class CustomerAccountEvent extends Event
 {
     private $feedbackId;
-    private $account;
+    private $email;
     private $customer;
-    private $request;
+    private $feedbackText;
+    private $feedbackRating;
     private $invite;
 
-    public function __construct($feedbackId, Account $account, Customer $customer, Request $request, $invite = null)
+    public function __construct($feedbackId, $email, Customer $customer, $feedbackText, $feedbackRating, $invite = null)
     {
         $this->feedbackId = $feedbackId;
-        $this->account = $account;
+        $this->email = $email;
         $this->customer = $customer;
-        $this->request = $request;
+        $this->feedbackText = $feedbackText;
+        $this->feedbackRating = $feedbackRating;
         $this->invite = $invite;
     }
 
@@ -36,9 +36,9 @@ class CustomerAccountEvent extends Event
     /**
      * @return mixed
      */
-    public function getAccount()
+    public function getEmail()
     {
-        return $this->account;
+        return $this->email;
     }
 
     /**
@@ -52,9 +52,17 @@ class CustomerAccountEvent extends Event
     /**
      * @return mixed
      */
-    public function getRequest()
+    public function getFeedbackText()
     {
-        return $this->request;
+        return $this->feedbackText;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFeedbackRating()
+    {
+        return $this->feedbackRating;
     }
 
     /**
