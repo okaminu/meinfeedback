@@ -84,6 +84,7 @@ class Customer
      */
     private $service;
 
+
     public function __construct()
     {
         $this->service = new ArrayCollection();
@@ -265,7 +266,7 @@ class Customer
     public function addService(\MFB\ServiceBundle\Entity\Service $service)
     {
         $this->service[] = $service;
-    
+
         return $this;
     }
 
@@ -282,7 +283,7 @@ class Customer
     /**
      * Get service
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getService()
     {

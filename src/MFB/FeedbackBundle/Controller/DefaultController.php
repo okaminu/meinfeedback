@@ -133,7 +133,7 @@ class DefaultController extends Controller
     {
         $accountId = $this->getCurrentUser()->getId();
 
-        $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
+        $customer = $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getCustomerForm($customer);
 
         return $this->render(

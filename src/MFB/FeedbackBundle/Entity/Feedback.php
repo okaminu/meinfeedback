@@ -50,6 +50,14 @@ class Feedback
     /**
      * @var integer
      *
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\Service", cascade={"persist"})
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     **/
+    private $service;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="channel_id", type="integer")
      */
     private $channelId;
@@ -298,4 +306,27 @@ class Feedback
         return $this->sort;
     }
 
+
+    /**
+     * Set service
+     *
+     * @param \MFB\ServiceBundle\Entity\Service $service
+     * @return Feedback
+     */
+    public function setService(\MFB\ServiceBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+    
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \MFB\ServiceBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
 }
