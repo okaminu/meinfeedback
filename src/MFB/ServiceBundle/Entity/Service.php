@@ -52,12 +52,6 @@ class Service
      **/
     private $customer;
 
-    /**
-     * @var integer
-     *
-     * @ORM\OneToMany(targetEntity="MFB\FeedbackBundle\Entity\Feedback", mappedBy="Service", cascade={"persist"})
-     **/
-    private $feedback;
 
     /**
      * @var string
@@ -257,38 +251,5 @@ class Service
     public function getServiceProvider()
     {
         return $this->serviceProvider;
-    }
-    
-    /**
-     * Add feedback
-     *
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return Service
-     */
-    public function addFeedback(\MFB\FeedbackBundle\Entity\Feedback $feedback)
-    {
-        $this->feedback[] = $feedback;
-    
-        return $this;
-    }
-
-    /**
-     * Remove feedback
-     *
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     */
-    public function removeFeedback(\MFB\FeedbackBundle\Entity\Feedback $feedback)
-    {
-        $this->feedback->removeElement($feedback);
-    }
-
-    /**
-     * Get feedback
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getFeedback()
-    {
-        return $this->feedback;
     }
 }
