@@ -2,6 +2,7 @@
 
 namespace MFB\ServiceBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -82,6 +83,10 @@ class Service
     private $serviceProvider;
 
 
+    public function __construct()
+    {
+        $this->feedback = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -252,13 +257,6 @@ class Service
     public function getServiceProvider()
     {
         return $this->serviceProvider;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->feedback = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
