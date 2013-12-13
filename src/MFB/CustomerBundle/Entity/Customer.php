@@ -37,6 +37,13 @@ class Customer
     private $accountId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="channel_id", type="integer")
+     */
+    private $channelId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="gender", type="integer", nullable=true)
@@ -77,12 +84,6 @@ class Customer
      * @ORM\Column(name="customer_id_reference", type="string", length=255, nullable=true)
      */
     private $customerIdReference;
-
-    /**
-     * @var
-     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\Service", mappedBy="Customer",cascade={"persist"})
-     */
-    private $service;
 
 
     public function __construct()
@@ -257,36 +258,27 @@ class Customer
         return $this->customerIdReference;
     }
 
+
     /**
-     * Add service
+     * Set channelId
      *
-     * @param \MFB\ServiceBundle\Entity\Service $service
+     * @param integer $channelId
      * @return Customer
      */
-    public function addService(\MFB\ServiceBundle\Entity\Service $service)
+    public function setChannelId($channelId)
     {
-        $this->service[] = $service;
-
+        $this->channelId = $channelId;
+    
         return $this;
     }
 
     /**
-     * Remove service
+     * Get channelId
      *
-     * @param \MFB\ServiceBundle\Entity\Service $service
+     * @return integer 
      */
-    public function removeService(\MFB\ServiceBundle\Entity\Service $service)
+    public function getChannelId()
     {
-        $this->service->removeElement($service);
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getService()
-    {
-        return $this->service;
+        return $this->channelId;
     }
 }

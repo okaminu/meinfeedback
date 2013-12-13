@@ -12,14 +12,14 @@ class AccountChannelManager extends EntityRepository
     /**
      * Get Account Channel by Account
      *
-     * @param Account $account
+     * @param $accountId
      * @return AccountChannel
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function findAccountChannelByAccount(Account $account)
+    public function findAccountChannelByAccount($accountId)
     {
         $accountChannel = $this->getEntityManager()->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$account->getId())
+            array('accountId'=>$accountId)
         );
         if (!$accountChannel) {
             throw new NotFoundHttpException('No feedback yet. Sorry.');

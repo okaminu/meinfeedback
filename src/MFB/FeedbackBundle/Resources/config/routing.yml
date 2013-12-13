@@ -1,10 +1,10 @@
 mfb_feedback_create:
     pattern:  /createFeedback/{accountId}
-    defaults: { _controller: MFBFeedbackBundle:Default:index }
+    defaults: { _controller: MFBFeedbackBundle:Default:showCreateFeedbackForm }
 
 mfb_feedback_save:
     pattern:  /saveFeedback/{accountId}/{accountChannelId}
-    defaults: { _controller: MFBFeedbackBundle:Default:save }
+    defaults: { _controller: MFBFeedbackBundle:Default:saveFeedback }
     requirements: { _method: post, accountId: \d+, accountChannelId: \d+}
 
 mfb_feedback_create_with_invite:

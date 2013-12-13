@@ -28,10 +28,10 @@
                         {{ form_errors(form) }}
                     </div>
 
-                    {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
+                    {{ form_widget(form.service.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
                     <div class="errorMessage">
-                    {{ form_errors(form.customer.email) }}
+                    {{ form_errors(form.service.customer.email) }}
                     </div>
 
                     {% if accountChannel.getRatingsEnabled == 1 %}
@@ -51,21 +51,21 @@
                     <div class="mandatoryFieldMark" style="float: right">*</div>
 
                 <div style="width: 92%">
-                {{ form_label(form.customer.anonymous) }}
+                {{ form_label(form.service.customer.anonymous) }}
                 <div style="display:block; width:80px;">
-                    {{ form_widget(form.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
+                    {{ form_widget(form.service.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
                     <div style="float:right; position:relative; top:10px">
                         {{ tooltips.tooltip('What anonymous feedback?',
                         "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
                     </div>
                 </div>
-                {{ form_label(form.customer.gender) }}
-                {{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}
-                {{ form_row(form.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
-                {{ form_row(form.customer.lastName) }}
-                {{ form_row(form.customer.customerIdReference) }}
-                {{ form_row(form.customer.service.0.date) }}
-                {{ form_row(form.customer.service.0.serviceIdReference) }}
+                {{ form_label(form.service.customer.gender) }}
+                {{ form_widget(form.service.customer.gender, {'attr': {'class' : 'gender'} }) }}
+                {{ form_row(form.service.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
+                {{ form_row(form.service.customer.lastName) }}
+                {{ form_row(form.service.customer.customerIdReference) }}
+                {{ form_row(form.service.date) }}
+                {{ form_row(form.service.serviceIdReference) }}
                 </div>
 
 

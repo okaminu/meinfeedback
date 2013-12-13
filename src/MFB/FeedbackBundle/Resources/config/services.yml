@@ -1,7 +1,7 @@
 parameters:
-#    mfb_feedback.example.class: MFB\FeedbackBundle\Example
+  mfb_feedback.class: MFB\FeedbackBundle\Service\Feedback
 
 services:
-#    mfb_feedback.example:
-#        class: %mfb_feedback.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+  mfb_feedback.service:
+    class: %mfb_feedback.class%
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service"]

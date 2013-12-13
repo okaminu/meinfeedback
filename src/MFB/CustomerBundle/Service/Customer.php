@@ -5,20 +5,17 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\AccountBundle\AccountException;
 use MFB\CustomerBundle\Entity\Customer as CustomerEntity;
-use MFB\ServiceBundle\Entity\Service;
 use MFB\CustomerBundle\CustomerEvents;
 use MFB\CustomerBundle\Event\NewCustomerEvent;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-
+use MFB\ServiceBundle\Service\Service;
 
 class Customer
 {
     private $entityManager;
 
     private $eventDispacher;
-
 
     public function __construct(EntityManager $em, EventDispatcher $ed)
     {
@@ -28,13 +25,7 @@ class Customer
 
     public function createNewCustomer($accountId)
     {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
-
         $customer = $this->getNewCustomerEntity($accountId);
-        $service = $this->getNewServiceEntity($accountId, $accountChannelId);
-        $customer->addService($service);
-        $service->setCustomer($customer);
-
         $this->eventDispacher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
         return $customer;
 
@@ -80,16 +71,10 @@ class Customer
         }
         $customer = new CustomerEntity();
         $customer->setAccountId($accountId);
+        $customer->setChannelId($accountChannel->getId());
         return $customer;
     }
 
-    private function getNewServiceEntity($accountId, $accountChannelId)
-    {
-        $service = new Service();
-        $service->setAccountId($accountId);
-        $service->setChannelId($accountChannelId);
-        return $service;
-    }
 
     /**
      * @param $customer

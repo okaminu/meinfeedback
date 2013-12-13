@@ -1,6 +1,7 @@
 <?php
 namespace MFB\ServiceBundle\Form;
 
+use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -21,6 +22,7 @@ class ServiceType extends AbstractType
                     'widget' => 'choice',
                     'data'  => new \DateTime('now')))
             ->add('serviceIdReference', 'text', array('required' => false))
+            ->add('customer', new CustomerType())
             ->add('serviceGroup', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceGroup',
                     'property' => 'name'

@@ -18,51 +18,22 @@ use Symfony\Component\Form\FormError;
 
 class DefaultController extends Controller
 {
-    public function indexAction($accountId)
+    public function showCreateFeedbackFormAction($accountId)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var Account $account */
-        $account = $em->find('MFBAccountBundle:Account', $accountId);
-        if (!$account) {
-            throw $this->createNotFoundException('Account does not exist');
-        }
-
-        /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $account->getId())
-        );
-
-        if (!$accountChannel) {
-            throw $this->createNotFoundException('Account does not have any channels');
-        }
-
-        $feedback = new Feedback();
-        $feedback->setChannelId($accountChannel->getId());
-        $feedback->setAccountId($account->getId());
-
-        $customer = new Customer();
-        $customer->setAccountId($account->getId());
-
-        $service = new Service();
-        $service->setAccountId($account->getId());
-        $service->setChannelId($accountChannel->getId());
-
-        $customer->addService($service);
-        $service->setCustomer($customer);
-        $feedback->setCustomer($customer);
+        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getFeedbackForm($feedback);
 
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(
-                'form' => $form->createView(),
-                'accountChannel' => $accountChannel
+                'accountChannel' => $accountChannel,
+                'form' => $form->createView()
             )
         );
     }
 
-    public function saveAction(Request $request)
+    public function saveFeedbackAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $dispatcher = $this->container->get('event_dispatcher');
@@ -72,7 +43,7 @@ class DefaultController extends Controller
         /** @var Account $account */
         $account = $this->get("mfb_account.service")->findByAccountId($request->get('accountId'));
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
+        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($account->getId());
 
         $feedback = new Feedback();
         $feedback->setChannelId($accountChannel->getId());
@@ -129,11 +100,11 @@ class DefaultController extends Controller
         );
     }
 
-    public function showCreateFeedbackFormAction()
+    public function showCreateFeedbackFormActionCP()
     {
         $accountId = $this->getCurrentUser()->getId();
 
-        $customer = $this->get('mfb_feedback.service')->createNewFeedback($accountId);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getCustomerForm($customer);
 
         return $this->render(
@@ -145,7 +116,7 @@ class DefaultController extends Controller
         );
     }
 
-    public function saveFeedbackAction(Request $request)
+    public function saveFeedbackActionCP(Request $request)
     {
         $accountId = $this->getCurrentUser()->getId();
         $customerEmail = null;

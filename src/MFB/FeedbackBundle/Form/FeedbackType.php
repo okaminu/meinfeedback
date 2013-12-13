@@ -3,6 +3,7 @@
 namespace MFB\FeedbackBundle\Form;
 
 use MFB\CustomerBundle\Form\CustomerType;
+use MFB\ServiceBundle\Form\ServiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -18,7 +19,7 @@ class FeedbackType extends AbstractType
         $builder
             ->add('content', 'textarea')
             ->add('rating', 'hidden')
-            ->add('customer', new CustomerType())
+            ->add('service', new ServiceType())
             ->add('save', 'submit', array('label' => 'Send'));
         ;
     }

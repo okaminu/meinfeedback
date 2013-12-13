@@ -52,7 +52,9 @@ class Widget
         /** @var Account $account */
         $account = $this->container->get("mfb_account.service")->findByAccountId($accountId);
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $this->container->get("mfb_account_channel.manager")->findAccountChannelByAccount($account);
+        $accountChannel = $this->container->get("mfb_account_channel.manager")->findAccountChannelByAccount(
+            $account->getId()
+        );
 
         $widget = $em->getRepository('MFBWidgetBundle:Widget')->findOneBy(
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())

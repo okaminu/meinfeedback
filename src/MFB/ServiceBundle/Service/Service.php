@@ -4,6 +4,7 @@ namespace MFB\ServiceBundle\Service;
 use Doctrine\ORM\EntityManager;
 use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\ServiceBundle\ServiceException;
 
 class Service
@@ -14,6 +15,13 @@ class Service
     public function __construct(EntityManager $em)
     {
         $this->entityManager = $em;
+    }
+
+    public function createNewService($accountId)
+    {
+        $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        $service = $this->getNewServiceEntity($accountChannelId, $accountId);
+        return $service;
     }
 
     public function createNewServiceGroup($accountId)
@@ -54,6 +62,14 @@ class Service
             array('accountId' => $accountId)
         );
         return $accountChannel;
+    }
+
+    private function getNewServiceEntity($accountChannel, $accountId)
+    {
+        $serviceGroup = new ServiceEntity();
+        $serviceGroup->setChannelId($accountChannel);
+        $serviceGroup->setAccountId($accountId);
+        return $serviceGroup;
     }
 
     private function getNewServiceGroupEntity($accountChannel)
