@@ -23,7 +23,11 @@ class ServiceType extends AbstractType
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('serviceGroup', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceGroup',
-                    'property' => 'name',
+                    'property' => 'name'
+                ))
+            ->add('serviceProvider', 'entity', array(
+                    'class' => 'MFBServiceBundle:ServiceProvider',
+                    'property' => 'firstname'
                 ))
         ;
     }

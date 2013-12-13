@@ -66,6 +66,14 @@ class Service
      **/
     private $serviceGroup;
 
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceProvider")
+     * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id")
+     **/
+    private $serviceProvider;
+
 
 
     /**
@@ -214,5 +222,28 @@ class Service
     public function getServiceGroup()
     {
         return $this->serviceGroup;
+    }
+
+    /**
+     * Set serviceProvider
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider
+     * @return Service
+     */
+    public function setServiceProvider(\MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider = null)
+    {
+        $this->serviceProvider = $serviceProvider;
+    
+        return $this;
+    }
+
+    /**
+     * Get serviceProvider
+     *
+     * @return \MFB\ServiceBundle\Entity\ServiceProvider 
+     */
+    public function getServiceProvider()
+    {
+        return $this->serviceProvider;
     }
 }

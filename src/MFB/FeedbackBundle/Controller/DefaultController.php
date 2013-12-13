@@ -129,6 +129,53 @@ class DefaultController extends Controller
         );
     }
 
+    public function showCreateFeedbackFormAction()
+    {
+        $accountId = $this->getCurrentUser()->getId();
+
+        $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
+        $form = $this->getCustomerForm($customer);
+
+        return $this->render(
+            'MFBAdminBundle:Default:customer.html.twig',
+            array(
+                'customerEmail' => $customer->getEmail(),
+                'form' => $form->createView()
+            )
+        );
+    }
+
+    public function saveFeedbackAction(Request $request)
+    {
+        $accountId = $this->getCurrentUser()->getId();
+        $customerEmail = null;
+        try {
+            $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
+            $form = $this->getCustomerForm($customer);
+            $form->handleRequest($request);
+
+            if (!$form->isValid()) {
+                throw new \Exception('Not valid form');
+            }
+
+            $this->get('mfb_customer.service')->store($customer);
+            $customerEmail = $customer->getEmail();
+        } catch (AccountException $ax) {
+            $form->get('email')->addError(new FormError('Email already exists'));
+        } catch (\Exception $ex) {
+            $form->addError(new FormError($ex->getMessage()));
+        }
+
+        return $this->render(
+            'MFBAdminBundle:Default:customer.html.twig',
+            array(
+                'customerEmail' => $customerEmail,
+                'form' => $form->createView()
+            )
+        );
+    }
+
+
     /**
      * @param $accountChannel
      * @return string
