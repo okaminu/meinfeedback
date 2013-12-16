@@ -56,7 +56,7 @@ class Sender
                   "#SAL#" => $customer->getSalutation(),
                   "#SERVICE_DATE#" => $date,
                   "#REFERENCE_ID#" => $service->getServiceIdReference(),
-                  "#SERVICE_NAME#" => $service->getDescription(),
+                  "#SERVICE_NAME#" => $service->getServiceGroup()->getName(),
                   "#HOMEPAGE#" => $channel->getHomepageUrl(),
                   "#SERVICE_ID#" => $service->getServiceIdReference(),
                   "#CUSTOMER_ID#" => $customer->getCustomerIdReference(),

@@ -6,10 +6,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\AccountBundle\AccountException;
 use MFB\CustomerBundle\Entity\Customer as CustomerEntity;
 use MFB\CustomerBundle\CustomerEvents;
-use MFB\CustomerBundle\Event\NewCustomerEvent;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\ServiceBundle\Service\Service;
 
 class Customer
 {
@@ -26,7 +24,6 @@ class Customer
     public function createNewCustomer($accountId)
     {
         $customer = $this->getNewCustomerEntity($accountId);
-        $this->eventDispacher->dispatch(CustomerEvents::CREATE_CUSTOMER_INITIALIZE);
         return $customer;
 
     }
@@ -35,7 +32,6 @@ class Customer
     {
         try {
             $this->saveEntity($customer);
-            $this->dispatchCreateCustomerEvent($customer);
         } catch (DBALException $ex) {
             if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
                 throw new AccountException('Email already exists');
@@ -76,14 +72,4 @@ class Customer
     }
 
 
-    /**
-     * @param $customer
-     */
-    private function dispatchCreateCustomerEvent($customer)
-    {
-        $accountChannel = $this->getAccountChannel($customer->getAccountId());
-        $service = $customer->getService()->first();
-        $event = new NewCustomerEvent($customer, $accountChannel, $service);
-        $this->eventDispacher->dispatch(CustomerEvents::CREATE_CUSTOMER_COMPLETE, $event);
-    }
 }

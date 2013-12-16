@@ -1,6 +1,7 @@
 <?php
 namespace MFB\ServiceBundle\Service;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
@@ -49,12 +50,12 @@ class Service
         return $serviceProvider;
     }
 
-    public function store($serviceGroup)
+    public function store($service)
     {
         try {
-            $this->saveEntity($serviceGroup);
-        } catch (\Exception $ex) {
-                throw new ServiceException('Cannot create service');
+            $this->saveEntity($service);
+        } catch (DBALException $ex) {
+            throw new ServiceException('Email already exists');
         }
     }
 
