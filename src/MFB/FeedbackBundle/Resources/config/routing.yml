@@ -9,10 +9,10 @@ mfb_feedback_save:
 
 mfb_feedback_create_with_invite:
     pattern:  /createFeedback/invite/{token}
-    defaults: { _controller: MFBFeedbackBundle:Invite:index }
+    defaults: { _controller: MFBFeedbackBundle:Invite:showCreateFeedbackForm }
 
 mfb_feedback_save_with_invite:
     pattern:  /saveFeedback/invite/{token}
-    defaults: { _controller: MFBFeedbackBundle:Invite:save }
-    requirements: { _method: post }
+    defaults: { _controller: MFBFeedbackBundle:Invite:saveFeedback }
+    requirements: { _method: post}
 

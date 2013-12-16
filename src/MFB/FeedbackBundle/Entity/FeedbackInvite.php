@@ -68,7 +68,7 @@ class FeedbackInvite
 
     /**
      * @var $service
-     * @ORM\OneToOne(targetEntity="\MFB\ServiceBundle\Entity\Service")
+     * @ORM\ManyToOne(targetEntity="\MFB\ServiceBundle\Entity\Service", fetch="EAGER")
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
     private $service;

@@ -127,4 +127,11 @@ class Service
         return $serviceProvider;
     }
 
+    public function findServiceById($id)
+    {
+        $service =  $this->entityManager->getReference('MFBServiceBundle:Service', $id);
+        return $service;
+    }
+
+
 }

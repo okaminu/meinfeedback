@@ -8,6 +8,7 @@ use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Service\Service;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -30,12 +31,14 @@ class Feedback
         $this->eventDispatcher = $ed;
     }
 
-    public function createNewFeedback($accountId)
+    public function createNewFeedback($accountId, $service = null)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
         $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
         $customer = $this->customerService->createNewCustomer($accountId);
-        $service = $this->service->createNewService($accountId, $customer);
+        if (!$service) {
+            $service = $this->service->createNewService($accountId, $customer);
+        }
 
         $feedback->setService($service);
         $feedback->setCustomer($customer);
@@ -62,6 +65,18 @@ class Feedback
         $this->dispatchCreateFeedbackEvent($feedback);
     }
 
+
+    public function remove($entity)
+    {
+        $this->removeEntity($entity);
+    }
+
+
+    private function removeEntity($entity)
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
     /**
      * @param $entity
      */
