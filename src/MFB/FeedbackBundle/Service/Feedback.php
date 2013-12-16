@@ -35,14 +35,14 @@ class Feedback
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
         $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
         $customer = $this->customerService->createNewCustomer($accountId);
-        $service = $this->service->createNewService($accountId);
+        $service = $this->service->createNewService($accountId, $customer);
 
-        $service->setCustomer($customer);
         $feedback->setService($service);
         $feedback->setCustomer($customer);
 
         return $feedback;
     }
+
 
     public function store($feedback)
     {
@@ -53,6 +53,8 @@ class Feedback
         } catch (DBALException $ex) {
             if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
                 throw new FeedbackException('Email already exists');
+            } else {
+                throw new FeedbackException('Cannot create feedback');
             }
         } catch (\Exception $ex) {
             throw new FeedbackException('Cannot create feedback');

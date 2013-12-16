@@ -4,4 +4,4 @@ parameters:
 services:
   mfb_service.service:
     class: %mfb_service.class%
-    arguments: ["@doctrine.orm.default_entity_manager"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service"]

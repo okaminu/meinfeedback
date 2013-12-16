@@ -6,21 +6,31 @@ use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\ServiceBundle\ServiceException;
+use MFB\CustomerBundle\Service\Customer as CustomerService;
 
 class Service
 {
     private $entityManager;
 
+    private $customerService;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, CustomerService $customer)
     {
         $this->entityManager = $em;
+        $this->customerService = $customer;
+
     }
 
-    public function createNewService($accountId)
+    public function createNewService($accountId, $customer = null)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        if (!$customer) {
+            $customer = $this->customerService->createNewCustomer($accountId);
+        }
         $service = $this->getNewServiceEntity($accountChannelId, $accountId);
+
+        $service->setCustomer($customer);
+
         return $service;
     }
 
