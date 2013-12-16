@@ -28,19 +28,10 @@ class InviteController extends Controller
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
-        $feedback = new Feedback();
-        $feedback->setChannelId($accountChannel->getId());
-        $feedback->setAccountId($accountChannel->getAccountId());
-        $feedback->setCustomer($customer);
+        $feedback = $this->getNewFeedbackEntity($accountChannel, $customer);
 
         $form = $this->getFeedbackForm($token, $feedback);
-        return $this->render(
-            'MFBFeedbackBundle:Invite:index.html.twig',
-            array(
-                'accountChannel' => $accountChannel,
-                'form' => $form->createView()
-            )
-        );
+        return $this->showFeedbackForm($accountChannel, $form);
     }
 
     public function saveAction(Request $request)
@@ -64,23 +55,18 @@ class InviteController extends Controller
         $accountChannel = $em->find('MFBChannelBundle:AccountChannel', $invite->getChannelId());
         $customer = $em->find('MFBCustomerBundle:Customer', $invite->getCustomerId());
 
-        $feedback = new Feedback();
-        $feedback->setChannelId($accountChannel->getId());
-        $feedback->setAccountId($accountChannel->getAccountId());
-        $feedback->setCustomer($customer);
+        $feedback = $this->getNewFeedbackEntity($accountChannel, $customer);
 
         $form = $this->getFeedbackForm($request->get('token'), $feedback);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($feedback);
-            $em->flush();
+            $this->saveEntity($em, $feedback);
 
             $event = new CustomerAccountEvent($feedback->getId(), $account, $customer, $request, $invite);
             $dispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);
 
-            $em->remove($invite);
-            $em->flush();
+            $this->removeEntity($em, $invite);
 
             $return_url = $this->getReturnUrl($accountChannel);
 
@@ -92,13 +78,7 @@ class InviteController extends Controller
                 )
             );
         }
-        return $this->render(
-            'MFBFeedbackBundle:Invite:index.html.twig',
-            array(
-                'accountChannel' => $accountChannel,
-                'form' => $form->createView()
-            )
-        );
+        return $this->showFeedbackForm($accountChannel, $form);
 
     }
 
@@ -142,5 +122,55 @@ class InviteController extends Controller
             )
         );
         return $form;
+    }
+
+    /**
+     * @param $accountChannel
+     * @param $customer
+     * @return Feedback
+     */
+    private function getNewFeedbackEntity($accountChannel, $customer)
+    {
+        $feedback = new Feedback();
+        $feedback->setChannelId($accountChannel->getId());
+        $feedback->setAccountId($accountChannel->getAccountId());
+        $feedback->setCustomer($customer);
+        return $feedback;
+    }
+
+    /**
+     * @param $em
+     * @param $feedback
+     */
+    private function saveEntity($em, $feedback)
+    {
+        $em->persist($feedback);
+        $em->flush();
+    }
+
+    /**
+     * @param $em
+     * @param $invite
+     */
+    private function removeEntity($em, $invite)
+    {
+        $em->remove($invite);
+        $em->flush();
+    }
+
+    /**
+     * @param $accountChannel
+     * @param $form
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function showFeedbackForm($accountChannel, $form)
+    {
+        return $this->render(
+            'MFBFeedbackBundle:Invite:index.html.twig',
+            array(
+                'accountChannel' => $accountChannel,
+                'form' => $form->createView()
+            )
+        );
     }
 }
