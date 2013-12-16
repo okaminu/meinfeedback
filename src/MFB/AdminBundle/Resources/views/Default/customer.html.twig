@@ -19,25 +19,26 @@
                 {{ form_errors(form) }}
                 <div>
                     <div style="width:300px">
-                        {{ form_errors(form.email) }}
-                        {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite400 spaceForMandatoryMark',
+                        {{ form_errors(form.customer.email) }}
+                        {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite400 spaceForMandatoryMark',
                         'placeholder': 'Customers email*'} }) }}
                         <div class="mandatoryFieldMark" style="float: right">*</div>
                     </div>
-                    {{ form_label(form.anonymous) }}
+                    {{ form_label(form.customer.anonymous) }}
                     <div style="display:block; width:50px">
-                        {{ form_widget(form.anonymous) }}
+                        {{ form_widget(form.customer.anonymous) }}
                     </div>
                     <p id='manual-example'>
-                    {{ form_label(form.gender) }}
-                    {{ form_widget(form.gender, {'attr': {'class' : 'gender'} }) }}
-                    {{ form_row(form.firstName) }}
-                    {{ form_row(form.lastName) }}
-                    {{ form_row(form.customerIdReference) }}
-                    {{ form_row(form.service.0.date) }}
-                    {{ form_row(form.service.0.description) }}
-                    {{ form_row(form.service.0.serviceIdReference) }}
-                    {{ form_row(form.salutation) }}
+                    {{ form_label(form.customer.gender) }}
+                    {{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}
+                    {{ form_row(form.customer.firstName) }}
+                    {{ form_row(form.customer.lastName) }}
+                    {{ form_row(form.customer.customerIdReference) }}
+                    {{ form_row(form.date) }}
+                    {{ form_row(form.serviceIdReference) }}
+                    {{ form_row(form.serviceProvider) }}
+                    {{ form_row(form.serviceGroup) }}
+                    {{ form_row(form.customer.salutation) }}
                 </div>
                 <div style="width:250px; padding-top:10px;">
                     <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">

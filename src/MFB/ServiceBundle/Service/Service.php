@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManager;
 use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\ServiceBundle\Form\ServiceType;
 use MFB\ServiceBundle\ServiceException;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 
@@ -55,6 +56,19 @@ class Service
         } catch (\Exception $ex) {
                 throw new ServiceException('Cannot create service');
         }
+    }
+
+    /**
+     * @param $accountId
+     * @return ServiceType
+     */
+    public function getServiceType($accountId)
+    {
+        $accountChannelId = $this->getAccountChannel($accountId);
+        $serviceGroup = $this->getServiceGroupEntity($accountChannelId);
+        $serviceProvider = $this->getServiceProviderEntity($accountChannelId);
+        $serviceType = new ServiceType($serviceProvider, $serviceGroup);
+        return $serviceType;
     }
 
     /**

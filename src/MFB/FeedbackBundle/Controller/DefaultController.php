@@ -80,10 +80,9 @@ class DefaultController extends Controller
      */
     private function getFeedbackForm(Feedback $feedback, $accountId, $accountChannelId)
     {
-        $serviceGroup = $this->get('mfb_service.service')->getServiceGroupEntity($accountChannelId);
-        $serviceProvider = $this->get('mfb_service.service')->getServiceProviderEntity($accountChannelId);
+        $serviceType = $this->get('mfb_service.service')->getServiceType($accountId);
 
-        $form = $this->createForm(new FeedbackType(new ServiceType($serviceProvider, $serviceGroup)), $feedback, array(
+        $form = $this->createForm(new FeedbackType($serviceType), $feedback, array(
             'action' => $this->generateUrl('mfb_feedback_save', array(
                         'accountId' => $accountId,
                         'accountChannelId' => $accountChannelId

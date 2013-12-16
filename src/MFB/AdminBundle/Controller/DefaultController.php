@@ -7,6 +7,8 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
+use MFB\ServiceBundle\Entity\Service;
+use MFB\ServiceBundle\Form\ServiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,13 +94,13 @@ class DefaultController extends Controller
     {
         $accountId = $this->getCurrentUser()->getId();
 
-        $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
-        $form = $this->getCustomerForm($customer);
+        $service = $this->get('mfb_service.service')->createNewService($accountId);
+        $form = $this->getServiceForm($service, $accountId);
 
         return $this->render(
             'MFBAdminBundle:Default:customer.html.twig',
             array(
-                'customerEmail' => $customer->getEmail(),
+                'customerEmail' => $service->getCustomer()->getEmail(),
                 'form' => $form->createView()
             )
         );
@@ -110,7 +112,7 @@ class DefaultController extends Controller
         $customerEmail = null;
         try {
             $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
-            $form = $this->getCustomerForm($customer);
+            $form = $this->getServiceForm($customer, $accountId);
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
@@ -182,21 +184,23 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $customer
+     * @param $service
+     * @param $accountId
      * @return \Symfony\Component\Form\Form
      */
-    private function getCustomerForm(Customer $customer)
+    private function getServiceForm(Service $service, $accountId)
     {
+        $serviceType = $this->get('mfb_service.service')->getServiceType($accountId);
         $form = $this->createForm(
-            new CustomerType(),
-            $customer,
+            $serviceType,
+            $service,
             array(
                 'action' => $this->generateUrl('mfb_save_customer'),
                 'method' => 'POST',
             )
         );
 
-        $form->add('salutation', 'text', array('required' => false));
+        $form->get('customer')->add('salutation', 'text', array('required' => false));
         return $form;
     }
 
