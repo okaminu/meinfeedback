@@ -35,11 +35,11 @@ class Feedback
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
         $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
-        if (!$service) {
-            $service = $this->service->createNewService($accountId, $customer);
-        }
         if (!$customer) {
             $customer = $this->customerService->createNewCustomer($accountId);
+        }
+        if (!$service) {
+            $service = $this->service->createNewService($accountId, $customer);
         }
         $feedback->setService($service);
         $feedback->setCustomer($customer);

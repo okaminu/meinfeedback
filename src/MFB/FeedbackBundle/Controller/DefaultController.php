@@ -34,7 +34,7 @@ class DefaultController extends Controller
                 throw new \Exception('Not valid form');
             }
 
-            $this->get('mfb_feedback.service')->store($feedback);
+            $this->get('mfb_feedback.service')->processFeedback($feedback);
             return $this->showThankyouForm($accountChannel, $feedback);
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
@@ -116,7 +116,6 @@ class DefaultController extends Controller
     private function showThankyouForm($accountChannel, $feedback)
     {
         $return_url = $this->getReturnUrl($accountChannel);
-
         return $this->render(
             'MFBFeedbackBundle:Default:thank_you.html.twig',
             array(
