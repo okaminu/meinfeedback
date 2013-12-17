@@ -1,7 +1,17 @@
 parameters:
   mfb_service.class: MFB\ServiceBundle\Service\Service
+  mfb_service_provider.class: MFB\ServiceBundle\Service\ServiceProvider
+  mfb_service_group.class: MFB\ServiceBundle\Service\ServiceGroup
 
 services:
   mfb_service.service:
     class: %mfb_service.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service_provider.service", "@mfb_service_group.service"]
+
+  mfb_service_provider.service:
+    class: %mfb_service_provider.class%
+    arguments: ["@doctrine.orm.default_entity_manager"]
+
+  mfb_service_group.service:
+    class: %mfb_service_group.class%
+    arguments: ["@doctrine.orm.default_entity_manager"]
