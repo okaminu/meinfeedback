@@ -53,11 +53,7 @@ class Feedback
         try {
             $this->saveEntity($feedback);
         } catch (DBALException $ex) {
-            if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
-                throw new FeedbackException('Email already exists');
-            } else {
-                throw new FeedbackException('Cannot create feedback');
-            }
+            throw new FeedbackException('Email already exists');
         } catch (\Exception $ex) {
             throw new FeedbackException('Cannot create feedback');
         }

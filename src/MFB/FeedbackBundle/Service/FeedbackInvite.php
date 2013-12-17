@@ -50,7 +50,7 @@ class FeedbackInvite
     }
 
 
-    public function store($invite)
+    public function storeInvite($invite)
     {
         $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_SEND_INITIALIZE);
         $this->saveEntity($invite);
@@ -69,9 +69,20 @@ class FeedbackInvite
     public function processInviteFeedback($invite, $feedback)
     {
         $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_INITIALIZE);
+        $this->saveEntity($feedback);
         $this->remove($invite);
         $this->dispatchCreateFeedbackInviteWroteEvent($invite, $feedback);
+    }
 
+    /**
+     * @param $accountId
+     * @param $customerId
+     * @param $service
+     */
+    public function createSaveFeedbackInvite($accountId, $customerId, $service)
+    {
+        $feedbackInvite = $this->createNewFeedbackInvite($accountId, $customerId, $service);
+        $this->storeInvite($feedbackInvite);
     }
 
     /**

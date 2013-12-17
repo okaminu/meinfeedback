@@ -121,11 +121,10 @@ class DefaultController extends Controller
             }
             $this->get('mfb_service.service')->store($service);
             $customer = $service->getCustomer();
-            $this->saveFeedbackInvite(
+            $this->get('mfb_feedback_invite.service')->createSaveFeedbackInvite(
                 $accountId,
                 $customer->getId(),
-                $service,
-                $this->get('mfb_feedback_invite.service')
+                $service
             );
 
             $customerEmail = $customer->getEmail();
@@ -240,20 +239,7 @@ class DefaultController extends Controller
         return $accountChannel;
     }
 
-    /**
-     * @param $accountId
-     * @param $customerId
-     * @param $service
-     * @param $feedbackInviteService
-     */
-    private function saveFeedbackInvite($accountId, $customerId, $service, $feedbackInviteService)
-    {
-        /**
-         * @var $feedbackInvite \MFB\FeedbackBundle\Entity\FeedbackInvite
-         */
-        $feedbackInvite = $feedbackInviteService->createNewFeedbackInvite($accountId, $customerId, $service);
-        $feedbackInviteService->store($feedbackInvite);
-    }
+
 
 
 }

@@ -52,7 +52,6 @@ class InviteController extends Controller
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-            $this->get('mfb_feedback.service')->processFeedback($feedback);
             $this->get('mfb_feedback_invite.service')->processInviteFeedback($invite, $feedback);
 
             return $this->showThankyouForm($accountChannel, $service->getCustomer());
