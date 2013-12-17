@@ -13,15 +13,12 @@ class ServiceProvider
     public function __construct(EntityManager $em)
     {
         $this->entityManager = $em;
-
     }
 
     public function createNewServiceProvider($accountId)
     {
         $accountChannelId = $this->getAccountChannelId($accountId);
-
         $service = $this->getNewServiceProviderEntity($accountChannelId);
-
         return $service;
     }
 
@@ -58,13 +55,14 @@ class ServiceProvider
         return $serviceGroup;
     }
 
-    public function findServiceProviderEntity($accountChannelId)
+    public function findByChannelId($accountChannelId)
     {
-        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
+        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findAll(
             array('channelId' => $accountChannelId)
         );
         return $serviceProvider;
     }
+
 
     /**
      * @param $accountId

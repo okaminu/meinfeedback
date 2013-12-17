@@ -48,7 +48,6 @@ class ServiceGroup
         return $accountChannel;
     }
 
-
     private function getNewServiceGroupEntity($accountChannel)
     {
         $serviceGroup = new ServiceGroupEntity();
@@ -56,13 +55,14 @@ class ServiceGroup
         return $serviceGroup;
     }
 
-    public function findServiceGroupEntity($accountChannelId)
+    public function findByChannelId($accountChannelId)
     {
-        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findBy(
+        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findAll(
             array('channelId' => $accountChannelId)
         );
         return $serviceProvider;
     }
+
 
     /**
      * @param $accountId

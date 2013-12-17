@@ -3,8 +3,6 @@ namespace MFB\ServiceBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use MFB\ServiceBundle\Entity\ServiceGroup as ServiceGroupEntity;
-use MFB\ServiceBundle\Entity\ServiceProvider as ServiceProviderEntity;
 use MFB\ServiceBundle\Service\ServiceGroup as ServiceGroupService;
 use MFB\ServiceBundle\Service\ServiceProvider as ServiceProviderService;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
@@ -32,7 +30,6 @@ class Service
         $this->customerService = $customer;
         $this->serviceProvider = $serviceProvider;
         $this->serviceGroup = $serviceGroup;
-
     }
 
     public function createNewService($accountId, $customer = null)
@@ -92,4 +89,5 @@ class Service
         $serviceGroup->setAccountId($accountId);
         return $serviceGroup;
     }
+
 }

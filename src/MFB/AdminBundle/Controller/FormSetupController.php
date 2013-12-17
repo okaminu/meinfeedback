@@ -19,12 +19,16 @@ class FormSetupController extends Controller
 
         $serviceGroupForm = $this->getNewServiceGroupForm($accountId);
         $serviceProviderForm = $this->getNewServiceProviderForm($accountId);
+        $serviceGroups = $this->getCurrentAccountServiceGroups($accountId);
+        $serviceProviders = $this->getCurrentAccountServiceProviders($accountId);
 
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
             array(
                 'serviceGroupForm' => $serviceGroupForm->createView(),
-                'serviceProviderForm' => $serviceProviderForm->createView()
+                'serviceProviderForm' => $serviceProviderForm->createView(),
+                'serviceGroupsList' => $serviceGroups,
+                'serviceProvidersList' => $serviceProviders
 
             )
         );
@@ -139,11 +143,40 @@ class FormSetupController extends Controller
         return $serviceProviderForm;
     }
 
+    private function getCurrentAccountServiceProviders($accountId)
+    {
+        $accountChannel = $this->getAccountChannel($accountId);
+        return $this->get('mfb_service_provider.service')->findByChannelId($accountChannel->getId());
+    }
+
+    private function getCurrentAccountServiceGroups($accountId)
+    {
+        $accountChannel = $this->getAccountChannel($accountId);
+        return $this->get('mfb_service_group.service')->findByChannelId($accountChannel->getId());
+    }
+
+
     /**
      * @return mixed
      */
     private function getCurrentUserId()
     {
         return $this->getCurrentUser()->getId();
+    }
+
+    private function getAccountChannel($accountId)
+    {
+        $accountChannel = $this->getEntityManager()->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('accountId' => $accountId)
+        );
+        return $accountChannel;
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     */
+    private function getEntityManager()
+    {
+        return $this->getDoctrine()->getManager();
     }
 }
