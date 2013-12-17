@@ -42,12 +42,12 @@ class InviteController extends Controller
         if (!$invite) {
             return $this->render('MFBFeedbackBundle:Invite:no_invite.html.twig');
         }
-
         $accountId = $invite->getAccountId();
 
+        $service = $invite->getService();
         $accountChannel = $this->getAccountChannel($accountId);
-        $service = $this->get('mfb_service.service')->findServiceById($invite->getService()->getId());
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId, $service);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId, $service, $service->getCustomer());
+
         $form = $this->getFeedbackForm($token, $feedback);
         try {
             $form->handleRequest($request);
@@ -55,11 +55,9 @@ class InviteController extends Controller
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-
             $this->get('mfb_feedback.service')->store($feedback);
             $this->get('mfb_feedback.service')->remove($invite);
-
-            return $this->showThankyouForm($accountChannel, $feedback);
+            return $this->showThankyouForm($accountChannel, $service->getCustomer());
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
         } catch (\Exception $ex) {
@@ -150,5 +148,23 @@ class InviteController extends Controller
     {
         $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
         return $accountChannel;
+    }
+
+    /**
+     * @param $accountChannel
+     * @param $customer
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function showThankyouForm($accountChannel, $customer)
+    {
+        $return_url = $this->getReturnUrl($accountChannel);
+
+        return $this->render(
+            'MFBFeedbackBundle:Invite:thank_you.html.twig',
+            array(
+                'thankyou_text' => $this->get('mfb_email.template')->getText($customer, 'ThankYou'),
+                'homepage' => $return_url
+            )
+        );
     }
 }

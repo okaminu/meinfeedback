@@ -31,13 +31,16 @@ class Feedback
         $this->eventDispatcher = $ed;
     }
 
-    public function createNewFeedback($accountId, $service = null)
+    public function createNewFeedback($accountId, $service = null, $customer = null)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
         $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
-        $customer = $this->customerService->createNewCustomer($accountId);
         if (!$service) {
             $service = $this->service->createNewService($accountId, $customer);
+        }
+
+        if (!$customer) {
+            $customer = $this->customerService->createNewCustomer($accountId);
         }
 
         $feedback->setService($service);

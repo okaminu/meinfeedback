@@ -77,11 +77,6 @@ class Service
     private $serviceProvider;
 
 
-    public function __construct()
-    {
-        $this->feedback = new ArrayCollection();
-    }
-
     /**
      * Get id
      *
