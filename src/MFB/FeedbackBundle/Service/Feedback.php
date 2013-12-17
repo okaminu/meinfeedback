@@ -38,11 +38,9 @@ class Feedback
         if (!$service) {
             $service = $this->service->createNewService($accountId, $customer);
         }
-
         if (!$customer) {
             $customer = $this->customerService->createNewCustomer($accountId);
         }
-
         $feedback->setService($service);
         $feedback->setCustomer($customer);
 
@@ -52,8 +50,6 @@ class Feedback
 
     public function store($feedback)
     {
-        $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
-
         try {
             $this->saveEntity($feedback);
         } catch (DBALException $ex) {
@@ -65,9 +61,15 @@ class Feedback
         } catch (\Exception $ex) {
             throw new FeedbackException('Cannot create feedback');
         }
-        $this->dispatchCreateFeedbackEvent($feedback);
     }
 
+
+    public function processFeedback($feedback)
+    {
+        $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
+        $this->store($feedback);
+        $this->dispatchCreateFeedbackEvent($feedback);
+    }
 
     public function remove($entity)
     {

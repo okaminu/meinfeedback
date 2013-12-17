@@ -2,11 +2,7 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
-use MFB\FeedbackBundle\Entity\FeedbackInvite;
-use MFB\FeedbackBundle\Event\CustomerAccountEvent;
-use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -46,6 +42,7 @@ class InviteController extends Controller
 
         $service = $invite->getService();
         $accountChannel = $this->getAccountChannel($accountId);
+
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId, $service, $service->getCustomer());
 
         $form = $this->getFeedbackForm($token, $feedback);
@@ -55,9 +52,11 @@ class InviteController extends Controller
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-            $this->get('mfb_feedback.service')->store($feedback);
-            $this->get('mfb_feedback.service')->remove($invite);
+            $this->get('mfb_feedback.service')->processFeedback($feedback);
+            $this->get('mfb_feedback_invite.service')->processInviteFeedback($invite, $feedback);
+
             return $this->showThankyouForm($accountChannel, $service->getCustomer());
+
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
         } catch (\Exception $ex) {

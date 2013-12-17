@@ -2,6 +2,7 @@
 namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\Event\NewFeedbackInviteEvent;
 use MFB\ServiceBundle\Service\Service;
@@ -10,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\FeedbackBundle\Entity\FeedbackInvite as FeedbackInviteEntity;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+
 
 class FeedbackInvite
 {
@@ -51,7 +54,24 @@ class FeedbackInvite
     {
         $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_SEND_INITIALIZE);
         $this->saveEntity($invite);
-        $this->dispatchCreateFeedbackInviteEvent($invite);
+        $this->dispatchCreateFeedbackInviteSendEvent($invite);
+    }
+
+    /**
+     * @param $entity
+     */
+    public function remove($entity)
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
+
+    public function processInviteFeedback($invite, $feedback)
+    {
+        $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_INITIALIZE);
+        $this->remove($invite);
+        $this->dispatchCreateFeedbackInviteWroteEvent($invite, $feedback);
+
     }
 
     /**
@@ -82,7 +102,7 @@ class FeedbackInvite
     /**
      * @param $invite
      */
-    private function dispatchCreateFeedbackInviteEvent(FeedbackInviteEntity $invite)
+    private function dispatchCreateFeedbackInviteSendEvent(FeedbackInviteEntity $invite)
     {
         $accountChannel = $this->getAccountChannel($invite->getAccountId());
         $service = $invite->getService();
@@ -109,6 +129,14 @@ class FeedbackInvite
         return $invite;
     }
 
+    private function getAccount($accountId)
+    {
+        $account = $this->entityManager->getRepository('MFBAccountBundle:Account')->findOneBy(
+            array('id' => $accountId)
+        );
+        return $account;
+    }
+
     private function getFeedbackInviteUrl($invite)
     {
         $inviteUrl = $this->router->generate(
@@ -117,5 +145,25 @@ class FeedbackInvite
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         return $inviteUrl;
+    }
+
+    /**
+     * @param $feedback
+     * @param $invite
+     */
+    private function dispatchCreateFeedbackInviteWroteEvent($invite, $feedback)
+    {
+        $customer = $feedback->getCustomer();
+        $account = $this->getAccount($feedback->getAccountId());
+
+        $event = new CustomerAccountEvent(
+            $feedback->getId(),
+            $account->getEmail(),
+            $customer,
+            $feedback->getContent(),
+            $feedback->getRating(),
+            $invite
+        );
+        $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);
     }
 }
