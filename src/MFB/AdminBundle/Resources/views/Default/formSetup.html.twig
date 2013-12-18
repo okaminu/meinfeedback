@@ -15,8 +15,11 @@
                 <div class="displayServiceTypeProvider">
                     <div class="title">Service Types</div>
                         {% for serviceGroup in serviceGroupsList %}
-                            <div>
-                                {{ serviceGroup.getName }}
+                            <div class="singleService">
+                                <div class="button {% if serviceGroup.getVisibility == 1 %} remove {% else %} add {% endif %}"></div>
+                                <div class="name">
+                                    {{ serviceGroup.getName }}
+                                </div>
                             </div>
                         {% endfor %}
                 </div>
@@ -24,9 +27,12 @@
                 <div class="displayServiceTypeProvider">
                     <div class="title">Service Providers</div>
                     {% for serviceProvider in serviceProvidersList %}
-                       <div>
-                           {{ serviceProvider.getFirstName }} {{ serviceProvider.getLastName }}
-                       </div>
+                        <div class="singleService">
+                            <div class="button {% if serviceProvider.getVisibility == 1 %} remove {% else %} add {% endif %}"></div>
+                            <div class="name">
+                                {{ serviceProvider.getFirstName }} {{ serviceProvider.getLastName }}
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             </div>

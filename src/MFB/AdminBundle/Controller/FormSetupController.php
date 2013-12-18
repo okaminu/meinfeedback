@@ -19,6 +19,7 @@ class FormSetupController extends Controller
 
         $serviceGroupForm = $this->getNewServiceGroupForm($accountId);
         $serviceProviderForm = $this->getNewServiceProviderForm($accountId);
+
         $serviceGroups = $this->getCurrentAccountServiceGroups($accountId);
         $serviceProviders = $this->getCurrentAccountServiceProviders($accountId);
 
@@ -76,9 +77,9 @@ class FormSetupController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-
         return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
     }
+
 
     private function getCurrentUser()
     {
@@ -145,16 +146,13 @@ class FormSetupController extends Controller
 
     private function getCurrentAccountServiceProviders($accountId)
     {
-        $accountChannel = $this->getAccountChannel($accountId);
-        return $this->get('mfb_service_provider.service')->findByChannelId($accountChannel->getId());
+        return $this->get('mfb_service_provider.service')->findByAccountId($accountId);
     }
 
     private function getCurrentAccountServiceGroups($accountId)
     {
-        $accountChannel = $this->getAccountChannel($accountId);
-        return $this->get('mfb_service_group.service')->findByChannelId($accountChannel->getId());
+        return $this->get('mfb_service_group.service')->findByAccountId($accountId);
     }
-
 
     /**
      * @return mixed
@@ -162,21 +160,5 @@ class FormSetupController extends Controller
     private function getCurrentUserId()
     {
         return $this->getCurrentUser()->getId();
-    }
-
-    private function getAccountChannel($accountId)
-    {
-        $accountChannel = $this->getEntityManager()->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|object
-     */
-    private function getEntityManager()
-    {
-        return $this->getDoctrine()->getManager();
     }
 }

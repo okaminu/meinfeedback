@@ -17,8 +17,8 @@ class ServiceGroup
 
     public function createNewServiceGroup($accountId)
     {
-        $accountChannelId = $this->getAccountChannelId($accountId);
-        $service = $this->getNewServiceGroupEntity($accountChannelId);
+        $accountChannel = $this->getAccountChannel($accountId);
+        $service = $this->getNewServiceGroupEntity($accountChannel);
         return $service;
     }
 
@@ -51,25 +51,16 @@ class ServiceGroup
     private function getNewServiceGroupEntity($accountChannel)
     {
         $serviceGroup = new ServiceGroupEntity();
-        $serviceGroup->setChannelId($accountChannel);
+        $serviceGroup->setChannel($accountChannel);
         return $serviceGroup;
     }
 
-    public function findByChannelId($accountChannelId)
+    public function findByAccountId($accountId)
     {
+        $accountChannel = $this->getAccountChannel($accountId);
         $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findBy(
-            array('channelId' => $accountChannelId)
+            array('channel' => $accountChannel)
         );
         return $serviceProvider;
-    }
-
-
-    /**
-     * @param $accountId
-     * @return int
-     */
-    private function getAccountChannelId($accountId)
-    {
-        return $this->getAccountChannel($accountId)->getId();
     }
 }
