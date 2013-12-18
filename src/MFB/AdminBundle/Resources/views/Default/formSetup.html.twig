@@ -14,12 +14,24 @@
 
                 {{ form_start(channelServicesForm) }}
 
-                {% for serviceProvider in channelServicesForm.serviceProvider %}
-                    <div style="display:block">
-                        <label>{{  serviceProvider.firstname.vars.value }}</label>
-                        {{ form_widget(serviceProvider.visibility) }}
-                    </div>
-                {% endfor %}
+                <div class="serviceType">
+                    {% for serviceProvider in channelServicesForm.serviceProvider %}
+                        <div style="display:block">
+                            <label>{{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}</label>
+                            {{ form_widget(serviceProvider.visibility) }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="serviceType">
+                    {% for serviceGroup in channelServicesForm.serviceGroup %}
+                        <div style="display:block">
+                            <label>{{  serviceGroup.name.vars.value }}</label>
+                            {{ form_widget(serviceGroup.visibility) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div style="clear:both"></div>
 
                 {{ form_row(channelServicesForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite210'} } ) }}
 
@@ -30,7 +42,6 @@
                 {{ form_end(channelServicesForm) }}
 
             </div>
-            <div style="clear:both"></div>
 
             <div id="addServiceProvider">
                 <div class="sectionTitle">

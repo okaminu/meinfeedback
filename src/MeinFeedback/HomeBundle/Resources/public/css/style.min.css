@@ -1515,7 +1515,7 @@ a.footer_link:hover {
     top:50px;
 }
 
-#displayServiceTypesProviders .displayServiceTypeProvider
+#displayServiceTypesProviders .serviceType
 {
     display: block;
     float: left;
@@ -1528,36 +1528,3 @@ a.footer_link:hover {
     margin: 15px 0px;
 }
 
-#displayServiceTypesProviders .remove
-{
-    background: url("/bundles/meinfeedbackhome/images/icons/minus_red.png") no-repeat;
-}
-
-#displayServiceTypesProviders .button
-{
-    height: 24px;
-    width: 24px;
-    display:inline-block;
-}
-
-
-
-#displayServiceTypesProviders .add
-{
-    background: url("/bundles/meinfeedbackhome/images/icons/minus_green.png") no-repeat;
-    height: 24px;
-    width: 24px;
-    display:inline-block;
-}
-
-#displayServiceTypesProviders .name
-{
-    display:inline-block;
-    vertical-align: middle;
-    padding: 0px 0px 15px 10px;
-}
-
-#displayServiceTypesProviders .singleService
-{
-    height: 30px;
-}

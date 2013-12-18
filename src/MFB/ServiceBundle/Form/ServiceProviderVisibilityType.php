@@ -17,6 +17,7 @@ class ServiceProviderVisibilityType extends AbstractType
         $builder
             ->add('visibility', 'checkbox', array('required' => false))
             ->add('firstname', 'hidden')
+            ->add('lastname', 'hidden')
         ;
     }
     
