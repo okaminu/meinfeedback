@@ -1515,6 +1515,21 @@ a.footer_link:hover {
     top:50px;
 }
 
+#displayServiceTypesProviders{
+    margin: 30px 0px;
+}
+
+#addServiceProvider{
+    margin: 30px 0px;
+}
+
+#displayServiceTypesProviders .name
+{
+    display:inline-block;
+    vertical-align: middle;
+    padding: 0px 0px 15px 10px;
+}
+
 #displayServiceTypesProviders .serviceType
 {
     display: block;
@@ -1525,6 +1540,6 @@ a.footer_link:hover {
 #displayServiceTypesProviders .title
 {
     font-weight: bold;
-    margin: 15px 0px;
+    margin: 0px 0px 15px;
 }
 

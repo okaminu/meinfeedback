@@ -9,12 +9,13 @@
 
             <div id="displayServiceTypesProviders">
                 <div class="sectionTitle">
-                    {% trans %} Service Types and Providers {% endtrans %}
+                    {% trans %} Change Service Visibility {% endtrans %}
                 </div>
 
                 {{ form_start(channelServicesForm) }}
 
                 <div class="serviceType">
+                    <div class="title">{% trans %} Service Providers {% endtrans %}</div>
                     {% for serviceProvider in channelServicesForm.serviceProvider %}
                         <div style="display:block">
                             <label>{{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}</label>
@@ -24,6 +25,7 @@
                 </div>
 
                 <div class="serviceType">
+                    <div class="title">{% trans %} Service Types {% endtrans %}</div>
                     {% for serviceGroup in channelServicesForm.serviceGroup %}
                         <div style="display:block">
                             <label>{{  serviceGroup.name.vars.value }}</label>
