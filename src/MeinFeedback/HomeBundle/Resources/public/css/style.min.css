@@ -1534,7 +1534,7 @@ a.footer_link:hover {
 {
     display: block;
     float: left;
-    margin: 15px 20px;
+    margin: 15px 30px;
 }
 
 #displayServiceTypesProviders .title
@@ -1546,4 +1546,6 @@ a.footer_link:hover {
 #displayServiceTypesProviders td{
     padding: 0px 10px;
 }
+
+
 
