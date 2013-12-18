@@ -76,3 +76,7 @@ mfb_admin_save_service_group:
 mfb_admin_save_service_provider:
     pattern: /mfb_admin_save_service_provider
     defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceProvider}
+
+mfb_admin_update_service_visibility:
+    pattern: /mfb_admin_update_service_visibility
+    defaults: { _controller: MFBAdminBundle:FormSetup:updateServicesVisibility}

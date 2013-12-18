@@ -12,29 +12,23 @@
                     {% trans %} Service Types and Providers {% endtrans %}
                 </div>
 
-                <div class="displayServiceTypeProvider">
-                    <div class="title">Service Types</div>
-                        {% for serviceGroup in serviceGroupsList %}
-                            <div class="singleService">
-                                <div class="button {% if serviceGroup.getVisibility == 1 %} remove {% else %} add {% endif %}"></div>
-                                <div class="name">
-                                    {{ serviceGroup.getName }}
-                                </div>
-                            </div>
-                        {% endfor %}
+                {{ form_start(channelServicesForm) }}
+
+                {% for serviceProvider in channelServicesForm.serviceProvider %}
+                    <div style="display:block">
+                        <label>{{  serviceProvider.firstname.vars.value }}</label>
+                        {{ form_widget(serviceProvider.visibility) }}
+                    </div>
+                {% endfor %}
+
+                {{ form_row(channelServicesForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite210'} } ) }}
+
+                <div class="hidden">
+                    {{ form_rest(channelServicesForm) }}
                 </div>
 
-                <div class="displayServiceTypeProvider">
-                    <div class="title">Service Providers</div>
-                    {% for serviceProvider in serviceProvidersList %}
-                        <div class="singleService">
-                            <div class="button {% if serviceProvider.getVisibility == 1 %} remove {% else %} add {% endif %}"></div>
-                            <div class="name">
-                                {{ serviceProvider.getFirstName }} {{ serviceProvider.getLastName }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                {{ form_end(channelServicesForm) }}
+
             </div>
             <div style="clear:both"></div>
 

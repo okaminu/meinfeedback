@@ -45,7 +45,7 @@ class ServiceProvider
 
     /**
      * @var integer
-     * @ORM\Column(name="visibility", type="integer", options={"default" : 1})
+     * @ORM\Column(name="visibility", type="boolean", options={"default" : 1})
      */
     private $visibility = 1;
     

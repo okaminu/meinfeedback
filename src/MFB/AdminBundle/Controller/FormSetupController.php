@@ -1,6 +1,7 @@
 <?php
 namespace MFB\AdminBundle\Controller;
 
+use MFB\ChannelBundle\Form\ChannelServicesType;
 use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\Form\ServiceGroupType;
@@ -20,16 +21,15 @@ class FormSetupController extends Controller
         $serviceGroupForm = $this->getNewServiceGroupForm($accountId);
         $serviceProviderForm = $this->getNewServiceProviderForm($accountId);
 
-        $serviceGroups = $this->getCurrentAccountServiceGroups($accountId);
-        $serviceProviders = $this->getCurrentAccountServiceProviders($accountId);
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
+        $channelServicesForm = $this->getChannelServiceForm($channel);
 
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
             array(
                 'serviceGroupForm' => $serviceGroupForm->createView(),
                 'serviceProviderForm' => $serviceProviderForm->createView(),
-                'serviceGroupsList' => $serviceGroups,
-                'serviceProvidersList' => $serviceProviders
+                'channelServicesForm' => $channelServicesForm->createView()
 
             )
         );
@@ -80,6 +80,29 @@ class FormSetupController extends Controller
         return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
     }
 
+
+    public function updateServicesVisibilityAction(Request $request)
+    {
+        $accountId = $this->getCurrentUserId();
+        try {
+            /**
+             * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
+             */
+            $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
+            $channelServicesForm = $this->getChannelServiceForm($channel);
+
+            $channelServicesForm->handleRequest($request);
+
+            if (!$channelServicesForm->isValid()) {
+                throw new \Exception('Not valid form');
+            }
+            $this->get('mfb_account_channel.service')->store($channel);
+        } catch (ServiceException $ex) {
+            $channelServicesForm->addError(new FormError($ex->getMessage()));
+        }
+
+        return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
+    }
 
     private function getCurrentUser()
     {
@@ -144,21 +167,28 @@ class FormSetupController extends Controller
         return $serviceProviderForm;
     }
 
-    private function getCurrentAccountServiceProviders($accountId)
-    {
-        return $this->get('mfb_service_provider.service')->findByAccountId($accountId);
-    }
-
-    private function getCurrentAccountServiceGroups($accountId)
-    {
-        return $this->get('mfb_service_group.service')->findByAccountId($accountId);
-    }
-
     /**
      * @return mixed
      */
     private function getCurrentUserId()
     {
         return $this->getCurrentUser()->getId();
+    }
+
+    /**
+     * @param $channel
+     * @return \Symfony\Component\Form\Form
+     */
+    private function getChannelServiceForm($channel)
+    {
+        $channelServicesForm = $this->createForm(
+            new ChannelServicesType(),
+            $channel,
+            array(
+                'action' => $this->generateUrl('mfb_admin_update_service_visibility'),
+                'method' => 'POST',
+            )
+        );
+        return $channelServicesForm;
     }
 }

@@ -1,6 +1,7 @@
 parameters:
      mfb_account_channel.account.class: MFB\ChannelBundle\Entity\AccountChannel
      mfb_account_channel.manager.class: MFB\ChannelBundle\Entity\AccountChannelManager
+     mfb_account_channel.class: MFB\ChannelBundle\Service\Channel
 
 services:
      mfb_account_channel.manager:
@@ -8,3 +9,7 @@ services:
         factory_service: "doctrine.orm.default_entity_manager"
         factory_method: "getRepository"
         arguments: ["%mfb_account_channel.account.class%"]
+
+     mfb_account_channel.service:
+        class: %mfb_account_channel.class%
+        arguments: ["@doctrine.orm.default_entity_manager"]
