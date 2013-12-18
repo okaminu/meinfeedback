@@ -1,50 +1,68 @@
 <?php
 namespace MFB\ServiceBundle\Service;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use MFB\ServiceBundle\Entity\ServiceGroup;
-use MFB\ServiceBundle\Entity\ServiceProvider;
+use MFB\ServiceBundle\Service\ServiceGroup as ServiceGroupService;
+use MFB\ServiceBundle\Service\ServiceProvider as ServiceProviderService;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\ServiceBundle\Form\ServiceType;
 use MFB\ServiceBundle\ServiceException;
+use MFB\CustomerBundle\Service\Customer as CustomerService;
 
 class Service
 {
     private $entityManager;
 
+    private $customerService;
 
-    public function __construct(EntityManager $em)
-    {
+    private $serviceProvider;
+
+    private $serviceGroup;
+
+    public function __construct(
+        EntityManager $em,
+        CustomerService $customer,
+        ServiceProviderService $serviceProvider,
+        ServiceGroupService $serviceGroup
+    ) {
         $this->entityManager = $em;
+        $this->customerService = $customer;
+        $this->serviceProvider = $serviceProvider;
+        $this->serviceGroup = $serviceGroup;
     }
 
-    public function createNewService($accountId)
+    public function createNewService($accountId, $customer = null)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        if (!$customer) {
+            $customer = $this->customerService->createNewCustomer($accountId);
+        }
         $service = $this->getNewServiceEntity($accountChannelId, $accountId);
+        $service->setCustomer($customer);
         return $service;
     }
 
-    public function createNewServiceGroup($accountId)
-    {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
-        $serviceGroup = $this->getNewServiceGroupEntity($accountChannelId);
-        return $serviceGroup;
-    }
 
-    public function createNewServiceProvider($accountId)
-    {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
-        $serviceProvider = $this->getNewServiceProviderEntity($accountChannelId);
-        return $serviceProvider;
-    }
-
-    public function store($serviceGroup)
+    public function store($service)
     {
         try {
-            $this->saveEntity($serviceGroup);
-        } catch (\Exception $ex) {
-                throw new ServiceException('Cannot create service');
+            $this->saveEntity($service);
+        } catch (DBALException $ex) {
+            throw new ServiceException('Email already exists');
         }
+    }
+
+    /**
+     * @param $accountId
+     * @return ServiceType
+     */
+    public function getServiceType($accountId)
+    {
+        $serviceGroup = $this->serviceGroup->createNewServiceGroup($accountId);
+        $serviceProvider = $this->serviceGroup->createNewServiceGroup($accountId);
+        $serviceType = new ServiceType($serviceProvider, $serviceGroup);
+        return $serviceType;
     }
 
     /**
@@ -70,36 +88,6 @@ class Service
         $serviceGroup->setChannelId($accountChannel);
         $serviceGroup->setAccountId($accountId);
         return $serviceGroup;
-    }
-
-    private function getNewServiceGroupEntity($accountChannel)
-    {
-        $serviceGroup = new ServiceGroup();
-        $serviceGroup->setChannelId($accountChannel);
-        return $serviceGroup;
-    }
-
-    private function getNewServiceProviderEntity($accountChannel)
-    {
-        $serviceGroup = new ServiceProvider();
-        $serviceGroup->setChannelId($accountChannel);
-        return $serviceGroup;
-    }
-
-    public function getServiceGroupEntity($accountChannelId)
-    {
-        $serviceGroup = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findBy(
-            array('channelId' => $accountChannelId)
-        );
-        return $serviceGroup;
-    }
-
-    public function getServiceProviderEntity($accountChannelId)
-    {
-        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
-            array('channelId' => $accountChannelId)
-        );
-        return $serviceProvider;
     }
 
 }

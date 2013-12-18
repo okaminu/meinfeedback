@@ -1,20 +1,19 @@
 <?php
 
 
-namespace MFB\CustomerBundle\EventListener;
+namespace MFB\FeedbackBundle\EventListener;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use MFB\CustomerBundle\Event\NewCustomerEvent;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Service\Sender;
+use MFB\FeedbackBundle\Event\NewFeedbackInviteEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\FeedbackBundle\Entity\FeedbackInvite;
 
-class NewCustomerListener
+class NewFeedbackInviteListener
 {
-
     /**
      * @var ObjectManager
      */
@@ -27,29 +26,17 @@ class NewCustomerListener
 
     private $translator;
 
-    private $router;
-
-    public function __construct(ObjectManager $em, Sender $sender, Translator $translator, $router)
+    public function __construct(ObjectManager $em, Sender $sender, Translator $translator)
     {
         $this->em = $em;
 
         $this->sender = $sender;
 
         $this->translator = $translator;
-
-        $this->router = $router;
     }
 
-    public function onCreateCustomerComplete(NewCustomerEvent $event)
+    public function onCreateFeedbackInviteComplete(NewFeedbackInviteEvent $event)
     {
-        $accountId = $event->getChannel()->getAccountId();
-        $customerId = $event->getCustomer()->getId();
-        $accountChannelId = $event->getChannel()->getId();
-
-        $invite = $this->createFeedbackInvite($accountId, $customerId, $accountChannelId);
-
-        $inviteUrl = $this->getFeedbackInviteUrl($invite);
-
         $accountId = $event->getCustomer()->getAccountId();
 
         $emailTemplate = $this->getEmailTemplate($accountId);
@@ -59,7 +46,7 @@ class NewCustomerListener
             $event->getChannel(),
             $event->getCustomer(),
             $event->getService(),
-            $inviteUrl
+            $event->getInviteUrl()
         );
     }
 
@@ -85,37 +72,5 @@ class NewCustomerListener
             );
         }
         return $emailTemplate;
-    }
-
-    /**
-     * @param $accountId
-     * @param $customerId
-     * @param $accountChannelId
-     * @return FeedbackInvite
-     */
-    private function createFeedbackInvite($accountId, $customerId, $accountChannelId)
-    {
-        $invite = new FeedbackInvite();
-        $invite->setAccountId($accountId);
-        $invite->setCustomerId($customerId);
-        $invite->setChannelId($accountChannelId);
-        $invite->updatedTimestamps();
-        $this->em->persist($invite);
-        $this->em->flush();
-        return $invite;
-    }
-
-    /**
-     * @param $invite
-     * @return mixed
-     */
-    private function getFeedbackInviteUrl($invite)
-    {
-        $inviteUrl = $this->router->generate(
-            'mfb_feedback_create_with_invite',
-            array('token' => $invite->getToken()),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-        return $inviteUrl;
     }
 }

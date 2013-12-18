@@ -16,11 +16,11 @@ mfb_location:
 
 mfb_show_create_customer:
     pattern: /show_create_customer
-    defaults: { _controller: MFBAdminBundle:Default:showCreateCustomerForm }
+    defaults: { _controller: MFBAdminBundle:Default:showCreateServiceCustomerForm }
 
 mfb_save_customer:
     pattern: /save_customer
-    defaults: { _controller: MFBAdminBundle:Default:saveCustomer }
+    defaults: { _controller: MFBAdminBundle:Default:saveServiceCustomer}
 
 mfb_widget:
     pattern: /widget
@@ -76,3 +76,7 @@ mfb_admin_save_service_group:
 mfb_admin_save_service_provider:
     pattern: /mfb_admin_save_service_provider
     defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceProvider}
+
+mfb_admin_update_service_visibility:
+    pattern: /mfb_admin_update_service_visibility
+    defaults: { _controller: MFBAdminBundle:FormSetup:updateServicesVisibility}

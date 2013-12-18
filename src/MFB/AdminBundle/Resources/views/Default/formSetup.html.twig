@@ -3,9 +3,56 @@
 {% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
 
 {% block content %}
-    <div>
-        <div class="row-fluid inner-page navLogo">
-            <div class="span12">
+<div>
+    <div class="row-fluid inner-page navLogo">
+        <div class="span12">
+
+            <div id="displayServiceTypesProviders">
+                <div class="sectionTitle">
+                    {% trans %} Change Service Visibility {% endtrans %}
+                </div>
+
+                {{ form_start(channelServicesForm) }}
+
+                <div class="serviceType">
+                    <div class="title">{% trans %} Service Providers {% endtrans %}</div>
+                    <table>
+                        {% for serviceProvider in channelServicesForm.serviceProvider %}
+                            <tr>
+                                <td><label>{{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}</label></td>
+                                <td>{{ form_widget(serviceProvider.visibility) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="serviceType">
+                    <div class="title">{% trans %} Service Types {% endtrans %}</div>
+                    <table>
+                    {% for serviceGroup in channelServicesForm.serviceGroup %}
+                        <tr>
+                            <td><label>{{  serviceGroup.name.vars.value }}</label></td>
+                            <td>{{ form_widget(serviceGroup.visibility) }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+                <div style="clear:both"></div>
+
+                {{ form_row(channelServicesForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite210'} } ) }}
+
+                <div class="hidden">
+                    {{ form_rest(channelServicesForm) }}
+                </div>
+
+                {{ form_end(channelServicesForm) }}
+
+            </div>
+
+            <div id="addServiceProvider">
+                <div class="sectionTitle">
+                    {% trans %} Add Service Type {% endtrans %}
+                </div>
                 {{ form_start(serviceGroupForm) }}
 
                 {{ form_row(serviceGroupForm.name, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
@@ -17,7 +64,10 @@
                 {{ form_end(serviceGroupForm) }}
             </div>
 
-            <div class="span12" style="margin-top: 35px">
+            <div style="margin-top: 35px">
+                <div class="sectionTitle">
+                    {% trans %} Add Service Provider {% endtrans %}
+                </div>
                 {{ form_start(serviceProviderForm) }}
 
                 {{ form_row(serviceProviderForm.firstname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
@@ -26,11 +76,11 @@
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
-
                 {{ form_end(serviceProviderForm) }}
             </div>
         </div>
     </div>
+</div>
 
 
 {% endblock %}

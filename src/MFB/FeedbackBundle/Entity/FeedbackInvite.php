@@ -67,6 +67,13 @@ class FeedbackInvite
     private $emailTemplate;
 
     /**
+     * @var $service
+     * @ORM\ManyToOne(targetEntity="\MFB\ServiceBundle\Entity\Service", fetch="EAGER")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     */
+    private $service;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -232,5 +239,28 @@ class FeedbackInvite
                 )
             )
         );
+    }
+
+    /**
+     * Set service
+     *
+     * @param \MFB\ServiceBundle\Entity\Service $service
+     * @return FeedbackInvite
+     */
+    public function setService(\MFB\ServiceBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+    
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \MFB\ServiceBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }

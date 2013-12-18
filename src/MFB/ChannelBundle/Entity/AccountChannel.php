@@ -86,6 +86,20 @@ class AccountChannel
      */
     private $phoneNumber;
 
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceProvider", mappedBy="channel", cascade={"persist"})
+     **/
+    private $serviceProvider;
+
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceGroup", mappedBy="channel", cascade={"persist"})
+     **/
+    private $serviceGroup;
+
 
     /**
      * Get id
@@ -302,5 +316,79 @@ class AccountChannel
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->serviceProvider = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceGroup = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add serviceProvider
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider
+     * @return AccountChannel
+     */
+    public function addServiceProvider(\MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider)
+    {
+        $this->serviceProvider[] = $serviceProvider;
+    
+        return $this;
+    }
+
+    /**
+     * Remove serviceProvider
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider
+     */
+    public function removeServiceProvider(\MFB\ServiceBundle\Entity\ServiceProvider $serviceProvider)
+    {
+        $this->serviceProvider->removeElement($serviceProvider);
+    }
+
+    /**
+     * Get serviceProvider
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceProvider()
+    {
+        return $this->serviceProvider;
+    }
+
+    /**
+     * Add serviceGroup
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
+     * @return AccountChannel
+     */
+    public function addServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup)
+    {
+        $this->serviceGroup[] = $serviceGroup;
+    
+        return $this;
+    }
+
+    /**
+     * Remove serviceGroup
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
+     */
+    public function removeServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup)
+    {
+        $this->serviceGroup->removeElement($serviceGroup);
+    }
+
+    /**
+     * Get serviceGroup
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceGroup()
+    {
+        return $this->serviceGroup;
     }
 }

@@ -1,13 +1,16 @@
 <?php
 
-namespace MFB\ServiceBundle\Form;
+namespace MFB\ChannelBundle\Form;
 
+use MFB\ServiceBundle\Form\ServiceGroupVisibilityType;
+use MFB\ServiceBundle\Form\ServiceProviderVisibilityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ServiceGroupType extends AbstractType
+class ChannelServicesType extends AbstractType
 {
+
         /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -15,7 +18,9 @@ class ServiceGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('label' => 'Service name', 'required' => true))
+            ->add('serviceProvider', 'collection', array('type' => new ServiceProviderVisibilityType()))
+            ->add('serviceGroup', 'collection', array('type' => new ServiceGroupVisibilityType()))
+            ->add('submit', 'submit', array('label' => 'Update'))
         ;
     }
     
@@ -25,7 +30,7 @@ class ServiceGroupType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MFB\ServiceBundle\Entity\ServiceGroup'
+            'data_class' => 'MFB\ChannelBundle\Entity\AccountChannel'
         ));
     }
 
@@ -34,6 +39,6 @@ class ServiceGroupType extends AbstractType
      */
     public function getName()
     {
-        return 'mfb_servicebundle_servicegroup';
+        return 'mfb_channelbundle_servicesvisibility';
     }
 }

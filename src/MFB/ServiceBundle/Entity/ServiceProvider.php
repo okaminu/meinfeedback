@@ -3,6 +3,7 @@
 namespace MFB\ServiceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MFB\ChannelBundle\Entity\AccountChannel;
 
 /**
  * ServiceProvider
@@ -24,9 +25,10 @@ class ServiceProvider
     /**
      * @var integer
      *
-     * @ORM\Column(name="channel_id", type="integer")
-     */
-    private $channelId;
+     * @ORM\ManyToOne(targetEntity="MFB\ChannelBundle\Entity\AccountChannel", inversedBy="serviceProvider", cascade={"persist"})
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     **/
+    private $channel;
 
     /**
      * @var string
@@ -41,6 +43,11 @@ class ServiceProvider
      */
     private $lastname;
 
+    /**
+     * @var integer
+     * @ORM\Column(name="visibility", type="boolean", options={"default" : 1})
+     */
+    private $visibility = 1;
     
 
     /**
@@ -51,29 +58,6 @@ class ServiceProvider
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set channelId
-     *
-     * @param integer $channelId
-     * @return ServiceProvider
-     */
-    public function setChannelId($channelId)
-    {
-        $this->channelId = $channelId;
-    
-        return $this;
-    }
-
-    /**
-     * Get channelId
-     *
-     * @return integer 
-     */
-    public function getChannelId()
-    {
-        return $this->channelId;
     }
 
     /**
@@ -120,5 +104,51 @@ class ServiceProvider
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * Set visibility
+     *
+     * @param integer $visibility
+     * @return ServiceProvider
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+    
+        return $this;
+    }
+
+    /**
+     * Get visibility
+     *
+     * @return integer 
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \MFB\ChannelBundle\Entity\AccountChannel $channel
+     * @return ServiceProvider
+     */
+    public function setChannel(AccountChannel $channel = null)
+    {
+        $this->channel = $channel;
+    
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \MFB\ChannelBundle\Entity\AccountChannel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

@@ -7,6 +7,9 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\CustomerBundle\Entity\Customer;
 use MFB\CustomerBundle\Form\CustomerType;
+use MFB\ServiceBundle\Entity\Service;
+use MFB\ServiceBundle\Form\ServiceType;
+use MFB\ServiceBundle\ServiceException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,39 +91,45 @@ class DefaultController extends Controller
         );
     }
 
-    public function showCreateCustomerFormAction()
+    public function showCreateServiceCustomerFormAction()
     {
         $accountId = $this->getCurrentUser()->getId();
 
-        $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
-        $form = $this->getCustomerForm($customer);
+        $service = $this->get('mfb_service.service')->createNewService($accountId);
+        $form = $this->getServiceForm($service, $accountId);
 
         return $this->render(
             'MFBAdminBundle:Default:customer.html.twig',
             array(
-                'customerEmail' => $customer->getEmail(),
+                'customerEmail' => $service->getCustomer()->getEmail(),
                 'form' => $form->createView()
             )
         );
     }
 
-    public function saveCustomerAction(Request $request)
+    public function saveServiceCustomerAction(Request $request)
     {
         $accountId = $this->getCurrentUser()->getId();
         $customerEmail = null;
         try {
-            $customer = $this->get('mfb_customer.service')->createNewCustomer($accountId);
-            $form = $this->getCustomerForm($customer);
+            $service = $this->get('mfb_service.service')->createNewService($accountId);
+            $form = $this->getServiceForm($service, $accountId);
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
+            $this->get('mfb_service.service')->store($service);
+            $customer = $service->getCustomer();
+            $this->get('mfb_feedback_invite.service')->createSaveFeedbackInvite(
+                $accountId,
+                $customer->getId(),
+                $service
+            );
 
-            $this->get('mfb_customer.service')->store($customer);
             $customerEmail = $customer->getEmail();
-        } catch (AccountException $ax) {
-            $form->get('email')->addError(new FormError('Email already exists'));
+        } catch (ServiceException $ax) {
+            $form->get('customer')->get('email')->addError(new FormError('Email already exists'));
         } catch (\Exception $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
@@ -182,21 +191,23 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $customer
+     * @param $service
+     * @param $accountId
      * @return \Symfony\Component\Form\Form
      */
-    private function getCustomerForm(Customer $customer)
+    private function getServiceForm(Service $service, $accountId)
     {
+        $serviceType = $this->get('mfb_service.service')->getServiceType($accountId);
         $form = $this->createForm(
-            new CustomerType(),
-            $customer,
+            $serviceType,
+            $service,
             array(
                 'action' => $this->generateUrl('mfb_save_customer'),
                 'method' => 'POST',
             )
         );
 
-        $form->add('salutation', 'text', array('required' => false));
+        $form->get('customer')->add('salutation', 'text', array('required' => false));
         return $form;
     }
 
@@ -227,6 +238,8 @@ class DefaultController extends Controller
         );
         return $accountChannel;
     }
+
+
 
 
 }

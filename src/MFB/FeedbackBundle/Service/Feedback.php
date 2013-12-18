@@ -8,6 +8,7 @@ use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Service\Service;
+use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -30,36 +31,53 @@ class Feedback
         $this->eventDispatcher = $ed;
     }
 
-    public function createNewFeedback($accountId)
+    public function createNewFeedback($accountId, $service = null, $customer = null)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
         $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
-        $customer = $this->customerService->createNewCustomer($accountId);
-        $service = $this->service->createNewService($accountId);
-
-        $service->setCustomer($customer);
+        if (!$customer) {
+            $customer = $this->customerService->createNewCustomer($accountId);
+        }
+        if (!$service) {
+            $service = $this->service->createNewService($accountId, $customer);
+        }
         $feedback->setService($service);
         $feedback->setCustomer($customer);
 
         return $feedback;
     }
 
+
     public function store($feedback)
     {
-        $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
-
         try {
             $this->saveEntity($feedback);
         } catch (DBALException $ex) {
-            if ($ex instanceof \PDOException && $ex->getCode() == 23000) {
-                throw new FeedbackException('Email already exists');
-            }
+            throw new FeedbackException('Email already exists');
         } catch (\Exception $ex) {
             throw new FeedbackException('Cannot create feedback');
         }
+    }
+
+
+    public function processFeedback($feedback)
+    {
+        $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
+        $this->store($feedback);
         $this->dispatchCreateFeedbackEvent($feedback);
     }
 
+    public function remove($entity)
+    {
+        $this->removeEntity($entity);
+    }
+
+
+    private function removeEntity($entity)
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
     /**
      * @param $entity
      */

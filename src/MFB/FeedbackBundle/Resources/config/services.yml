@@ -1,7 +1,18 @@
 parameters:
   mfb_feedback.class: MFB\FeedbackBundle\Service\Feedback
-
+  mfb_feedback_invite.class: MFB\FeedbackBundle\Service\FeedbackInvite
+  mfb_feedback_invite.listener.new_invite.class: MFB\FeedbackBundle\EventListener\NewFeedbackInviteListener
 services:
   mfb_feedback.service:
     class: %mfb_feedback.class%
     arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service", "@event_dispatcher"]
+
+  mfb_feedback_invite.service:
+    class: %mfb_feedback_invite.class%
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_service.service", "@event_dispatcher", "@router"]
+
+  mfb_feedback_invite.listener.new_invite:
+    class: %mfb_feedback_invite.listener.new_invite.class%
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_email.sender", "@translator"]
+    tags:
+        - { name: kernel.event_listener, event: feedback.invite.send.complete, method: onCreateFeedbackInviteComplete}

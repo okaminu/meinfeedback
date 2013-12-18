@@ -34,7 +34,7 @@ class DefaultController extends Controller
                 throw new \Exception('Not valid form');
             }
 
-            $this->get('mfb_feedback.service')->store($feedback);
+            $this->get('mfb_feedback.service')->processFeedback($feedback);
             return $this->showThankyouForm($accountChannel, $feedback);
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
@@ -80,10 +80,9 @@ class DefaultController extends Controller
      */
     private function getFeedbackForm(Feedback $feedback, $accountId, $accountChannelId)
     {
-        $serviceGroup = $this->get('mfb_service.service')->getServiceGroupEntity($accountChannelId);
-        $serviceProvider = $this->get('mfb_service.service')->getServiceProviderEntity($accountChannelId);
+        $serviceType = $this->get('mfb_service.service')->getServiceType($accountId);
 
-        $form = $this->createForm(new FeedbackType(new ServiceType($serviceProvider, $serviceGroup)), $feedback, array(
+        $form = $this->createForm(new FeedbackType($serviceType), $feedback, array(
             'action' => $this->generateUrl('mfb_feedback_save', array(
                         'accountId' => $accountId,
                         'accountChannelId' => $accountChannelId
@@ -117,9 +116,8 @@ class DefaultController extends Controller
     private function showThankyouForm($accountChannel, $feedback)
     {
         $return_url = $this->getReturnUrl($accountChannel);
-
         return $this->render(
-            'MFBFeedbackBundle:Invite:thank_you.html.twig',
+            'MFBFeedbackBundle:Default:thank_you.html.twig',
             array(
                 'thankyou_text' => $this->get('mfb_email.template')->getText($feedback->getCustomer(), 'ThankYou'),
                 'homepage' => $return_url
