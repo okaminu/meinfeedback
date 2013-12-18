@@ -1200,7 +1200,7 @@ td.taboben h3 { padding:20px 0 10px 0; margin:0; color: #666;}
 .kleiner { font-size:12px;}
 
 .preisliste td.tabohne { border:0px solid #b2b2b2; background-color:#fff; background-image:none;}
-*/
+
 
 td.beschreibung { text-align:left;padding:16px 0 16px 10px; background-image:none;}
 td.zwischenheadline { background-color:#ffce60; color:#fff; text-align:left; text-align:left; padding:16px 0 16px 10px; background-image:none;}
@@ -1514,3 +1514,17 @@ a.footer_link:hover {
     right:30px;
     top:50px;
 }
+
+#displayServiceTypesProviders .displayServiceTypeProvider
+{
+    display: block;
+    float: left;
+    margin: 15px 20px;
+}
+
+#displayServiceTypesProviders .title
+{
+    font-weight: bold;
+    margin: 15px 0px;
+}
+

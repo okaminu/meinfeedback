@@ -3,24 +3,39 @@
 {% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
 
 {% block content %}
-    <div>
-        <div class="row-fluid inner-page navLogo">
+<div>
+    <div class="row-fluid inner-page navLogo">
+        <div class="span12">
 
-            <div style="display: block; float: left; margin: 15px 20px;">
-                {% for serviceGroup in serviceGroupsList %}
-                   <div>{{ serviceGroup.getName }} </div>
-                {% endfor %}
+            <div id="displayServiceTypesProviders">
+                <div class="sectionTitle">
+                    {% trans %} Service Types and Providers {% endtrans %}
+                </div>
 
+                <div class="displayServiceTypeProvider">
+                    <div class="title">Service Types</div>
+                        {% for serviceGroup in serviceGroupsList %}
+                            <div>
+                                {{ serviceGroup.getName }}
+                            </div>
+                        {% endfor %}
+                </div>
+
+                <div class="displayServiceTypeProvider">
+                    <div class="title">Service Providers</div>
+                    {% for serviceProvider in serviceProvidersList %}
+                       <div>
+                           {{ serviceProvider.getFirstName }} {{ serviceProvider.getLastName }}
+                       </div>
+                    {% endfor %}
+                </div>
             </div>
+            <div style="clear:both"></div>
 
-            <div style="display: block; float: left; margin: 15px 20px;">
-                {% for serviceProvider in serviceProvidersList %}
-                   <div> {{ serviceProvider.getFirstName }} </div>
-                {% endfor %}
-
-            </div>
-
-            <div class="span12">
+            <div id="addServiceProvider">
+                <div class="sectionTitle">
+                    {% trans %} Add Service Type {% endtrans %}
+                </div>
                 {{ form_start(serviceGroupForm) }}
 
                 {{ form_row(serviceGroupForm.name, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
@@ -32,7 +47,10 @@
                 {{ form_end(serviceGroupForm) }}
             </div>
 
-            <div class="span12" style="margin-top: 35px">
+            <div style="margin-top: 35px">
+                <div class="sectionTitle">
+                    {% trans %} Add Service Provider {% endtrans %}
+                </div>
                 {{ form_start(serviceProviderForm) }}
 
                 {{ form_row(serviceProviderForm.firstname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
@@ -41,11 +59,11 @@
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
-
                 {{ form_end(serviceProviderForm) }}
             </div>
         </div>
     </div>
+</div>
 
 
 {% endblock %}
