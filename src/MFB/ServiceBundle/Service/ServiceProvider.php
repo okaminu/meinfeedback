@@ -63,4 +63,13 @@ class ServiceProvider
         );
         return $serviceProvider;
     }
+
+    public function findVisibleByAccountId($accountId)
+    {
+        $accountChannel = $this->getAccountChannel($accountId);
+        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
+            array('channel' => $accountChannel, 'visibility' => 1)
+        );
+        return $serviceProvider;
+    }
 }

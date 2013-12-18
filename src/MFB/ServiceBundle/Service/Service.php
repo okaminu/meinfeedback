@@ -59,8 +59,8 @@ class Service
      */
     public function getServiceType($accountId)
     {
-        $serviceGroup = $this->serviceGroup->createNewServiceGroup($accountId);
-        $serviceProvider = $this->serviceGroup->createNewServiceGroup($accountId);
+        $serviceGroup = $this->serviceGroup->findVisibleByAccountId($accountId);
+        $serviceProvider = $this->serviceProvider->findVisibleByAccountId($accountId);
         $serviceType = new ServiceType($serviceProvider, $serviceGroup);
         return $serviceType;
     }
