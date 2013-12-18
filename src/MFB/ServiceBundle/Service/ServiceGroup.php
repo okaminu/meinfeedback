@@ -57,7 +57,7 @@ class ServiceGroup
 
     public function findByChannelId($accountChannelId)
     {
-        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findAll(
+        $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceGroup')->findBy(
             array('channelId' => $accountChannelId)
         );
         return $serviceProvider;
