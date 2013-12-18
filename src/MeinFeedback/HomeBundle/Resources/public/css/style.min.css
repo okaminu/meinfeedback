@@ -1543,3 +1543,7 @@ a.footer_link:hover {
     margin: 0px 0px 15px;
 }
 
+#displayServiceTypesProviders td{
+    padding: 0px 10px;
+}
+

@@ -16,22 +16,26 @@
 
                 <div class="serviceType">
                     <div class="title">{% trans %} Service Providers {% endtrans %}</div>
-                    {% for serviceProvider in channelServicesForm.serviceProvider %}
-                        <div style="display:block">
-                            <label>{{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}</label>
-                            {{ form_widget(serviceProvider.visibility) }}
-                        </div>
-                    {% endfor %}
+                    <table>
+                        {% for serviceProvider in channelServicesForm.serviceProvider %}
+                            <tr>
+                                <td><label>{{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}</label></td>
+                                <td>{{ form_widget(serviceProvider.visibility) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
 
                 <div class="serviceType">
                     <div class="title">{% trans %} Service Types {% endtrans %}</div>
+                    <table>
                     {% for serviceGroup in channelServicesForm.serviceGroup %}
-                        <div style="display:block">
-                            <label>{{  serviceGroup.name.vars.value }}</label>
-                            {{ form_widget(serviceGroup.visibility) }}
-                        </div>
+                        <tr>
+                            <td><label>{{  serviceGroup.name.vars.value }}</label></td>
+                            <td>{{ form_widget(serviceGroup.visibility) }}</td>
+                        </tr>
                     {% endfor %}
+                    </table>
                 </div>
                 <div style="clear:both"></div>
 
