@@ -24,7 +24,7 @@ class Country
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=128)
+     * @ORM\Column(name="name", type="string", length=128, unique=true)
      */
     private $name;
 

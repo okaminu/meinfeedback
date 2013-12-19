@@ -1,5 +1,8 @@
 parameters:
-#    mfb_country.example.class: MFB\CountryBundle\Example
+    mfb_country.default.countries:
+      - Germany
+      - Spain
+      - France
 
 services:
 #    mfb_country.example:

@@ -42,6 +42,8 @@ class RegisterController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->get('mfb_account_channel.service')->createStoreNewChannel($entity->getId());
+
             $url = $this->get('mfb_reskribe.api')->getSignUrl($entity);
             return $this->redirect($url);
         }

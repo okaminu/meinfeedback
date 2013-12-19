@@ -4,6 +4,7 @@ namespace MFB\ChannelBundle\Service;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\ChannelException;
+use MFB\ChannelBundle\Entity\AccountChannel;
 
 class Channel
 {
@@ -12,6 +13,19 @@ class Channel
     public function __construct(EntityManager $em)
     {
         $this->entityManager = $em;
+    }
+
+    public function createNewChannel($accountId)
+    {
+        $accountChannel = new AccountChannel();
+        $accountChannel->setAccountId($accountId);
+        return $accountChannel;
+    }
+
+    public function createStoreNewChannel($accountId)
+    {
+        $accountChannel = $this->createNewChannel($accountId);
+        $this->store($accountChannel);
     }
 
     public function store($channel)

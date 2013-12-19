@@ -33,35 +33,35 @@ class AccountChannel
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="homepageUrl", type="string", length=128)
      */
-    private $homepageUrl;
+    private $homepageUrl = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=128)
      */
-    private $street;
+    private $street = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="place", type="string", length=128)
      */
-    private $place;
+    private $place = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=128)
      */
-    private $city;
+    private $city = '';
 
 
     /**
