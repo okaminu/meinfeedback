@@ -1,5 +1,10 @@
 parameters:
-#    mfb_rating.example.class: MFB\RatingBundle\Example
+    mfb_rating.default.ratings:
+      - Speed
+      - Price
+      - Delivery
+      - Quality
+      - Service
 
 services:
 #    mfb_rating.example:
