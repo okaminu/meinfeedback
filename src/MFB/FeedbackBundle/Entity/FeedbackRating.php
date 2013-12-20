@@ -12,14 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FeedbackRating
 {
-
     /**
      * @var integer
      *
      * @ORM\Column(name="rating", type="smallint")
      */
     private $rating;
-
     /**
      * @var integer
      *
@@ -28,7 +26,6 @@ class FeedbackRating
      * @ORM\JoinColumn(name="feedback_id", referencedColumnName="id")
      */
     private $feedback;
-
     /**
      * @var integer
      *
@@ -39,6 +36,16 @@ class FeedbackRating
     private $ratingCriteria;
 
     /**
+     * Get rating
+     *
+     * @return integer
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
      * Set rating
      *
      * @param integer $rating
@@ -47,18 +54,18 @@ class FeedbackRating
     public function setRating($rating)
     {
         $this->rating = $rating;
-    
+
         return $this;
     }
 
     /**
-     * Get rating
+     * Get feedback
      *
-     * @return integer 
+     * @return \MFB\FeedbackBundle\Entity\Feedback
      */
-    public function getRating()
+    public function getFeedback()
     {
-        return $this->rating;
+        return $this->feedback;
     }
 
     /**
@@ -70,18 +77,18 @@ class FeedbackRating
     public function setFeedback(\MFB\FeedbackBundle\Entity\Feedback $feedback = null)
     {
         $this->feedback = $feedback;
-    
+
         return $this;
     }
 
     /**
-     * Get feedback
+     * Get ratingCriteria
      *
-     * @return \MFB\FeedbackBundle\Entity\Feedback 
+     * @return \MFB\ChannelBundle\Entity\ChannelRatingCriteria
      */
-    public function getFeedback()
+    public function getRatingCriteria()
     {
-        return $this->feedback;
+        return $this->ratingCriteria;
     }
 
     /**
@@ -93,17 +100,7 @@ class FeedbackRating
     public function setRatingCriteria(\MFB\ChannelBundle\Entity\ChannelRatingCriteria $ratingCriteria = null)
     {
         $this->ratingCriteria = $ratingCriteria;
-    
-        return $this;
-    }
 
-    /**
-     * Get ratingCriteria
-     *
-     * @return \MFB\ChannelBundle\Entity\ChannelRatingCriteria 
-     */
-    public function getRatingCriteria()
-    {
-        return $this->ratingCriteria;
+        return $this;
     }
 }

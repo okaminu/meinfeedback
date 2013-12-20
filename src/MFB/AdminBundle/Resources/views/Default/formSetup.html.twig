@@ -7,7 +7,21 @@
     <div class="row-fluid inner-page navLogo">
         <div class="span12">
 
-            <div id="displayServiceTypesProviders">
+            <div id="selectRatingCriteria" class="section">
+                <div class="sectionTitle">
+                    {% trans %} Select Rating Criterias {% endtrans %}
+                </div>
+                <div class="title">{% trans %} Select 3 rating criterias {% endtrans %}</div>
+                {{ form_start(ratingSelectionForm) }}
+
+                {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+
+                {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite210'} } ) }}
+                {{ form_end(ratingSelectionForm) }}
+            </div>
+
+
+            <div id="displayServiceTypesProviders" class="section">
                 <div class="sectionTitle">
                     {% trans %} Change Service Visibility {% endtrans %}
                 </div>
@@ -49,7 +63,7 @@
 
             </div>
 
-            <div id="addServiceProvider">
+            <div id="addServiceProvider" class="section">
                 <div class="sectionTitle">
                     {% trans %} Add Service Type {% endtrans %}
                 </div>
@@ -64,7 +78,7 @@
                 {{ form_end(serviceGroupForm) }}
             </div>
 
-            <div style="margin-top: 35px">
+            <div style="margin-top: 35px" class="section">
                 <div class="sectionTitle">
                     {% trans %} Add Service Provider {% endtrans %}
                 </div>

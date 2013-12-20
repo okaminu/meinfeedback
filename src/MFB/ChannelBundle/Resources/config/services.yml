@@ -2,6 +2,7 @@ parameters:
      mfb_account_channel.account.class: MFB\ChannelBundle\Entity\AccountChannel
      mfb_account_channel.manager.class: MFB\ChannelBundle\Entity\AccountChannelManager
      mfb_account_channel.class: MFB\ChannelBundle\Service\Channel
+     mfb_account_channel.rating_criteria.class: MFB\ChannelBundle\Service\ChannelRatingCriteria
 
 services:
      mfb_account_channel.manager:
@@ -12,4 +13,8 @@ services:
 
      mfb_account_channel.service:
         class: %mfb_account_channel.class%
+        arguments: ["@doctrine.orm.default_entity_manager"]
+
+     mfb_account_channel.rating_criteria.service:
+        class: %mfb_account_channel.rating_criteria.class%
         arguments: ["@doctrine.orm.default_entity_manager"]
