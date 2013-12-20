@@ -98,6 +98,13 @@ class Feedback
      */
     private $sort = null;
 
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\FeedbackBundle\Entity\FeedbackRating", mappedBy="feedback", cascade={"persist"})
+     */
+    private $feedbackRating;
+
 
     /**
      * Get id
@@ -328,5 +335,45 @@ class Feedback
     public function getService()
     {
         return $this->service;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->feedbackRating = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add feedbackRating
+     *
+     * @param \MFB\FeedbackBundle\Entity\FeedbackRating $feedbackRating
+     * @return Feedback
+     */
+    public function addFeedbackRating(\MFB\FeedbackBundle\Entity\FeedbackRating $feedbackRating)
+    {
+        $this->feedbackRating[] = $feedbackRating;
+    
+        return $this;
+    }
+
+    /**
+     * Remove feedbackRating
+     *
+     * @param \MFB\FeedbackBundle\Entity\FeedbackRating $feedbackRating
+     */
+    public function removeFeedbackRating(\MFB\FeedbackBundle\Entity\FeedbackRating $feedbackRating)
+    {
+        $this->feedbackRating->removeElement($feedbackRating);
+    }
+
+    /**
+     * Get feedbackRating
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeedbackRating()
+    {
+        return $this->feedbackRating;
     }
 }

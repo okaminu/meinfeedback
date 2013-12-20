@@ -100,6 +100,17 @@ class AccountChannel
      **/
     private $serviceGroup;
 
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(
+     * targetEntity="MFB\ChannelBundle\Entity\ChannelRatingCriteria",
+     * mappedBy="channel",
+     * cascade={"persist"}
+     * )
+     */
+    private $ratingCriteria;
+
 
     /**
      * Get id
@@ -390,5 +401,38 @@ class AccountChannel
     public function getServiceGroup()
     {
         return $this->serviceGroup;
+    }
+
+    /**
+     * Add ratingCriteria
+     *
+     * @param \MFB\ChannelBundle\Entity\ChannelRatingCriteria $ratingCriteria
+     * @return AccountChannel
+     */
+    public function addRatingCriteria(\MFB\ChannelBundle\Entity\ChannelRatingCriteria $ratingCriteria)
+    {
+        $this->ratingCriteria[] = $ratingCriteria;
+    
+        return $this;
+    }
+
+    /**
+     * Remove ratingCriteria
+     *
+     * @param \MFB\ChannelBundle\Entity\ChannelRatingCriteria $ratingCriteria
+     */
+    public function removeRatingCriteria(\MFB\ChannelBundle\Entity\ChannelRatingCriteria $ratingCriteria)
+    {
+        $this->ratingCriteria->removeElement($ratingCriteria);
+    }
+
+    /**
+     * Get ratingCriteria
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRatingCriteria()
+    {
+        return $this->ratingCriteria;
     }
 }
