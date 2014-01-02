@@ -31,7 +31,8 @@ class FormSetupController extends Controller
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
                 'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria, $channel->getId())
                         ->createView(),
-                'channelRatingCriterias' => $channel->getRatingCriteria()
+                'channelRatingCriterias' => $channel->getRatingCriteria(),
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteri.limit')
             )
         );
     }

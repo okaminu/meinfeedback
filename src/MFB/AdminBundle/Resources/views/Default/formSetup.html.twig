@@ -23,6 +23,7 @@
                     </ol>
                 </div>
 
+                {% if channelRatingCriterias|length < criteriaLimit%}
                 <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
                 <div class="sectionIdent">
                     {{ form_start(ratingSelectionForm) }}
@@ -31,6 +32,7 @@
                 </div>
                 {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
                 {{ form_end(ratingSelectionForm) }}
+                {% endif %}
             </div>
 
 
