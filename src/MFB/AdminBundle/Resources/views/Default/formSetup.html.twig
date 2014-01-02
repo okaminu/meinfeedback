@@ -8,11 +8,18 @@
         <div class="span12">
 
             <div id="selectRatingCriteria">
+                {% if channelRatingCriterias|length < criteriaLimit %}
+                    <div class="alert alert-info">
+                        You need to insert {{ criteriaLimit - channelRatingCriterias|length }} rating criterias
+                    </div>
+                {% endif %}
                 <div class="sectionTitle">
                     {% trans %} Add Rating Criteria {% endtrans %}
                 </div>
 
-                <div class="title">{% trans %} The following rating criteria was added {% endtrans %}</div>
+
+
+                <div class="title">{% trans %} The following rating criterias were added {% endtrans %}</div>
                 <div class="sectionIdent">
                     <ol>
                         {% for criteria in channelRatingCriterias %}
@@ -23,7 +30,7 @@
                     </ol>
                 </div>
 
-                {% if channelRatingCriterias|length < criteriaLimit%}
+                {% if channelRatingCriterias|length < criteriaLimit %}
                 <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
                 <div class="sectionIdent">
                     {{ form_start(ratingSelectionForm) }}
