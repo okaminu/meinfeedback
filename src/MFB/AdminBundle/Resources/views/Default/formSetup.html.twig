@@ -12,7 +12,7 @@
                     {% trans %} Add Rating Criteria {% endtrans %}
                 </div>
 
-                <div class="title">{% trans %} The following criteria was inserted {% endtrans %}</div>
+                <div class="title">{% trans %} The following rating criteria was added {% endtrans %}</div>
                 <div class="sectionIdent">
                     <ol>
                         {% for criteria in channelRatingCriterias %}
@@ -23,7 +23,7 @@
                     </ol>
                 </div>
 
-                <div class="title">{% trans %} Insert selected rating criteria {% endtrans %}</div>
+                <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
                 <div class="sectionIdent">
                     {{ form_start(ratingSelectionForm) }}
                     <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>

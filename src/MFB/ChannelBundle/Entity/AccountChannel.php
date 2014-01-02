@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="MFB\ChannelBundle\Entity\AccountChannelManager")
  */
 class AccountChannel
 {

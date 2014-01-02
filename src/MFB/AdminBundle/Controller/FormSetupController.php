@@ -21,7 +21,7 @@ class FormSetupController extends Controller
         $accountId = $this->getCurrentUserId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
-            ->createNewChannelCriteria($accountId);
+            ->createNewChannelCriteria($channel);
 
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
@@ -29,7 +29,8 @@ class FormSetupController extends Controller
                 'serviceGroupForm' => $this->getNewServiceGroupForm($accountId)->createView(),
                 'serviceProviderForm' => $this->getNewServiceProviderForm($accountId)->createView(),
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
-                'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria)->createView(),
+                'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria, $channel->getId())
+                        ->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria()
             )
         );
@@ -38,14 +39,15 @@ class FormSetupController extends Controller
     public function updateRatingCriteriaSelectAction(Request $request)
     {
         $accountId = $this->getCurrentUserId();
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         try {
             /**
              * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
              */
             $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
-                ->createNewChannelCriteria($accountId);
+                ->createNewChannelCriteria($channel);
 
-            $form = $this->getChannelRatingSelectForm($channelCriteria);
+            $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
@@ -216,12 +218,16 @@ class FormSetupController extends Controller
 
     /**
      * @param $channelCriteria
+     * @param $channelId
      * @return \Symfony\Component\Form\Form
      */
-    private function getChannelRatingSelectForm($channelCriteria)
+    private function getChannelRatingSelectForm($channelCriteria, $channelId)
     {
+        $unusedCriterias = $this->get('mfb_account_channel.rating_criteria.service')
+            ->getNotUsedRatingCriterias($channelId);
+
         return $this->createForm(
-            new ChannelRatingSelectType(),
+            new ChannelRatingSelectType($unusedCriterias),
             $channelCriteria,
             array(
                 'action' => $this->generateUrl('mfb_admin_update_rating_criteria_select'),

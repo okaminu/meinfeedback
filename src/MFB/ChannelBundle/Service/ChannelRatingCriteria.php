@@ -16,9 +16,8 @@ class ChannelRatingCriteria
         $this->entityManager = $em;
     }
 
-    public function createNewChannelCriteria($accountId)
+    public function createNewChannelCriteria($channel)
     {
-        $channel = $this->getAccountChannel($accountId);
         $ratingCriteria = new ChannelRatingCriteriaEntity();
         $ratingCriteria->setChannel($channel);
         return $ratingCriteria;
@@ -39,6 +38,12 @@ class ChannelRatingCriteria
             array('accountId' => $accountId)
         );
         return $accountChannel;
+    }
+
+    public function getNotUsedRatingCriterias($channelId)
+    {
+        return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
+            ->findAllUnusedRatingCriterias($channelId);
     }
 
     /**

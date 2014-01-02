@@ -8,7 +8,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ChannelRatingSelectType extends AbstractType
 {
-        /**
+    private $unusedCriterias;
+    
+    public function __construct($unusedCriterias)
+    {
+        $this->unusedCriterias = $unusedCriterias;
+    }
+    
+    
+     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -20,7 +28,8 @@ class ChannelRatingSelectType extends AbstractType
                 'entity',
                 array(
                     'class' => 'MFBRatingBundle:Rating',
-                    'property' => 'name'
+                    'property' => 'name',
+                    'choices' => $this->unusedCriterias
                 )
             )
             ->add('submit', 'submit', array('label' => 'Add'))
