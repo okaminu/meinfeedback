@@ -51,9 +51,9 @@ class ChannelRatingCriteria
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isEnabled", type="boolean", options={"default" : 0})
+     * @ORM\Column(name="isEnabled", type="boolean", options={"default" : 1})
      */
-    private $isEnabled;
+    private $isEnabled = 1;
 
 
 

@@ -2,6 +2,7 @@
 namespace MFB\AdminBundle\Controller;
 
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
+use MFB\ChannelBundle\Form\ChannelRatingType;
 use MFB\ChannelBundle\Form\ChannelServicesType;
 use MFB\ServiceBundle\Entity\ServiceGroup;
 use MFB\ServiceBundle\Entity\ServiceProvider;
@@ -19,8 +20,8 @@ class FormSetupController extends Controller
     {
         $accountId = $this->getCurrentUserId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
-        $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')->createNewChannelCriteria($accountId);
-
+        $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
+            ->createNewChannelCriteria($accountId);
 
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
@@ -28,7 +29,8 @@ class FormSetupController extends Controller
                 'serviceGroupForm' => $this->getNewServiceGroupForm($accountId)->createView(),
                 'serviceProviderForm' => $this->getNewServiceProviderForm($accountId)->createView(),
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
-                'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria)->createView()
+                'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria)->createView(),
+                'channelRatingCriterias' => $channel->getRatingCriteria()
             )
         );
     }
@@ -40,7 +42,8 @@ class FormSetupController extends Controller
             /**
              * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
              */
-            $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')->createNewChannelCriteria($accountId);
+            $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
+                ->createNewChannelCriteria($accountId);
 
             $form = $this->getChannelRatingSelectForm($channelCriteria);
             $form->handleRequest($request);
@@ -53,7 +56,7 @@ class FormSetupController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->redirect($this->generateUrl('mfb_admin_update_rating_criteria_select'));
+        return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
     }
 
     public function saveServiceGroupAction(Request $request)
@@ -217,6 +220,13 @@ class FormSetupController extends Controller
      */
     private function getChannelRatingSelectForm($channelCriteria)
     {
-        return $this->createForm(new ChannelRatingSelectType(), $channelCriteria);
+        return $this->createForm(
+            new ChannelRatingSelectType(),
+            $channelCriteria,
+            array(
+                'action' => $this->generateUrl('mfb_admin_update_rating_criteria_select'),
+                'method' => 'POST',
+            )
+        );
     }
 }

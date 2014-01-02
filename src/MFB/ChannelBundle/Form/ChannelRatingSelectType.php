@@ -23,7 +23,7 @@ class ChannelRatingSelectType extends AbstractType
                     'property' => 'name'
                 )
             )
-            ->add('submit', 'submit')
+            ->add('submit', 'submit', array('label' => 'Add'))
         ;
     }
 

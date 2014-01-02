@@ -7,16 +7,29 @@
     <div class="row-fluid inner-page navLogo">
         <div class="span12">
 
-            <div id="selectRatingCriteria" class="section">
+            <div id="selectRatingCriteria">
                 <div class="sectionTitle">
-                    {% trans %} Select Rating Criterias {% endtrans %}
+                    {% trans %} Add Rating Criteria {% endtrans %}
                 </div>
-                <div class="title">{% trans %} Select 3 rating criterias {% endtrans %}</div>
-                {{ form_start(ratingSelectionForm) }}
 
-                {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+                <div class="title">{% trans %} The following criteria was inserted {% endtrans %}</div>
+                <div class="sectionIdent">
+                    <ol>
+                        {% for criteria in channelRatingCriterias %}
+                        <li>
+                            {{ criteria.getRatingCriteria.getName }}
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
 
-                {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite210'} } ) }}
+                <div class="title">{% trans %} Insert selected rating criteria {% endtrans %}</div>
+                <div class="sectionIdent">
+                    {{ form_start(ratingSelectionForm) }}
+                    <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>
+                    {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+                </div>
+                {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
                 {{ form_end(ratingSelectionForm) }}
             </div>
 
@@ -28,7 +41,7 @@
 
                 {{ form_start(channelServicesForm) }}
 
-                <div class="serviceType">
+                <div class="serviceType sectionIdent">
                     <div class="title">{% trans %} Service Providers {% endtrans %}</div>
                     <table>
                         {% for serviceProvider in channelServicesForm.serviceProvider %}
@@ -40,7 +53,7 @@
                     </table>
                 </div>
 
-                <div class="serviceType">
+                <div class="serviceType sectionIdent">
                     <div class="title">{% trans %} Service Types {% endtrans %}</div>
                     <table>
                     {% for serviceGroup in channelServicesForm.serviceGroup %}
@@ -67,10 +80,12 @@
                 <div class="sectionTitle">
                     {% trans %} Add Service Type {% endtrans %}
                 </div>
-                {{ form_start(serviceGroupForm) }}
+                <div class="sectionIdent">
+                    {{ form_start(serviceGroupForm) }}
 
-                {{ form_row(serviceGroupForm.name, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
+                    {{ form_row(serviceGroupForm.name, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
 
+                </div>
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(serviceGroupForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
@@ -82,11 +97,14 @@
                 <div class="sectionTitle">
                     {% trans %} Add Service Provider {% endtrans %}
                 </div>
-                {{ form_start(serviceProviderForm) }}
 
-                {{ form_row(serviceProviderForm.firstname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
-                {{ form_row(serviceProviderForm.lastname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
+                <div class="sectionIdent">
+                    {{ form_start(serviceProviderForm) }}
 
+                    {{ form_row(serviceProviderForm.firstname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
+                    {{ form_row(serviceProviderForm.lastname, {'attr': {'class': 'breite400', 'style': 'display:block'} } ) }}
+
+                </div>
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
