@@ -46,7 +46,6 @@ class ChannelRatingCriteria
     public function hasSelectedRatingCriterias($accountId)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();
-
         $usedCriteriaCount = $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->getUsedCriteriaCount($accountChannelId);
         

@@ -33,27 +33,21 @@ class LoggedInAdminListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $this->redirectAdminIfMissingCriterias($event);
+            if ($this->isCriterias($event)) {
+                $url = $this->getRedirectUrl();
+                $event->setResponse(new RedirectResponse($url));
+            }
         }
     }
 
     /**
-     * @param $showFormRoute
-     * @return RedirectResponse
-     */
-    private function getRedirectResponse($showFormRoute)
-    {
-        $url = $this->router->generate($showFormRoute, array(), Router::ABSOLUTE_URL);
-        return new RedirectResponse($url);
-    }
-
-    /**
-     * @param $userId
      * @return bool
      */
-    private function isUserMissingCriterias($userId)
+    private function isUserMissingCriterias()
     {
-        return !$this->ratingCriteriaService->hasSelectedRatingCriterias($userId);
+        return !$this->ratingCriteriaService->hasSelectedRatingCriterias(
+            $this->getUser()->getId()
+        );
     }
 
     /**
@@ -92,18 +86,6 @@ class LoggedInAdminListener
         return false;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    private function redirectAdminIfMissingCriterias(GetResponseEvent $event)
-    {
-        if ($this->isUserLoggenIn() &&
-            $this->isUserNotInCriteriaForm($this->getRoute($event)) &&
-            $this->isUserMissingCriterias($this->getUser()->getId)
-        ) {
-                $this->addRedirectToEvent($event);
-        }
-    }
 
     private function getUser()
     {
@@ -114,17 +96,6 @@ class LoggedInAdminListener
         return $user;
     }
 
-
-    /**
-     * @param GetResponseEvent $event
-     */
-    private function addRedirectToEvent(GetResponseEvent $event)
-    {
-        $event->setResponse(
-            $this->getRedirectResponse($this->getShowFormRoute())
-        );
-    }
-
     /**
      * @param GetResponseEvent $event
      * @return mixed
@@ -132,5 +103,25 @@ class LoggedInAdminListener
     private function getRoute(GetResponseEvent $event)
     {
         return $event->getRequest()->get('_route');
+    }
+
+    /**
+     * @param GetResponseEvent $event
+     * @return bool
+     */
+    private function isCriterias(GetResponseEvent $event)
+    {
+        return $this->isUserLoggenIn() &&
+        $this->isUserNotInCriteriaForm($this->getRoute($event)) &&
+        $this->isUserMissingCriterias();
+    }
+
+    /**
+     * @return string
+     */
+    private function getRedirectUrl()
+    {
+        $url = $this->router->generate($this->showFormRoute, array(), Router::ABSOLUTE_URL);
+        return $url;
     }
 }
