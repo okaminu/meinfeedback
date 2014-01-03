@@ -10,7 +10,6 @@ use MFB\ChannelBundle\Service\ChannelRatingCriteria as CriteriaService;
 
 class LoggedInAdminListener
 {
-
     private $router;
     
     private $securityContext;
@@ -41,8 +40,7 @@ class LoggedInAdminListener
     private function getRedirectResponse($showFormRoute)
     {
         $url = $this->router->generate($showFormRoute, array(), Router::ABSOLUTE_URL);
-        $response = new RedirectResponse($url);
-        return $response;
+        return new RedirectResponse($url);
     }
 
     /**
@@ -68,8 +66,7 @@ class LoggedInAdminListener
      */
     private function getShowFormRoute()
     {
-        $showFormRoute = 'mfb_admin_show_form_setup';
-        return $showFormRoute;
+        return 'mfb_admin_show_form_setup';
     }
 
     /**
@@ -77,8 +74,7 @@ class LoggedInAdminListener
      */
     private function getSaveFormRoute()
     {
-        $saveFormRoute = 'mfb_admin_update_rating_criteria_select';
-        return $saveFormRoute;
+        return 'mfb_admin_update_rating_criteria_select';
     }
 
     /**
@@ -107,7 +103,12 @@ class LoggedInAdminListener
 
     private function getUserId()
     {
-        return $this->securityContext->getToken()->getUser()->getId();
+        $userId = $this->securityContext
+            ->getToken()
+            ->getUser()
+            ->getId();
+
+        return $userId;
     }
 
 
@@ -116,7 +117,9 @@ class LoggedInAdminListener
      */
     private function addRedirectToEvent(GetResponseEvent $event)
     {
-        $event->setResponse($this->getRedirectResponse($this->getShowFormRoute()));
+        $event->setResponse(
+            $this->getRedirectResponse($this->getShowFormRoute())
+        );
     }
 
     /**
