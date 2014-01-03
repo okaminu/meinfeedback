@@ -88,13 +88,19 @@ class Feedback
 
     public function getFeedbackSummaryList($accountId)
     {
+        $feedbackList = $this->getFeedbackList($accountId);
+        return $this->createFeedbackSummary($feedbackList);
+    }
+
+    public function getFeedbackList($accountId)
+    {
         $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->findBy(
                 array('accountId' => $accountId, 'isEnabled' =>  1),
                 array('createdAt' => 'DESC')
             );
 
-        return $this->createFeedbackSummary($feedbackList);
+        return $feedbackList;
     }
 
     private function roundHalfUp($number)

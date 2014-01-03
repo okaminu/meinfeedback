@@ -26,32 +26,21 @@ class DefaultController extends Controller
         $accountId = $account->getId();
         $em = $this->getEntityManager();
 
-        /** @var AccountChannel $accountChannel */
-        $accountChannel = $this->getAccountChannel($em, $accountId);
-
-        $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
-        $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
-
-        $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
-        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackRatingSpecification);
-        $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
-
-        $feedbackList = $em
-            ->getRepository('MFBFeedbackBundle:Feedback')
-            ->findSortedByAccountId($accountId);
+        $feedbackService = $this->get('mfb_feedback.service');
 
         if ($request->getMethod() == 'POST') {
             $activates = $request->request->get('activate');
-            $em->getRepository('MFBFeedbackBundle:Feedback')->batchActivate($activates, $feedbackList, $em);
+            $em->getRepository('MFBFeedbackBundle:Feedback')
+                ->batchActivate($activates, $feedbackService->getFeedbackList($accountId), $em);
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackList' => $feedbackList,
-                'ratingCount' => $feedbackCount,
-                'ratingAverage' => $feedbackRatingAverage
+                'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($accountId),
+                'ratingCount' => $feedbackService->getFeedbackCount($accountId),
+                'ratingAverage' => $feedbackService->getFeedbackRatingAverage($accountId)
             )
         );
     }

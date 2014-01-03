@@ -17,7 +17,7 @@
     {% if ratingAverage > 0 %}
         <div style="margin-left: 20px">Active ratings average: {{ ratingAverage }}</div>
     {% endif %}
-    <div style="margin-left: 20px">Total active ratings: {{ ratingCount }}</div>
+    <div style="margin-left: 20px">Total active feedbacks: {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">
@@ -29,14 +29,15 @@
 
     <div>
 
-            {% if  feedbackList|length > 0 %}
+            {% if  feedbackSummaryList|length > 0 %}
             <form action="{{ path("mfb_admin_homepage") }}" method="post" id="login" class="form-inline" >
                 <div style="width: 740px">
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
                 <ul id="sortable" style="width: 720px">
-                {% for feedback in feedbackList %}
+                {% for feedbackSummary in feedbackSummaryList %}
+                    {% set feedback = feedbackSummary.getFeedback %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
                         <div class="username">
                             {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
@@ -46,10 +47,10 @@
                             {% endif %}
                         </div>
 
-                        {%  if feedback.rating %}
+                        {%  if feedbackSummary.getRating %}
                             <div class="stars_rating">
                                 <div class="stars_gray_small">
-                                    <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                                    <span style="width: {{ feedbackSummary.getRating * 20 }}%;" class="stars_gold_small"></span>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
