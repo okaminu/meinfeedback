@@ -11,4 +11,4 @@ services:
 
      mfb_account_channel.rating_criteria.service:
         class: %mfb_account_channel.rating_criteria.class%
-        arguments: ["@doctrine.orm.default_entity_manager"]
+        arguments: ["@doctrine.orm.default_entity_manager", "%mfb_account_channel.rating_criteri.limit%"]

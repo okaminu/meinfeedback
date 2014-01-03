@@ -10,10 +10,13 @@ use MFB\ChannelBundle\Entity\ChannelRatingCriteria as ChannelRatingCriteriaEntit
 class ChannelRatingCriteria
 {
     private $entityManager;
+    private $criteriaLimit;
 
-    public function __construct(EntityManager $em)
+
+    public function __construct(EntityManager $em, $criteriaLimit)
     {
         $this->entityManager = $em;
+        $this->criteriaLimit = $criteriaLimit;
     }
 
     public function createNewChannelCriteria($channel)
@@ -39,6 +42,20 @@ class ChannelRatingCriteria
         );
         return $accountChannel;
     }
+
+    public function hasSelectedRatingCriterias($accountId)
+    {
+        $accountChannelId = $this->getAccountChannel($accountId)->getId();
+
+        $usedCriteriaCount = $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
+            ->getUsedCriteriaCount($accountChannelId);
+        
+        if ($usedCriteriaCount < $this->criteriaLimit) {
+            return false;
+        }
+        return true;
+    }
+
 
     public function getNotUsedRatingCriterias($channelId)
     {

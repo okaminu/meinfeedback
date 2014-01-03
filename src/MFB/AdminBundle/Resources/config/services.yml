@@ -12,3 +12,8 @@ services:
                 meinfeedback.net: de
         tags:
             -  { name: kernel.event_subscriber }
+    kernel.listener.LoggedInAdminListener:
+        class: MFB\AdminBundle\EventListener\LoggedInAdminListener
+        arguments: [@router, @security.context, @mfb_account_channel.rating_criteria.service]
+        tags:
+          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}

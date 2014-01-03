@@ -15,7 +15,7 @@ class DefaultController extends Controller
 {
     public function showCreateFeedbackFormAction($accountId)
     {
-        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
+        $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
         return $this->showFeedbackFrom($accountChannel, $form);
@@ -24,7 +24,7 @@ class DefaultController extends Controller
     public function saveFeedbackAction(Request $request)
     {
         $accountId = $request->get('accountId');
-        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
+        $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
         $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
         try {

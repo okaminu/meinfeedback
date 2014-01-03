@@ -29,6 +29,13 @@ class ChannelCriteriaRepository extends EntityRepository
         return $this->mergeToSingleArray($result);
     }
 
+    public function getUsedCriteriaCount($channelId)
+    {
+        $unusedCriteriaIds = $this->findAllUsedRatingCriteriaIds($channelId);
+        return count($unusedCriteriaIds);
+    }
+
+
     /**
      * @param $result
      * @return array

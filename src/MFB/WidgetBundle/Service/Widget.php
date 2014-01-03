@@ -52,7 +52,7 @@ class Widget
         /** @var Account $account */
         $account = $this->container->get("mfb_account.service")->findByAccountId($accountId);
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $this->container->get("mfb_account_channel.manager")->findAccountChannelByAccount(
+        $accountChannel = $this->container->get("mfb_account_channel.service")->findByAccountId(
             $account->getId()
         );
 
