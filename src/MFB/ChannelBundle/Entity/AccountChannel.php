@@ -62,14 +62,6 @@ class AccountChannel
      */
     private $city = '';
 
-
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="ratings_enabled", type="smallint")
-     */
-    private $ratingsEnabled = 0;
-
     /**
      * @var integer
      *

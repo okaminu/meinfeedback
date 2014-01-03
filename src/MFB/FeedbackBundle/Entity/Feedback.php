@@ -11,7 +11,7 @@ use MFB\EmailBundle\Entity\EmailTemplate;
  *
  * @ORM\Table()
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="MFB\FeedbackBundle\Repository\FeedbackRepository")
+ * @ORM\Entity(repositoryClass="\MFB\FeedbackBundle\Entity\FeedbackRepository")
  *
  */
 class Feedback
@@ -76,13 +76,6 @@ class Feedback
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      **/
     private $emailTemplate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="rating", type="integer", nullable=true)
-     */
-    private $rating = null;
 
     /**
      * @var integer
@@ -233,29 +226,6 @@ class Feedback
         if ($this->getCreatedAt() == null) {
             $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
-    }
-
-    /**
-     * Set rating
-     *
-     * @param \integer $rating
-     * @return Feedback
-     */
-    public function setRating($rating)
-    {
-        $this->rating = $rating;
-    
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return \integer
-     */
-    public function getRating()
-    {
-        return $this->rating;
     }
 
     /**

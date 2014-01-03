@@ -23,13 +23,6 @@ class AccountChannelType extends AbstractType
             ->add('homepageUrl')
             ->add('phoneNumber')
             ->add('redirect', 'hidden', array('mapped' => false))
-            ->add(
-                'ratingsEnabled',
-                'choice',
-                array(
-                    'choices' => array('1' => 'Enabled', '0' => 'Disabled')
-                )
-            )
             ->add('country', 'entity', array(
                     'class' => 'MFBCountryBundle:Country',
                     'property' => 'name',

@@ -28,15 +28,7 @@ class DefaultController extends Controller
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
         }
 
-        $preBuiltSpec = new PreBuiltSpecification($account, $accountChannel);
-        $feedbackSpecification = $preBuiltSpec->getFeedbackSpecification();
-        $feedbackRatingSpecification = $preBuiltSpec->getFeedbackWithRatingSpecification();
-
-        $feedbackRepo = $em->getRepository('MFBFeedbackBundle:Feedback');
-        $feedbackCount = $feedbackRepo->getFeedbackCount($feedbackRatingSpecification);
-        $feedbackRatingAverage = round($feedbackRepo->getRatingsAverage($feedbackRatingSpecification), 1);
-
-        $feedbackList = $feedbackRepo->findSortedFeedbacks($feedbackSpecification, 'DESC', 100);
+        $feedbackService = $this->get('mfb_feedback.service');
 
         $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
         return $this->render(
@@ -44,9 +36,9 @@ class DefaultController extends Controller
             array(
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
-                'feedbackList'=>$feedbackList,
-                'ratingCount' => $feedbackCount,
-                'ratingAverage' => $feedbackRatingAverage,
+                'feedbackSummaryList'=> $feedbackService->getFeedbackSummaryList($accountId),
+                'ratingCount' => $feedbackService->getFeedbackCount($accountId),
+                'ratingAverage' => $feedbackService->getFeedbackRatingAverage($accountId),
                 'channelName' => $accountChannel->getName(),
                 'channelUrl' => $accountChannel->getHomepageUrl(),
                 'channelAddress' => $channelAddress,

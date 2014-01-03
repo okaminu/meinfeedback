@@ -3,12 +3,12 @@ namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
+use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Service\Service;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -21,8 +21,7 @@ class Feedback
     private $service;
 
     private $eventDispatcher;
-
-
+    
     public function __construct(EntityManager $em, CustomerService $customer, Service $service, EventDispatcher $ed)
     {
         $this->entityManager = $em;
@@ -72,6 +71,37 @@ class Feedback
         $this->removeEntity($entity);
     }
 
+    public function getFeedbackCount($accountId)
+    {
+        $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->getAccountFeedbackCount($accountId);
+        return $feedbackCount;
+    }
+
+    public function getFeedbackRatingAverage($accountId)
+    {
+        $ratingAverage = $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->getFeedbackRatingAverage($accountId);
+
+        return $this->roundHalfUp($ratingAverage);
+    }
+
+    public function getFeedbackSummaryList($accountId)
+    {
+        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->findBy(
+                array('accountId' => $accountId, 'isEnabled' =>  1),
+                array('createdAt' => 'DESC')
+            );
+
+        return $this->createFeedbackSummary($feedbackList);
+    }
+
+    private function roundHalfUp($number)
+    {
+        return round($number, 0, PHP_ROUND_HALF_UP);
+    }
+
 
     private function removeEntity($entity)
     {
@@ -111,6 +141,7 @@ class Feedback
         return $feedback;
     }
 
+
     /**
      * @param $feedback
      */
@@ -127,5 +158,35 @@ class Feedback
             $feedback->getRating()
         );
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
+    }
+
+    /**
+     * @param $feedbackList
+     * @return array
+     */
+    private function createFeedbackSummary($feedbackList)
+    {
+        $feedbackSummaryList = array();
+        foreach ($feedbackList as $feedback) {
+            $singleSummary = new FeedbackSummary();
+            $singleSummary->setFeedback($feedback);
+            $singleSummary->setRating($this->calcFeedbackRatingAverage($feedback));
+            $feedbackSummaryList[] = $singleSummary;
+        }
+        return $feedbackSummaryList;
+    }
+
+    /**
+     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
+     * @return float
+     */
+    private function calcFeedbackRatingAverage(FeedbackEntity $feedback)
+    {
+        $ratingAverage = array();
+        foreach ($feedback->getFeedbackRating() as $rating) {
+            $ratingAverage[] = $rating->getRating();
+        }
+        $average = array_sum($ratingAverage) / count($ratingAverage);
+        return $this->roundHalfUp($average);
     }
 }

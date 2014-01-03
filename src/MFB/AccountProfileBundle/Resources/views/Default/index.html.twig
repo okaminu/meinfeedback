@@ -34,10 +34,11 @@
         {% if ratingAverage > 0 %}
             <div>Ratings average: {{ ratingAverage }}</div>
         {% endif %}
-        <div>Total ratings: {{ ratingCount }}</div>
+        <div>Total feedbacks: {{ ratingCount }}</div>
 
         <div class="feedbackDisplayForm">
-            {% for feedback in feedbackList %}
+            {% for feedbackSummary in feedbackSummaryList %}
+                {% set feedback = feedbackSummary.getFeedback %}
                 <div style="margin:20px 0px">
                     <div class="username">
                         {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
@@ -46,10 +47,10 @@
                             {% trans %} Anonymous says: {% endtrans %}
                         {% endif %}
                     </div>
-                    {%  if feedback.rating %}
+                    {%  if feedbackSummary.getRating %}
                         <div class="stars_rating">
                             <div class="stars_gray_small">
-                                <span style="width: {{ feedback.rating * 20 }}%;" class="stars_gold_small"></span>
+                                <span style="width: {{ feedbackSummary.getRating * 20 }}%;" class="stars_gold_small"></span>
                             </div>
                             <div class="clearfix"></div>
                         </div>
