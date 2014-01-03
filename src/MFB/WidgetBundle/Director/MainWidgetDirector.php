@@ -20,7 +20,6 @@ class MainWidgetDirector implements WidgetDirectorInterface
     public function build(
         $lastFeedbacks,
         $feedbackCount,
-        $feedbackRatingCount,
         $feedbackRatingAverage,
         Color $textColor,
         Color $backgroundColor
@@ -35,8 +34,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
             ->addText($feedbackCount . " Bewertungen")
             ->setFontColorCode($textColor);
 
-        if ($feedbackRatingCount != 0) {
-            $repText->addText($feedbackRatingCount . " Ratings");
+        if ($feedbackRatingAverage != 0) {
             $repText->addText($feedbackRatingAverage ." Average");
         }
         $this->builder->addElement($repText);
@@ -45,7 +43,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
         $lastFeedback = reset($lastFeedbacks);
         $date = '';
         if (!empty($lastFeedback)) {
-            $date =  $lastFeedback->getCreatedAt()->format('d.m.Y');
+            $date =  $lastFeedback->getFeedback()->getCreatedAt()->format('d.m.Y');
         }
 
         $text = new ImageTextElement($this->builder->getResources());

@@ -60,44 +60,28 @@ class Widget
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
         );
 
-        $prebuiltSpec = new PreBuiltSpecification($account, $accountChannel);
-        $specification = $prebuiltSpec->getFeedbackSpecification();
-        $lastFeedbacks  = $this->getFeedbackRepo()->findSortedFeedbacks($specification);
-        $feedbackCount = $this->getFeedbackRepo()->getFeedbackCount($specification);
+        $feedbackService = $this->container->get('mfb_feedback.service');
 
-        $withRatingsSpecification = $prebuiltSpec->getFeedbackWithRatingSpecification();
-        $feedbackRatingCount = $this->getFeedbackRepo()->getFeedbackCount($withRatingsSpecification);
-        $feedbackRatingAverage = round($this->getFeedbackRepo()->getRatingsAverage($withRatingsSpecification), 1);
-
+        $lastFeedbacks = $feedbackService->getFeedbackSummaryList($accountId);
         $this->filterComments($lastFeedbacks);
 
         $imageDirector = new MainWidgetDirector($this->imageBuilder);
         return $imageDirector->build(
             $lastFeedbacks,
-            $feedbackCount,
-            $feedbackRatingCount,
-            $feedbackRatingAverage,
+            $feedbackService->getFeedbackCount($accountId),
+            $feedbackService->getFeedbackRatingAverage($accountId),
             new Color($widget->getTextColorCode()),
             new Color($widget->getBackgroundColorCode())
         );
     }
 
     /**
-     * Get Feedback repository
-     * @return \MFB\FeedbackBundle\Repository\FeedbackRepository
-     */
-    protected function getFeedbackRepo()
-    {
-        return $this->em->getRepository('MFBFeedbackBundle:Feedback');
-    }
-
-
-    /**
      * @param $lastFeedbacks
      */
     private function filterComments($lastFeedbacks)
     {
-        foreach ($lastFeedbacks as $feedback) {
+        foreach ($lastFeedbacks as $feedbackSummary) {
+            $feedback = $feedbackSummary->getFeedback();
             $filteredText = $feedback->getContent();
             $textArray = explode(' ', $feedback->getContent());
 

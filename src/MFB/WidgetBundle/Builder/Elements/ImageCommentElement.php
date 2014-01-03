@@ -135,16 +135,16 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
     /**
      * Get Stars Element
      *
-     * @param $feedback
+     * @param $feedbackSummary
      * @return $this
      *
      * @todo here we need dependency injection
      */
-    protected function getStarsElement($feedback)
+    protected function getStarsElement($feedbackSummary)
     {
         $element = new RatingStarsElement( $this->getResources() );
 
-        if ($feedback->getRating() == null)
+        if ($feedbackSummary->getRating() == null)
         {
             $element->setElementHeight(0);
         }
@@ -152,10 +152,10 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
         return $element
             ->setPositionX($this->getPositionX())
             ->setPositionY($this->getPositionY())
-            ->setRating($feedback->getRating());
+            ->setRating($feedbackSummary->getRating());
     }
 
-    protected function getTextElement($feedback)
+    protected function getTextElement($feedbackSummary)
     {
         $textElement = new ImageTextElement($this->getResources());
 
@@ -163,7 +163,7 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
             $commentAdded = $this->wrap(
                 $this->getFontSize(),
                 $this->getFontType(),
-                '"'. trim($feedback->getContent()) . '"',
+                '"'. trim($feedbackSummary->getFeedback()->getContent()) . '"',
                 $this->getBoxWidth(),
                 $this->getBoxHeight()
             );

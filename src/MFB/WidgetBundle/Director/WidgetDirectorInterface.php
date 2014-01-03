@@ -8,7 +8,6 @@ interface WidgetDirectorInterface
     public function build(
         $lastFeedbacks,
         $feedbackCount,
-        $feedbackRatingCount,
         $feedbackRatingAverage,
         Color $textColor,
         Color $feedbackColor
