@@ -16,6 +16,10 @@ class LoggedInAdminListener
 
     private $ratingCriteriaService;
 
+    private $showFormRoute = 'mfb_admin_show_form_setup';
+
+    private $saveFormRoute = 'mfb_admin_update_rating_criteria_select';
+
     public function __construct(
         Router $router,
         SecurityContext $securityContext,
@@ -66,7 +70,7 @@ class LoggedInAdminListener
      */
     private function getShowFormRoute()
     {
-        return 'mfb_admin_show_form_setup';
+        return $this->showFormRoute;
     }
 
     /**
@@ -74,7 +78,7 @@ class LoggedInAdminListener
      */
     private function getSaveFormRoute()
     {
-        return 'mfb_admin_update_rating_criteria_select';
+        return $this->saveFormRoute;
     }
 
     /**
@@ -95,20 +99,19 @@ class LoggedInAdminListener
     {
         if ($this->isUserLoggenIn() &&
             $this->isUserNotInCriteriaForm($this->getRoute($event)) &&
-            $this->isUserMissingCriterias($this->getUserId())
+            $this->isUserMissingCriterias($this->getUser()->getId)
         ) {
                 $this->addRedirectToEvent($event);
         }
     }
 
-    private function getUserId()
+    private function getUser()
     {
-        $userId = $this->securityContext
+        $user = $this->securityContext
             ->getToken()
-            ->getUser()
-            ->getId();
+            ->getUser();
 
-        return $userId;
+        return $user;
     }
 
 
