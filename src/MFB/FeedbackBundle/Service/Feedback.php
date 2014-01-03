@@ -21,7 +21,9 @@ class Feedback
     private $service;
 
     private $eventDispatcher;
-    
+
+    private $feedbackOrder = array('createdAt' => 'DESC');
+
     public function __construct(EntityManager $em, CustomerService $customer, Service $service, EventDispatcher $ed)
     {
         $this->entityManager = $em;
@@ -103,7 +105,7 @@ class Feedback
         $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->findBy(
                 array('accountId' => $accountId),
-                array('createdAt' => 'DESC')
+                $this->feedbackOrder
             );
 
         return $feedbackList;
@@ -114,7 +116,7 @@ class Feedback
         $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->findBy(
                 array('accountId' => $accountId, 'isEnabled' =>  1),
-                array('createdAt' => 'DESC')
+                $this->feedbackOrder
             );
 
         return $feedbackList;
