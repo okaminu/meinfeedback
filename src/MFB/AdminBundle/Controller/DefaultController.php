@@ -24,14 +24,12 @@ class DefaultController extends Controller
     {
         $account = $this->getCurrentUser();
         $accountId = $account->getId();
-        $em = $this->getEntityManager();
 
         $feedbackService = $this->get('mfb_feedback.service');
 
         if ($request->getMethod() == 'POST') {
             $activates = $request->request->get('activate');
-            $em->getRepository('MFBFeedbackBundle:Feedback')
-                ->batchActivate($activates, $feedbackService->getFeedbackList($accountId), $em);
+            $feedbackService->batchActivate($activates, $feedbackService->getFeedbackList($accountId));
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
 

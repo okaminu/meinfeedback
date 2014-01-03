@@ -92,7 +92,24 @@ class Feedback
         return $this->createFeedbackSummary($feedbackList);
     }
 
+    public function getActiveFeedbackSummaryList($accountId)
+    {
+        $feedbackList = $this->getActiveFeedbackList($accountId);
+        return $this->createFeedbackSummary($feedbackList);
+    }
+
     public function getFeedbackList($accountId)
+    {
+        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->findBy(
+                array('accountId' => $accountId),
+                array('createdAt' => 'DESC')
+            );
+
+        return $feedbackList;
+    }
+
+    public function getActiveFeedbackList($accountId)
     {
         $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->findBy(
@@ -194,5 +211,18 @@ class Feedback
         }
         $average = array_sum($ratingAverage) / count($ratingAverage);
         return $this->roundHalfUp($average);
+    }
+
+    public function batchActivate($activateList, $inFeedbackList)
+    {
+        foreach ($inFeedbackList as $feedback) {
+            $feedback->setIsEnabled(false);
+
+            if (array_key_exists($feedback->getId(), $activateList)) {
+                $feedback->setIsEnabled(true);
+            }
+            $this->entityManager->persist($feedback);
+        }
+        $this->entityManager->flush();
     }
 }
