@@ -26,8 +26,10 @@ class InviteController extends Controller
 
         $accountChannel = $this->getAccountChannel($accountId);
 
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId, $invite->getService());
-        $form = $this->getFeedbackForm($token, $feedback);
+        $feedbackService = $this->get('mfb_feedback.service');
+        $feedbackService->setServiceEntity($invite->getService());
+
+        $form = $this->getFeedbackForm($token, $feedbackService->createNewFeedback($accountId));
         return $this->showFeedbackForm($accountChannel, $form);
     }
 
@@ -43,7 +45,10 @@ class InviteController extends Controller
         $service = $invite->getService();
         $accountChannel = $this->getAccountChannel($accountId);
 
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId, $service, $service->getCustomer());
+        $feedbackService = $this->get('mfb_feedback.service');
+        $feedbackService->setServiceEntity($service);
+        $feedbackService->setCustomerEntity($service->getCustomer());
+        $feedback= $feedbackService->createNewFeedback($accountId);
 
         $form = $this->getFeedbackForm($token, $feedback);
         try {

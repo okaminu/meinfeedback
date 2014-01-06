@@ -100,6 +100,14 @@ class Feedback
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->feedbackRating = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -306,14 +314,7 @@ class Feedback
     {
         return $this->service;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->feedbackRating = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Add feedbackRating
      *

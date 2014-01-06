@@ -11,10 +11,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class FeedbackType extends AbstractType
 {
     private $serviceType;
+    
+    private $ratingCriterias;
 
-    public function __construct(ServiceType $serviceType)
+    public function __construct(ServiceType $serviceType, $ratingCriterias)
     {
         $this->serviceType = $serviceType;
+        $this->ratingCriterias = $ratingCriterias;
     }
         /**
      * @param FormBuilderInterface $builder
@@ -24,10 +27,12 @@ class FeedbackType extends AbstractType
     {
         $builder
             ->add('content', 'textarea')
-            ->add('rating', 'hidden')
             ->add('service', $this->serviceType)
             ->add('save', 'submit', array('label' => 'Send'));
         ;
+
+        $builder->add('feedbackRating', 'collection', array('type' => new FeedbackRatingType()));
+
     }
     
     /**

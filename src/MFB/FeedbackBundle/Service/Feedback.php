@@ -3,6 +3,7 @@ namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
+use MFB\FeedbackBundle\Service\FeedbackRating as FeedbackRatingService;
 use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
@@ -24,37 +25,47 @@ class Feedback
     private $eventDispatcher;
 
     private $feedbackOrder;
+    
+    private $serviceEntity = null;
+    
+    private $customerEntity = null;
+    
+    private $feedbackRatingService;
+
+    private $accountId;
 
     public function __construct(
         EntityManager $em,
         CustomerService $customer,
         Service $service,
+        FeedbackRatingService $feedbackRatingService,
         EventDispatcher $ed,
         $feedbackOrder
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->service = $service;
+        $this->feedbackRatingService = $feedbackRatingService;
         $this->eventDispatcher = $ed;
         $this->feedbackOrder = $feedbackOrder;
     }
 
-    public function createNewFeedback($accountId, $service = null, $customer = null)
+    public function createNewFeedback($accountId)
     {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
-        $feedback = $this->getNewFeedbackEntity($accountId, $accountChannelId);
-        if (!$customer) {
-            $customer = $this->customerService->createNewCustomer($accountId);
+        $this->setAccountId($accountId);
+        $accountChannel = $this->getAccountChannel($accountId);
+        $feedback = $this->getNewFeedbackEntity($accountId, $accountChannel->getId());
+
+        $feedback->setService($this->getServiceEntity());
+        $feedback->setCustomer($this->getCustomerEntity());
+
+        foreach ($accountChannel->getRatingCriteria() as $criteria) {
+            $feedbackRating = $this->feedbackRatingService->createNewFeedbackRating($criteria, $feedback);
+            $feedback->addFeedbackRating($feedbackRating);
         }
-        if (!$service) {
-            $service = $this->service->createNewService($accountId, $customer);
-        }
-        $feedback->setService($service);
-        $feedback->setCustomer($customer);
 
         return $feedback;
     }
-
 
     public function store($feedback)
     {
@@ -81,7 +92,9 @@ class Feedback
 
     public function getFeedbackType($accountId)
     {
-        return new FeedbackType($this->service->getServiceType($accountId));
+        $channel = $this->getAccountChannel($accountId);
+
+        return new FeedbackType($this->service->getServiceType($accountId), $channel->getRatingCriteria());
     }
 
     public function getFeedbackCount($accountId)
@@ -131,6 +144,52 @@ class Feedback
             );
 
         return $feedbackList;
+    }
+
+
+    public function batchActivate($activateList, $inFeedbackList)
+    {
+        foreach ($inFeedbackList as $feedback) {
+            $feedback->setIsEnabled(false);
+
+            if (array_key_exists($feedback->getId(), $activateList)) {
+                $feedback->setIsEnabled(true);
+            }
+            $this->entityManager->persist($feedback);
+        }
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param mixed $accountId
+     */
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param null $customerEntity
+     */
+    public function setCustomerEntity($customerEntity)
+    {
+        $this->customerEntity = $customerEntity;
+    }
+
+    /**
+     * @param null $serviceEntity
+     */
+    public function setServiceEntity($serviceEntity)
+    {
+        $this->serviceEntity = $serviceEntity;
     }
 
     private function roundHalfUp($number)
@@ -226,16 +285,27 @@ class Feedback
         return $this->roundHalfUp($average);
     }
 
-    public function batchActivate($activateList, $inFeedbackList)
-    {
-        foreach ($inFeedbackList as $feedback) {
-            $feedback->setIsEnabled(false);
 
-            if (array_key_exists($feedback->getId(), $activateList)) {
-                $feedback->setIsEnabled(true);
-            }
-            $this->entityManager->persist($feedback);
+    /**
+     * @return null
+     */
+    private function getCustomerEntity()
+    {
+        if (!$this->customerEntity) {
+            $this->customerEntity = $this->customerService->createNewCustomer($this->getAccountId());
         }
-        $this->entityManager->flush();
+        return $this->customerEntity;
     }
+
+    /**
+     * @return null
+     */
+    private function getServiceEntity()
+    {
+        if (!$this->serviceEntity) {
+            $this->serviceEntity = $this->service->createNewService($this->getAccountId(), $this->getCustomerEntity());
+        }
+        return $this->serviceEntity;
+    }
+
 }

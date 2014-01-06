@@ -34,19 +34,23 @@
                     {{ form_errors(form.service.customer.email) }}
                     </div>
 
-                    {% if accountChannel.getRatingsEnabled == 1 %}
-                        <div class="stars_gray">
+                    {% for criteria in form.feedbackRating %}
+                        {% set criteriaName = criteria.ratingCriteria.ratingCriteria.name.vars.value %}
+                        <div style="display: block">{{ criteriaName }}</div>
+                        <div style="display: block" id="{{ criteriaName }}">
+                            <div class="stars_gray">
                             <span style="width: 0%;" class="stars_gold"></span>
-                            <div onmouseout="setRating(0);" class="stars_coords">
+                            <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
                                 {% for i in 1..5 %}
-                                    <div onmousemove="setRating({{ i }});" onclick="clickRating({{ i }});"></div>
+                                    <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
                                 {% endfor %}
                             </div>
                         </div>
                         <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                        {{ form_widget(form.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
-                    {% endif %}
-
+                        {{ form_widget(criteria.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
+                        </div>
+                        <div style="clear: both"></div>
+                    {% endfor %}
                     {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
                     <div class="mandatoryFieldMark" style="float: right">*</div>
 

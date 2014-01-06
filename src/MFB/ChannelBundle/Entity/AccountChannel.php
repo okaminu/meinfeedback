@@ -160,29 +160,6 @@ class AccountChannel
     }
 
     /**
-     * Set ratingsEnabled
-     *
-     * @param integer $ratingsEnabled
-     * @return AccountChannel
-     */
-    public function setRatingsEnabled($ratingsEnabled)
-    {
-        $this->ratingsEnabled = $ratingsEnabled;
-    
-        return $this;
-    }
-
-    /**
-     * Get ratingsEnabled
-     *
-     * @return integer 
-     */
-    public function getRatingsEnabled()
-    {
-        return $this->ratingsEnabled;
-    }
-
-    /**
      * Set homepageUrl
      *
      * @param string $homepageUrl
