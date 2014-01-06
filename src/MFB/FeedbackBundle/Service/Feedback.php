@@ -22,7 +22,7 @@ class Feedback
 
     private $eventDispatcher;
 
-    private $feedbackOrder = array('createdAt' => 'DESC');
+    private $feedbackOrder = array('sort' => 'ASC');
 
     public function __construct(EntityManager $em, CustomerService $customer, Service $service, EventDispatcher $ed)
     {

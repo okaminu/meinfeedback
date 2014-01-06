@@ -135,11 +135,8 @@ class WidgetController extends Controller
 
     public function sortAction(Request $request)
     {
-        $accountId = $this->get('security.context')->getToken()->getUser()->getId();
-        $em = $this->getDoctrine()->getManager();
-        $feedbackList = $em
-            ->getRepository('MFBFeedbackBundle:Feedback')
-            ->findSortedByAccountId($accountId);
+        $accountId = $this->getUserId();
+        $feedbackList = $this->get('mfb_feedback.service')->getFeedbackList($accountId);
 
         $item_order_str = $request->request->get('item_order_str');
         parse_str($item_order_str, $output);
@@ -147,21 +144,10 @@ class WidgetController extends Controller
         foreach ($feedbackList as $item) {
             /** @var Feedback $item */
             $item->setSort(array_search($item->getId(), $output['item_order']));
-            $em->persist($item);
-            $em->flush();
+            $this->get('mfb_feedback.service')->store($item);
         }
 
-        $response = new Response();
-        $response->setContent(
-            json_encode(
-                array(
-                    'success' => true,
-                    'sort' => $item_order_str
-                )
-            )
-        );
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $this->sortResponse($item_order_str);
     }
 
     /**
@@ -180,6 +166,33 @@ class WidgetController extends Controller
         $em->persist($widget);
         $em->flush();
         return $widget;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserId()
+    {
+        return $this->get('security.context')->getToken()->getUser()->getId();
+    }
+
+    /**
+     * @param $item_order_str
+     * @return Response
+     */
+    private function sortResponse($item_order_str)
+    {
+        $response = new Response();
+        $response->setContent(
+            json_encode(
+                array(
+                    'success' => true,
+                    'sort' => $item_order_str
+                )
+            )
+        );
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
 
