@@ -22,14 +22,20 @@ class Feedback
 
     private $eventDispatcher;
 
-    private $feedbackOrder = array('sort' => 'ASC');
+    private $feedbackOrder;
 
-    public function __construct(EntityManager $em, CustomerService $customer, Service $service, EventDispatcher $ed)
-    {
+    public function __construct(
+        EntityManager $em,
+        CustomerService $customer,
+        Service $service,
+        EventDispatcher $ed,
+        $feedbackOrder
+    ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->service = $service;
         $this->eventDispatcher = $ed;
+        $this->feedbackOrder = $feedbackOrder;
     }
 
     public function createNewFeedback($accountId, $service = null, $customer = null)
