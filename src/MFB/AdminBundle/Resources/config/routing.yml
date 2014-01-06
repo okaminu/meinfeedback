@@ -22,6 +22,11 @@ mfb_save_customer:
     pattern: /save_customer
     defaults: { _controller: MFBAdminBundle:Default:saveServiceCustomer}
 
+mfb_save_feedback_activation:
+    pattern: /save_feedback_activation
+    defaults: { _controller: MFBAdminBundle:Default:saveFeedbackActivation}
+    requirements: { _method: POST }
+
 mfb_widget:
     pattern: /widget
     defaults: { _controller: MFBAdminBundle:Widget:index }

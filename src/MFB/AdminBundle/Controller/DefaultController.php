@@ -5,33 +5,21 @@ namespace MFB\AdminBundle\Controller;
 
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
-use MFB\CustomerBundle\Entity\Customer;
-use MFB\CustomerBundle\Form\CustomerType;
 use MFB\ServiceBundle\Entity\Service;
-use MFB\ServiceBundle\Form\ServiceType;
 use MFB\ServiceBundle\ServiceException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
-use MFB\AccountBundle\AccountException;
 
 class DefaultController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $account = $this->getCurrentUser();
-        $accountId = $account->getId();
+        $accountId = $this->getCurrentUser()->getId();
 
         $feedbackService = $this->get('mfb_feedback.service');
-
-        if ($request->getMethod() == 'POST') {
-            $activates = $request->request->get('activate');
-            $feedbackService->batchActivate($activates, $feedbackService->getFeedbackList($accountId));
-            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
-        }
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
@@ -42,6 +30,18 @@ class DefaultController extends Controller
             )
         );
     }
+
+    public function saveFeedbackActivationAction(Request $request)
+    {
+        $accountId = $this->getCurrentUser()->getId();
+        $feedbackService = $this->get('mfb_feedback.service');
+        if ($request->getMethod() == 'POST') {
+            $activates = $request->request->get('activate');
+            $feedbackService->batchActivate($activates, $feedbackService->getFeedbackList($accountId));
+            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
+        }
+    }
+
 
     public function locationAction(Request $request)
     {

@@ -3,7 +3,6 @@
 namespace MFB\AdminBundle\Controller;
 
 use MFB\EmailBundle\Entity\EmailTemplate;
-use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use MFB\EmailBundle\Form\EmailTemplateType;
 use MFB\EmailBundle\Form\ThankYouTemplateType;
 use MFB\EmailBundle\Form\VariableType;
