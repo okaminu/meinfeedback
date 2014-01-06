@@ -8,6 +8,7 @@ use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
+use MFB\FeedbackBundle\Form\FeedbackType;
 use MFB\ServiceBundle\Service\Service;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -66,7 +67,6 @@ class Feedback
         }
     }
 
-
     public function processFeedback($feedback)
     {
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
@@ -77,6 +77,11 @@ class Feedback
     public function remove($entity)
     {
         $this->removeEntity($entity);
+    }
+
+    public function getFeedbackType($accountId)
+    {
+        return new FeedbackType($this->service->getServiceType($accountId));
     }
 
     public function getFeedbackCount($accountId)
