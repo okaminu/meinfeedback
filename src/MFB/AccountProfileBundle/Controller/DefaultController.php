@@ -5,24 +5,19 @@ namespace MFB\AccountProfileBundle\Controller;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 
 class DefaultController extends Controller
 {
     public function indexAction($accountId)
     {
-        $em = $this->getDoctrine()->getManager();
-
         /** @var Account $account */
-        $account = $em->find('MFBAccountBundle:Account', $accountId);
+        $account = $this->get('mfb_account.service')->findByAccountId($accountId);
         if (!$account) {
             throw $this->createNotFoundException('Account does not exits');
         }
 
         /** @var AccountChannel $accountChannel */
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId'=>$account->getId())
-        );
+        $accountChannel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
 
         if (!$accountChannel) {
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
