@@ -21,9 +21,7 @@ class InviteController extends Controller
         if (!$invite) {
             return $this->render('MFBFeedbackBundle:Invite:no_invite.html.twig');
         }
-
         $accountId = $invite->getAccountId();
-
         $accountChannel = $this->getAccountChannel($accountId);
 
         $feedbackService = $this->get('mfb_feedback.service');
@@ -149,7 +147,7 @@ class InviteController extends Controller
      */
     private function getAccountChannel($accountId)
     {
-        $accountChannel = $this->get("mfb_account_channel.manager")->findAccountChannelByAccount($accountId);
+        $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
         return $accountChannel;
     }
 

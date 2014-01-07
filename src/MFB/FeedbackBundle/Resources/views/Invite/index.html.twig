@@ -28,19 +28,23 @@
                     {{ form_errors(form) }}
                 </div>
 
-                {% if accountChannel.getRatingsEnabled == 1 %}
-                    <div class="stars_gray">
-                        <span style="width: 0%;" class="stars_gold"></span>
-                        <div onmouseout="setRating(0);" class="stars_coords">
-                            {% for i in 1..5 %}
-                                <div onmousemove="setRating({{ i }});" onclick="clickRating({{ i }});"></div>
-                            {% endfor %}
+                {% for criteria in form.feedbackRating %}
+                    {% set criteriaName = criteria.ratingCriteria.ratingCriteria.name.vars.value %}
+                    <div style="display: block">{{ criteriaName }}</div>
+                    <div style="display: block" id="{{ criteriaName }}">
+                        <div class="stars_gray">
+                            <span style="width: 0%;" class="stars_gold"></span>
+                            <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
+                                {% for i in 1..5 %}
+                                    <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
+                                {% endfor %}
+                            </div>
                         </div>
+                        <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
+                        {{ form_widget(criteria.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
                     </div>
-
-                    <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                    {{ form_widget(form.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
-                {% endif %}
+                    <div style="clear: both"></div>
+                {% endfor %}
 
                 {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
                 <div class="mandatoryFieldMark" style="float: right">*</div>
@@ -48,6 +52,8 @@
                     {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                 </div>
                     <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
+
+                <div style="display: none">{{ form_rest(form) }}</div>
                 {{ form_end(form) }}
             </div>
 

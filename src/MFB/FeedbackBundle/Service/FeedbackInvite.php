@@ -172,7 +172,7 @@ class FeedbackInvite
             $account->getEmail(),
             $customer,
             $feedback->getContent(),
-            $feedback->getRating(),
+            null,
             $invite
         );
         $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);
