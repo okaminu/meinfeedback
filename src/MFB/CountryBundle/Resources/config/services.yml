@@ -1,10 +1,11 @@
 parameters:
+    mfb_country.class: MFB\CountryBundle\Service\Country
     mfb_country.default.countries:
       - Germany
       - Spain
       - France
 
 services:
-#    mfb_country.example:
-#        class: %mfb_country.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mfb_country.service:
+        class: %mfb_country.class%
+        arguments: ["@doctrine.orm.default_entity_manager"]

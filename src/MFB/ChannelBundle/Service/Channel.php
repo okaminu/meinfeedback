@@ -5,20 +5,26 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Entity\AccountChannel;
+use MFB\CountryBundle\Service\Country;
 
 class Channel
 {
     private $entityManager;
+    private $countryService;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, Country $countryService)
     {
         $this->entityManager = $em;
+        $this->countryService = $countryService;
     }
 
     public function createNewChannel($accountId)
     {
         $accountChannel = new AccountChannel();
         $accountChannel->setAccountId($accountId);
+
+        $countries = $this->countryService->findAll();
+        $accountChannel->setCountry($countries[0]);
         return $accountChannel;
     }
 
