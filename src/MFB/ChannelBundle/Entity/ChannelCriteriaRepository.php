@@ -10,14 +10,15 @@ class ChannelCriteriaRepository extends EntityRepository
         $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
 
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $result = $qb->select('e')
-            ->from('MFBRatingBundle:Rating', 'e')
-            ->where(
+        $builder = $qb->select('e')->from('MFBRatingBundle:Rating', 'e');
+
+        if (!empty($usedCriteriasIds)) {
+            $builder->where(
                 $qb->expr()->notIn('e.id', $usedCriteriasIds)
-            )
-            ->getQuery()
-            ->getResult();
-        return $result;
+            );
+        }
+
+        return $builder->getQuery()->getResult();
     }
 
     public function findAllUsedRatingCriteriaIds($channelId)
