@@ -92,9 +92,7 @@ class Feedback
 
     public function getFeedbackType($accountId)
     {
-        $channel = $this->getAccountChannel($accountId);
-
-        return new FeedbackType($this->service->getServiceType($accountId), $channel->getRatingCriteria());
+        return new FeedbackType($this->service->getServiceType($accountId));
     }
 
     public function getFeedbackCount($accountId)
@@ -250,7 +248,7 @@ class Feedback
             $account->getEmail(),
             $customer,
             $feedback->getContent(),
-            $feedback->getRating()
+            null
         );
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
     }

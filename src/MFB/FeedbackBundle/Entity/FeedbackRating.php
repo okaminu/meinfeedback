@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FeedbackRating
 {
+
+    /**
+     * @var integer
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+
+    private $id;
+
     /**
      * @var integer
      *
@@ -21,7 +31,6 @@ class FeedbackRating
     /**
      * @var integer
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="MFB\FeedbackBundle\Entity\Feedback", inversedBy="feedbackRating")
      * @ORM\JoinColumn(name="feedback_id", referencedColumnName="id")
      */
@@ -29,7 +38,6 @@ class FeedbackRating
     /**
      * @var integer
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="MFB\ChannelBundle\Entity\ChannelRatingCriteria", inversedBy="feedbackRating")
      * @ORM\JoinColumn(name="channel_rating_criteria_id", referencedColumnName="id")
      */
@@ -102,5 +110,15 @@ class FeedbackRating
         $this->ratingCriteria = $ratingCriteria;
 
         return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

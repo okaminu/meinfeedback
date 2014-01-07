@@ -49,14 +49,6 @@ class ChannelRatingCriteria
      */
     private $feedbackRating;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isEnabled", type="boolean", options={"default" : 1})
-     */
-    private $isEnabled = 1;
-
-
 
     /**
      * Get id
@@ -66,29 +58,6 @@ class ChannelRatingCriteria
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set isEnabled
-     *
-     * @param boolean $isEnabled
-     * @return ChannelRatingCriteria
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-    
-        return $this;
-    }
-
-    /**
-     * Get isEnabled
-     *
-     * @return boolean 
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
     }
 
     /**

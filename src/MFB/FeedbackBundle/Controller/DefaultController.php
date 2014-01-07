@@ -33,7 +33,6 @@ class DefaultController extends Controller
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-
             $this->get('mfb_feedback.service')->processFeedback($feedback);
             return $this->showThankyouForm($accountChannel, $feedback);
         } catch (FeedbackException $ax) {

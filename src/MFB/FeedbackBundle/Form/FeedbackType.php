@@ -12,12 +12,9 @@ class FeedbackType extends AbstractType
 {
     private $serviceType;
     
-    private $ratingCriterias;
-
-    public function __construct(ServiceType $serviceType, $ratingCriterias)
+    public function __construct(ServiceType $serviceType)
     {
         $this->serviceType = $serviceType;
-        $this->ratingCriterias = $ratingCriterias;
     }
         /**
      * @param FormBuilderInterface $builder
@@ -28,11 +25,8 @@ class FeedbackType extends AbstractType
         $builder
             ->add('content', 'textarea')
             ->add('service', $this->serviceType)
-            ->add('save', 'submit', array('label' => 'Send'));
-        ;
-
-        $builder->add('feedbackRating', 'collection', array('type' => new FeedbackRatingType()));
-
+            ->add('save', 'submit', array('label' => 'Send'))
+            ->add('feedbackRating', 'collection', array('type' => new FeedbackRatingType()));
     }
     
     /**

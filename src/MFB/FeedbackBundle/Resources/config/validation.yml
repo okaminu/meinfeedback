@@ -1,6 +1,12 @@
 MFB\FeedbackBundle\Entity\Feedback:
   properties:
+    feedbackRating:
+      - Valid: ~
+
+
+MFB\FeedbackBundle\Entity\FeedbackRating:
+  properties:
     rating:
       - GreaterThan :
           value: 0
-          message: "Please Select Star Rating"
+          message: "Not all star ratings were selected"
