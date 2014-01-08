@@ -7,6 +7,42 @@ class FeedbackSummary
 
     private $feedbackRating;
 
+    private $serviceProviderInfo;
+
+    private $serviceTypeName;
+
+    /**
+     * @param mixed $serviceProviderInfo
+     */
+    public function setServiceProviderInfo($serviceProviderInfo)
+    {
+        $this->serviceProviderInfo = $serviceProviderInfo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceProviderInfo()
+    {
+        return $this->serviceProviderInfo;
+    }
+
+    /**
+     * @param mixed $serviceTypeName
+     */
+    public function setServiceTypeName($serviceTypeName)
+    {
+        $this->serviceTypeName = $serviceTypeName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceTypeName()
+    {
+        return $this->serviceTypeName;
+    }
+
     /**
      * @param mixed $feedback
      */

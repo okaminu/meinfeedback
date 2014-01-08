@@ -10,6 +10,8 @@ use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Form\FeedbackType;
+use MFB\ServiceBundle\Entity\ServiceGroup;
+use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\Service\Service;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -113,13 +115,13 @@ class Feedback
     public function getFeedbackSummaryList($accountId)
     {
         $feedbackList = $this->getFeedbackList($accountId);
-        return $this->createFeedbackSummary($feedbackList);
+        return $this->createFeedbackSummaryList($feedbackList);
     }
 
     public function getActiveFeedbackSummaryList($accountId)
     {
         $feedbackList = $this->getActiveFeedbackList($accountId);
-        return $this->createFeedbackSummary($feedbackList);
+        return $this->createFeedbackSummaryList($feedbackList);
     }
 
     public function getFeedbackList($accountId)
@@ -257,14 +259,11 @@ class Feedback
      * @param $feedbackList
      * @return array
      */
-    private function createFeedbackSummary($feedbackList)
+    private function createFeedbackSummaryList($feedbackList)
     {
         $feedbackSummaryList = array();
         foreach ($feedbackList as $feedback) {
-            $singleSummary = new FeedbackSummary();
-            $singleSummary->setFeedback($feedback);
-            $singleSummary->setRating($this->calcFeedbackRatingAverage($feedback));
-            $feedbackSummaryList[] = $singleSummary;
+            $feedbackSummaryList[] = $this->createFeedbackSummaryItem($feedback);
         }
         return $feedbackSummaryList;
     }
@@ -308,8 +307,8 @@ class Feedback
 
     /**
      * @param $ratingCriterias
-     * @param $feedback
-     * @return $feedback
+     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
+     * @return Feedback
      */
     private function addFeedbackCriterias($ratingCriterias, $feedback)
     {
@@ -334,6 +333,41 @@ class Feedback
             $rating->setRatingCriteria($channelRatingCriteria);
         }
         return $feedbackRatings;
+    }
+
+    /**
+     * @param FeedbackSummary $singleSummary
+     * @param ServiceGroup $serviceGroup
+     * @param ServiceProvider $serviceProvider
+     * @return FeedbackSummary
+     */
+    private function addServiceSummary(
+        FeedbackSummary $singleSummary,
+        ServiceGroup $serviceGroup,
+        ServiceProvider $serviceProvider
+    ) {
+        $singleSummary->setServiceTypeName($serviceGroup->getName());
+        $serviceProviderInfo = $serviceProvider->getFirstname() . ' ' . $serviceProvider->getLastname();
+        $singleSummary->setServiceProviderInfo($serviceProviderInfo);
+        return $singleSummary;
+    }
+
+    /**
+     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
+     * @return FeedbackSummary
+     */
+    private function createFeedbackSummaryItem($feedback)
+    {
+        $singleSummary = new FeedbackSummary();
+        $service = $feedback->getService();
+        $singleSummary = $this->addServiceSummary(
+            $singleSummary,
+            $service->getServiceGroup(),
+            $service->getServiceProvider()
+        );
+        $singleSummary->setRating($this->calcFeedbackRatingAverage($feedback));
+        $singleSummary->setFeedback($feedback);
+        return $singleSummary;
     }
 
 }

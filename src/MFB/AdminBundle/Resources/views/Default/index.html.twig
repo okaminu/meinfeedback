@@ -72,8 +72,19 @@
                             </tbody>
                         </table>
 
+
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
+                        </div>
+
+                        <div class="service-info">
+                            <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                            <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
+                        </div>
+
+                        <div class="service-info">
+                            <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                            <div> {{ feedbackSummary.getServiceTypeName}} </div>
                         </div>
                     </li>
                 {% endfor %}

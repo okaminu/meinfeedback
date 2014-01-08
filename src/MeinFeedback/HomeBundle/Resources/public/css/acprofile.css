@@ -42,11 +42,22 @@ font-size: 14px;
 }
 
 .username {
-	font-size: 14px;
 	color: #666;
 	padding: 10px 10px 10px 0px;
 	font-weight: bold;
 	font-size: 12px;
+}
+
+.service-info {
+    color: #666;
+    padding: 0px 10px 13px 15px;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.service-title
+{
+    font-weight: bold;
 }
 
 .input-block {
