@@ -4,14 +4,11 @@ namespace MFB\FeedbackBundle\Service;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\FeedbackBundle\Service\FeedbackRating as FeedbackRatingService;
-use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Event\CustomerAccountEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Form\FeedbackType;
-use MFB\ServiceBundle\Entity\ServiceGroup;
-use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\Service\Service;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -26,8 +23,6 @@ class Feedback
 
     private $eventDispatcher;
 
-    private $feedbackOrder;
-    
     private $serviceEntity = null;
     
     private $customerEntity = null;
@@ -41,15 +36,13 @@ class Feedback
         CustomerService $customer,
         Service $service,
         FeedbackRatingService $feedbackRatingService,
-        EventDispatcher $ed,
-        $feedbackOrder
+        EventDispatcher $ed
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->service = $service;
         $this->feedbackRatingService = $feedbackRatingService;
         $this->eventDispatcher = $ed;
-        $this->feedbackOrder = $feedbackOrder;
     }
 
     public function createNewFeedback($accountId)
@@ -97,56 +90,6 @@ class Feedback
         return new FeedbackType($this->service->getServiceType($accountId));
     }
 
-    public function getFeedbackCount($accountId)
-    {
-        $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getAccountFeedbackCount($accountId);
-        return $feedbackCount;
-    }
-
-    public function getFeedbackRatingAverage($accountId)
-    {
-        $ratingAverage = $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getFeedbackRatingAverage($accountId);
-
-        return $this->roundHalfUp($ratingAverage);
-    }
-
-    public function getFeedbackSummaryList($accountId)
-    {
-        $feedbackList = $this->getFeedbackList($accountId);
-        return $this->createFeedbackSummaryList($feedbackList);
-    }
-
-    public function getActiveFeedbackSummaryList($accountId)
-    {
-        $feedbackList = $this->getActiveFeedbackList($accountId);
-        return $this->createFeedbackSummaryList($feedbackList);
-    }
-
-    public function getFeedbackList($accountId)
-    {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array('accountId' => $accountId),
-                $this->feedbackOrder
-            );
-
-        return $feedbackList;
-    }
-
-    public function getActiveFeedbackList($accountId)
-    {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array('accountId' => $accountId, 'isEnabled' =>  1),
-                $this->feedbackOrder
-            );
-
-        return $feedbackList;
-    }
-
-
     public function batchActivate($activateList, $inFeedbackList)
     {
         foreach ($inFeedbackList as $feedback) {
@@ -191,12 +134,6 @@ class Feedback
     {
         $this->serviceEntity = $serviceEntity;
     }
-
-    private function roundHalfUp($number)
-    {
-        return round($number, 0, PHP_ROUND_HALF_UP);
-    }
-
 
     private function removeEntity($entity)
     {
@@ -256,34 +193,6 @@ class Feedback
     }
 
     /**
-     * @param $feedbackList
-     * @return array
-     */
-    private function createFeedbackSummaryList($feedbackList)
-    {
-        $feedbackSummaryList = array();
-        foreach ($feedbackList as $feedback) {
-            $feedbackSummaryList[] = $this->createFeedbackSummaryItem($feedback);
-        }
-        return $feedbackSummaryList;
-    }
-
-    /**
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return float
-     */
-    private function calcFeedbackRatingAverage(FeedbackEntity $feedback)
-    {
-        $ratingAverage = array();
-        foreach ($feedback->getFeedbackRating() as $rating) {
-            $ratingAverage[] = $rating->getRating();
-        }
-        $average = array_sum($ratingAverage) / count($ratingAverage);
-        return $this->roundHalfUp($average);
-    }
-
-
-    /**
      * @return null
      */
     private function getCustomerEntity()
@@ -334,40 +243,4 @@ class Feedback
         }
         return $feedbackRatings;
     }
-
-    /**
-     * @param FeedbackSummary $singleSummary
-     * @param ServiceGroup $serviceGroup
-     * @param ServiceProvider $serviceProvider
-     * @return FeedbackSummary
-     */
-    private function addServiceSummary(
-        FeedbackSummary $singleSummary,
-        ServiceGroup $serviceGroup,
-        ServiceProvider $serviceProvider
-    ) {
-        $singleSummary->setServiceTypeName($serviceGroup->getName());
-        $serviceProviderInfo = $serviceProvider->getFirstname() . ' ' . $serviceProvider->getLastname();
-        $singleSummary->setServiceProviderInfo($serviceProviderInfo);
-        return $singleSummary;
-    }
-
-    /**
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return FeedbackSummary
-     */
-    private function createFeedbackSummaryItem($feedback)
-    {
-        $singleSummary = new FeedbackSummary();
-        $service = $feedback->getService();
-        $singleSummary = $this->addServiceSummary(
-            $singleSummary,
-            $service->getServiceGroup(),
-            $service->getServiceProvider()
-        );
-        $singleSummary->setRating($this->calcFeedbackRatingAverage($feedback));
-        $singleSummary->setFeedback($feedback);
-        return $singleSummary;
-    }
-
 }

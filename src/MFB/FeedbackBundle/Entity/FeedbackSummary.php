@@ -5,11 +5,27 @@ class FeedbackSummary
 {
     private $feedback;
 
-    private $feedbackRating;
+    private $feedbackRatings;
 
     private $serviceProviderInfo;
 
     private $serviceTypeName;
+
+    /**
+     * @param mixed $feedbackRatings
+     */
+    public function setRatings($feedbackRatings)
+    {
+        $this->feedbackRatings = $feedbackRatings;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRatings()
+    {
+        return $this->feedbackRatings;
+    }
 
     /**
      * @param mixed $serviceProviderInfo
@@ -59,21 +75,12 @@ class FeedbackSummary
         return $this->feedback;
     }
 
-    /**
-     * @param mixed $feedbackRating
-     */
-    public function setRating($feedbackRating)
+    public function getRatingByName($name)
     {
-        $this->feedbackRating = $feedbackRating;
+        foreach ($this->feedbackRatings as $rating) {
+            if ($rating->getName() == $name) {
+                return $rating;
+            }
+        }
     }
-
-    /**
-     * @return mixed
-     */
-    public function getRating()
-    {
-        return $this->feedbackRating;
-    }
-
-
 }

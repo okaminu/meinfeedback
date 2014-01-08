@@ -60,7 +60,7 @@ class Widget
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
         );
 
-        $feedbackService = $this->container->get('mfb_feedback.service');
+        $feedbackService = $this->container->get('mfb_feedback_display.service');
 
         $lastFeedbacks = $feedbackService->getActiveFeedbackSummaryList($accountId);
         $this->filterComments($lastFeedbacks);

@@ -142,17 +142,17 @@ class ImageCommentElement extends AbstractImageBase  implements ElementInterface
      */
     protected function getStarsElement($feedbackSummary)
     {
-        $element = new RatingStarsElement( $this->getResources() );
+        $element = new RatingStarsElement($this->getResources());
+        $rating = $feedbackSummary->getRatingByName('Overall');
 
-        if ($feedbackSummary->getRating() == null)
-        {
+        if ($rating == null) {
             $element->setElementHeight(0);
         }
 
         return $element
             ->setPositionX($this->getPositionX())
             ->setPositionY($this->getPositionY())
-            ->setRating($feedbackSummary->getRating());
+            ->setRating($rating->getRating());
     }
 
     protected function getTextElement($feedbackSummary)

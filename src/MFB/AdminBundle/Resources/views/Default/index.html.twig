@@ -46,14 +46,15 @@
                             {% endif %}
                         </div>
 
-                        {%  if feedbackSummary.getRating %}
-                            <div class="stars_rating">
-                                <div class="stars_gray_small">
-                                    <span style="width: {{ feedbackSummary.getRating * 20 }}%;" class="stars_gold_small"></span>
-                                </div>
-                                <div class="clearfix"></div>
+                        {% for ratingCriteria in feedbackSummary.getRatings %}
+                            {{ ratingCriteria.getName }}
+                        <div class="stars_rating">
+                            <div class="stars_gray_small">
+                                <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                             </div>
-                        {% endif %}
+                            <div class="clearfix"></div>
+                        </div>
+                        {% endfor %}
 
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
@@ -71,7 +72,6 @@
                             </tr>
                             </tbody>
                         </table>
-
 
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>

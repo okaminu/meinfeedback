@@ -19,7 +19,7 @@ class DefaultController extends Controller
     {
         $accountId = $this->getCurrentUser()->getId();
 
-        $feedbackService = $this->get('mfb_feedback.service');
+        $feedbackService = $this->get('mfb_feedback_display.service');
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
@@ -35,9 +35,10 @@ class DefaultController extends Controller
     {
         $accountId = $this->getCurrentUser()->getId();
         $feedbackService = $this->get('mfb_feedback.service');
+        $feedbackDisplayService = $this->get('mfb_feedback_display.service');
         if ($request->getMethod() == 'POST') {
             $activates = $request->request->get('activate');
-            $feedbackService->batchActivate($activates, $feedbackService->getFeedbackList($accountId));
+            $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($accountId));
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
     }

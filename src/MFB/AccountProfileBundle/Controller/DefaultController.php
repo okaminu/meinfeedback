@@ -23,7 +23,7 @@ class DefaultController extends Controller
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
         }
 
-        $feedbackService = $this->get('mfb_feedback.service');
+        $feedbackDisplay = $this->get('mfb_feedback_display.service');
 
         $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
         return $this->render(
@@ -31,9 +31,9 @@ class DefaultController extends Controller
             array(
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
-                'feedbackSummaryList'=> $feedbackService->getActiveFeedbackSummaryList($accountId),
-                'ratingCount' => $feedbackService->getFeedbackCount($accountId),
-                'ratingAverage' => $feedbackService->getFeedbackRatingAverage($accountId),
+                'feedbackSummaryList'=> $feedbackDisplay->getActiveFeedbackSummaryList($accountId),
+                'ratingCount' => $feedbackDisplay->getFeedbackCount($accountId),
+                'ratingAverage' => $feedbackDisplay->getFeedbackRatingAverage($accountId),
                 'channelName' => $accountChannel->getName(),
                 'channelUrl' => $accountChannel->getHomepageUrl(),
                 'channelAddress' => $channelAddress,
