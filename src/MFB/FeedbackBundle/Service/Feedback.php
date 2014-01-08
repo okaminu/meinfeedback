@@ -59,10 +59,7 @@ class Feedback
         $feedback->setService($this->getServiceEntity());
         $feedback->setCustomer($this->getCustomerEntity());
 
-        foreach ($accountChannel->getRatingCriteria() as $criteria) {
-            $feedbackRating = $this->feedbackRatingService->createNewFeedbackRating($criteria, $feedback);
-            $feedback->addFeedbackRating($feedbackRating);
-        }
+        $feedback = $this->addFeedbackCriterias($accountChannel->getRatingCriteria(), $feedback);
 
         return $feedback;
     }
@@ -78,10 +75,13 @@ class Feedback
         }
     }
 
-    public function processFeedback($feedback)
+    public function processFeedback(FeedbackEntity $feedback)
     {
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_INITIALIZE);
+
+        $this->preserveRatingCriteriaOrder($feedback->getFeedbackRating());
         $this->store($feedback);
+
         $this->dispatchCreateFeedbackEvent($feedback);
     }
 
@@ -304,6 +304,36 @@ class Feedback
             $this->serviceEntity = $this->service->createNewService($this->getAccountId(), $this->getCustomerEntity());
         }
         return $this->serviceEntity;
+    }
+
+    /**
+     * @param $ratingCriterias
+     * @param $feedback
+     * @return $feedback
+     */
+    private function addFeedbackCriterias($ratingCriterias, $feedback)
+    {
+        foreach ($ratingCriterias as $criteria) {
+            $feedbackRating = $this->feedbackRatingService->createNewFeedbackRating($criteria, $feedback);
+            $feedback->addFeedbackRating($feedbackRating);
+        }
+        return $feedback;
+    }
+
+    /**
+     * @param $feedbackRatings
+     */
+    private function preserveRatingCriteriaOrder($feedbackRatings)
+    {
+        /**
+         * @var $rating \MFB\FeedbackBundle\Entity\FeedbackRating
+         */
+        foreach ($feedbackRatings as $rating) {
+            $channelRatingCriteria = $this->entityManager
+                ->getReference('MFBChannelBundle:ChannelRatingCriteria', $rating->getRatingCriteriaId());
+            $rating->setRatingCriteria($channelRatingCriteria);
+        }
+        return $feedbackRatings;
     }
 
 }

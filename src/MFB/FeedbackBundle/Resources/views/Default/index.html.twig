@@ -37,7 +37,8 @@
                     </div>
 
                     {% for criteria in form.feedbackRating %}
-                        {% set criteriaName = criteria.ratingCriteria.ratingCriteria.name.vars.value %}
+                        {% set criteriaName = criteria.ratingCriteriaId.vars.value %}
+                        {{ form_row(criteria.ratingCriteriaId) }}
                         <div style="display: block">{{ criteriaName }}</div>
                         <div style="display: block" id="{{ criteriaName }}">
                             <div class="stars_gray">
@@ -75,7 +76,6 @@
                 {{ form_row(form.service.serviceProvider) }}
                 {{ form_row(form.service.serviceGroup) }}
                 </div>
-
 
                 <div style="width:250px; padding-top:10px;">
                     {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}

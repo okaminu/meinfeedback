@@ -21,6 +21,7 @@ class FeedbackRating
     {
         $feedbackRating = new FeedbackRatingEntity();
         $feedbackRating->setRatingCriteria($criteria);
+        $feedbackRating->setRatingCriteriaId($criteria->getId());
         $feedbackRating->setFeedback($feedbackEntity);
 
         return $feedbackRating;

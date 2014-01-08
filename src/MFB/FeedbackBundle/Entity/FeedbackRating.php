@@ -44,6 +44,30 @@ class FeedbackRating
     private $ratingCriteria;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating_criteria_id", type="smallint")
+     */
+    private $ratingCriteriaId;
+
+
+    /**
+     * @param mixed $ratingCriteriaId
+     */
+    public function setRatingCriteriaId($ratingCriteriaId)
+    {
+        $this->ratingCriteriaId = $ratingCriteriaId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRatingCriteriaId()
+    {
+        return $this->ratingCriteriaId;
+    }
+
+    /**
      * Get rating
      *
      * @return integer

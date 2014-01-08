@@ -2,7 +2,6 @@
 
 namespace MFB\FeedbackBundle\Form;
 
-use MFB\ChannelBundle\Form\ChannelRatingCriteriaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -18,7 +17,7 @@ class FeedbackRatingType extends AbstractType
     {
         $builder
             ->add('rating', 'hidden')
-            ->add('ratingCriteria', new ChannelRatingCriteriaType())
+            ->add('ratingCriteriaId', 'hidden')
         ;
     }
 
