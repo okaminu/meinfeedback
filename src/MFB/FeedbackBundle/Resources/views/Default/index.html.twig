@@ -1,94 +1,33 @@
-{% extends "::base.html.twig" %}
+{% extends "MFBFeedbackBundle::base.html.twig" %}
 {% import "MeinFeedbackHomeBundle::macros.html.twig" as tooltips %}
-{% block title %}MeinFeedback{% endblock %}
 
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_errors.html.twig" %}
-
-{% block body %}
-    <header class="navbar navbar-fixed-top">
-        <div class="inner-page">
-            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
+    {% block preRating %}
+        {{ form_widget(form.service.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
+        <div class="mandatoryFieldMark" style="float: right">*</div>
+        <div class="errorMessage">
+        {{ form_errors(form.service.customer.email) }}
         </div>
-    </header>
-    {% javascripts '@MFBFeedbackBundle/Resources/public/js/main.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    {% endblock %}
 
-    {% stylesheets '@MFBFeedbackBundle/Resources/public/css/style.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-
-    <div>
-        <div class="row-fluid inner-page contact">
-            <div class="span6">
-                <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
-                    Please leave feedback about {{ accountChannel.getName }}
-                </div>
-
-                {{ form_start(form) }}
-                    <div class="errorMessage">
-                        {{ form_errors(form) }}
-                    </div>
-
-                    {{ form_widget(form.service.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
-                    <div class="mandatoryFieldMark" style="float: right">*</div>
-                    <div class="errorMessage">
-                    {{ form_errors(form.service.customer.email) }}
-                    </div>
-
-                    {% for criteria in form.feedbackRating %}
-                        {% set criteriaName = criteria.ratingCriteriaId.vars.value %}
-                        {{ form_row(criteria.ratingCriteriaId) }}
-                        <div style="display: block">{{ criteriaName }}</div>
-                        <div style="display: block" id="{{ criteriaName }}">
-                            <div class="stars_gray">
-                            <span style="width: 0%;" class="stars_gold"></span>
-                            <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
-                                {% for i in 1..5 %}
-                                    <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                        {{ form_widget(criteria.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
-                        </div>
-                        <div style="clear: both"></div>
-                    {% endfor %}
-                    {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
-                    <div class="mandatoryFieldMark" style="float: right">*</div>
-
-                <div style="width: 92%">
-                {{ form_label(form.service.customer.anonymous) }}
-                <div style="display:block; width:80px;">
-                    {{ form_widget(form.service.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
-                    <div style="float:right; position:relative; top:10px">
-                        {{ tooltips.tooltip('What anonymous feedback?',
-                        "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
-                    </div>
-                </div>
-                {{ form_label(form.service.customer.gender) }}
-                {{ form_widget(form.service.customer.gender, {'attr': {'class' : 'gender'} }) }}
-                {{ form_row(form.service.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
-                {{ form_row(form.service.customer.lastName) }}
-                {{ form_row(form.service.customer.customerIdReference) }}
-                {{ form_row(form.service.date) }}
-                {{ form_row(form.service.serviceIdReference) }}
-                {{ form_row(form.service.serviceProvider) }}
-                {{ form_row(form.service.serviceGroup) }}
-                </div>
-
-                <div style="width:250px; padding-top:10px;">
-                    {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
-                </div>
-
-                <div style="display: none">{{ form_rest(form) }}</div>
-
-                    {{ form_end(form) }}
-                    <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
-                </form>
+    {% block postRating %}
+        {{ form_label(form.service.customer.anonymous) }}
+        <div style="display:block; width:80px;">
+            {{ form_widget(form.service.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
+            <div style="float:right; position:relative; top:10px">
+                {{ tooltips.tooltip('What anonymous feedback?',
+                "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
             </div>
-
         </div>
-    </div>
-{% endblock %}
+        {{ form_label(form.service.customer.gender) }}
+        {{ form_widget(form.service.customer.gender, {'attr': {'class' : 'gender'} }) }}
+        {{ form_row(form.service.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
+        {{ form_row(form.service.customer.lastName) }}
+        {{ form_row(form.service.customer.customerIdReference) }}
+        {{ form_row(form.service.date) }}
+        {{ form_row(form.service.serviceIdReference) }}
+        {{ form_row(form.service.serviceProvider) }}
+        {{ form_row(form.service.serviceGroup) }}
+    {% endblock %}
+
+
 

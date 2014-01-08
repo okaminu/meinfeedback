@@ -2,10 +2,9 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
+use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\FeedbackException;
-use MFB\FeedbackBundle\Form\FeedbackType;
-use MFB\ServiceBundle\Form\ServiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -17,7 +16,7 @@ class DefaultController extends Controller
     {
         $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
-        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
+        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel);
         return $this->showFeedbackFrom($accountChannel, $form);
     }
 
@@ -26,7 +25,7 @@ class DefaultController extends Controller
         $accountId = $request->get('accountId');
         $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
         $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
-        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel->getId());
+        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel);
         try {
             $form->handleRequest($request);
 
@@ -74,19 +73,22 @@ class DefaultController extends Controller
     /**
      * @param $feedback
      * @param $accountId
-     * @param $accountChannelId
+     * @param $accountChannel
      * @return \Symfony\Component\Form\Form
      */
-    private function getFeedbackForm(Feedback $feedback, $accountId, $accountChannelId)
+    private function getFeedbackForm(Feedback $feedback, $accountId, AccountChannel $accountChannel)
     {
         $feedbackType = $this->get('mfb_feedback.service')->getFeedbackType($accountId);
         $form = $this->createForm($feedbackType, $feedback, array(
             'action' => $this->generateUrl('mfb_feedback_save', array(
                         'accountId' => $accountId,
-                        'accountChannelId' => $accountChannelId
+                        'accountChannelId' => $accountChannel->getId()
                     )),
                 'method' => 'POST'
             ));
+
+        $this->addCriteriaLabels($form);
+
         return $form;
     }
 
@@ -121,5 +123,18 @@ class DefaultController extends Controller
                 'homepage' => $return_url
             )
         );
+    }
+
+    /**
+     * @param $form
+     */
+    private function addCriteriaLabels($form)
+    {
+        $feedbackRatingForms = $form->get('feedbackRating');
+        foreach ($feedbackRatingForms as $ratingForm) {
+            $channelCriteria = $ratingForm->getData()->getRatingCriteria();
+            $ratingForm->remove('rating');
+            $ratingForm->add('rating', 'hidden', array('label' => $channelCriteria->getRatingCriteria()->getName()));
+        }
     }
 }
