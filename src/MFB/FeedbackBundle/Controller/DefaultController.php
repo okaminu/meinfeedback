@@ -117,7 +117,7 @@ class DefaultController extends Controller
     {
         $return_url = $this->getReturnUrl($accountChannel);
         return $this->render(
-            'MFBFeedbackBundle:Default:thank_you.html.twig',
+            'MFBFeedbackBundle::thank_you.html.twig',
             array(
                 'thankyou_text' => $this->get('mfb_email.template')->getText($feedback->getCustomer(), 'ThankYou'),
                 'homepage' => $return_url

@@ -119,6 +119,9 @@ class InviteController extends Controller
                 'method' => 'POST',
             )
         );
+
+        $this->addCriteriaLabels($form);
+
         return $form;
     }
 
@@ -161,11 +164,25 @@ class InviteController extends Controller
         $return_url = $this->getReturnUrl($accountChannel);
 
         return $this->render(
-            'MFBFeedbackBundle:Invite:thank_you.html.twig',
+            'MFBFeedbackBundle::thank_you.html.twig',
             array(
                 'thankyou_text' => $this->get('mfb_email.template')->getText($customer, 'ThankYou'),
                 'homepage' => $return_url
             )
         );
     }
+
+    /**
+     * @param $form
+     */
+    private function addCriteriaLabels($form)
+    {
+        $feedbackRatingForms = $form->get('feedbackRating');
+        foreach ($feedbackRatingForms as $ratingForm) {
+            $channelCriteria = $ratingForm->getData()->getRatingCriteria();
+            $ratingForm->remove('rating');
+            $ratingForm->add('rating', 'hidden', array('label' => $channelCriteria->getRatingCriteria()->getName()));
+        }
+    }
+
 }
