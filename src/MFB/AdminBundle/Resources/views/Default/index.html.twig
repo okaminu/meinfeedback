@@ -12,12 +12,25 @@
 
 {% block content %}
 
-    <h3 style="margin-top: 90px; margin-left: 20px">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
+    <div style="margin-left: 20px">
+    <h3 style="margin-top: 90px">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
-    {% if ratingAverage > 0 %}
-        <div style="margin-left: 20px">Active ratings average: {{ ratingAverage }}</div>
-    {% endif %}
-    <div style="margin-left: 20px">Total active feedbacks: {{ ratingCount }}</div>
+    <ul class="stars_rating channel-ratings not-nested">
+        {% for ratingCriteria in channelRatingSummaryList %}
+            <li>
+                <div class="rating-title {% if ratingCriteria.getName == 'Average' %} overall {% endif %}">
+                    {{ ratingCriteria.getName }}
+                </div>
+                <div class="rating-stars">
+                    <div class="stars_gray_small">
+                        <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <div>Total active feedbacks: {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">
@@ -26,15 +39,14 @@
             <a href="#" class="close" data-dismiss="alert">&times;</a>
         </div>
     {% endfor %}
-
     <div>
             {% if  feedbackSummaryList|length > 0 %}
             <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
-                <div style="width: 740px">
+                <div style="width: 710px">
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
-                <ul id="sortable" style="width: 720px">
+                <ul id="sortable" class="not-nested" style="width: 720px">
                 {% for feedbackSummary in feedbackSummaryList %}
                     {% set feedback = feedbackSummary.getFeedback %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
@@ -46,10 +58,10 @@
                             {% endif %}
                         </div>
 
-                        <ul class="stars_rating">
+                        <ul class="stars_rating not-nested">
                             {% for ratingCriteria in feedbackSummary.getRatings %}
                                 <li>
-                                    <div class="rating-title">
+                                    <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
                                         {{ ratingCriteria.getName }}
                                     </div>
                                     <div class="rating-stars">
@@ -79,12 +91,12 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
+
 
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
                         </div>
-
+                        </div>
                         <div class="service-info">
                             <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
                             <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
@@ -102,5 +114,6 @@
         {% else %}
             {% trans %} No feedbacks yet. {% endtrans %}
         {% endif %}
+    </div>
     </div>
 {% endblock %}

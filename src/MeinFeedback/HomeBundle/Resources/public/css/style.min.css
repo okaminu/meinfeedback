@@ -1383,11 +1383,6 @@ a.footer_link:hover {
     position: relative;
 }
 
-.stars_rating{
-    padding: 0px;
-    margin: 0px;
-}
-
 .stars_rating .rating-stars{
     display: inline-block;
     margin: 0px 10px;
@@ -1396,7 +1391,7 @@ a.footer_link:hover {
 .stars_rating .rating-title
 {
     display: inline-block;
-    width: 60px;
+    width: 65px;
     vertical-align: middle;
     line-height: 15px;
 }
@@ -1404,12 +1399,12 @@ a.footer_link:hover {
 .stars_rating .rating-title.overall{
     font-weight: bold;
 }
-.stars_rating .rating-title .channel-ratings{
+.stars_rating .rating-title.channel-ratings{
     font-size: 15px;
 }
 
-.stars_rating .rating-title .feedback-ratings{
-    font-size: 12px;
+.stars_rating .rating-title.feedback-ratings{
+    font-size: 13px;
 }
 
 
@@ -1574,6 +1569,11 @@ a.footer_link:hover {
 
 .sectionIdent{
     margin: 15px 30px;
+}
+
+ul.not-nested{
+    padding: 0px;
+    margin: 0px;
 }
 
 

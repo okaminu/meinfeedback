@@ -30,8 +30,8 @@
         </div>
 
         <h3 style="margin-top: 50px;">aktuelle Feedbacks für {{ account_channel_name }}</h3>
-        <ul class="stars_rating channel-ratings">
-            {% for ratingCriteria in channelRatingSummary %}
+        <ul class="stars_rating channel-ratings not-nested">
+            {% for ratingCriteria in channelRatingSummaryList %}
                 <li>
                     <div class="rating-title {% if ratingCriteria.getName == 'Average' %} overall {% endif %}">
                         {{ ratingCriteria.getName }}
@@ -73,16 +73,17 @@
                         <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
                             <tbody><tr>
                                 <td width="80%" style="padding:10px;">
-                    <span class="comment-text left" itemprop="description">
-                        {{ feedback.content }}
-                    </span>
+                                    <span class="comment-text left" itemprop="description">
+                                        {{ feedback.content }}
+                                    </span>
                                 </td>
 
                                 <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
                                     <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
                                 </td>
                             </tr>
-                            </tbody></table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             {% endfor %}
