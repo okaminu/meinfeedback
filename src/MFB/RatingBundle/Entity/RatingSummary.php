@@ -1,8 +1,8 @@
 <?php
-namespace MFB\FeedbackBundle\Entity;
+namespace MFB\RatingBundle\Entity;
 
 
-class FeedbackSummaryCriteria
+class RatingSummary
 {
     private $name;
 

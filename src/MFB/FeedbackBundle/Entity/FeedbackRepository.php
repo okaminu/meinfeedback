@@ -32,7 +32,6 @@ class FeedbackRepository extends EntityRepository
         $qb->select("AVG(rating.rating)");
         $qb->from('MFBFeedbackBundle:Feedback', 'feedback');
         $qb->where($qb->expr()->eq('feedback.id', $feedbackId));
-        $qb->andWhere($qb->expr()->eq('feedback.isEnabled', 1));
         $qb->leftJoin('feedback.feedbackRating', 'rating');
         return $qb->getQuery()->getSingleScalarResult();
     }

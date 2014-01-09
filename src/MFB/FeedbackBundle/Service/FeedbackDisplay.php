@@ -2,7 +2,7 @@
 namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use MFB\FeedbackBundle\Entity\FeedbackSummaryCriteria;
+use MFB\RatingBundle\Entity\RatingSummary;
 use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
@@ -30,8 +30,16 @@ class FeedbackDisplay
 
     public function getChannelRatingAverage($accountId)
     {
-        $ratingAverage = $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+        $ratingAverage = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->getChannelRatingAverage($accountId);
+
+        return $this->roundHalfUp($ratingAverage);
+    }
+
+    private function getFeedbackRatingAverage($feedbackId)
+    {
+        $ratingAverage = $this->entityManager->getRepository("MFBFeedbackBundle:Feedback")
+            ->getFeedbackRatingAverage($feedbackId);
 
         return $this->roundHalfUp($ratingAverage);
     }
@@ -97,7 +105,7 @@ class FeedbackDisplay
     {
         $singleSummary = new FeedbackSummary();
         $singleSummary = $this->addServiceSummary($singleSummary, $feedback->getService());
-        $singleSummary->setRatings($this->createRatingSummary($feedback));
+        $singleSummary->setRatings($this->createFeedbackRatingSummary($feedback));
         $singleSummary->setFeedback($feedback);
         return $singleSummary;
     }
@@ -121,30 +129,19 @@ class FeedbackDisplay
      * @param $feedback
      * @return array
      */
-    private function createRatingSummary(FeedbackEntity $feedback)
+    private function createFeedbackRatingSummary(FeedbackEntity $feedback)
     {
         $ratings = array();
-        $ratings[] = new FeedbackSummaryCriteria(
+        $ratings[] = new RatingSummary(
             'Overall',
             $this->getFeedbackRatingAverage($feedback->getId())
         );
 
         foreach ($feedback->getFeedbackRating() as $criteria) {
             $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();
-            $ratings[] = new FeedbackSummaryCriteria($criteriaName, $criteria->getRating());
+            $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
         }
         return $ratings;
-    }
-
-    /**
-     * @param $feedbackId
-     * @return float
-     */
-    private function getFeedbackRatingAverage($feedbackId)
-    {
-        $ratingAverage = $this->entityManager
-            ->getRepository("MFBFeedbackBundle:Feedback")->getFeedbackRatingAverage($feedbackId);
-        return $this->roundHalfUp($ratingAverage);
     }
 
 }
