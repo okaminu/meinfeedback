@@ -46,15 +46,21 @@
                             {% endif %}
                         </div>
 
-                        {% for ratingCriteria in feedbackSummary.getRatings %}
-                            {{ ratingCriteria.getName }}
-                        <div class="stars_rating">
-                            <div class="stars_gray_small">
-                                <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        {% endfor %}
+                        <ul class="rating-list">
+                            {% for ratingCriteria in feedbackSummary.getRatings %}
+                                <li>
+                                    <div class="rating-title">
+                                        {{ ratingCriteria.getName }}
+                                    </div>
+                                    <div class="stars_rating">
+                                        <div class="stars_gray_small">
+                                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
 
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
