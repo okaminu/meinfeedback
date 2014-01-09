@@ -21,20 +21,71 @@ class FeedbackDisplay
     }
 
 
-    public function getFeedbackCount($accountId)
+    public function getChannelFeedbackCount($channelId)
     {
         $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getAccountFeedbackCount($accountId);
+            ->getChannelFeedbackCount($channelId);
         return $feedbackCount;
     }
 
-    public function getChannelRatingAverage($accountId)
+    public function getFeedbackSummaryList($channelId)
+    {
+        $feedbackList = $this->getFeedbackList($channelId);
+        return $this->createFeedbackSummaryList($feedbackList);
+    }
+
+    public function getActiveFeedbackSummaryList($channelId)
+    {
+        $feedbackList = $this->getActiveFeedbackList($channelId);
+        return $this->createFeedbackSummaryList($feedbackList);
+    }
+
+    public function getFeedbackList($channelId)
+    {
+        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->findBy(
+                array('channelId' => $channelId),
+                $this->feedbackOrder
+            );
+
+        return $feedbackList;
+    }
+
+    public function getActiveFeedbackList($channelId)
+    {
+        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->findBy(
+                array('channelId' => $channelId, 'isEnabled' =>  1),
+                $this->feedbackOrder
+            );
+
+        return $feedbackList;
+    }
+
+//    /**
+//     * @param $channelId
+//     * @return array
+//     */
+//    public function createChannelRatingSummary($channelId)
+//    {
+//        $ratings = array();
+//        $ratings[] = new RatingSummary('Average', $this->getChannelRatingAverage($channelId));
+//
+//        foreach ($feedback->getFeedbackRating() as $criteria) {
+//            $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();
+//            $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
+//        }
+//        return $ratings;
+//    }
+
+    public function getChannelRatingAverage($channelId)
     {
         $ratingAverage = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getChannelRatingAverage($accountId);
+            ->getChannelRatingAverage($channelId);
 
         return $this->roundHalfUp($ratingAverage);
     }
+
 
     private function getFeedbackRatingAverage($feedbackId)
     {
@@ -43,41 +94,6 @@ class FeedbackDisplay
 
         return $this->roundHalfUp($ratingAverage);
     }
-
-    public function getFeedbackSummaryList($accountId)
-    {
-        $feedbackList = $this->getFeedbackList($accountId);
-        return $this->createFeedbackSummaryList($feedbackList);
-    }
-
-    public function getActiveFeedbackSummaryList($accountId)
-    {
-        $feedbackList = $this->getActiveFeedbackList($accountId);
-        return $this->createFeedbackSummaryList($feedbackList);
-    }
-
-    public function getFeedbackList($accountId)
-    {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array('accountId' => $accountId),
-                $this->feedbackOrder
-            );
-
-        return $feedbackList;
-    }
-
-    public function getActiveFeedbackList($accountId)
-    {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array('accountId' => $accountId, 'isEnabled' =>  1),
-                $this->feedbackOrder
-            );
-
-        return $feedbackList;
-    }
-
 
     private function roundHalfUp($number)
     {
@@ -132,10 +148,7 @@ class FeedbackDisplay
     private function createFeedbackRatingSummary(FeedbackEntity $feedback)
     {
         $ratings = array();
-        $ratings[] = new RatingSummary(
-            'Overall',
-            $this->getFeedbackRatingAverage($feedback->getId())
-        );
+        $ratings[] = new RatingSummary('Overall', $this->getFeedbackRatingAverage($feedback->getId()));
 
         foreach ($feedback->getFeedbackRating() as $criteria) {
             $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();

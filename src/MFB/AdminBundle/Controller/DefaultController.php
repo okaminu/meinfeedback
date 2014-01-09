@@ -18,15 +18,16 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $accountId = $this->getCurrentUser()->getId();
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
 
         $feedbackService = $this->get('mfb_feedback_display.service');
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($accountId),
-                'ratingCount' => $feedbackService->getFeedbackCount($accountId),
-                'ratingAverage' => $feedbackService->getChannelRatingAverage($accountId)
+                'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($channel->getId()),
+                'ratingCount' => $feedbackService->getChannelFeedbackCount($channel->getId()),
+                'ratingAverage' => $feedbackService->getChannelRatingAverage($channel->getId())
             )
         );
     }
