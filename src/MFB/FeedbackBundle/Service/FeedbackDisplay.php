@@ -28,10 +28,10 @@ class FeedbackDisplay
         return $feedbackCount;
     }
 
-    public function getFeedbackRatingAverage($accountId)
+    public function getChannelRatingAverage($accountId)
     {
         $ratingAverage = $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getFeedbackRatingAverage($accountId);
+            ->getChannelRatingAverage($accountId);
 
         return $this->roundHalfUp($ratingAverage);
     }
@@ -91,20 +91,6 @@ class FeedbackDisplay
 
     /**
      * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return float
-     */
-    private function calcFeedbackRatingAverage(FeedbackEntity $feedback)
-    {
-        $ratingAverage = array();
-        foreach ($feedback->getFeedbackRating() as $rating) {
-            $ratingAverage[] = $rating->getRating();
-        }
-        $average = array_sum($ratingAverage) / count($ratingAverage);
-        return $this->roundHalfUp($average);
-    }
-
-    /**
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
      * @return FeedbackSummary
      */
     private function createFeedbackSummaryItem($feedback)
@@ -138,13 +124,27 @@ class FeedbackDisplay
     private function createRatingSummary(FeedbackEntity $feedback)
     {
         $ratings = array();
-        $ratings[] = new FeedbackSummaryCriteria('Overall', $this->calcFeedbackRatingAverage($feedback));
+        $ratings[] = new FeedbackSummaryCriteria(
+            'Overall',
+            $this->getFeedbackRatingAverage($feedback->getId())
+        );
 
         foreach ($feedback->getFeedbackRating() as $criteria) {
             $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();
             $ratings[] = new FeedbackSummaryCriteria($criteriaName, $criteria->getRating());
         }
         return $ratings;
+    }
+
+    /**
+     * @param $feedbackId
+     * @return float
+     */
+    private function getFeedbackRatingAverage($feedbackId)
+    {
+        $ratingAverage = $this->entityManager
+            ->getRepository("MFBFeedbackBundle:Feedback")->getFeedbackRatingAverage($feedbackId);
+        return $this->roundHalfUp($ratingAverage);
     }
 
 }

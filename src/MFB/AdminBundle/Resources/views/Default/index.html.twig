@@ -62,22 +62,24 @@
                             {% endfor %}
                         </ul>
 
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
+                        <div style="margin-top: 20px">
+                            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
-                        <table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >
-                            <tbody>
-                                <tr>
-                                <td width="80%" style="padding:10px;">
-                                    <span class="comment-text left" itemprop="description">
-                                        {{ feedback.content }}
-                                    </span>
-                                </td>
-                                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                                        <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                            <table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >
+                                <tbody>
+                                    <tr>
+                                    <td width="80%" style="padding:10px;">
+                                        <span class="comment-text left" itemprop="description">
+                                            {{ feedback.content }}
+                                        </span>
+                                    </td>
+                                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>

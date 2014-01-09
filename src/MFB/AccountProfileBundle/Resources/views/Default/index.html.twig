@@ -29,11 +29,23 @@
         {% endif %}
         </div>
 
-
         <h3 style="margin-top: 50px;">aktuelle Feedbacks für {{ account_channel_name }}</h3>
         {% if ratingAverage > 0 %}
-            <div>Ratings average: {{ ratingAverage }}</div>
+            <table class="channel-overalls" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td>Rating Average</td>
+                    <td>
+                        <div class="stars_rating">
+                            <div class="stars_gray_small">
+                                <span style="width: {{ ratingAverage * 20 }}%;" class="stars_gold_small"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         {% endif %}
+
         <div>Total feedbacks: {{ ratingCount }}</div>
 
         <div class="feedbackDisplayForm">
@@ -55,21 +67,23 @@
                         <div class="clearfix"></div>
                     </div>
 
-                    <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
+                    <div style="margin-top: 20px">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
-                    <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                        <tbody><tr>
-                            <td width="80%" style="padding:10px;">
-                <span class="comment-text left" itemprop="description">
-                    {{ feedback.content }}
-                </span>
-                            </td>
+                        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
+                            <tbody><tr>
+                                <td width="80%" style="padding:10px;">
+                    <span class="comment-text left" itemprop="description">
+                        {{ feedback.content }}
+                    </span>
+                                </td>
 
-                            <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                                <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                            </td>
-                        </tr>
-                        </tbody></table>
+                                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                    <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                    </div>
                 </div>
             {% endfor %}
         </div>

@@ -7,6 +7,9 @@ MFB\FeedbackBundle\Entity\Feedback:
 MFB\FeedbackBundle\Entity\FeedbackRating:
   properties:
     rating:
-      - GreaterThan :
-          value: 0
+      - GreaterThanOrEqual :
+          value: 1
           message: "Not all star ratings were selected"
+      - LessThanOrEqual :
+          value: 5
+          message: "The rating is too big"

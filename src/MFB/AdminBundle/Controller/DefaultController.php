@@ -26,7 +26,7 @@ class DefaultController extends Controller
             array(
                 'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($accountId),
                 'ratingCount' => $feedbackService->getFeedbackCount($accountId),
-                'ratingAverage' => $feedbackService->getFeedbackRatingAverage($accountId)
+                'ratingAverage' => $feedbackService->getChannelRatingAverage($accountId)
             )
         );
     }

@@ -1383,11 +1383,6 @@ a.footer_link:hover {
     position: relative;
 }
 
-.stars_rating
-{
-    margin-bottom: 20px;
-}
-
 .stars_rating .rating-stars{
     display: inline-block;
 }
@@ -1398,6 +1393,14 @@ a.footer_link:hover {
     width: 60px;
     vertical-align: middle;
     line-height: 15px;
+}
+
+.channel-overalls{
+
+}
+
+.channel-overalls td{
+    padding-right: 10px;
 }
 
 .partial_address{

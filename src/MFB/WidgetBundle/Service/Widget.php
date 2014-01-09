@@ -69,7 +69,7 @@ class Widget
         return $imageDirector->build(
             $lastFeedbacks,
             $feedbackService->getFeedbackCount($accountId),
-            $feedbackService->getFeedbackRatingAverage($accountId),
+            $feedbackService->getChannelRatingAverage($accountId),
             new Color($widget->getTextColorCode()),
             new Color($widget->getBackgroundColorCode())
         );
