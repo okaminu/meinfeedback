@@ -62,21 +62,23 @@ class FeedbackDisplay
         return $feedbackList;
     }
 
-//    /**
-//     * @param $channelId
-//     * @return array
-//     */
-//    public function createChannelRatingSummary($channelId)
-//    {
-//        $ratings = array();
-//        $ratings[] = new RatingSummary('Average', $this->getChannelRatingAverage($channelId));
-//
-//        foreach ($feedback->getFeedbackRating() as $criteria) {
-//            $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();
-//            $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
-//        }
-//        return $ratings;
-//    }
+    /**
+     * @param $channelId
+     * @return array
+     */
+    public function createChannelRatingSummary($channelId)
+    {
+        $ratings = array();
+        $ratings[] = new RatingSummary('Average', $this->getChannelRatingAverage($channelId));
+
+        $channelCriteriaRatings = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
+            ->getChannelCriteriaRatings($channelId);
+
+        foreach ($channelCriteriaRatings as $singleCriteria) {
+            $ratings[] = new RatingSummary($singleCriteria['name'], $this->roundHalfUp($singleCriteria['rating']));
+        }
+        return $ratings;
+    }
 
     public function getChannelRatingAverage($channelId)
     {

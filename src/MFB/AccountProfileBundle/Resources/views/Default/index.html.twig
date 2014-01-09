@@ -30,21 +30,21 @@
         </div>
 
         <h3 style="margin-top: 50px;">aktuelle Feedbacks für {{ account_channel_name }}</h3>
-        {% if ratingAverage > 0 %}
-            <table class="channel-overalls" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                    <td>Rating Average</td>
-                    <td>
-                        <div class="stars_rating">
-                            <div class="stars_gray_small">
-                                <span style="width: {{ ratingAverage * 20 }}%;" class="stars_gold_small"></span>
-                            </div>
-                            <div class="clearfix"></div>
+        <ul class="stars_rating channel-ratings">
+            {% for ratingCriteria in channelRatingSummary %}
+                <li>
+                    <div class="rating-title {% if ratingCriteria.getName == 'Average' %} overall {% endif %}">
+                        {{ ratingCriteria.getName }}
+                    </div>
+                    <div class="rating-stars">
+                        <div class="stars_gray_small">
+                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                         </div>
-                    </td>
-                </tr>
-            </table>
-        {% endif %}
+                        <div class="clearfix"></div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
 
         <div>Total feedbacks: {{ ratingCount }}</div>
 
@@ -60,7 +60,7 @@
                         {% endif %}
                     </div>
                     {% set ratingCriteria = feedbackSummary.getRatingByName('Overall') %}
-                    <div class="stars_rating">
+                    <div class="stars_rating feedback-ratings">
                         <div class="stars_gray_small">
                             <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                         </div>
