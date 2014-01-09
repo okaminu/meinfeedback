@@ -40,10 +40,12 @@ class FeedbackRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('r.name AS name, AVG(fr.rating) AS rating');
-        $qb->from('MFBFeedbackBundle:FeedbackRating', 'fr');
+        $qb->from('MFBFeedbackBundle:Feedback', 'f');
+        $qb->join('f.feedbackRating', 'fr');
         $qb->join('fr.ratingCriteria', 'cr');
         $qb->join('cr.ratingCriteria', 'r');
         $qb->where($qb->expr()->eq('cr.channel', $channelId));
+        $qb->andWhere($qb->expr()->eq('f.isEnabled', 1));
         $qb->groupBy('r.name');
         return $qb->getQuery()->getArrayResult();
     }
