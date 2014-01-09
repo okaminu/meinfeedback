@@ -46,13 +46,13 @@
                             {% endif %}
                         </div>
 
-                        <ul class="rating-list">
+                        <ul class="stars_rating">
                             {% for ratingCriteria in feedbackSummary.getRatings %}
                                 <li>
                                     <div class="rating-title">
                                         {{ ratingCriteria.getName }}
                                     </div>
-                                    <div class="stars_rating">
+                                    <div class="rating-stars">
                                         <div class="stars_gray_small">
                                             <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                                         </div>

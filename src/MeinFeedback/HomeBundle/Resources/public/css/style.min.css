@@ -1383,22 +1383,21 @@ a.footer_link:hover {
     position: relative;
 }
 
-.rating-list .stars_rating
+.stars_rating
 {
-    display: inline-block;
+    margin-bottom: 20px;
 }
 
-.rating-list .rating-title
+.stars_rating .rating-stars{
+    display: inline-block;
+}
+.stars_rating .rating-title
 {
     font-size: 12px;
     display: inline-block;
     width: 60px;
     vertical-align: middle;
     line-height: 15px;
-}
-
-.rating-list{
-    margin-bottom: 20px;
 }
 
 .partial_address{
