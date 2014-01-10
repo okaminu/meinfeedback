@@ -160,5 +160,4 @@ class FeedbackDisplay
         }
         return $ratings;
     }
-
 }

@@ -6,6 +6,7 @@ parameters:
   mfb_feedback_rating.service.class: MFB\FeedbackBundle\Service\FeedbackRating
   mfb_feedback.sort_order:
     sort: ASC
+    createdAt: DESC
 
 services:
   mfb_feedback_display.service:

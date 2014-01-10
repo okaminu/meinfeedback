@@ -103,6 +103,13 @@ class Feedback
         $this->entityManager->flush();
     }
 
+    public function activateFeedback($feedbackId)
+    {
+        $feedback = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')->find($feedbackId);
+        $feedback->setIsEnabled(true);
+        $this->saveEntity($feedback);
+    }
+
     /**
      * @param mixed $accountId
      */

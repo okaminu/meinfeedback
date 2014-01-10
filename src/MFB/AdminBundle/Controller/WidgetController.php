@@ -100,24 +100,13 @@ class WidgetController extends Controller
      */
     public function enableAction($feedbackId)
     {
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
-
-        try {
-            $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('MFBFeedbackBundle:Feedback')
-                ->activateFeedback($feedbackId, $accountId);
-
-        } catch (NoResultException $e) {
-            throw $this->createNotFoundException('Feedback was not found.');
-        }
+        $this->get('mfb_feedback.service')->activateFeedback($feedbackId);
 
         $message = $this->get('translator')->trans(
             'Feedback %feedback% was activated',
             array('%feedback%' => $feedbackId)
         );
+
 
         $this->getRequest()->getSession()->getFlashBag()->add('success', $message);
 
