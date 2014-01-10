@@ -29,3 +29,15 @@ services:
     arguments: ["@doctrine.orm.default_entity_manager", "@mfb_email.sender", "@translator"]
     tags:
         - { name: kernel.event_listener, event: feedback.invite.send.complete, method: onCreateFeedbackInviteComplete}
+
+  mfb_feedback.validator.rating_min_bounds:
+    class: MFB\FeedbackBundle\Validator\Constraints\RatingMinBoundsValidator
+    arguments: ["%mfb_rating.boundary%"]
+    tags:
+      - {name: validator.constraint_validator, alias: mfb_feedback_validator_rating_min_bounds}
+
+  mfb_feedback.validator.rating_max_bounds:
+    class: MFB\FeedbackBundle\Validator\Constraints\RatingMaxBoundsValidator
+    arguments: ["%mfb_rating.boundary%"]
+    tags:
+      - {name: validator.constraint_validator, alias: mfb_feedback_validator_rating_max_bounds}

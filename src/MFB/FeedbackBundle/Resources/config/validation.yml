@@ -3,13 +3,8 @@ MFB\FeedbackBundle\Entity\Feedback:
     feedbackRating:
       - Valid: ~
 
-
 MFB\FeedbackBundle\Entity\FeedbackRating:
   properties:
     rating:
-      - GreaterThanOrEqual :
-          value: 1
-          message: "Not all star ratings were selected"
-      - LessThanOrEqual :
-          value: 5
-          message: "The rating is too big"
+      - MFB\FeedbackBundle\Validator\Constraints\RatingMaxBounds: ~
+      - MFB\FeedbackBundle\Validator\Constraints\RatingMinBounds: ~
