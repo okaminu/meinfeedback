@@ -38,11 +38,9 @@ class DefaultController extends Controller
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         $feedbackService = $this->get('mfb_feedback.service');
         $feedbackDisplayService = $this->get('mfb_feedback_display.service');
-        if ($request->getMethod() == 'POST') {
-            $activates = $request->request->get('activate');
-            $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($channel->getId()));
-            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
-        }
+        $activates = $request->request->get('activate');
+        $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($channel->getId()));
+        return $this->redirect($this->generateUrl('mfb_admin_homepage'));
     }
 
 
