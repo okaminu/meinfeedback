@@ -20,7 +20,6 @@ class FeedbackDisplay
         $this->feedbackOrder = $feedbackOrder;
     }
 
-
     public function getChannelFeedbackCount($channelId)
     {
         $feedbackCount = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')

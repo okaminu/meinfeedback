@@ -35,11 +35,12 @@ class DefaultController extends Controller
     public function saveFeedbackActivationAction(Request $request)
     {
         $accountId = $this->getCurrentUser()->getId();
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         $feedbackService = $this->get('mfb_feedback.service');
         $feedbackDisplayService = $this->get('mfb_feedback_display.service');
         if ($request->getMethod() == 'POST') {
             $activates = $request->request->get('activate');
-            $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($accountId));
+            $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($channel->getId()));
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
     }

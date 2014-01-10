@@ -18,11 +18,13 @@ class FeedbackRepository extends EntityRepository
     public function getChannelRatingAverage($channelId)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select("AVG(r.rating)");
+        $qb->select("AVG(fr.rating)");
         $qb->from('MFBFeedbackBundle:Feedback', 'f');
+        $qb->join('f.feedbackRating', 'fr');
         $qb->where($qb->expr()->eq('f.channelId', $channelId));
         $qb->andWhere($qb->expr()->eq('f.isEnabled', 1));
-        $qb->leftJoin('f.feedbackRating', 'r');
+        $qb->andWhere($qb->expr()->gte('fr.rating', 1));
+        $qb->andWhere($qb->expr()->lte('fr.rating', 5));
         return $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -46,6 +48,8 @@ class FeedbackRepository extends EntityRepository
         $qb->join('cr.ratingCriteria', 'r');
         $qb->where($qb->expr()->eq('cr.channel', $channelId));
         $qb->andWhere($qb->expr()->eq('f.isEnabled', 1));
+        $qb->andWhere($qb->expr()->gte('fr.rating', 1));
+        $qb->andWhere($qb->expr()->lte('fr.rating', 5));
         $qb->groupBy('r.name');
         return $qb->getQuery()->getArrayResult();
     }

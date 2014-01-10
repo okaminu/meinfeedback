@@ -129,7 +129,8 @@ class WidgetController extends Controller
     public function sortAction(Request $request)
     {
         $accountId = $this->getUserId();
-        $feedbackList = $this->get('mfb_feedback_display.service')->getFeedbackList($accountId);
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
+        $feedbackList = $this->get('mfb_feedback_display.service')->getFeedbackList($channel->getId());
 
         $item_order_str = $request->request->get('item_order_str');
         parse_str($item_order_str, $output);

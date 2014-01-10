@@ -60,13 +60,14 @@
                         {% endif %}
                     </div>
                     {% set ratingCriteria = feedbackSummary.getRatingByName('Overall') %}
+                    {% if ratingCriteria.getRating > 0 %}
                     <div class="stars_rating feedback-ratings">
                         <div class="stars_gray_small">
                             <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                         </div>
                         <div class="clearfix"></div>
                     </div>
-
+                    {% endif %}
                     <div style="margin-top: 20px">
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 

@@ -60,6 +60,7 @@
 
                         <ul class="stars_rating not-nested">
                             {% for ratingCriteria in feedbackSummary.getRatings %}
+                                {% if ratingCriteria.getRating > 0 %}
                                 <li>
                                     <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
                                         {{ ratingCriteria.getName }}
@@ -71,6 +72,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                 </li>
+                                 {% endif %}
                             {% endfor %}
                         </ul>
 
