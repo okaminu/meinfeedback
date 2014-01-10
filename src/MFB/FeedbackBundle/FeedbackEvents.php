@@ -1,6 +1,5 @@
 <?php
 namespace MFB\FeedbackBundle;
-
 final class FeedbackEvents
 {
     const REGULAR_INITIALIZE = 'feedback.regular.initialize';

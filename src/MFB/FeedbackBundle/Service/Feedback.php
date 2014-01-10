@@ -4,7 +4,7 @@ namespace MFB\FeedbackBundle\Service;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\FeedbackBundle\Service\FeedbackRating as FeedbackRatingService;
-use MFB\FeedbackBundle\Event\CustomerAccountEvent;
+use MFB\FeedbackBundle\Event\FeedbackNotificationEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\FeedbackException;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
@@ -182,12 +182,10 @@ class Feedback
         $customer = $feedback->getCustomer();
         $account = $this->getAccount($feedback->getAccountId());
 
-        $event = new CustomerAccountEvent(
-            $feedback->getId(),
+        $event = new FeedbackNotificationEvent(
+            $feedback,
             $account->getEmail(),
-            $customer,
-            $feedback->getContent(),
-            null
+            $customer
         );
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
     }

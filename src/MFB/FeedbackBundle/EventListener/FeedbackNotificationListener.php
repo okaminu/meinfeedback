@@ -3,7 +3,7 @@
 namespace MFB\FeedbackBundle\EventListener;
 
 use MFB\EmailBundle\Service\Sender;
-use MFB\FeedbackBundle\Event\CustomerAccountEvent;
+use MFB\FeedbackBundle\Event\FeedbackNotificationEvent;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -19,16 +19,20 @@ class FeedbackNotificationListener
         $this->sender = $sender;
     }
 
-    public function onRegularComplete(CustomerAccountEvent $event)
+    public function onRegularComplete(FeedbackNotificationEvent $event)
     {
+        /**
+         * @var $feedback \MFB\FeedbackBundle\Entity\Feedback
+         */
+        $feedback = $event->getFeedback();
         $this->sender->sendFeedbackNotification(
             $event->getEmail(),
             $event->getCustomer(),
-            $event->getFeedbackText(),
-            $event->getFeedbackRating(),
+            $feedback->getContent(),
+            $feedback->getFeedbackRating(),
             $this->router->generate(
                 'mfb_feedback_enable',
-                array('feedbackId' => $event->getFeedbackId()),
+                array('feedbackId' => $feedback->getId()),
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
             $event->getInvite()

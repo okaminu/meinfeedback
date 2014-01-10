@@ -2,7 +2,7 @@
 namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use MFB\FeedbackBundle\Event\CustomerAccountEvent;
+use MFB\FeedbackBundle\Event\FeedbackNotificationEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
 use MFB\FeedbackBundle\Event\NewFeedbackInviteEvent;
 use MFB\ServiceBundle\Service\Service;
@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\FeedbackBundle\Entity\FeedbackInvite as FeedbackInviteEntity;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 
 
 class FeedbackInvite
@@ -167,12 +166,10 @@ class FeedbackInvite
         $customer = $feedback->getCustomer();
         $account = $this->getAccount($feedback->getAccountId());
 
-        $event = new CustomerAccountEvent(
-            $feedback->getId(),
+        $event = new FeedbackNotificationEvent(
+            $feedback,
             $account->getEmail(),
             $customer,
-            $feedback->getContent(),
-            null,
             $invite
         );
         $this->eventDispatcher->dispatch(FeedbackEvents::INVITE_COMPLETE, $event);

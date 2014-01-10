@@ -104,7 +104,7 @@ class Sender
         $email,
         Customer $customer,
         $feedbackText,
-        $feedbackRating,
+        $feedbackRatingCriterias,
         $feedbackEnableLink,
         FeedbackInvite $invite = null
     ) {
@@ -121,7 +121,7 @@ class Sender
                 'email_title' => $emailSubject,
                 'customerName' => $customerName,
                 'feedbackText' => $feedbackText,
-                'feedbackRating' => $feedbackRating,
+                'feedbackRatingCriterias' => $feedbackRatingCriterias,
                 'enabaleFeedbackLink' => $feedbackEnableLink,
                 'invite' => $invite
             )

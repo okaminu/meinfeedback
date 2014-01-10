@@ -15,11 +15,12 @@
             <div style="clear:both"></div>
 
             <div style="padding:20px; width:550px;">
-                Der Kunde {{ customerName }} hat
-                {% if feedbackRating %}
-                sie mit {{ feedbackRating }} Sternen bewertet und
-                {% endif %}
-                das folgende Feedback gegeben: <br>
+                Der Kunde {{ customerName }} hat sie mit
+                <br>
+                {% for criteria in feedbackRatingCriterias %}
+                    {{ criteria.getRatingCriteria.getRatingCriteria.getName }} : {{ criteria.getRating }} Sternen bewertet<br>
+                {% endfor %}
+                und das folgende Feedback gegeben: <br>
                 {{ feedbackText }}
 
                 <br>
