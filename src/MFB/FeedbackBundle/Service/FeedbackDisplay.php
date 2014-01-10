@@ -13,11 +13,14 @@ class FeedbackDisplay
     private $entityManager;
 
     private $feedbackOrder;
+    
+    private $ratingBounds;
 
-    public function __construct(EntityManager $em, $feedbackOrder)
+    public function __construct(EntityManager $em, $feedbackOrder, $ratingBoundaries)
     {
         $this->entityManager = $em;
         $this->feedbackOrder = $feedbackOrder;
+        $this->ratingBounds = $ratingBoundaries;
     }
 
     public function getChannelFeedbackCount($channelId)
@@ -71,7 +74,7 @@ class FeedbackDisplay
         $ratings[] = new RatingSummary('Average', $this->getChannelRatingAverage($channelId));
 
         $channelCriteriaRatings = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getChannelCriteriaRatings($channelId);
+            ->getChannelCriteriaRatings($channelId, $this->ratingBounds['min'], $this->ratingBounds['max']);
 
         foreach ($channelCriteriaRatings as $singleCriteria) {
             $ratings[] = new RatingSummary($singleCriteria['name'], $this->roundHalfUp($singleCriteria['rating']));
@@ -82,7 +85,7 @@ class FeedbackDisplay
     public function getChannelRatingAverage($channelId)
     {
         $ratingAverage = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->getChannelRatingAverage($channelId);
+            ->getChannelRatingAverage($channelId, $this->ratingBounds['min'], $this->ratingBounds['max']);
 
         return $this->roundHalfUp($ratingAverage);
     }

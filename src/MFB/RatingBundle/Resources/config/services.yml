@@ -6,6 +6,10 @@ parameters:
       - Quality
       - Service
 
+    mfb_rating.boundary:
+      min: 1
+      max: 5
+
 services:
 #    mfb_rating.example:
 #        class: %mfb_rating.example.class%

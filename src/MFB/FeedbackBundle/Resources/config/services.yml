@@ -10,7 +10,7 @@ parameters:
 services:
   mfb_feedback_display.service:
     class: %mfb_feedback_display.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "%mfb_feedback.sort_order%"]
+    arguments: ["@doctrine.orm.default_entity_manager", "%mfb_feedback.sort_order%", "%mfb_rating.boundary%"]
 
   mfb_feedback.service:
     class: %mfb_feedback.class%

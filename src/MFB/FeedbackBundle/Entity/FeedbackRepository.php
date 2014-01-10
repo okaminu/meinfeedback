@@ -15,7 +15,7 @@ class FeedbackRepository extends EntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getChannelRatingAverage($channelId)
+    public function getChannelRatingAverage($channelId, $minRating, $maxRating)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select("AVG(fr.rating)");
@@ -23,8 +23,8 @@ class FeedbackRepository extends EntityRepository
         $qb->join('f.feedbackRating', 'fr');
         $qb->where($qb->expr()->eq('f.channelId', $channelId));
         $qb->andWhere($qb->expr()->eq('f.isEnabled', 1));
-        $qb->andWhere($qb->expr()->gte('fr.rating', 1));
-        $qb->andWhere($qb->expr()->lte('fr.rating', 5));
+        $qb->andWhere($qb->expr()->gte('fr.rating', $minRating));
+        $qb->andWhere($qb->expr()->lte('fr.rating', $maxRating));
         return $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -38,7 +38,7 @@ class FeedbackRepository extends EntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getChannelCriteriaRatings($channelId)
+    public function getChannelCriteriaRatings($channelId, $minRating, $maxRating)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('r.name AS name, AVG(fr.rating) AS rating');
@@ -48,8 +48,8 @@ class FeedbackRepository extends EntityRepository
         $qb->join('cr.ratingCriteria', 'r');
         $qb->where($qb->expr()->eq('cr.channel', $channelId));
         $qb->andWhere($qb->expr()->eq('f.isEnabled', 1));
-        $qb->andWhere($qb->expr()->gte('fr.rating', 1));
-        $qb->andWhere($qb->expr()->lte('fr.rating', 5));
+        $qb->andWhere($qb->expr()->gte('fr.rating', $minRating));
+        $qb->andWhere($qb->expr()->lte('fr.rating', $maxRating));
         $qb->groupBy('r.name');
         return $qb->getQuery()->getArrayResult();
     }
