@@ -57,7 +57,11 @@ class InviteController extends Controller
             }
             $this->get('mfb_feedback_invite.service')->processInviteFeedback($invite, $feedback);
 
-            return $this->showThankyouForm($accountChannel, $service->getCustomer());
+            return $this->showThankyouForm(
+                $accountChannel,
+                $service->getCustomer(),
+                $this->container->getParameter('mfb_feedback.redirectTimeout')
+            );
 
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
@@ -157,9 +161,10 @@ class InviteController extends Controller
     /**
      * @param $accountChannel
      * @param $customer
+     * @param $redirectTimeout
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function showThankyouForm($accountChannel, $customer)
+    private function showThankyouForm($accountChannel, $customer, $redirectTimeout)
     {
         $return_url = $this->getReturnUrl($accountChannel);
 
@@ -167,7 +172,8 @@ class InviteController extends Controller
             'MFBFeedbackBundle::thank_you.html.twig',
             array(
                 'thankyou_text' => $this->get('mfb_email.template')->getText($customer, 'ThankYou'),
-                'homepage' => $return_url
+                'homepage' => $return_url,
+                'redirectTimeout' => $redirectTimeout
             )
         );
     }

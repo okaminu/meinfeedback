@@ -33,7 +33,11 @@ class DefaultController extends Controller
                 throw new \Exception('Not valid form');
             }
             $this->get('mfb_feedback.service')->processFeedback($feedback);
-            return $this->showThankyouForm($accountChannel, $feedback);
+            return $this->showThankyouForm(
+                $accountChannel,
+                $feedback,
+                $this->container->getParameter('mfb_feedback.redirectTimeout')
+            );
         } catch (FeedbackException $ax) {
             $form->addError(new FormError($ax->getMessage()));
         } catch (\Exception $ex) {
@@ -111,16 +115,18 @@ class DefaultController extends Controller
     /**
      * @param $accountChannel
      * @param $feedback
+     * @param $redirectTimeout
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function showThankyouForm($accountChannel, $feedback)
+    private function showThankyouForm($accountChannel, $feedback, $redirectTimeout)
     {
         $return_url = $this->getReturnUrl($accountChannel);
         return $this->render(
             'MFBFeedbackBundle::thank_you.html.twig',
             array(
                 'thankyou_text' => $this->get('mfb_email.template')->getText($feedback->getCustomer(), 'ThankYou'),
-                'homepage' => $return_url
+                'homepage' => $return_url,
+                'redirectTimeout' => $redirectTimeout
             )
         );
     }

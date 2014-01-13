@@ -11,7 +11,7 @@
     <div class="row-fluid inner-page thankyou">
     {%  if homepage %}
         <script>
-            var delay = 3000;
+            var delay = {{ redirectTimeout }};
             setTimeout(function(){ window.location = '{{ homepage }}';}, delay);
         </script>
         <div class="alert alert-info">
