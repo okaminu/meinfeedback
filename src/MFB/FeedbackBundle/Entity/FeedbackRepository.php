@@ -51,6 +51,7 @@ class FeedbackRepository extends EntityRepository
         $qb->andWhere($qb->expr()->gte('fr.rating', $minRating));
         $qb->andWhere($qb->expr()->lte('fr.rating', $maxRating));
         $qb->groupBy('r.name');
+        $qb->orderBy('cr.id', 'ASC');
         return $qb->getQuery()->getArrayResult();
     }
 

@@ -60,7 +60,6 @@ class FeedbackDisplay
                 array('channelId' => $channelId, 'isEnabled' =>  1),
                 $this->feedbackOrder
             );
-
         return $feedbackList;
     }
 
@@ -71,7 +70,7 @@ class FeedbackDisplay
     public function createChannelRatingSummary($channelId)
     {
         $ratings = array();
-        $ratings[] = new RatingSummary('Average', $this->getChannelRatingAverage($channelId));
+        $ratings[] = new RatingSummary('Overall', $this->getChannelRatingAverage($channelId));
 
         $channelCriteriaRatings = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->getChannelCriteriaRatings($channelId, $this->ratingBounds['min'], $this->ratingBounds['max']);
