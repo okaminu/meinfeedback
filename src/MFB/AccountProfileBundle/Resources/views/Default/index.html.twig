@@ -86,6 +86,10 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="service-info">
+                        <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                        <div> {{ feedbackSummary.getServiceTypeName}} </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
