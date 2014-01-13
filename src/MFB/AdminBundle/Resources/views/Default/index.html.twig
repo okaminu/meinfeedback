@@ -58,23 +58,23 @@
                             {% endif %}
                         </div>
 
-                            <ul class="stars_rating not-nested">
-                                {% for ratingCriteria in feedbackSummary.getRatings %}
-                                    {% if ratingCriteria.getRating > 0 %}
-                                        <li>
-                                            <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                                                {{ ratingCriteria.getName }}
+                        <ul class="stars_rating not-nested">
+                            {% for ratingCriteria in feedbackSummary.getRatings %}
+                                {% if ratingCriteria.getRating > 0 %}
+                                    <li>
+                                        <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                                            {{ ratingCriteria.getName }}
+                                        </div>
+                                        <div class="rating-stars">
+                                            <div class="stars_gray_small">
+                                                <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                                             </div>
-                                            <div class="rating-stars">
-                                                <div class="stars_gray_small">
-                                                    <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
 
                         <div class="service-pane" style="margin-right: 120px">
                             <div class="service-info">

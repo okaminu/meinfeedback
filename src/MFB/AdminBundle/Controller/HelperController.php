@@ -10,16 +10,32 @@ class HelperController extends Controller
 {
     public function getCompanyNameAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('mfb_account.service')->findByAccountId($this->getUserId());
+        return $this->showText($entity->getName());
+    }
 
-        $token = $this->get('security.context')->getToken();
-        $accountId = $token->getUser()->getId();
+    public function hasCriteriasAction($print)
+    {
+        $hasSelected = $this->get('mfb_account_channel.rating_criteria.service')
+            ->hasSelectedRatingCriterias($this->getUserId());
+        if ($hasSelected) {
+            return $this->showText($print);
+        }
+        return $this->showText('');
+    }
 
-        $entity = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(array('accountId' => $accountId));
-
+    private function showText($text)
+    {
         return $this->render(
             'MFBAdminBundle:Helper:helper.html.twig',
-            array('helperData' => $entity->getName())
+            array('helperData' => $text)
         );
     }
+
+    private function getUserId()
+    {
+        $token = $this->get('security.context')->getToken();
+        return $token->getUser()->getId();
+    }
+
 }

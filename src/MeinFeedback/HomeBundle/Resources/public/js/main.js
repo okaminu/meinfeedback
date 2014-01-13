@@ -36,7 +36,7 @@ $('.lightbox').magnificPopup({
 tLoading: 'Loading',
 
 // Delay in milliseconds before popup is removed
-	removalDelay: 300,
+    removalDelay: 300,
   mainClass: 'mfp-fade',
   callbacks: {
     open: function() {
@@ -48,27 +48,27 @@ tLoading: 'Loading',
   }
 });
 
-    $('#pickerText').colpick({
-        onChange:function(hsb,hex,rgb,fromSetColor) {
-            $('.textColor').val(hex);
-        },
-        color: $('.textColor').val()
-    });
+$('#pickerText').colpick({
+    onChange:function(hsb,hex,rgb,fromSetColor) {
+        $('.textColor').val(hex);
+    },
+    color: $('.textColor').val()
+});
 
-    $('#pickerBackground').colpick({
-        onChange:function(hsb,hex,rgb,fromSetColor) {
-            $('.backgroundColor').val(hex);
-        },
-        color: $('.backgroundColor').val()
-    });
+$('#pickerBackground').colpick({
+    onChange:function(hsb,hex,rgb,fromSetColor) {
+        $('.backgroundColor').val(hex);
+    },
+    color: $('.backgroundColor').val()
+});
 
-    $('.colpick_submit').click(function(){
-        $('.colpick_full').addClass('hide');
-        $('.widgetColorForm').submit();
-    });
-    $('#pickerText, #pickerBackground').click(function(){
-        $('.colpick_full').removeClass('hide');
-    });
+$('.colpick_submit').click(function(){
+    $('.colpick_full').addClass('hide');
+    $('.widgetColorForm').submit();
+});
+$('#pickerText, #pickerBackground').click(function(){
+    $('.colpick_full').removeClass('hide');
+});
 
 
 // Lightbox video/maps
