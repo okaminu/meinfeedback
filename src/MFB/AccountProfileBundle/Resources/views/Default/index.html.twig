@@ -68,6 +68,18 @@
                         <div class="clearfix"></div>
                     </div>
                     {% endif %}
+                    <div class="service-pane" style="margin-right: 20px">
+                        <div class="service-info">
+                            <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                            <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
+                        </div>
+
+                        <div class="service-info">
+                            <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                            <div> {{ feedbackSummary.getServiceTypeName}} </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
                     <div style="margin-top: 20px">
                         <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
@@ -85,10 +97,6 @@
                             </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="service-info">
-                        <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                        <div> {{ feedbackSummary.getServiceTypeName}} </div>
                     </div>
                 </div>
             {% endfor %}

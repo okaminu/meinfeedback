@@ -47,15 +47,21 @@ font-size: 14px;
 	font-weight: bold;
 	font-size: 12px;
 }
-
-.service-info {
-    color: #666;
-    padding: 0px 10px 13px 15px;
-    font-size: 13px;
+.service-pane{
     display: inline-block;
+    float: right;
 }
 
-.service-title
+.service-pane .service-info {
+    color: #666;
+    padding: 0px 10px 0px 15px;
+    font-size: 13px;
+    width: 110px;
+    float: right;
+
+}
+
+.service-pane .service-title
 {
     font-weight: bold;
 }

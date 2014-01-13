@@ -1383,6 +1383,10 @@ a.footer_link:hover {
     position: relative;
 }
 
+.stars_rating{
+    display: inline-block;
+}
+
 .stars_rating .rating-stars{
     display: inline-block;
     margin: 0px 10px;
@@ -1497,6 +1501,7 @@ a.footer_link:hover {
 
 .feedbackDisplayForm{
     padding:0px 10px 10px 10px;
+    width: 720px;
 }
 
 .feedbackInput{

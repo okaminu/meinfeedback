@@ -58,25 +58,37 @@
                             {% endif %}
                         </div>
 
-                        <ul class="stars_rating not-nested">
-                            {% for ratingCriteria in feedbackSummary.getRatings %}
-                                {% if ratingCriteria.getRating > 0 %}
-                                <li>
-                                    <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                                        {{ ratingCriteria.getName }}
-                                    </div>
-                                    <div class="rating-stars">
-                                        <div class="stars_gray_small">
-                                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </li>
-                                 {% endif %}
-                            {% endfor %}
-                        </ul>
+                            <ul class="stars_rating not-nested">
+                                {% for ratingCriteria in feedbackSummary.getRatings %}
+                                    {% if ratingCriteria.getRating > 0 %}
+                                        <li>
+                                            <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                                                {{ ratingCriteria.getName }}
+                                            </div>
+                                            <div class="rating-stars">
+                                                <div class="stars_gray_small">
+                                                    <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
 
-                        <div style="margin-top: 20px">
+                        <div class="service-pane" style="margin-right: 120px">
+                            <div class="service-info">
+                                <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                                <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
+                            </div>
+
+                            <div class="service-info">
+                                <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                                <div> {{ feedbackSummary.getServiceTypeName}} </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div style="margin-top: 20px;">
                             <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
                             <table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >
@@ -93,20 +105,9 @@
                                 </tr>
                                 </tbody>
                             </table>
-
-
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
                         </div>
-                        </div>
-                        <div class="service-info">
-                            <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                            <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
-                        </div>
-
-                        <div class="service-info">
-                            <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                            <div> {{ feedbackSummary.getServiceTypeName}} </div>
                         </div>
                     </li>
                 {% endfor %}
