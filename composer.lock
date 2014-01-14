@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "cd438ccec9763ae8054d677ccc981906",
+    "hash": "f5d053da5ee60719f5755defe231a202",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1015,6 +1015,123 @@
             "time": "2013-11-14 19:48:31"
         },
         {
+            "name": "mopa/bootstrap-bundle",
+            "version": "dev-master",
+            "target-dir": "Mopa/Bundle/BootstrapBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phiamo/MopaBootstrapBundle.git",
+                "reference": "b1368f6302484bb3f19d989f93612c2db6e1091d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phiamo/MopaBootstrapBundle/zipball/b1368f6302484bb3f19d989f93612c2db6e1091d",
+                "reference": "b1368f6302484bb3f19d989f93612c2db6e1091d",
+                "shasum": ""
+            },
+            "require": {
+                "mopa/composer-bridge": "~1.3",
+                "symfony/console": "~2.3",
+                "symfony/form": "~2.3",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/twig-bundle": "~2.3"
+            },
+            "suggest": {
+                "craue/formflow-bundle": "~2.0",
+                "jlong/sass-twitter-bootstrap": "dev-master",
+                "knplabs/knp-menu-bundle": "~2.0@dev",
+                "knplabs/knp-paginator-bundle": "~2.3",
+                "mopa/bootstrap-sandbox-bundle": "~2.3",
+                "twbs/bootstrap": ">2.0,<4.0-dev"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Mopa\\Bundle\\BootstrapBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp A. Mohrenweiser",
+                    "email": "phiamo@googlemail.com",
+                    "homepage": "http://bootstrap.mohrenweiserpartner.de"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/phiamo/MopaBootstrapBundle/contributors"
+                }
+            ],
+            "description": "Easy integration of twitters bootstrap into symfony2",
+            "keywords": [
+                "bootstrap",
+                "bootstrap form",
+                "extra form",
+                "form",
+                "template"
+            ],
+            "time": "2014-01-05 15:25:53"
+        },
+        {
+            "name": "mopa/composer-bridge",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phiamo/MopaComposerBridge.git",
+                "reference": "4ce791bfeabc5261da11cf4a949745d60dae711f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phiamo/MopaComposerBridge/zipball/4ce791bfeabc5261da11cf4a949745d60dae711f",
+                "reference": "4ce791bfeabc5261da11cf4a949745d60dae711f",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/console": "2.*"
+            },
+            "type": "symfony-bridge",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Mopa\\Bridge\\Composer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp A. Mohrenweiser",
+                    "email": "phiamo@googlemail.com",
+                    "homepage": "http://bootstrap.mohrenweiserpartner.de"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/phiamo/MopaComposerBridge/contributors"
+                }
+            ],
+            "description": "Symfony2 Composer Bridge",
+            "homepage": "http://bootstrap.mohrenweiserpartner.de",
+            "keywords": [
+                "Symfony2",
+                "composer"
+            ],
+            "time": "2013-09-10 10:06:34"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -1721,6 +1838,48 @@
                 "templating"
             ],
             "time": "2013-12-06 07:47:10"
+        },
+        {
+            "name": "twitter/bootstrap",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "8c0cb806c6471749761efb4f9c892344d357e769"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/8c0cb806c6471749761efb4f9c892344d357e769",
+                "reference": "8c0cb806c6471749761efb4f9c892344d357e769",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "bootstrap",
+                "css"
+            ],
+            "time": "2014-01-14 06:38:47"
         }
     ],
     "packages-dev": [
@@ -1730,9 +1889,10 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "twitter/bootstrap": 20,
+        "mopa/bootstrap-bundle": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },
