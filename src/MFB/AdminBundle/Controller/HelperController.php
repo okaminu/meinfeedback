@@ -16,12 +16,11 @@ class HelperController extends Controller
 
     public function hasCriteriasAction($print)
     {
-        $hasSelected = $this->get('mfb_account_channel.rating_criteria.service')
-            ->hasSelectedRatingCriterias($this->getUserId());
-        if ($hasSelected) {
-            return $this->showText($print);
+        $adminService = $this->get('mfb_admin.form_setup.service');
+        if ($adminService->isMissingMandatorySettings($this->getUserId())) {
+            return $this->showText('');
         }
-        return $this->showText('');
+        return $this->showText($print);
     }
 
     private function showText($text)

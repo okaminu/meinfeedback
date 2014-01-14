@@ -32,9 +32,19 @@ class FormSetupController extends Controller
                 'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria, $channel->getId())
                         ->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
-                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit')
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
+                'errors' => $this->getErrors()
             )
         );
+    }
+
+
+    private function getErrors()
+    {
+        $adminService = $this->get('mfb_admin.form_setup.service');
+        if ($adminService->isMissingMandatorySettings($this->getCurrentUserId())) {
+            return $adminService->missingMandatorySettingsErrors($this->getCurrentUserId());
+        }
     }
 
     public function updateRatingCriteriaSelectAction(Request $request)

@@ -1,19 +1,29 @@
 parameters:
-#    mfb_admin.example.class: MFB\AdminBundle\Example
-
+  mfb_admin.form_setup.class: MFB\AdminBundle\Service\Admin
+  mfb_admin.form_setup_paths:
+            - 'mfb_admin_show_form_setup'
+            - 'mfb_admin_update_rating_criteria_select'
+            - 'mfb_admin_save_service_group'
+            - 'mfb_admin_save_service_provider'
+            - 'mfb_admin_update_service_visibility'
 
 services:
-    my_locale_listener:
-        class: MFB\AdminBundle\LocaleListener
-        arguments:
-            hostMap:
-                default: de
-                miofeedback.it: it
-                meinfeedback.net: de
-        tags:
-            -  { name: kernel.event_subscriber }
-    kernel.listener.LoggedInAdminListener:
-        class: MFB\AdminBundle\EventListener\LoggedInAdminListener
-        arguments: [@router, @security.context, @mfb_account_channel.rating_criteria.service]
-        tags:
-          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+
+  mfb_admin.form_setup.service:
+    class: %mfb_admin.form_setup.class%
+    arguments: [@mfb_account_channel.rating_criteria.service, @mfb_service_group.service, @mfb_service_provider.service, @security.context]
+
+  my_locale_listener:
+      class: MFB\AdminBundle\LocaleListener
+      arguments:
+          hostMap:
+              default: de
+              miofeedback.it: it
+              meinfeedback.net: de
+      tags:
+          -  { name: kernel.event_subscriber }
+  kernel.listener.LoggedInAdminListener:
+      class: MFB\AdminBundle\EventListener\LoggedInAdminListener
+      arguments: [@router, @security.context, @mfb_admin.form_setup.service, %mfb_admin.form_setup_paths%]
+      tags:
+        - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
