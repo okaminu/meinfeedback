@@ -32,7 +32,8 @@ class Admin
     {
         $errors = array();
         if ($this->isUserMissingCriterias($accountId)) {
-            $errors[] = 'Please insert all rating criterias';
+            $count = $this->ratingCriteriaService->missingRatingCriteriaCount($accountId);
+            $errors[] = "Please insert {$count} rating criterias";
         }
         if ($this->isUserMissingServiceGroup($accountId)) {
             $errors[] = 'Please insert at least one visible Service Type';
