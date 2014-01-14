@@ -8,7 +8,6 @@ use MFB\FeedbackBundle\Event\NewFeedbackInviteEvent;
 use MFB\ServiceBundle\Service\Service;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\FeedbackBundle\Entity\FeedbackInvite as FeedbackInviteEntity;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -24,7 +23,7 @@ class FeedbackInvite
     private $router;
 
 
-    public function __construct(EntityManager $em, Service $service, EventDispatcher $ed, Router $router)
+    public function __construct(EntityManager $em, Service $service, $ed, Router $router)
     {
         $this->entityManager = $em;
         $this->service = $service;

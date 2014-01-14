@@ -6,7 +6,6 @@ use MFB\RatingBundle\Entity\RatingSummary;
 use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FeedbackDisplay
 {

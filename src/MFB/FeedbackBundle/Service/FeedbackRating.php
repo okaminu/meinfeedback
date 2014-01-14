@@ -5,7 +5,6 @@ use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\Entity\ChannelRatingCriteria;
 use MFB\FeedbackBundle\Entity\FeedbackRating as FeedbackRatingEntity;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FeedbackRating
 {
