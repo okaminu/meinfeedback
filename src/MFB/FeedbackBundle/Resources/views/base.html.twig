@@ -36,7 +36,7 @@
                     <div style="display: block">{{ form_label(criteria.rating) }}</div>
                     <div style="display: block" id="{{ criteriaName }}">
                         <div class="stars_gray">
-                            <span style="width: {{ criteria.rating.vars.value * 20}}%;" class="stars_gold"></span>
+                            <span style="width: 0%;" class="stars_gold"></span>
                             <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
                                 {% for i in 1..5 %}
                                     <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
@@ -47,6 +47,9 @@
                         {{ form_widget(criteria.rating, {'attr': {'class': 'rating'} }) }}
                     </div>
                     <div style="clear: both"></div>
+                    {% if  criteria.rating.vars.value != 0%}
+                        <script>clickRating({{ criteria.rating.vars.value }}, '{{ criteriaName }}')</script>
+                    {% endif %}
                 {% endfor %}
 
                 {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark', 'placeholder':"Feedback"} }) }}
