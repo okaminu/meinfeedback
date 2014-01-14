@@ -41,25 +41,19 @@ class FeedbackDisplay
         return $this->createFeedbackSummaryList($feedbackList);
     }
 
-    public function getFeedbackList($channelId)
+    public function getFeedbackList($channelId, $criteria = array())
     {
         $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
             ->findBy(
-                array('channelId' => $channelId),
+                array_merge(array('channelId' => $channelId), $criteria),
                 $this->feedbackOrder
             );
-
         return $feedbackList;
     }
 
     public function getActiveFeedbackList($channelId)
     {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array('channelId' => $channelId, 'isEnabled' =>  1),
-                $this->feedbackOrder
-            );
-        return $feedbackList;
+        return $this->getFeedbackList($channelId, array('isEnabled' =>  1));
     }
 
     /**
