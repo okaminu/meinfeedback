@@ -36,7 +36,7 @@
                     <div style="display: block">{{ form_label(criteria.rating) }}</div>
                     <div style="display: block" id="{{ criteriaName }}">
                         <div class="stars_gray">
-                            <span style="width: 0%;" class="stars_gold"></span>
+                            <span style="width: {{ criteria.rating.vars.value * 20}}%;" class="stars_gold"></span>
                             <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
                                 {% for i in 1..5 %}
                                     <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="mandatoryFieldMark" style="float: left; position: relative; top:10px">*</div>
-                        {{ form_widget(criteria.rating, {'attr': {'class': 'rating', 'value': 0} }) }}
+                        {{ form_widget(criteria.rating, {'attr': {'class': 'rating'} }) }}
                     </div>
                     <div style="clear: both"></div>
                 {% endfor %}
