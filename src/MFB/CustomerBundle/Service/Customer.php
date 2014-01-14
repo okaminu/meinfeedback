@@ -2,10 +2,8 @@
 namespace MFB\CustomerBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use MFB\AccountBundle\AccountException;
 use MFB\CustomerBundle\Entity\Customer as CustomerEntity;
-use MFB\CustomerBundle\CustomerEvents;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -15,7 +13,7 @@ class Customer
 
     private $eventDispacher;
 
-    public function __construct(EntityManager $em, EventDispatcher $ed)
+    public function __construct(EntityManager $em, $ed)
     {
         $this->entityManager = $em;
         $this->eventDispacher = $ed;

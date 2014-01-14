@@ -11,7 +11,6 @@ use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\FeedbackBundle\Form\FeedbackType;
 use MFB\ServiceBundle\Service\Service;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Feedback
 {
@@ -36,7 +35,7 @@ class Feedback
         CustomerService $customer,
         Service $service,
         FeedbackRatingService $feedbackRatingService,
-        EventDispatcher $ed
+        $ed
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
