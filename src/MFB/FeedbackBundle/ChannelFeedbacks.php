@@ -53,13 +53,13 @@ class ChannelFeedbacks
         return $feedbackCount;
     }
 
-    public function getFeedbackSummary($page)
+    public function getFeedbackSummary($page = 1)
     {
         $qb = $this->getFeedbackQueryBuilder($this->channelId);
         return $this->createFeedbackSummary($this->getPage($qb, $page));
     }
 
-    public function getActiveFeedbackSummary($page)
+    public function getActiveFeedbackSummary($page = 1)
     {
         $qb = $this->getFeedbackQueryBuilder($this->channelId);
         $qb->andWhere($qb->expr()->eq('feedback.isEnabled', 1));
