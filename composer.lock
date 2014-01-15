@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f5d053da5ee60719f5755defe231a202",
+    "hash": "715daf196cefb0d37efb804c739dd4e2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -827,6 +827,67 @@
                 "sql"
             ],
             "time": "2014-01-12 16:20:24"
+        },
+        {
+            "name": "knplabs/knp-components",
+            "version": "1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/knp-components.git",
+                "reference": "ae454fb43473127a7bdc0a777f962f64f94e2795"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/ae454fb43473127a7bdc0a777f962f64f94e2795",
+                "reference": "ae454fb43473127a7bdc0a777f962f64f94e2795",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "suggest": {
+                "doctrine/common": "to allow usage pagination with Doctrine ArrayCollection",
+                "doctrine/mongodb-odm": "to allow usage pagination with Doctrine ODM MongoDB",
+                "doctrine/orm": "to allow usage pagination with Doctrine ORM",
+                "propel/propel1": "to allow usage pagination with Propel ORM",
+                "ruflin/Elastica": "to allow usage pagination with ElasticSearch Client",
+                "solarium/solarium": "to allow usage pagination with Solarium Client"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Knp\\Component": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://github.com/KnpLabs/knp-components/contributors"
+                }
+            ],
+            "description": "Knplabs component library",
+            "homepage": "http://github.com/KnpLabs/knp-components",
+            "keywords": [
+                "components",
+                "knp",
+                "knplabs",
+                "pager",
+                "paginator"
+            ],
+            "time": "2013-12-23 13:48:48"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1845,12 +1906,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "8c0cb806c6471749761efb4f9c892344d357e769"
+                "reference": "1facbf6e7a32cfb1334e9c84a59c762c27f13cb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/8c0cb806c6471749761efb4f9c892344d357e769",
-                "reference": "8c0cb806c6471749761efb4f9c892344d357e769",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/1facbf6e7a32cfb1334e9c84a59c762c27f13cb5",
+                "reference": "1facbf6e7a32cfb1334e9c84a59c762c27f13cb5",
                 "shasum": ""
             },
             "type": "library",
@@ -1879,7 +1940,7 @@
                 "bootstrap",
                 "css"
             ],
-            "time": "2014-01-14 06:38:47"
+            "time": "2014-01-15 05:47:24"
         }
     ],
     "packages-dev": [

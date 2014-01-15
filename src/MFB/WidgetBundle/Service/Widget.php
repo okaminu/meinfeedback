@@ -62,7 +62,7 @@ class Widget
 
         $feedbackService = $this->container->get('mfb_feedback_display.service');
 
-        $lastFeedbacks = $feedbackService->getActiveFeedbackSummaryList($accountChannel->getId());
+        $lastFeedbacks = $feedbackService->getActiveFeedbackSummary($accountChannel->getId());
         $this->filterComments($lastFeedbacks);
 
         $imageDirector = new MainWidgetDirector($this->imageBuilder);

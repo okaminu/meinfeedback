@@ -25,7 +25,7 @@ class DefaultController extends Controller
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($channel->getId()),
+                'feedbackSummaryList' => $feedbackService->getFeedbackSummary($channel->getId()),
                 'ratingCount' => $feedbackService->getChannelFeedbackCount($channel->getId()),
                 'channelRatingSummaryList' => $feedbackService->createChannelRatingSummary($channel->getId())
             )

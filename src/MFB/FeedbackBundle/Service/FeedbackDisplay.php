@@ -2,6 +2,8 @@
 namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\Paginator;
 use MFB\RatingBundle\Entity\RatingSummary;
 use MFB\FeedbackBundle\Entity\FeedbackSummary;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
@@ -14,12 +16,15 @@ class FeedbackDisplay
     private $feedbackOrder;
     
     private $ratingBounds;
-
-    public function __construct(EntityManager $em, $feedbackOrder, $ratingBoundaries)
+    
+    private $elementsPerPage;
+    
+    public function __construct(EntityManager $em, $feedbackOrder, $ratingBoundaries, $feedbacksPerPage)
     {
         $this->entityManager = $em;
         $this->feedbackOrder = $feedbackOrder;
         $this->ratingBounds = $ratingBoundaries;
+        $this->elementsPerPage = $feedbacksPerPage;
     }
 
     public function getChannelFeedbackCount($channelId)
@@ -29,31 +34,17 @@ class FeedbackDisplay
         return $feedbackCount;
     }
 
-    public function getFeedbackSummaryList($channelId)
+    public function getFeedbackSummary($channelId, $page)
     {
-        $feedbackList = $this->getFeedbackList($channelId);
-        return $this->createFeedbackSummaryList($feedbackList);
+        $qb = $this->getFeedbackQueryBuilder($channelId);
+        return $this->createFeedbackSummary($this->getPage($qb, $page));
     }
 
-    public function getActiveFeedbackSummaryList($channelId)
+    public function getActiveFeedbackSummary($channelId, $page)
     {
-        $feedbackList = $this->getActiveFeedbackList($channelId);
-        return $this->createFeedbackSummaryList($feedbackList);
-    }
-
-    public function getFeedbackList($channelId, $criteria = array())
-    {
-        $feedbackList = $this->entityManager->getRepository('MFBFeedbackBundle:Feedback')
-            ->findBy(
-                array_merge(array('channelId' => $channelId), $criteria),
-                $this->feedbackOrder
-            );
-        return $feedbackList;
-    }
-
-    public function getActiveFeedbackList($channelId)
-    {
-        return $this->getFeedbackList($channelId, array('isEnabled' =>  1));
+        $qb = $this->getFeedbackQueryBuilder($channelId);
+        $qb->andWhere($qb->expr()->eq('feedback.isEnabled', 1));
+        return $this->createFeedbackSummary($this->getPage($qb, $page));
     }
 
     /**
@@ -82,6 +73,13 @@ class FeedbackDisplay
         return $this->roundHalfUp($ratingAverage);
     }
 
+    private function getFeedbackQueryBuilder($channelId)
+    {
+        return $this->entityManager
+            ->getRepository("MFBFeedbackBundle:Feedback")
+            ->getFeedbackQueryBuilder($channelId, $this->feedbackOrder);
+    }
+
 
     private function getFeedbackRatingAverage($feedbackId)
     {
@@ -97,16 +95,16 @@ class FeedbackDisplay
     }
 
     /**
-     * @param $feedbackList
+     * @param $page
      * @return array
      */
-    private function createFeedbackSummaryList($feedbackList)
+    private function createFeedbackSummary(PaginationInterface $page)
     {
-        $feedbackSummaryList = array();
-        foreach ($feedbackList as $feedback) {
-            $feedbackSummaryList[] = $this->createFeedbackSummaryItem($feedback);
+        $feedbackSummary = array();
+        foreach ($page as $feedback) {
+            $feedbackSummary[] = $this->createFeedbackSummaryItem($feedback);
         }
-        return $feedbackSummaryList;
+        return $feedbackSummary;
     }
 
     /**
@@ -151,5 +149,16 @@ class FeedbackDisplay
             $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
         }
         return $ratings;
+    }
+
+    /**
+     * @param $list
+     * @param $page
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    private function getPage($list, $page)
+    {
+        $paginator = new Paginator();
+        return $paginator->paginate($list, $page, $this->elementsPerPage);
     }
 }

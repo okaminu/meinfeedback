@@ -8,24 +8,24 @@
         <h3 style="margin-top: 50px;">Company profile</h3>
 
         <div id="companyProfile">
-        {% if channelName %}
-            <div>Company name: {{ channelName }}</div>
+        {% if channel.getName %}
+            <div>Company name: {{ channel.getName }}</div>
         {% endif %}
 
-        {% if channelUrl %}
-            <div>Homepage: <a href="{{ channelUrl }}">{{ channelUrl }}</a></div>
+        {% if channel.getHomepageUrl %}
+            <div>Homepage: <a href="{{ channel.getHomepageUrl }}">{{ channel.getHomepageUrl }}</a></div>
         {% endif %}
 
         {% if channelAddress %}
             <div>Address: {{ channelAddress }}</div>
         {% endif %}
 
-        {% if channelCountry %}
-            <div>Country: {{ channelCountry }}</div>
+        {% if channel.getCountry.getName %}
+            <div>Country: {{ channel.getCountry.getName }}</div>
         {% endif %}
 
-        {% if channelPhoneNumber %}
-            <div style="">Phone number: {{ channelPhoneNumber }}</div>
+        {% if channel.getPhoneNumber %}
+            <div style="">Phone number: {{ channel.getPhoneNumber }}</div>
         {% endif %}
         </div>
 
@@ -49,8 +49,8 @@
         <div>Total feedbacks: {{ ratingCount }}</div>
 
         <div class="feedbackDisplayForm">
-            {% for feedbackSummary in feedbackSummaryList %}
-                {% set feedback = feedbackSummary.getFeedback %}
+            {% for feedbackSummaryItem in feedbackSummary %}
+                {% set feedback = feedbackSummaryItem.getFeedback %}
                 <div style="margin:20px 0px">
                     <div class="username">
                         {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
@@ -59,7 +59,7 @@
                             {% trans %} Anonymous says: {% endtrans %}
                         {% endif %}
                     </div>
-                    {% set ratingCriteria = feedbackSummary.getRatingByName('Overall') %}
+                    {% set ratingCriteria = feedbackSummaryItem.getRatingByName('Overall') %}
                     {% if ratingCriteria.getRating > 0 %}
                     <div class="stars_rating feedback-ratings">
                         <div class="stars_gray_small">
@@ -71,12 +71,12 @@
                     <div class="service-pane" style="margin-right: 20px">
                         <div class="service-info">
                             <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                            <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
+                            <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
                         </div>
 
                         <div class="service-info">
                             <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                            <div> {{ feedbackSummary.getServiceTypeName}} </div>
+                            <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -102,6 +102,19 @@
             {% endfor %}
         </div>
     </div>
+
+    <div class="pagination">
+        <ul>
+            <li><a href="#">Prev</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">Next</a></li>
+        </ul>
+    </div>
+
     <header class="navbar navbar-fixed-top">
         <div class="inner-page">
             <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
