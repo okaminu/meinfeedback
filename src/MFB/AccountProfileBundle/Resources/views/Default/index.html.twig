@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-
+{% import "MFBFeedbackBundle::feedbackMacros.html.twig" as feedbackMacros %}
 {% block title %}Feedbacks für {{ account_channel_name }}{% endblock %}
 
 {% block body %}
@@ -49,7 +49,7 @@
         <div>Total feedbacks: {{ ratingCount }}</div>
 
         <div class="feedbackDisplayForm">
-            {% for feedbackSummaryItem in feedbackSummary %}
+            {% for feedbackSummaryItem in feedbackSummary.feedbackSummaryList %}
                 {% set feedback = feedbackSummaryItem.getFeedback %}
                 <div style="margin:20px 0px">
                     <div class="username">
@@ -103,17 +103,7 @@
         </div>
     </div>
 
-    <div class="pagination">
-        <ul>
-            <li><a href="#">Prev</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
-        </ul>
-    </div>
+        {{ feedbackMacros.pagination(feedbackSummary.currentPageNumber, feedbackSummary.lastPageNumber) }}
 
     <header class="navbar navbar-fixed-top">
         <div class="inner-page">

@@ -34,8 +34,7 @@ class DefaultController extends Controller
                 'ratingCount' => $feedbackDisplay->getChannelFeedbackCount($accountChannel->getId()),
                 'channelRatingSummaryList' => $feedbackDisplay->createChannelRatingSummary($accountChannel->getId()),
                 'channelAddress' => $channelAddress,
-                'channel' => $accountChannel,
-                'pageNumber' => $feedbackPage
+                'channel' => $accountChannel
             )
         );
     }

@@ -100,9 +100,14 @@ class FeedbackDisplay
      */
     private function createFeedbackSummary(PaginationInterface $page)
     {
-        $feedbackSummary = array();
+        $lastPageNumber = ceil($page->getTotalItemCount() / $page->getItemNumberPerPage());
+        $feedbackSummary = array(
+            'feedbackSummaryList' => array(),
+            'currentPageNumber' => $page->getCurrentPageNumber(),
+            'lastPageNumber' => $lastPageNumber
+        );
         foreach ($page as $feedback) {
-            $feedbackSummary[] = $this->createFeedbackSummaryItem($feedback);
+            $feedbackSummary['feedbackSummaryList'][] = $this->createFeedbackSummaryItem($feedback);
         }
         return $feedbackSummary;
     }
