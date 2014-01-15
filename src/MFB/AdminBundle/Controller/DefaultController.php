@@ -20,14 +20,15 @@ class DefaultController extends Controller
         $accountId = $this->getCurrentUser()->getId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
 
-        $feedbackService = $this->get('mfb_feedback_display.service');
+        $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
+        $channelFeedbacks->setElementsPerPage(100);
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackSummaryList' => $feedbackService->getFeedbackSummary($channel->getId()),
-                'ratingCount' => $feedbackService->getChannelFeedbackCount($channel->getId()),
-                'channelRatingSummaryList' => $feedbackService->createChannelRatingSummary($channel->getId())
+                'feedbackSummary' => $channelFeedbacks->getFeedbackSummary(1),
+                'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
+                'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary()
             )
         );
     }
@@ -37,9 +38,11 @@ class DefaultController extends Controller
         $accountId = $this->getCurrentUser()->getId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         $feedbackService = $this->get('mfb_feedback.service');
-        $feedbackDisplayService = $this->get('mfb_feedback_display.service');
+        $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
         $activates = $request->request->get('activate');
-        $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($channel->getId()));
+
+        $channelFeedbacks->setElementsPerPage(100);
+        $feedbackService->batchActivate($activates, $channelFeedbacks->getFeedbackSummary(1));
         return $this->redirect($this->generateUrl('mfb_admin_homepage'));
     }
 

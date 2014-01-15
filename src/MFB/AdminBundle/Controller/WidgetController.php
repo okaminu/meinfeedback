@@ -55,7 +55,7 @@ class WidgetController extends Controller
 
         $widgetLink = $this->generateUrl(
             'mfb_account_profile_homepage',
-            array('accountId' => $accountId),
+            array('accountId' => $accountId, 'feedbackPage' => 1),
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
