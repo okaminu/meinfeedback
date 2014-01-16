@@ -2,13 +2,7 @@
 namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\Paginator;
 use MFB\FeedbackBundle\ChannelFeedbacks;
-use MFB\RatingBundle\Entity\RatingSummary;
-use MFB\FeedbackBundle\Entity\FeedbackSummary;
-use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
-use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 
 class FeedbackDisplay
 {

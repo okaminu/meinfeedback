@@ -40,15 +40,15 @@
         </div>
     {% endfor %}
     <div>
-            {% if  feedbackSummary.feedbackSummaryList|length > 0 %}
+            {% if  feedbackSummaryPage.getItemsCount > 0 %}
             <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
                 <div style="width: 710px">
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
                 <ul id="sortable" class="not-nested" style="width: 720px">
-                {% for feedbackSummary in feedbackSummary.feedbackSummaryList %}
-                    {% set feedback = feedbackSummary.getFeedback %}
+                {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}
+                    {% set feedback = feedbackSummaryItem.getFeedback %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
                         <div class="username">
                             {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
@@ -59,7 +59,7 @@
                         </div>
 
                         <ul class="stars_rating not-nested">
-                            {% for ratingCriteria in feedbackSummary.getRatings %}
+                            {% for ratingCriteria in feedbackSummaryItem.getRatings %}
                                 {% if ratingCriteria.getRating > 0 %}
                                     <li>
                                         <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
@@ -79,12 +79,12 @@
                         <div class="service-pane" style="margin-right: 120px">
                             <div class="service-info">
                                 <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                                <div> {{ feedbackSummary.getServiceProviderInfo }} </div>
+                                <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
                             </div>
 
                             <div class="service-info">
                                 <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                                <div> {{ feedbackSummary.getServiceTypeName}} </div>
+                                <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
                             </div>
                         </div>
                         <div class="clearfix"></div>

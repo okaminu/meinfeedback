@@ -36,7 +36,7 @@ class RegisterController extends Controller
             $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
             $entity->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
             $entity->setPassword($encoder->encodePassword($entity->getPassword(), $entity->getSalt()));
-            $entity->setIsEnabled(false);
+            $entity->setIsEnabled(true);
             $entity->setIsLocked(false);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -44,8 +44,7 @@ class RegisterController extends Controller
 
             $this->get('mfb_account_channel.service')->createStoreNewChannel($entity->getId());
 
-            $url = $this->get('mfb_reskribe.api')->getSignUrl($entity);
-            return $this->redirect($url);
+            return $this->redirect($this->generateUrl('mfb_account_login'));
         }
 
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(
