@@ -1,7 +1,7 @@
 <?php
-namespace MFB\FeedbackBundle\Entity;
+namespace MFB\FeedbackBundle\Summary;
 
-class FeedbackSummaryPage
+class FeedbackPage
 {
     protected $currentPageNumber;
 
@@ -20,9 +20,9 @@ class FeedbackSummaryPage
     }
 
     /**
-     * @param FeedbackSummaryItem $item
+     * @param FeedbackItem $item
      */
-    public function addItem(FeedbackSummaryItem $item)
+    public function addItem(FeedbackItem $item)
     {
         $this->feedbackSummaryItemList[] = $item;
     }

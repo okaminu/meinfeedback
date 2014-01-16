@@ -32,7 +32,7 @@ class DefaultController extends Controller
                 'account_id' => $account->getId(),
                 'feedbackSummaryPage'=> $channelFeedbacks->getActiveFeedbackSummary($feedbackPage),
                 'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
-                'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary(),
+                'channelRatingSummaryList' => $channelFeedbacks->getChannelRatingSummary(),
                 'channelAddress' => $channelAddress,
                 'channel' => $accountChannel
             )

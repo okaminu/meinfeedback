@@ -27,7 +27,7 @@ class DefaultController extends Controller
             array(
                 'feedbackSummaryPage' => $channelFeedbacks->getFeedbackSummary(),
                 'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
-                'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary()
+                'channelRatingSummaryList' => $channelFeedbacks->getChannelRatingSummary()
             )
         );
     }
