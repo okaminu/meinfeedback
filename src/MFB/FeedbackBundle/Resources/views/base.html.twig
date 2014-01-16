@@ -1,15 +1,10 @@
-{% extends "::base.html.twig" %}
+{% extends "MFBAccountBundle::base.html.twig" %}
 
 {% block title %}MeinFeedback{% endblock %}
 
 {% form_theme form "MeinFeedbackHomeBundle:Form:form_errors.html.twig" %}
 
-{% block body %}
-    <header class="navbar navbar-fixed-top">
-        <div class="inner-page">
-            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
-        </div>
-    </header>
+{% block content %}
     {% javascripts '@MFBFeedbackBundle/Resources/public/js/main.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

@@ -1,13 +1,12 @@
-{% extends "::base.html.twig" %}
+{% extends 'MFBAdminBundle::base.html.twig' %}
 
 {% block title %}Welcome to MeinFeedback{% endblock %}
 
-{% block body %}
+{% block content %}
 
     <div class="formular">
         <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">{% trans %} Places setting {% endtrans %}</div>
         <div class="places">
-
 
             {{ form_start(form, {'attr':{'target':'_top'} }) }}
             {{ form_errors(form) }}
@@ -19,7 +18,6 @@
                 {{ form_errors(form.name) }}
                 <div class="mandatoryFieldMark locationFieldMark">*</div>
             </div>
-
 
             <div>
                 {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_address', 'placeholder': 'Straße'} }) }}

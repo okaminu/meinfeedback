@@ -19,33 +19,6 @@ $("img.lazy").lazyload({
   var $spy = $(this).scrollspy('refresh')
 });
       }
-}); 
-
-// Lightbox
-
-$('.lightbox').magnificPopup({
-  type:'image',
-   disableOn: function() {
-    // Detect here whether you want to show the popup
-    // return true if you want
-    if($(window).width() < 500) {
-      return false;
-    }
-    return true; },
-     preloader: true,
-tLoading: 'Loading',
-
-// Delay in milliseconds before popup is removed
-    removalDelay: 300,
-  mainClass: 'mfp-fade',
-  callbacks: {
-    open: function() {
-      $('.navbar').fadeOut('slow');
-    },
-    close: function() {
-     $('.navbar').fadeIn('slow');
-    }
-  }
 });
 
 $('#pickerText').colpick({
@@ -69,12 +42,6 @@ $('.colpick_submit').click(function(){
 $('#pickerText, #pickerBackground').click(function(){
     $('.colpick_full').removeClass('hide');
 });
-
-
-// Lightbox video/maps
-
-$(' .iframe-small').magnificPopup(popupSmallParams);
-$(' .iframe').magnificPopup(popupFullParams);
 
 
 // .scroll class for link scrolling.

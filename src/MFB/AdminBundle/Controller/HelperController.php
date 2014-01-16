@@ -14,15 +14,6 @@ class HelperController extends Controller
         return $this->showText($entity->getName());
     }
 
-    public function hasCriteriasAction($print)
-    {
-        $adminService = $this->get('mfb_admin.form_setup.service');
-        if ($adminService->isMissingMandatorySettings($this->getUserId())) {
-            return $this->showText('');
-        }
-        return $this->showText($print);
-    }
-
     private function showText($text)
     {
         return $this->render(
