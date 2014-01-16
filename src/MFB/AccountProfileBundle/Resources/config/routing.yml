@@ -1,3 +1,5 @@
 mfb_account_profile_homepage:
-    pattern:  /feedbacks/{accountId}
+    pattern:  /feedbacks/{accountId}/{feedbackPage}
     defaults: { _controller: MFBAccountProfileBundle:Default:index }
+    requirements:
+      feedbackPage: \d+

@@ -72,4 +72,12 @@ class ServiceGroup
         );
         return $serviceProvider;
     }
+    public function hasVisibleServiceGroup($accountId)
+    {
+        $service = $this->findVisibleByAccountId($accountId);
+        if (count($service) > 0) {
+            return true;
+        }
+        return false;
+    }
 }

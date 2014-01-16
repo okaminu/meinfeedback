@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($accountId)
+    public function indexAction($accountId, $feedbackPage)
     {
         /** @var Account $account */
         $account = $this->get('mfb_account.service')->findByAccountId($accountId);
@@ -23,22 +23,18 @@ class DefaultController extends Controller
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
         }
 
-        $feedbackDisplay = $this->get('mfb_feedback_display.service');
-
+        $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($accountChannel->getId());
         $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
         return $this->render(
             'MFBAccountProfileBundle:Default:index.html.twig',
             array(
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
-                'feedbackSummaryList'=> $feedbackDisplay->getActiveFeedbackSummaryList($accountChannel->getId()),
-                'ratingCount' => $feedbackDisplay->getChannelFeedbackCount($accountChannel->getId()),
-                'channelRatingSummaryList' => $feedbackDisplay->createChannelRatingSummary($accountChannel->getId()),
-                'channelName' => $accountChannel->getName(),
-                'channelUrl' => $accountChannel->getHomepageUrl(),
+                'feedbackSummary'=> $channelFeedbacks->getActiveFeedbackSummary($feedbackPage),
+                'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
+                'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary(),
                 'channelAddress' => $channelAddress,
-                'channelCountry' => $accountChannel->getCountry()->getName(),
-                'channelPhoneNumber' => $accountChannel->getPhoneNumber()
+                'channel' => $accountChannel
             )
         );
     }

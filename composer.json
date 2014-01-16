@@ -22,7 +22,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "sensio/buzz-bundle": "v1.0.0",
         "twitter/bootstrap": "3.0.*@dev",
-        "mopa/bootstrap-bundle": "3.*@dev"
+        "mopa/bootstrap-bundle": "3.*@dev",
+        "knplabs/knp-components": "1.2.4"
     },
     "scripts": {
         "post-install-cmd": [

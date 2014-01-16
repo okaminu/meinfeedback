@@ -40,14 +40,14 @@
         </div>
     {% endfor %}
     <div>
-            {% if  feedbackSummaryList|length > 0 %}
+            {% if  feedbackSummary.feedbackSummaryList|length > 0 %}
             <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
                 <div style="width: 710px">
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
                 <ul id="sortable" class="not-nested" style="width: 720px">
-                {% for feedbackSummary in feedbackSummaryList %}
+                {% for feedbackSummary in feedbackSummary.feedbackSummaryList %}
                     {% set feedback = feedbackSummary.getFeedback %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
                         <div class="username">

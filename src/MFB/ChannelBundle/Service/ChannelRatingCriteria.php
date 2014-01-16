@@ -45,22 +45,33 @@ class ChannelRatingCriteria
 
     public function hasSelectedRatingCriterias($accountId)
     {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
-        $usedCriteriaCount = $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
-            ->getUsedCriteriaCount($accountChannelId);
-        
-        if ($usedCriteriaCount < $this->criteriaLimit) {
+        $missingCount = $this->missingRatingCriteriaCount($accountId);
+
+        if ($missingCount > 0) {
             return false;
         }
         return true;
     }
-
 
     public function getNotUsedRatingCriterias($channelId)
     {
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->findAllUnusedRatingCriterias($channelId);
     }
+
+    public function getUsedRatingCriteriasCount($accountId)
+    {
+        $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
+            ->getUsedCriteriaCount($accountChannelId);
+    }
+
+    public function missingRatingCriteriaCount($accountId)
+    {
+        $usedCriteriaCount = $this->getUsedRatingCriteriasCount($accountId);
+        return $this->criteriaLimit - $usedCriteriaCount;
+    }
+
 
     /**
      * @param $entity

@@ -55,4 +55,16 @@ class FeedbackRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
+    public function getFeedbackQueryBuilder($channelId, $feedbackOrder)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('feedback');
+        $qb->from("MFBFeedbackBundle:Feedback", 'feedback');
+        $qb->where($qb->expr()->eq('feedback.channelId', $channelId));
+        foreach ($feedbackOrder as $field => $direction) {
+            $qb->addOrderBy("feedback.{$field}", $direction);
+        }
+        return $qb;
+    }
+
 }

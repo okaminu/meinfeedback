@@ -8,9 +8,9 @@
         <div class="span12">
 
             <div id="selectRatingCriteria">
-                {% if channelRatingCriterias|length < criteriaLimit %}
+                {% if errors|length > 0 %}
                     <div class="alert alert-info">
-                        You need to insert {{ criteriaLimit - channelRatingCriterias|length }} rating criterias
+                        {{ errors[0] }}
                     </div>
                 {% endif %}
                 <div class="sectionTitle">

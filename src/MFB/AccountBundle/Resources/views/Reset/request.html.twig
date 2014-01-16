@@ -1,14 +1,14 @@
-{% extends "::base.html.twig" %}
+{% extends "MFBAccountBundle::base.html.twig" %}
 
 {% block title %}Request a new password.{% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="formular container modal-spacing" xmlns="http://www.w3.org/1999/html">
     <h3 class="text-center form-header">{% trans %} Send new password {% endtrans %}</h3>
     <div class="kontaktform remind-password">
         <form action="{{ path("mfb_account_send_email") }}" method="post" class="form-horizontal">
             {% if invalid_username is defined %}
-                <p class="alert alert-danger">{{ 'Entered username %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
+                <p class="alert alert-danger">{{ 'Entered email %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
             {% endif %}
             <div class="form-group">
                 {#<label for="username">{{ 'Username'|trans }}</label>#}

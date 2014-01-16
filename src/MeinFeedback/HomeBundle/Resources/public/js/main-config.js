@@ -42,8 +42,7 @@ popupFullParams = {
 function resizeIframe(){
     $('.mfp-content iframe').on('load', function(){
         height = $(this).contents().find('body').height();
-//        height+=100;
+        height+=100;
         $('.mfp-content').css('height', height + 'px');
-        $(this).contents().find('body').css('margin-top', '-120px');
     });
 }

@@ -5,6 +5,8 @@ parameters:
   mfb_feedback_invite.listener.new_invite.class: MFB\FeedbackBundle\EventListener\NewFeedbackInviteListener
   mfb_feedback_rating.service.class: MFB\FeedbackBundle\Service\FeedbackRating
   mfb_feedback.redirectTimeout: 6000 # time in ms
+  mfb_feedback.maxFeedbacks: 100
+  mfb_feedback.feedbacksPerPage: 5
   mfb_feedback.sort_order:
     sort: ASC
     createdAt: DESC
@@ -12,7 +14,7 @@ parameters:
 services:
   mfb_feedback_display.service:
     class: %mfb_feedback_display.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "%mfb_feedback.sort_order%", "%mfb_rating.boundary%"]
+    arguments: ["@doctrine.orm.default_entity_manager", "%mfb_feedback.sort_order%", "%mfb_rating.boundary%", %mfb_feedback.feedbacksPerPage%]
 
   mfb_feedback.service:
     class: %mfb_feedback.class%

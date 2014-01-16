@@ -1,12 +1,13 @@
 <?php
 namespace MFB\AdminBundle\EventListener;
 
+
+use MFB\AdminBundle\Service\Admin;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\SecurityContext;
-use MFB\ChannelBundle\Service\ChannelRatingCriteria as CriteriaService;
 
 class LoggedInAdminListener
 {
@@ -14,40 +15,32 @@ class LoggedInAdminListener
     
     private $securityContext;
 
-    private $ratingCriteriaService;
+    private $criteriaFormPaths;
+
+    private $adminService;
 
     private $showFormRoute = 'mfb_admin_show_form_setup';
-
-    private $saveFormRoute = 'mfb_admin_update_rating_criteria_select';
 
     public function __construct(
         Router $router,
         SecurityContext $securityContext,
-        CriteriaService $ratingCriteriaService
+        Admin $adminService,
+        $criteriaFormPaths
     ) {
         $this->router = $router;
         $this->securityContext = $securityContext;
-        $this->ratingCriteriaService = $ratingCriteriaService;
+        $this->criteriaFormPaths = $criteriaFormPaths;
+        $this->adminService = $adminService;
     }
     
     public function onKernelRequest(GetResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            if ($this->isCriterias($event)) {
+            if ($this->shouldRedirect($event)) {
                 $url = $this->getRedirectUrl();
                 $event->setResponse(new RedirectResponse($url));
             }
         }
-    }
-
-    /**
-     * @return bool
-     */
-    private function isUserMissingCriterias()
-    {
-        return !$this->ratingCriteriaService->hasSelectedRatingCriterias(
-            $this->getUser()->getId()
-        );
     }
 
     /**
@@ -56,23 +49,10 @@ class LoggedInAdminListener
      */
     private function isUserNotInCriteriaForm($route)
     {
-        return !(($route == $this->getSaveFormRoute()) || ($route == $this->getShowFormRoute()));
-    }
-
-    /**
-     * @return string
-     */
-    private function getShowFormRoute()
-    {
-        return $this->showFormRoute;
-    }
-
-    /**
-     * @return string
-     */
-    private function getSaveFormRoute()
-    {
-        return $this->saveFormRoute;
+        if (in_array($route, $this->criteriaFormPaths)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -109,11 +89,11 @@ class LoggedInAdminListener
      * @param GetResponseEvent $event
      * @return bool
      */
-    private function isCriterias(GetResponseEvent $event)
+    private function shouldRedirect(GetResponseEvent $event)
     {
         return $this->isUserLoggenIn() &&
         $this->isUserNotInCriteriaForm($this->getRoute($event)) &&
-        $this->isUserMissingCriterias();
+        $this->adminService->isMissingMandatorySettings($this->getUser()->getId());
     }
 
     /**

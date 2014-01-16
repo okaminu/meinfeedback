@@ -19,15 +19,15 @@ class DefaultController extends Controller
     {
         $accountId = $this->getCurrentUser()->getId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
-
-        $feedbackService = $this->get('mfb_feedback_display.service');
+        $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
+        $channelFeedbacks->setElementsPerPage($this->container->getParameter('mfb_feedback.maxFeedbacks'));
 
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackSummaryList' => $feedbackService->getFeedbackSummaryList($channel->getId()),
-                'ratingCount' => $feedbackService->getChannelFeedbackCount($channel->getId()),
-                'channelRatingSummaryList' => $feedbackService->createChannelRatingSummary($channel->getId())
+                'feedbackSummary' => $channelFeedbacks->getFeedbackSummary(),
+                'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
+                'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary()
             )
         );
     }
@@ -37,9 +37,11 @@ class DefaultController extends Controller
         $accountId = $this->getCurrentUser()->getId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         $feedbackService = $this->get('mfb_feedback.service');
-        $feedbackDisplayService = $this->get('mfb_feedback_display.service');
+        $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
+        $channelFeedbacks->setElementsPerPage($this->container->getParameter('mfb_feedback.maxFeedbacks'));
         $activates = $request->request->get('activate');
-        $feedbackService->batchActivate($activates, $feedbackDisplayService->getFeedbackList($channel->getId()));
+
+        $feedbackService->batchActivate($activates, $channelFeedbacks->getFeedbackSummary());
         return $this->redirect($this->generateUrl('mfb_admin_homepage'));
     }
 
@@ -204,7 +206,6 @@ class DefaultController extends Controller
         $em->persist($entity);
         $em->flush();
     }
-
 
     private function getCurrentUser()
     {

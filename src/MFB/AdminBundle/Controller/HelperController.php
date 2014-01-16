@@ -14,16 +14,6 @@ class HelperController extends Controller
         return $this->showText($entity->getName());
     }
 
-    public function hasCriteriasAction($print)
-    {
-        $hasSelected = $this->get('mfb_account_channel.rating_criteria.service')
-            ->hasSelectedRatingCriterias($this->getUserId());
-        if ($hasSelected) {
-            return $this->showText($print);
-        }
-        return $this->showText('');
-    }
-
     private function showText($text)
     {
         return $this->render(

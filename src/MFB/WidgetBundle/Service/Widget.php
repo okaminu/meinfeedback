@@ -60,16 +60,19 @@ class Widget
             array('accountId' => $account->getId(), 'channelId' => $accountChannel->getId())
         );
 
-        $feedbackService = $this->container->get('mfb_feedback_display.service');
+        $channelFeedbacks = $this->container->get('mfb_feedback_display.service')
+            ->getChannelFeedbacks($accountChannel->getId());
 
-        $lastFeedbacks = $feedbackService->getActiveFeedbackSummaryList($accountChannel->getId());
+        $channelFeedbacks->setElementsPerPage(5);
+        $allFeedbacks = $channelFeedbacks->getActiveFeedbackSummary();
+        $lastFeedbacks = $allFeedbacks['feedbackSummaryList'];
         $this->filterComments($lastFeedbacks);
 
         $imageDirector = new MainWidgetDirector($this->imageBuilder);
         return $imageDirector->build(
             $lastFeedbacks,
-            $feedbackService->getChannelFeedbackCount($accountChannel->getId()),
-            $feedbackService->getChannelRatingAverage($accountChannel->getId()),
+            $channelFeedbacks->getChannelFeedbackCount(),
+            $channelFeedbacks->getChannelRatingAverage(),
             new Color($widget->getTextColorCode()),
             new Color($widget->getBackgroundColorCode())
         );
