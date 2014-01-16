@@ -8,12 +8,20 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="http://necolas.github.com/normalize.css/2.0.1/normalize.css">
         {% stylesheets
+        '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        {# stylesheets
         '@MeinFeedbackHomeBundle/Resources/public/css/normalize.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/sortable.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/style.min.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/acprofile.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/jquery.qtip.min.css'
         '@MeinFeedbackHomeBundle/Resources/public/css/colpick.css'
+        #}
+        {% stylesheets
+            '@MeinFeedbackHomeBundle/Resources/public/less/meinfeedback.less'
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
         {% endstylesheets %}
@@ -40,7 +48,7 @@
     {% javascripts
     '@MeinFeedbackHomeBundle/Resources/public/js/jquery.qtip.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/lazyload.min.js'
-    '@MeinFeedbackHomeBundle/Resources/public/js/bootstrap.min.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/dist/js/bootstrap.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/lightbox.min.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/colpick.js'
     '@MeinFeedbackHomeBundle/Resources/public/js/main.js'

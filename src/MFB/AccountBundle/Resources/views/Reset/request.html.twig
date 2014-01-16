@@ -3,22 +3,22 @@
 {% block title %}Request a new password.{% endblock %}
 
 {% block body %}
-<div class="formular" xmlns="http://www.w3.org/1999/html">
-    <h3>{% trans %} Send new password {% endtrans %}</h3>
+<div class="formular container modal-spacing" xmlns="http://www.w3.org/1999/html">
+    <h3 class="text-center form-header">{% trans %} Send new password {% endtrans %}</h3>
     <div class="kontaktform remind-password">
-        <form action="{{ path("mfb_account_send_email") }}" method="post">
-            <div class="control-group">
-                <label for="username">{{ 'Username'|trans }}</label>
-                <div class="controls">
-                    {% if invalid_username is defined %}
-                        <p class="alert alert-error">{{ 'Entered username %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
-                    {% endif %}
-                    <input type="text" id="username" name="username" required="required" placeholder="Email"/>
+        <form action="{{ path("mfb_account_send_email") }}" method="post" class="form-horizontal">
+            {% if invalid_username is defined %}
+                <p class="alert alert-danger">{{ 'Entered username %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
+            {% endif %}
+            <div class="form-group">
+                {#<label for="username">{{ 'Username'|trans }}</label>#}
+                <div class="controls col-xs-12">
+                    <input type="text" id="username" name="username" class="form-control" required="required" placeholder="Email"/>
                 </div>
             </div>
-            <div class="control-group">
-                <div class="controls">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="{{ 'Submit'|trans }}" type="submit">
+            <div class="form-group">
+                <div class="controls col-xs-12">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite180 width100" value="{{ 'Submit'|trans }}" type="submit">
                 </div>
             </div>
         </form>

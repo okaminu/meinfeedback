@@ -9,13 +9,18 @@
 
 {% block body %}
     <!-- Brand and Navigation -->
-    <header class="navbar navbar-fixed-top">
-        <div class="inner-page">
-            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
-            <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
+    <header class="navbar navbar-fixed-top dashboard">
+        <div class="container">
+            <img class="navbar-brand img-responsive" src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/>
+            <button class="navbar-toggle collapsed pull-right" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-            <div class="nav-collapse collapse">
-                <ul class="nav navigation" id="menu">
+            <nav class="collapse navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav" id="menu">
                     <li ><a title="Company" class="scroll fadeto brand-4">{{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}</a></li>
                     <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
                         <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">{% trans %}Dashboard{% endtrans %}</a>
@@ -32,7 +37,7 @@
                     <li><a title="Change password" href="{{ path('mfb_admin_change_password') }}" class="scroll fadeto brand-4 {{ criterias.showWhenHasCriterias('iframe-small') }}" rel="nofollow">{% trans %} Change password {% endtrans %}</a></li>
                     <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">{% trans %} Logout {% endtrans %}</a></li>
                 </ul>
-            </div>
+            </nav>
         </div>
 
         <div class="companyName"></div>

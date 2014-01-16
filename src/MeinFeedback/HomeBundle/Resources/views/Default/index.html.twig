@@ -5,75 +5,84 @@
 {% block body %}
 <!-- Brand and Navigation -->
 <header class="navbar navbar-fixed-top">
-    <div class="inner-page">
-        <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
-        <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
-
-        <div class="nav-collapse collapse">
-            <ul class="nav navigation" id="menu">
+    <div class="container">
+        <div class="navbar-header">
+            <img class="navbar-brand img-responsive" src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/>
+            <button class="navbar-toggle collapsed pull-right" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <nav class="collapse navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav" id="menu">
                 <li class="active"><a title="Start" class="scroll brand-1" href="#home">Startseite</a></li>
                 <li><a title="Produkt" href="#produkt" class="scroll brand-4">Produkt</a></li>
                 <li><a title="Preise" href="#preise" class="scroll brand-3">Preise</a></li>
                 <li><a title="Login" href="{{ path('mfb_account_login') }}" class="scroll fadeto brand-4 iframe-small" rel="nofollow">Login</a></li>
             </ul>
-        </div>
-
+        </nav>
     </div>
 </header>
 <!-- Home Page -->
-
-
-<div id="home" class="page color-1" style="background:url('{{ asset('bundles/meinfeedbackhome/images/bg_1.png') }}') #FDFDFD no-repeat; height:500px;">
-    <div class="inner-page">
-        <div class="page-headline_start large">Ihre Kunden lieben Ihre Produkte. Und Ihren Service.<br/> Zeigen Sie es - mit Mein<span style="color:#ffce60;">Feedback</span></h2>
-
-            <div align="center">
-                <br/>
-                <a rel="nofollow" href="{{ path('mfb_account_register') }}" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe-small">Jetzt anmelden</a>
-            </div>
+<div id="home" class="row front-block front-block-bg fblock1">
+    <div class="container">
+        <div class="col-xs-12 text-center">
+            Ihre Kunden lieben Ihre Produkte. Und Ihren Service.<br/>
+            Zeigen Sie es - mit Mein<span>Feedback</span>
+            <br/>
+            <a rel="nofollow" href="{{ path('mfb_account_register') }}" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe-small mtop60">Jetzt anmelden</a>
         </div>
     </div>
-    <div style="background:#999; height:1px;"></div>
+</div>
 
     <!-- Produkt -->
-    <div id="produkt" class="page color-4">
-        <div class="inner-page">
-            <div class="page-headline_2">So funktioniert Mein<span style="color:#ffce60;">Feedback</span></div>
-            <img class="lazy" alt="So funktioniert Foxrate" src="{{ asset('bundles/meinfeedbackhome/images/pixel.png') }}" data-original="{{ asset('bundles/meinfeedbackhome/images/circle.png') }}" />
-        </div>
-        <div style="background:#999; height:1px;"></div>
-
-        <!-- Preise -->
-        <div id="preise" class="page color-2">
-            <div class="inner-page">
-                <div class="page-headline_1">Preise & Features</div>
-                <div class="row-fluid inner-page">
-                    <table class="preisliste" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td class="taboben" style="background:#ffce60"><h3>Monatlicher Grundpreis</h3><h1>69€</h1></td>
-                            <td class="taboben" style="width:217px;"><h3>Vertagslaufzeit</h3><h2>12 Monate</h2></td>
-                            <td class="taboben" style="width:217px;"><h3>Transaktionen inklusive</h3><h2>200</h2></td>
-                            <td class="taboben" style="width:217px;"><h3>Einmalige Einrichtungsgebühr</h3><h2>69€</h2></td>
-                            <td class="taboben" style="width:217px;"><h3>Aufpreis für je 100 Transaktionen</h3><h2>7€</h2></td>
-                        </tr>
-                    </table>
-                    <br/><br/>
-                    <div align="center">
-                        <a href="{{ path('mfb_account_register') }}" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe-small">Jetzt anmelden</a>
-                    </div>
-                    <br/><br/><br/>
+    <div id="produkt">
+        <div class="row front-block fblock2">
+            <div class="container">
+                <div class="col-xs-12 text-center">
+                    <div class="page-headline_2">So funktioniert Mein<span>Feedback</span></div>
+                    <img class="lazy img-responsive" alt="So funktioniert Foxrate" src="{{ asset('bundles/meinfeedbackhome/images/pixel.png') }}" data-original="{{ asset('bundles/meinfeedbackhome/images/circle.png') }}" />
                 </div>
             </div>
         </div>
 
-    <div style="background:#999; height:1px; width:1100px; margin: 0 auto;"></div>
-    <footer class="page color-5 footer">
-        <div class="inner-page row-fluid">
-            <div class="span6 social_icon">
-
-                <a href="mailto:service@meinfeedback.net">service@meinfeedback.net</a>
+        <!-- Preise -->
+        <div id="preise" class="page color-2 row front-block fblock3">
+            <div class="container">
+                <div class="col-xs-12 text-center">
+                    <div class="page-headline_1">Preise & Features</div>
+                    <br/>
+                    <table id="front-table" class="table preisliste" cellpadding="0" cellspacing="0" border="0">
+                        <tr class="hidden-xs">
+                            <td class="front-table-bg"><h3>Monatlicher Grundpreis</h3><h1>69€</h1></td>
+                            <td><h3>Vertagslaufzeit</h3><h2>12 Monate</h2></td>
+                            <td><h3>Transaktionen inklusive</h3><h2>200</h2></td>
+                            <td><h3>Einmalige Einrichtungsgebühr</h3><h2>69€</h2></td>
+                            <td><h3>Aufpreis für je 100 Transaktionen</h3><h2>7€</h2></td>
+                        </tr>
+                        <tr class="hidden-lg hidden-sm hidden-md"><td class="front-table-bg"><h3>Monatlicher Grundpreis</h3><h1>69€</h1></td></tr>
+                        <tr class="hidden-lg hidden-sm hidden-md"><td><h3>Vertagslaufzeit</h3><h2>12 Monate</h2></td></tr>
+                        <tr class="hidden-lg hidden-sm hidden-md"><td><h3>Transaktionen inklusive</h3><h2>200</h2></td></tr>
+                        <tr class="hidden-lg hidden-sm hidden-md"><td><h3>Einmalige Einrichtungsgebühr</h3><h2>69€</h2></td></tr>
+                        <tr class="hidden-lg hidden-sm hidden-md"><td><h3>Aufpreis für je 100 Transaktionen</h3><h2>7€</h2></td></tr>
+                    </table>
+                    <br/>
+                    <a href="{{ path('mfb_account_register') }}" title="Anmelden" class="scroll btn btn-left orange abstandoben iframe-small">Jetzt anmelden</a>
+                </div>
             </div>
-            <div class="span6 text-right footer_right"><img src="{{ asset('bundles/meinfeedbackhome/images/mf_de.png') }}"></div>
+        </div>
+    <footer class="page color-5 footer">
+        <div class="container">
+            <div class="row footer-wrap">
+                <div class="col-xs-10 social_icon pull-left">
+                    <a href="mailto:service@meinfeedback.net" class="footer-mail">service@meinfeedback.net</a>
+                </div>
+                <div class="col-xs-2 text-right footer_right pull-right">
+                    <img src="{{ asset('bundles/meinfeedbackhome/images/mf_de.png') }}">
+                </div>
+            </div>
         </div>
     </footer>
 {% endblock %}

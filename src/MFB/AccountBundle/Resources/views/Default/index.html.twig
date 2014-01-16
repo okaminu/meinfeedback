@@ -3,11 +3,11 @@
 {% block title %}Login to MeinFeedback{% endblock %}
 
 {% block body %}
-    <div class="formular">
-        <h3>Kunden Login</h3>
+    <div class="formular container modal-spacing">
+        <h3 class="text-center form-header">Kunden Login</h3>
 
         {% if error %}
-            <div class="alert alert-error">
+            <div class="alert alert-danger">
                 {% if error.getMessageKey == 'Account is disabled.' %}
                     We are waiting for payment. If you did not do that yet, please click here : <a href="{{ pay_url }}">{{ pay_url }}</a> <br/>
                     If you already paid, please try again latter or contact support.
@@ -17,13 +17,23 @@
             </div>
         {% endif %}
 
-            <form action="{{ path("mfb_admin_login_check") }}" method="post" id="login" class="form-inline" target="_top">
-                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld popupInput"/>
-                <input type="password" id="password" name="_password"  class="log_feld popupInput"  placeholder="Passwort"/>
-                <input id="sendOut" class="btn btn-left orange abstandoben breite180" value="Anmelden" type="submit">
-            </form>
-            <p>&nbsp;</p>
-            <p class="forget-password">Sie haben Ihr Passwort vergessen? Klicken Sie <a href="{{ path("mfb_account_reset_request") }}" title="Passwort vergessen" class="login_sublnk fright">hier</a> um ein neues anzufordern.</p>
-
+        <form action="{{ path("mfb_admin_login_check") }}" method="post" id="login" class="form-horizontal" target="_top">
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Benutzername"  class="log_feld popupInput form-control"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="password" id="password" name="_password"  class="log_feld popupInput form-control" placeholder="Passwort"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12 text-center">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite180 width100" value="Anmelden" type="submit">
+                </div>
+            </div>
+        </form>
+        <p class="forget-password text-center form-endnote">Sie haben Ihr Passwort vergessen? Klicken Sie <a href="{{ path("mfb_account_reset_request") }}" title="Passwort vergessen" class="login_sublnk fright golden-link">hier</a> um ein neues anzufordern.</p>
     </div>
 {% endblock %}

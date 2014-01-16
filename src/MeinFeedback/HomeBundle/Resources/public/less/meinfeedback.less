@@ -1,0 +1,267 @@
+@mgrey: #666;
+@lgrey: #999;
+@silver: #ccc;
+@gold: #ffce60;
+@lblack: #444;
+@white: #fff;
+@hblack: #4b4b4b;
+@red: #A94442;
+
+
+body {
+  font-family: "Lato" ,"Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 120px;
+}
+
+header {
+  &.navbar {
+    min-height: 40px;
+    height: 40px;
+    background: @hblack;
+    margin-bottom: 0;
+  }
+  &.dashboard {
+    height: 85px;
+    .nav {
+      margin-top: 5px;
+    }
+  }
+  .navbar-brand {
+    height: 40px;
+    padding: 0;
+    @media (max-width: 992px) {
+      height: 26px;
+      margin-top: 7px;
+    }
+    @media (max-width: 768px) {
+      margin-left: 15px;
+    }
+    @media (max-width: 450px) {
+      height: 18px;
+      margin-left: 15px;
+      margin-top: 11px;
+    }
+    @media (max-width: 340px) {
+      height: 12px;
+      margin-top: 14px;
+    }
+  }
+  .navbar-toggle {
+    background: #616161;
+    margin-top: 3px;
+    margin-bottom: 2px;
+    .icon-bar {
+      background: #ececec;
+    }
+  }
+  .navbar-collapse {
+    float: right;
+    @media (max-width: 768px) {
+      float: none !important;
+    }
+  }
+  .nav {
+    margin-top: 0;
+    a {
+      color: @white;
+      padding: 0 20px;
+      line-height: 40px;
+      background: @hblack;
+      .transition(.5s);
+      &:hover {
+        background: @white;
+        color: @hblack;
+      }
+      &:hover.brand-1 {
+        background: @gold;
+      }
+    }
+    .active {
+      a {
+        background: @white;
+        color: @hblack;
+      }
+      a.brand-1 {
+        background: @gold;
+      }
+    }
+  }
+}
+
+.front-block  {
+  margin-left: 0;
+  margin-right: 0;
+  font-size: 42px;
+  color: @mgrey;
+  line-height: 50px;
+  font-family: Lato, Helvetica, sans-serif;
+  font-weight: 100;
+  border-bottom: 1px solid @lgrey;
+  span {
+    color: @gold;
+  }
+  &.front-block-bg {
+    background: url('../../bundles/meinfeedbackhome/images/bg_1.png') no-repeat;
+  }
+  &.fblock1 {
+    margin-top: -80px;
+    padding: 230px 0 200px 0;
+    @media (max-width: 768px) {
+      padding: 130px 0 100px 0;
+    }
+  }
+  &.fblock2 {
+    padding: 120px 0;
+    @media (max-width: 768px) {
+      padding: 80px 0;
+    }
+  }
+  &.fblock3 {
+    padding: 150px 0 130px 0;
+    @media (max-width: 768px) {
+      padding: 80px 0 50px 0;
+    }
+  }
+  #front-table {
+    td {
+      border: 1px solid @silver;
+      color: @mgrey;
+      h1 {
+        font-size: 80px;
+        font-weight: 300;
+        padding: 0px 20px 0px 0;
+        margin: 30px 0;
+      }
+      h2 {
+        font-size: 30px;
+        padding: 30px 0 0 0;
+        margin: 30px 0;
+        font-weight: 300;
+      }
+      h3 {
+        padding: 20px 0 10px 0;
+        font-size: 14px;
+        margin: 0;
+        font-weight: 300;
+      }
+    }
+    .front-table-bg {
+      background: @gold;
+    }
+  }
+}
+
+.mandatoryFieldMark {
+  position: absolute;
+  color: @red;
+  font-size: 17px;
+  right: 0;
+  top: 0;
+}
+
+.transition (@transition) {
+  -webkit-transition: @transition;
+  -moz-transition:    @transition;
+  -ms-transition:     @transition;
+  -o-transition:      @transition;
+}
+
+.border-radius (@radius: 4px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.btn {
+  font-weight: 300;
+  height: 56px;
+  line-height: 40px;
+  color: @mgrey;
+  background: @gold;
+  outline: none;
+  padding: 8px 32px;
+  font-size: 17px;
+  .transition(.5s);
+  .border-radius(0);
+  &:hover {
+    background: @lblack;
+    color: @white;
+    .transition(.1s);
+  }
+  &.mtop60 {
+    margin-top: 60px;
+  }
+}
+
+.form-header {
+  margin: 0 auto 30px 0;
+  color: @lblack;
+  font-weight: 300;
+  font-size: 30px;
+}
+
+.modal-spacing {
+  max-width: 500px;
+  padding: 50px;
+}
+
+.alert {
+  .border-radius(0);
+}
+
+.golden-link {
+  color: @gold;
+  .transition(.5s);
+  text-decoration: underline;
+  &:hover {
+    color: @lblack;
+  }
+}
+
+.form-endnote {
+  font-size: 17px;
+  margin-top: 40px;
+  .mandatory-mark {
+    color: @red;
+  }
+}
+
+input,
+.form-control {
+  font-size: 16px;
+  .border-radius(0);
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+input:focus,
+.form-control:focus {
+  border-color: @gold;
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(98, 196, 98, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(98, 196, 98, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 206, 96, 0.6);
+}
+
+footer {
+  .footer-wrap {
+    padding: 30px 20px 20px 20px;
+  }
+  .footer-mail {
+    font-size: 17px;
+    color: @lblack;
+  }
+}
+
+@import (less) "../css/magnific.popup.css";
