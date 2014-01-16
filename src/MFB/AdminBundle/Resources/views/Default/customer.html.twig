@@ -5,7 +5,7 @@
 {% block content %}
 
     <!-- Contact Us -->
-    <div>
+    <div class="formular container modal-spacing">
         {% if customerEmail %}
         <div class="alert alert-success">
             <strong>{% trans %} Well done! {% endtrans %}</strong> {% trans %} Customer added {% endtrans %} ({{ customerEmail }})
@@ -14,7 +14,7 @@
         {% endif %}
         <div class="row-fluid inner-page contact">
             <div class="span6">
-                <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">{% trans %} Customer Form {% endtrans %}</div>
+                <h3 class="text-center form-header">{% trans %} Customer Form {% endtrans %}</h3>
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
                 <div>
