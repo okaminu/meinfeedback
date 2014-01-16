@@ -122,11 +122,11 @@ class WidgetController extends Controller
         $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
         $channelFeedbacks->setElementsPerPage($this->container->getParameter('mfb_feedback.maxFeedbacks'));
 
-        $feedbackSummaryList = $channelFeedbacks->getFeedbackSummary();
+        $feedbackSummaryList = $channelFeedbacks->getFeedbackSummary()->getItems();
         $item_order_str = $request->request->get('item_order_str');
         parse_str($item_order_str, $output);
 
-        foreach ($feedbackSummaryList['feedbackSummaryList'] as $feedbackSummary) {
+        foreach ($feedbackSummaryList as $feedbackSummary) {
             $item = $feedbackSummary->getFeedback();
             /** @var Feedback $item */
             $item->setSort(array_search($item->getId(), $output['item_order']));

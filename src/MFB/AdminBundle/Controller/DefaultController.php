@@ -25,7 +25,7 @@ class DefaultController extends Controller
         return $this->render(
             'MFBAdminBundle:Default:index.html.twig',
             array(
-                'feedbackSummary' => $channelFeedbacks->getFeedbackSummary(),
+                'feedbackSummaryPage' => $channelFeedbacks->getFeedbackSummary(),
                 'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
                 'channelRatingSummaryList' => $channelFeedbacks->createChannelRatingSummary()
             )
@@ -41,7 +41,7 @@ class DefaultController extends Controller
         $channelFeedbacks->setElementsPerPage($this->container->getParameter('mfb_feedback.maxFeedbacks'));
         $activates = $request->request->get('activate');
 
-        $feedbackService->batchActivate($activates, $channelFeedbacks->getFeedbackSummary());
+        $feedbackService->batchActivate($activates, $channelFeedbacks->getFeedbackSummary()->getItems());
         return $this->redirect($this->generateUrl('mfb_admin_homepage'));
     }
 

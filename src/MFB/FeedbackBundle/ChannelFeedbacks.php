@@ -4,8 +4,9 @@ namespace MFB\FeedbackBundle;
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\Paginator;
+use MFB\FeedbackBundle\Entity\FeedbackSummaryPage;
 use MFB\RatingBundle\Entity\RatingSummary;
-use MFB\FeedbackBundle\Entity\FeedbackSummary;
+use MFB\FeedbackBundle\Entity\FeedbackSummaryItem;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 
@@ -56,14 +57,14 @@ class ChannelFeedbacks
     public function getFeedbackSummary($page = 1)
     {
         $qb = $this->getFeedbackQueryBuilder($this->channelId);
-        return $this->createFeedbackSummary($this->getPage($qb, $page));
+        return $this->createFeedbackSummaryPage($this->getPage($qb, $page));
     }
 
     public function getActiveFeedbackSummary($page = 1)
     {
         $qb = $this->getFeedbackQueryBuilder($this->channelId);
         $qb->andWhere($qb->expr()->eq('feedback.isEnabled', 1));
-        return $this->createFeedbackSummary($this->getPage($qb, $page));
+        return $this->createFeedbackSummaryPage($this->getPage($qb, $page));
     }
 
     /**
@@ -113,30 +114,26 @@ class ChannelFeedbacks
     }
 
     /**
-     * @param $page
-     * @return array
+     * @param PaginationInterface $page
+     * @return FeedbackSummaryPage
      */
-    private function createFeedbackSummary(PaginationInterface $page)
+    private function createFeedbackSummaryPage(PaginationInterface $page)
     {
         $lastPageNumber = ceil($page->getTotalItemCount() / $page->getItemNumberPerPage());
-        $feedbackSummary = array(
-            'feedbackSummaryList' => array(),
-            'currentPageNumber' => $page->getCurrentPageNumber(),
-            'lastPageNumber' => $lastPageNumber
-        );
+        $feedbackSummaryPage = new FeedbackSummaryPage($page->getCurrentPageNumber(), $lastPageNumber);
         foreach ($page as $feedback) {
-            $feedbackSummary['feedbackSummaryList'][] = $this->createFeedbackSummaryItem($feedback);
+            $feedbackSummaryPage->addItem($this->createFeedbackSummaryItem($feedback));
         }
-        return $feedbackSummary;
+        return $feedbackSummaryPage;
     }
 
     /**
      * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return FeedbackSummary
+     * @return FeedbackSummaryItem
      */
     private function createFeedbackSummaryItem($feedback)
     {
-        $singleSummary = new FeedbackSummary();
+        $singleSummary = new FeedbackSummaryItem();
         $singleSummary = $this->addServiceSummary($singleSummary, $feedback->getService());
         $singleSummary->setRatings($this->createFeedbackRatingSummary($feedback));
         $singleSummary->setFeedback($feedback);
@@ -144,11 +141,11 @@ class ChannelFeedbacks
     }
 
     /**
-     * @param FeedbackSummary $singleSummary
+     * @param FeedbackSummaryItem $singleSummary
      * @param ServiceEntity $service
-     * @return FeedbackSummary
+     * @return FeedbackSummaryItem
      */
-    private function addServiceSummary(FeedbackSummary $singleSummary, ServiceEntity $service)
+    private function addServiceSummary(FeedbackSummaryItem $singleSummary, ServiceEntity $service)
     {
         $serviceGroup = $service->getServiceGroup();
         $serviceProvider = $service->getServiceProvider();

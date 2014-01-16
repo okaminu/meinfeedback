@@ -91,7 +91,7 @@ class Feedback
 
     public function batchActivate($activateList, $inFeedbackList)
     {
-        foreach ($inFeedbackList['feedbackSummaryList'] as $feedbackSummary) {
+        foreach ($inFeedbackList as $feedbackSummary) {
             $feedback = $feedbackSummary->getFeedback();
             $feedback->setIsEnabled(false);
 

@@ -1,7 +1,7 @@
 <?php
 namespace MFB\FeedbackBundle\Entity;
 
-class FeedbackSummary
+class FeedbackSummaryItem
 {
     private $feedback;
 

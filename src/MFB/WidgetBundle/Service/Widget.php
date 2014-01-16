@@ -64,8 +64,7 @@ class Widget
             ->getChannelFeedbacks($accountChannel->getId());
 
         $channelFeedbacks->setElementsPerPage(5);
-        $allFeedbacks = $channelFeedbacks->getActiveFeedbackSummary();
-        $lastFeedbacks = $allFeedbacks['feedbackSummaryList'];
+        $lastFeedbacks = $channelFeedbacks->getActiveFeedbackSummary()->getItems();
         $this->filterComments($lastFeedbacks);
 
         $imageDirector = new MainWidgetDirector($this->imageBuilder);
