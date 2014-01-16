@@ -11,7 +11,7 @@
                 <label for="username">{{ 'Username'|trans }}</label>
                 <div class="controls">
                     {% if invalid_username is defined %}
-                        <p class="alert alert-error">{{ 'Entered username %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
+                        <p class="alert alert-error">{{ 'Entered email %username% is invalid.'|trans({'%username%': invalid_username}) }}</p>
                     {% endif %}
                     <input type="text" id="username" name="username" required="required" placeholder="Email"/>
                 </div>
