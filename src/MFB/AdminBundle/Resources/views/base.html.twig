@@ -16,7 +16,7 @@
 
             <nav class="collapse navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav" id="menu">
-                    <li >
+                    <li>
                         <a title="Company" class="scroll fadeto brand-4">{{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}</a>
                     </li>
                     <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
