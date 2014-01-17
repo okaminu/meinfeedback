@@ -47,7 +47,7 @@
             {% set feedback = feedbackSummaryItem.getFeedback %}
             <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
                 <div class="username">
-                    {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
+                    {% if (feedback.getCustomer.getFirstName) %}
                         {{ feedback.getCustomer.getFirstName }}
                     {% else %}
                         {% trans %} Anonymous says: {% endtrans %}
