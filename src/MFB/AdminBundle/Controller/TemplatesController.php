@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\EmailBundle\Service\Template;
 
-class EmailTemplatesController extends Controller
+class TemplatesController extends Controller
 {
 
 
@@ -51,10 +51,10 @@ class EmailTemplatesController extends Controller
             $emailTemplateService->removesUnwantedVariables($emailTemplate);
             $emailTemplateService->addMandatoryVariables($emailTemplate);
 
-            return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
+            return $this->redirect($this->generateUrl('mfb_admin_edit_template'));
         }
         return $this->render(
-            'MFBAdminBundle:EmailTemplates:selectVariables.html.twig',
+            'MFBAdminBundle:Templates:selectVariables.html.twig',
             array('form' => $form->createView())
         );
     }
@@ -125,7 +125,7 @@ class EmailTemplatesController extends Controller
             $em->persist($thankYouTemplate);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('mfb_admin_edit_email_template'));
+            return $this->redirect($this->generateUrl('mfb_admin_edit_template'));
         }
 
         return $this->showEmailTemplate($accountId);
@@ -159,7 +159,7 @@ class EmailTemplatesController extends Controller
         $thankyou_variables = $this->get('mfb_email.variables')->getVariables($thankYouTemplate);
 
         return $this->render(
-            'MFBAdminBundle:EmailTemplates:edit.html.twig',
+            'MFBAdminBundle:Templates:edit.html.twig',
             array(
                 'errors' => $errors,
                 'variables' => $variables,
@@ -176,7 +176,7 @@ class EmailTemplatesController extends Controller
     {
         $variables = $this->get('mfb_email.variables')->getSelectedVariables($emailTemplateId);
         return $this->render(
-            'MFBAdminBundle:EmailTemplates:possibleVariablesList.html.twig',
+            'MFBAdminBundle:Templates:possibleVariablesList.html.twig',
             array(
                 'emailTemplateId' => $emailTemplateId,
                 'variables' => $variables
@@ -196,7 +196,7 @@ class EmailTemplatesController extends Controller
             new EmailTemplateType(),
             $entity,
             array(
-                'action' => $this->generateUrl('mfb_admin_edit_email_template', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('mfb_admin_edit_template', array('id' => $entity->getId())),
                 'method' => 'PUT',
             )
         );
