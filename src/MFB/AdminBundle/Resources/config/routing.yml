@@ -16,7 +16,7 @@ mfb_location:
 
 mfb_show_create_customer:
     pattern: /show_create_customer
-    defaults: { _controller: MFBAdminBundle:Default:showCreateServiceCustomerForm }
+    defaults: { _controller: MFBAdminBundle:Default:index }
 
 mfb_save_customer:
     pattern: /save_customer

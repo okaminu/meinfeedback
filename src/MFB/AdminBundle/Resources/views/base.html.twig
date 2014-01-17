@@ -22,9 +22,7 @@
                     <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
                         <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">{% trans %}Dashboard{% endtrans %}</a>
                     </li>
-                    <li>
-                        <a title="Add customer" href="{{ path('mfb_show_create_customer') }}" class="scroll fadeto brand-4" rel="nofollow">{% trans %} Add Customer {% endtrans %}</a>
-                    </li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle">{% trans %}Feedback{% endtrans %} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
