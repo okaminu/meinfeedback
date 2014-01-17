@@ -42,11 +42,11 @@
     <div>
             {% if  feedbackSummaryPage.getItemsCount > 0 %}
             <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
-                <div style="width: 710px">
+                <div>
                     <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
                 </div>
 
-                <ul id="sortable" class="not-nested" style="width: 720px">
+                <ul id="sortable" class="not-nested individual-feedback">
                 {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}
                     {% set feedback = feedbackSummaryItem.getFeedback %}
                     <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
@@ -57,54 +57,62 @@
                                 {% trans %} Anonymous says: {% endtrans %}
                             {% endif %}
                         </div>
-
-                        <ul class="stars_rating not-nested">
-                            {% for ratingCriteria in feedbackSummaryItem.getRatings %}
-                                {% if ratingCriteria.getRating > 0 %}
-                                    <li>
-                                        <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                                            {{ ratingCriteria.getName }}
-                                        </div>
-                                        <div class="rating-stars">
-                                            <div class="stars_gray_small">
-                                                <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                        <div class="col-xs-4">
+                            <ul class="stars_rating not-nested">
+                                {% for ratingCriteria in feedbackSummaryItem.getRatings %}
+                                    {% if ratingCriteria.getRating > 0 %}
+                                        <li>
+                                            <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                                                {{ ratingCriteria.getName }}
                                             </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
+                                            <div class="rating-stars">
+                                                <div class="stars_gray_small">
+                                                    <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
 
-                        <div class="service-pane" style="margin-right: 120px">
-                            <div class="service-info">
+                        {#<div class="service-pane">#}
+                            <div class="service-info col-xs-2 col-xs-offset-4">
                                 <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
                                 <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
                             </div>
 
-                            <div class="service-info">
+                            <div class="service-info col-xs-2">
                                 <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
                                 <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
                             </div>
-                        </div>
+                        {#</div>#}
                         <div class="clearfix"></div>
                         <div style="margin-top: 20px;">
-                            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
+                            {#<img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">#}
 
-                            <table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >
-                                <tbody>
-                                    <tr>
-                                    <td width="80%" style="padding:10px;">
+                            {#<table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >#}
+                                {#<tbody>#}
+                                    {#<tr>#}
+                                    {#<td width="80%" style="padding:10px;">#}
+                            <div class="row feedback-wrap">
+                                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_top.png') }}" width="16" height="10" class="comment-top"/>
+                                <div class="col-xs-10">
                                         <span class="comment-text left" itemprop="description">
                                             {{ feedback.content }}
                                         </span>
-                                    </td>
-                                    <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
+                                </div>
+                                    {#</td>#}
+                                    {#<td align="right" valign="top" nowrap="nowrap" style="padding:10px;">#}
+                                <div class="col-xs-2">
                                             <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                </div>
+                                    {#</td>#}
+                                {#</tr>#}
+                                {#</tbody>#}
+                            {#</table>#}
+                            </div>
                         <div class="fr input-block enable-comment box-comment">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
                         </div>

@@ -17,35 +17,95 @@
                 <h3 class="text-center form-header">{% trans %} Customer Form {% endtrans %}</h3>
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
-                <div>
-                    <div style="width:300px">
+
+                    <div class="form-group">
+
                         {{ form_errors(form.customer.email) }}
-                        {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite400 spaceForMandatoryMark',
-                        'placeholder': 'Customers email*'} }) }}
-                        <div class="mandatoryFieldMark" style="float: right">*</div>
+                        {{ form_label(form.customer.email, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.customer.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro breite400 spaceForMandatoryMark form-control',
+                        'placeholder': 'Customers email'} }) }}
+                        <div class="mandatoryFieldMark">*</div>
                     </div>
-                    {{ form_label(form.customer.anonymous) }}
-                    <div style="display:block; width:50px">
+                    <div class="checkbox">
+                        <label>
                         {{ form_widget(form.customer.anonymous) }}
+                        {{ form_label(form.customer.anonymous) }}
+                        </label>
                     </div>
-                    <p id='manual-example'>
-                    {{ form_label(form.customer.gender) }}
-                    {{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}
-                    {{ form_row(form.customer.firstName) }}
-                    {{ form_row(form.customer.lastName) }}
-                    {{ form_row(form.customer.customerIdReference) }}
-                    {{ form_row(form.date) }}
-                    {{ form_row(form.serviceIdReference) }}
-                    {{ form_row(form.serviceProvider) }}
-                    {{ form_row(form.serviceGroup) }}
-                    {{ form_row(form.customer.salutation) }}
+                    {#<p id='manual-example'>#}
+                    <div class="form-group">
+                        {{ form_label(form.customer.gender, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {#{{ form_widget(form.customer.gender, {'attr': {'class' : 'gender'} }) }}#}
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div class="radio no-marg-top-bottom">
+                                    {{ form_widget(form.customer.gender.0) }}
+                                    {{ form_label(form.customer.gender.0) }}
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="radio no-marg-top-bottom">
+                                    {{ form_widget(form.customer.gender.1) }}
+                                    {{ form_label(form.customer.gender.1) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.customer.firstName, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.customer.firstName, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.customer.lastName, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.customer.lastName, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.customer.customerIdReference, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.customer.customerIdReference, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.date, null, {'label_attr':{'class': 'control-label'} }) }}
+                        <div class="form-group col-xs-4 no-pad-left">
+                            {{ form_widget(form.date.year, {'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        <div class="form-group col-xs-5">
+                            {{ form_widget(form.date.month, {'attr': {'class': 'form-control'} }) }}
+                        </div>
+                        <div class="form-group col-xs-3 no-pad-right">
+                            {{ form_widget(form.date.day, {'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.serviceIdReference, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.serviceIdReference, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.serviceProvider, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.serviceProvider, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.serviceGroup, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.serviceGroup, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.customer.salutation, null, {'label_attr':{'class': 'control-label'} }) }}
+                        {{ form_widget(form.customer.salutation, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    {#{{ form_row(form.customer.firstName) }}#}
+                    {#{{ form_row(form.customer.lastName) }}#}
+                    {#{{ form_row(form.customer.customerIdReference) }}#}
+                    {#{{ form_row(form.date) }}#}
+                    {#{{ form_row(form.serviceIdReference) }}#}
+                    {#{{ form_row(form.serviceProvider) }}#}
+                    {#{{ form_row(form.serviceGroup) }}#}
+                    {#{{ form_row(form.customer.salutation) }}#}
                 </div>
-                <div style="width:250px; padding-top:10px;">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite210" value="{% trans %} Send {% endtrans %}" type="submit">
+                <div class="form-group">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite210 width100" value="{% trans %} Send {% endtrans %}" type="submit">
                 </div>
 
                 {{ form_end(form) }}
-                <div class="mandatoryFieldText">* {% trans %} indicates required fields {% endtrans %}</div>
+                <div class="mandatoryFieldText form-endnote text-center"><span class="mandatory-mark">*</span> {% trans %} indicates required fields {% endtrans %}</div>
             </div>
 
         </div>

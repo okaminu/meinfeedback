@@ -76,6 +76,22 @@ $('#menu a').click(function (e) {
         if ($('.btn-nav').is(":visible"))
           $('.btn-nav').click();
       });
+
+    // Bootstrap 3 add hover class
+
+    $('.nav li.dropdown, .nav li.dropdown a').on({
+        mouseenter: function() {
+            $(this).addClass('open').off('click');
+        },
+        mouseleave: function() {
+            $(this).removeClass('open');
+        },
+        click: function() {
+            $(this).addClass('open');
+        }
+    });
+
+
 });
 
 $(function() {
