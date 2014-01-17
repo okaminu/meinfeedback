@@ -7,6 +7,7 @@
         <img class="navbar-brand img-responsive" src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/>
         <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
     </div>
+    {% block head %}{% endblock %}
 </header>
     {% block content %}{% endblock %}
 {% endblock %}
