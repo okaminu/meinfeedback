@@ -225,19 +225,48 @@ header {
   color: @lblack;
   font-weight: 300;
   font-size: 30px;
+  &.mb10 {
+    margin-bottom: 10px;
+  }
+}
+
+.fs17 {
+  font-size: 17px;
+}
+
+.feedback-count {
+  padding-left: 25px;
+  margin-bottom: 30px;
 }
 
 .modal-spacing {
   max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 20px;
 }
 
 .stars_rating{
   list-style-type: none;
   display: inline-block;
+  padding-left: 10px;
+  &.channel-ratings{
+    padding-left: 25px;
+    li {
+      font-size: 17px;
+      line-height: 24px;
+      .rating-title {
+        &.overall {
+          font-weight: bold;
+        }
+      }
+    }
+  }
   .rating-stars{
     display: inline-block;
     margin: 0px 10px;
+    vertical-align: middle;
+
     .stars_gray_small {
       background: url("/bundles/meinfeedbackhome/images/stars_gray_small.png") no-repeat scroll left top rgba(0, 0, 0, 0);
       height: 14px;
@@ -264,11 +293,52 @@ header {
 .individual-feedback {
   list-style-type: none;
   padding-left: 0;
+  >li {
+    margin-bottom: 15px;
+  }
+  .enable-comment {
+    padding-top: 30px;
+    padding-left: 0;
+  }
+  .service-info {
+    margin-top: 40px;
+    .service-title {
+      font-weight: bold;
+    }
+  }
+  .overall {
+    font-weight: bold;
+  }
+  .username {
+    font-size: 17px;
+    font-weight: bold;
+  }
 }
 
 .control-label {
   font-size: 16px;
-  font-weight: 300;
+}
+
+.mt50 {
+  margin-top: 50px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.iconDisplay {
+  margin-top: 25px;
+}
+
+#displayServiceTypesProviders {
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .checkbox {
+    margin-left: 10px;
+  }
 }
 
 .alert {
@@ -329,6 +399,9 @@ footer {
   padding-top: 15px;
   padding-bottom: 15px;
   position: relative;
+  width: 90%;
+  margin-left: 15px;
+  margin-top: 15px;
   .comment-top {
     position: absolute;
     top: -10px;
@@ -349,3 +422,5 @@ footer {
 }
 
 @import (less) "../css/magnific.popup.css";
+@import (less) "../css/colpick.css";
+@import (less) "../css/jquery.qtip.min.css";

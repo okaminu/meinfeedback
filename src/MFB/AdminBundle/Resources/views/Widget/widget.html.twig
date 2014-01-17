@@ -1,31 +1,43 @@
-<div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300; text-align: center">{% trans %} Widget {% endtrans %}</div>
-<div class="widgetDisplay">
-    <img src="{{ widgetImage }}" usemap="#widgetmap">
-    <map name="widgetmap">
-        <area shape="rect" coords="0,0,270,265" href="{{ widgetLink }}" target="_blank"/>
-        <area shape="rect" coords="0,270,270,300" href="{{ inviteUrl }}" target="_blank"/>
-    </map>
-</div>
-
-<div class="widgetCode">
-    <textarea>{% verbatim %} <img src=" {% endverbatim %} {{ widgetImage }} {% verbatim %} " usemap="#widgetmap">
-        <map name="widgetmap"> {% endverbatim %}
-            {% verbatim %} <area shape="rect" coords="0,0,270,265" href=" {% endverbatim %} {{ widgetLink }} {% verbatim %} " target="_blank"/>
-            <area shape="rect" coords="0,270,270,300" href="{% endverbatim %} {{ inviteUrl }} {% verbatim %} " target="_blank"/>
-        </map> {% endverbatim %}</textarea>
-</div>
-<div>
-    <div style="width: 30px; float:right; margin-right: 100px">
-        {{ tooltips.tooltip('What is the widget code?',
-        "It is a code snippet which could be used in your website to display the feedbacks and ratings ", 'positionBottomLeft') }}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2">
+            <h3 class="text-center form-header">{% trans %} Widget {% endtrans %}</h3>
+            <div class="col-xs-3">
+                <div class="widgetDisplay">
+                    <img src="{{ widgetImage }}" usemap="#widgetmap">
+                    <map name="widgetmap">
+                        <area shape="rect" coords="0,0,270,265" href="{{ widgetLink }}" target="_blank"/>
+                        <area shape="rect" coords="0,270,270,300" href="{{ inviteUrl }}" target="_blank"/>
+                    </map>
+                </div>
+            </div>
+            <div class="col-xs-9">
+                <div class="widgetCode">
+                    <textarea class="width100 form-control" rows="8" cols="50">{% verbatim %} <img src=" {% endverbatim %} {{ widgetImage }} {% verbatim %} " usemap="#widgetmap">
+                        <map name="widgetmap"> {% endverbatim %}
+                            {% verbatim %} <area shape="rect" coords="0,0,270,265" href=" {% endverbatim %} {{ widgetLink }} {% verbatim %} " target="_blank"/>
+                            <area shape="rect" coords="0,270,270,300" href="{% endverbatim %} {{ inviteUrl }} {% verbatim %} " target="_blank"/>
+                        </map> {% endverbatim %}</textarea>
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col-xs-4 mt20">
+                            <button id="pickerText" class="btn btn-left orange abstandoben breiteCustom">Change Text color</button>
+                        </div>
+                        <div class="col-xs-5 mt20">
+                            <button id="pickerBackground" class="btn btn-left orange abstandoben breiteCustom">Change Background color</button>
+                        </div>
+                        <div class="col-xs-1 col-xs-offset-2 text-center">
+                            {{ tooltips.tooltip('What is the widget code?',
+                            "It is a code snippet which could be used in your website to display the feedbacks and ratings ", 'positionBottomLeft') }}
+                        </div>
+                    </div>
+                    {{ form_start(form, {'attr' : {'class' : 'widgetColorForm'} } ) }}
+                    {{ form_widget(form.textColorCode, {'attr': {'class': 'textColor'} }) }}
+                    {{ form_widget(form.backgroundColorCode, {'attr': {'class': 'backgroundColor'} }) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div style="margin: 15px 0px 0px 25px">
-    <button id="pickerText" class="btn btn-left orange abstandoben breiteCustom">Change Text color</button>
-    <button id="pickerBackground" class="btn btn-left orange abstandoben breiteCustom">Change Background color</button>
-    {{ form_start(form, {'attr' : {'class' : 'widgetColorForm'} } ) }}
-    {{ form_widget(form.textColorCode, {'attr': {'class': 'textColor'} }) }}
-    {{ form_widget(form.backgroundColorCode, {'attr': {'class': 'backgroundColor'} }) }}
-    {{ form_end(form) }}
-</div>
-

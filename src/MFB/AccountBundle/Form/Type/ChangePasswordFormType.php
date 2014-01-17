@@ -28,12 +28,12 @@ class ChangePasswordFormType extends AbstractType
             'current_password',
             'password',
             array(
-                'label' => 'form.current_password',
+                'label' => 'Old password',
                 'translation_domain' => 'MFBAccountBundle',
                 'mapped' => false,
                 'constraints' => $constraint,
                 'attr' => array(
-                    'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput',
+                    'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput form-control',
                     'placeholder' => 'Old password'
                 )
             )
@@ -45,16 +45,16 @@ class ChangePasswordFormType extends AbstractType
                 'type' => 'password',
                 'options' => array('translation_domain' => 'MFBAccountBundle'),
                 'first_options' => array(
-                    'label' => 'form.new_password',
+                    'label' => 'New password',
                     'attr' => array(
-                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput',
+                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput form-control',
                         'placeholder' => 'New password'
                     )
                 ),
                 'second_options' => array(
-                    'label' => 'form.new_password_confirmation',
+                    'label' => 'Repeat new password',
                     'attr' => array(
-                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput',
+                        'class' => 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput form-control',
                         'placeholder' => 'Repeat new password'
                     )
                 ),
@@ -68,7 +68,7 @@ class ChangePasswordFormType extends AbstractType
             array(
                 'label' => 'Change password',
                 'attr' => array(
-                    "class" => "btn btn-left orange abstandoben breite210"
+                    "class" => "btn btn-left orange abstandoben breite210 width100"
                 )
             )
         );

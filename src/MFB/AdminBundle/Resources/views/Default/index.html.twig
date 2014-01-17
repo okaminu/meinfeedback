@@ -13,7 +13,7 @@
 {% block content %}
 
     <div class="container">
-    <h3 >{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
+    <h3 class="form-header mb10">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
     <ul class="stars_rating channel-ratings not-nested">
         {% for ratingCriteria in channelRatingSummaryList %}
@@ -30,7 +30,7 @@
             </li>
         {% endfor %}
     </ul>
-    <div>Total active feedbacks: {{ ratingCount }}</div>
+    <div class="feedback-count fs17">Total active feedbacks: {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">
@@ -39,92 +39,82 @@
             <a href="#" class="close" data-dismiss="alert">&times;</a>
         </div>
     {% endfor %}
-    <div>
-            {% if  feedbackSummaryPage.getItemsCount > 0 %}
-            <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
-                <div>
-                    <div class="activeFeedbackTitle">{% trans %} Show {% endtrans %}</div>
+
+    {% if  feedbackSummaryPage.getItemsCount > 0 %}
+    <form action="{{ path("mfb_save_feedback_activation") }}" method="post" id="login" class="form-inline" >
+        <ul id="sortable" class="not-nested individual-feedback">
+        {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}
+            {% set feedback = feedbackSummaryItem.getFeedback %}
+            <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
+                <div class="username">
+                    {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
+                        {{ feedback.getCustomer.getFirstName }}
+                    {% else %}
+                        {% trans %} Anonymous says: {% endtrans %}
+                    {% endif %}
+                </div>
+                <div class="col-xs-4">
+                    <ul class="stars_rating not-nested">
+                        {% for ratingCriteria in feedbackSummaryItem.getRatings %}
+                            {% if ratingCriteria.getRating > 0 %}
+                                <li>
+                                    <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                                        {{ ratingCriteria.getName }}
+                                    </div>
+                                    <div class="rating-stars">
+                                        <div class="stars_gray_small">
+                                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                 </div>
 
-                <ul id="sortable" class="not-nested individual-feedback">
-                {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}
-                    {% set feedback = feedbackSummaryItem.getFeedback %}
-                    <li class="ui-state-default" id="item_order_{{ feedback.getId }}" >
-                        <div class="username">
-                            {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
-                                {{ feedback.getCustomer.getFirstName }}
-                            {% else %}
-                                {% trans %} Anonymous says: {% endtrans %}
-                            {% endif %}
+                <div class="service-info col-xs-2 col-xs-offset-3">
+                    <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                    <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
+                </div>
+
+                <div class="service-info col-xs-2">
+                    <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                    <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
+                </div>
+
+                <div class="service-info col-xs-1">
+                    <div class="service-title text-center no-pad-right">
+                        {% trans %} Show {% endtrans %}
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-xs-11 feedback-wrap">
+                            <img src="{{ asset('bundles/meinfeedbackhome/images/comment_top.png') }}" width="16" height="10" class="comment-top"/>
+                            <div class="col-xs-9">
+                                <span class="comment-text left" itemprop="description">
+                                    {{ feedback.content }}
+                                </span>
+                            </div>
+                            <div class="col-xs-3 text-right">
+                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">
+                                {{ feedback.createdAt|date('D, d. M. Y, H:i') }}
+                            </span>
+                            </div>
                         </div>
-                        <div class="col-xs-4">
-                            <ul class="stars_rating not-nested">
-                                {% for ratingCriteria in feedbackSummaryItem.getRatings %}
-                                    {% if ratingCriteria.getRating > 0 %}
-                                        <li>
-                                            <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                                                {{ ratingCriteria.getName }}
-                                            </div>
-                                            <div class="rating-stars">
-                                                <div class="stars_gray_small">
-                                                    <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-
-                        {#<div class="service-pane">#}
-                            <div class="service-info col-xs-2 col-xs-offset-4">
-                                <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                                <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
-                            </div>
-
-                            <div class="service-info col-xs-2">
-                                <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                                <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
-                            </div>
-                        {#</div>#}
-                        <div class="clearfix"></div>
-                        <div style="margin-top: 20px;">
-                            {#<img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">#}
-
-                            {#<table border="0" cellspacing="0" cellpadding="0" class="admin box-comment" >#}
-                                {#<tbody>#}
-                                    {#<tr>#}
-                                    {#<td width="80%" style="padding:10px;">#}
-                            <div class="row feedback-wrap">
-                                <img src="{{ asset('bundles/meinfeedbackhome/images/comment_top.png') }}" width="16" height="10" class="comment-top"/>
-                                <div class="col-xs-10">
-                                        <span class="comment-text left" itemprop="description">
-                                            {{ feedback.content }}
-                                        </span>
-                                </div>
-                                    {#</td>#}
-                                    {#<td align="right" valign="top" nowrap="nowrap" style="padding:10px;">#}
-                                <div class="col-xs-2">
-                                            <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                                </div>
-                                    {#</td>#}
-                                {#</tr>#}
-                                {#</tbody>#}
-                            {#</table>#}
-                            </div>
-                        <div class="fr input-block enable-comment box-comment">
+                        <div class="fr input-block enable-comment box-comment col-xs-1 text-center">
                             <input type="checkbox" name="activate[{{ feedback.id }}]" value="1" {%  if feedback.isEnabled  == 1 %}checked="checked"{%  endif  %}>
                         </div>
-                        </div>
-                    </li>
-                {% endfor %}
-                    <input id="sendOut" class="adminFeedback btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
-                </ul>
-            </form>
-        {% else %}
-            {% trans %} No feedbacks yet. {% endtrans %}
-        {% endif %}
-    </div>
+                    </div>
+            </li>
+        {% endfor %}
+            <input id="sendOut" class="adminFeedback btn btn-left orange abstandoben breite180" value="{% trans %} Active {% endtrans %}" type="submit">
+        </ul>
+    </form>
+    {% else %}
+        {% trans %} No feedbacks yet. {% endtrans %}
+    {% endif %}
     </div>
 {% endblock %}

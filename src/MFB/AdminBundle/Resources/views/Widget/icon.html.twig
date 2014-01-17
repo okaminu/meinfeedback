@@ -1,13 +1,20 @@
-<div style="margin-top: 10px">
-<div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300; text-align: center">{{ title }}</div>
-<div class="iconDisplay">
-    <a href="{{ widgetLink }}" target='_blank'><img src="{{ iconImage }}"></a>
-</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2">
+            <h3 class="text-center form-header mt50">{{ title }}</h3>
+            <div class="col-xs-3">
+                <div class="iconDisplay text-center">
+                    <a href="{{ widgetLink }}" target='_blank'><img src="{{ iconImage }}"></a>
+                </div>
+            </div>
 
-<div class="iconCode">
-    <textarea>{% verbatim %} <a target='_blank' href={% endverbatim %}{{ widgetLink }}{% verbatim %}>
-            <img src="{% endverbatim %}{{ iconImage }}{% verbatim %}"> </a>{% endverbatim %}
-    </textarea>
+            <div class="col-xs-9">
+                <div class="iconCode">
+                    <textarea class="width100 form-control" rows="3" cols="50">{% verbatim %} <a target='_blank' href={% endverbatim %}{{ widgetLink }}{% verbatim %}>
+                            <img src="{% endverbatim %}{{ iconImage }}{% verbatim %}"> </a>{% endverbatim %}
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-<div style="clear:both"></div>
