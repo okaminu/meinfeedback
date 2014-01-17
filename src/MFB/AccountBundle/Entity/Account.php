@@ -37,6 +37,13 @@ class Account implements AdvancedUserInterface
     /**
      * @var string
      *
+     * @ORM\Column(name="lastname", type="string", length=32)
+     */
+    private $lastname;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=64)
      * @Assert\NotBlank()
      * @Assert\Email()
@@ -329,5 +336,28 @@ class Account implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->getIsEnabled();
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     * @return Account
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string 
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
     }
 }
