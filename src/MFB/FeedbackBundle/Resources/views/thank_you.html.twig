@@ -1,13 +1,8 @@
-{% extends "::base.html.twig" %}
+{% extends "MFBAccountBundle::base.html.twig" %}
 
 {% block title %}MeinFeedback{% endblock %}
 
-{% block body %}
-    <header class="navbar navbar-fixed-top">
-        <div class="inner-page">
-            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
-        </div>
-    </header>
+{% block content %}
     <div class="row-fluid inner-page thankyou">
     {%  if homepage %}
         <script>

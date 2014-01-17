@@ -56,7 +56,7 @@ class DefaultController extends Controller
     {
         $return_url = $this->generateUrl(
             'mfb_account_profile_homepage',
-            array('accountId' => $accountChannel->getAccountId()),
+            array('accountId' => $accountChannel->getAccountId(), 'feedbackPage' => 1),
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
