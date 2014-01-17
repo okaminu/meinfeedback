@@ -16,7 +16,7 @@ mfb_location:
 
 mfb_show_create_customer:
     pattern: /show_create_customer
-    defaults: { _controller: MFBAdminBundle:Default:showCreateServiceCustomerForm }
+    defaults: { _controller: MFBAdminBundle:Default:index }
 
 mfb_save_customer:
     pattern: /save_customer
@@ -33,19 +33,19 @@ mfb_widget:
 
 mfb_admin_select_variables:
     pattern: /select_variables
-    defaults: { _controller: MFBAdminBundle:EmailTemplates:selectVariables}
+    defaults: { _controller: MFBAdminBundle:Templates:selectVariables}
 
-mfb_admin_edit_email_template:
+mfb_admin_edit_template:
     pattern: /edit_template
-    defaults: { _controller: MFBAdminBundle:EmailTemplates:edit }
+    defaults: { _controller: MFBAdminBundle:Templates:edit }
 
 mfb_admin_edit_thankyou_template:
     pattern: /edit_thankyou_template
-    defaults: { _controller: MFBAdminBundle:EmailTemplates:thankYouEdit }
+    defaults: { _controller: MFBAdminBundle:Templates:thankYouEdit }
 
 mfb_admin_list_possible_variables:
     pattern: /template/{emailTemplateId}/list_variables
-    defaults: { _controller: MFBAdminBundle:EmailTemplates:listPossibleVariables }
+    defaults: { _controller: MFBAdminBundle:Templates:listPossibleVariables }
 
 mfb_feedback_enable:
     pattern: /enableFeedback/{feedbackId}

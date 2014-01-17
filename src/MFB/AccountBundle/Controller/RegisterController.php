@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-
 class RegisterController extends Controller
 {
     public function indexAction()
@@ -22,10 +21,7 @@ class RegisterController extends Controller
             ));
 
     }
-    /**
-     * Creates a new Account entity.
-     *
-     */
+
     public function createAction(Request $request)
     {
         $entity = new Account();
@@ -53,13 +49,6 @@ class RegisterController extends Controller
             ));
     }
 
-    /**
-     * Creates a form to create a Account entity.
-     *
-     * @param Account $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
     private function createCreateForm(Account $entity)
     {
         $form = $this->createForm(new AccountType(), $entity, array(

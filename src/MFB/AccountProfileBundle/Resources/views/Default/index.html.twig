@@ -1,8 +1,14 @@
-{% extends "::base.html.twig" %}
+{% extends "MFBAccountBundle::base.html.twig" %}
 {% import "MFBFeedbackBundle::feedbackMacros.html.twig" as feedbackMacros %}
 {% block title %}Feedbacks für {{ account_channel_name }}{% endblock %}
 
-{% block body %}
+{% block head %}
+    <div class="writeFeedbackButton">
+        <a href="{{ path('mfb_feedback_create', {'accountId': account_id}) }}" class="btn btn-left orange abstandoben breite130">{% trans %} Give Feedback {% endtrans %}</a>
+    </div>
+{% endblock %}
+
+{% block content %}
     <!-- Brand and Navigation -->
     <div style="margin-left: 20px">
         <h3 style="margin-top: 50px;">Company profile</h3>
@@ -12,19 +18,19 @@
             <div>Company name: {{ channel.getName }}</div>
         {% endif %}
 
-        {% if channel.getHomepageUrl %}
+            {% if channel.getHomepageUrl %}
             <div>Homepage: <a href="{{ channel.getHomepageUrl }}">{{ channel.getHomepageUrl }}</a></div>
         {% endif %}
 
-        {% if channelAddress %}
+            {% if channelAddress %}
             <div>Address: {{ channelAddress }}</div>
         {% endif %}
 
-        {% if channel.getCountry.getName %}
+            {% if channel.getCountry.getName %}
             <div>Country: {{ channel.getCountry.getName }}</div>
         {% endif %}
 
-        {% if channel.getPhoneNumber %}
+            {% if channel.getPhoneNumber %}
             <div style="">Phone number: {{ channel.getPhoneNumber }}</div>
         {% endif %}
         </div>
@@ -61,7 +67,7 @@
                     </div>
                     {% set ratingCriteria = feedbackSummaryItem.getRatingByName('Overall') %}
                     {% if ratingCriteria.getRating > 0 %}
-                    <div class="stars_rating feedback-ratings">
+                        <div class="stars_rating feedback-ratings">
                         <div class="stars_gray_small">
                             <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
                         </div>
@@ -104,17 +110,5 @@
     </div>
 
     {{ feedbackMacros.pagination(feedbackSummaryPage.currentPageNumber, feedbackSummaryPage.lastPageNumber) }}
-
-    <header class="navbar navbar-fixed-top">
-        <div class="inner-page">
-            <h1 class="logo"><img src="{{ asset('bundles/meinfeedbackhome/images/logo-' ~ app.request.locale ~ '.png') }}"/></h1>
-            <a class="btn-nav" data-toggle="collapse" data-target=".nav-collapse"> <i class="icon-reorder"></i> </a>
-        </div>
-        <div class="writeFeedbackButton">
-            <a href="{{ path('mfb_feedback_create', {'accountId': account_id}) }}" class="btn btn-left orange abstandoben breite130">{% trans %} Give Feedback {% endtrans %}</a>
-        </div>
-    </header>
-    <!-- Home Page -->
-
 
 {% endblock %}
