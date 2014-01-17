@@ -106,11 +106,6 @@ class ChannelFeedbacks
         return round($number, 0, PHP_ROUND_HALF_UP);
     }
 
-    /**
-     * @param $list
-     * @param $page
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface
-     */
     private function makePaginator($list, $page)
     {
         $paginator = new Paginator();

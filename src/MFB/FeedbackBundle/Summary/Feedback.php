@@ -2,6 +2,7 @@
 namespace MFB\FeedbackBundle\Summary;
 
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use MFB\FeedbackBundle\ChannelFeedbacks;
 use MFB\FeedbackBundle\Summary\FeedbackPage as FeedbackSummaryPage;
 use MFB\FeedbackBundle\Summary\FeedbackItem as FeedbackSummaryItem;
 use MFB\RatingBundle\Entity\RatingSummary;
@@ -11,13 +12,13 @@ use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 class Feedback
 {
     private $channelFeedbacks;
-    
-    public function __construct($channelFeedbacks)
+
+    public function __construct(ChannelFeedbacks $channelFeedbacks)
     {
         $this->channelFeedbacks = $channelFeedbacks;
     }
 
-    
+
     public function createChannelRatingSummary($channelCriteriaRatings, $average)
     {
         $ratings = array();
@@ -31,10 +32,7 @@ class Feedback
         }
         return $ratings;
     }
-    /**
-     * @param PaginationInterface $page
-     * @return FeedbackSummaryPage
-     */
+
     public function createFeedbackPage(PaginationInterface $page)
     {
         $lastPageNumber = ceil($page->getTotalItemCount() / $page->getItemNumberPerPage());
@@ -45,10 +43,6 @@ class Feedback
         return $feedbackSummaryPage;
     }
 
-    /**
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return FeedbackSummaryItem
-     */
     private function createFeedbackSummaryItem($feedback)
     {
         $singleSummary = new FeedbackSummaryItem();
@@ -58,11 +52,6 @@ class Feedback
         return $singleSummary;
     }
 
-    /**
-     * @param FeedbackSummaryItem $singleSummary
-     * @param ServiceEntity $service
-     * @return FeedbackSummaryItem
-     */
     private function addServiceSummary(FeedbackSummaryItem $singleSummary, ServiceEntity $service)
     {
         $serviceGroup = $service->getServiceGroup();
@@ -73,10 +62,6 @@ class Feedback
         return $singleSummary;
     }
 
-    /**
-     * @param $feedback
-     * @return array
-     */
     private function createFeedbackRatingSummary(FeedbackEntity $feedback)
     {
         $ratings = array();
