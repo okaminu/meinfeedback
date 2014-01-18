@@ -40,7 +40,7 @@ class Admin
         }
 
         if ($this->isUserMissingServiceProvider($accountId)) {
-            $errors[] = 'Please insert at least one visible Service Provider';
+            $errors[] = 'Please insert at least one visible Employee';
         }
         return $errors;
     }

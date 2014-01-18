@@ -43,6 +43,7 @@ class ServiceType extends AbstractType
             ->add('serviceProvider', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceProvider',
                     'property' => 'firstname',
+                    'label' => "Service Provider",
                     'choices' => $this->serviceProvider
 
                 ))
