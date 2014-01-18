@@ -10,6 +10,9 @@
     {% endblock %}
 
     {% block postRating %}
+        {{ form_label(form.service.customer.gender) }}
+        {{ form_widget(form.service.customer.gender, {'attr': {'class' : 'gender'} }) }}
+        <div class="mandatoryFieldMark" style="float: right">*</div>
         {{ form_label(form.service.customer.anonymous) }}
         <div style="display:block; width:80px;">
             {{ form_widget(form.service.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
@@ -18,8 +21,6 @@
                 "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
             </div>
         </div>
-        {{ form_label(form.service.customer.gender) }}
-        {{ form_widget(form.service.customer.gender, {'attr': {'class' : 'gender'} }) }}
         {{ form_row(form.service.customer.firstName, {'attr':{'class': 'feedbackInput'} }) }}
         {{ form_row(form.service.customer.lastName) }}
         {{ form_row(form.service.customer.customerIdReference) }}

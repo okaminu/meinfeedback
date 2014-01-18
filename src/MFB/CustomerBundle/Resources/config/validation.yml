@@ -1,0 +1,4 @@
+MFB\CustomerBundle\Entity\Customer:
+  properties:
+    gender:
+      - NotNull: {message: "You must select gender"}

@@ -1,5 +1,7 @@
 MFB\FeedbackBundle\Entity\Feedback:
   properties:
+    customer:
+      - Valid: ~
     feedbackRating:
       - Valid: ~
 
