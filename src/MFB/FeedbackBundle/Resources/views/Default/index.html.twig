@@ -3,76 +3,95 @@
 
     {% block preRating %}
         <div class="form-group">
-            {{ form_widget(form.service.customer.email, {'attr': {'class': 'required validate-email form-control fr_input_txt fr_97_5pro breite490, spaceForMandatoryMark', 'placeholder': 'Customers email'} }) }}
-            <div class="mandatoryFieldMark" style="float: right">*</div>
+            <div class="col-xs-12">
+                {{ form_widget(form.service.customer.email, {'attr': {'class': 'form-control', 'placeholder': 'Customers email'} }) }}
+                <div class="mandatory">*</div>
+            </div>
         </div>
     {% endblock %}
 
     {% block postRating %}
-
-
         <div class="form-group">
+            <div class="col-xs-6">
                 {{ form_label(form.service.customer.gender) }}
-            <div class="input-group">
-                {% for gender in form.service.customer.gender %}
-                    <label class="radio-inline">
-                        {{ form_widget(gender, {'attr': {'class' : 'radio'} }) }} {{ gender.vars.label }}
-                    </label>
-                {% endfor %}
+                <div class="input-group">
+                    {% for gender in form.service.customer.gender %}
+                        <label class="radio-inline">
+                            {{ form_widget(gender, {'attr': {'class' : 'radio'} }) }} {{ gender.vars.label }}
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="mandatory">*</div>
             </div>
-            <div class="mandatory" style="float: right">*</div>
         </div>
 
         <div class="form-group">
+            <div class="col-xs-12">
             {{ form_label(form.service.customer.anonymous) }}
             <div style="display:block; width:80px;">
                 {{ form_widget(form.service.customer.anonymous, {'attr': {'style': 'width:30px'} }) }}
-                <div style="float:right; position:relative; top:10px">
-                    {{ tooltips.tooltip('What anonymous feedback?',
-                    "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
+                    <div style="float:right; position:relative; top:10px">
+                        {{ tooltips.tooltip('What anonymous feedback?',
+                        "Anonymous feedback will not display your personal information", 'positionBottomRight') }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            {{ form_label(form.service.customer.firstName) }}
-            {{ form_widget(form.service.customer.firstName, {'attr':{'class': 'feedbackInput form-control'} }) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(form.service.customer.lastName) }}
-            {{ form_widget(form.service.customer.lastName, {'attr':{'class': 'form-control'} }) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(form.service.customer.customerIdReference) }}
-            {{ form_widget(form.service.customer.customerIdReference, {'attr':{'class': 'form-control'} }) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(form.service.date) }}
-            <div class="form-inline">
-                {% for date in form.service.date %}
-                    <div class="col-xs-4">
-                        {{ form_widget(date, {'attr': {'class': 'form-control'} }) }}
-                    </div>
-                {% endfor %}
+            <div class="col-xs-12">
+                {{ form_label(form.service.customer.firstName) }}
+                {{ form_widget(form.service.customer.firstName, {'attr':{'class': 'feedbackInput form-control'} }) }}
             </div>
         </div>
 
         <div class="form-group">
-            {{ form_label(form.service.serviceIdReference) }}
-            {{ form_widget(form.service.serviceIdReference, {'attr':{'class': 'form-control'} }) }}
+            <div class="col-xs-12">
+                {{ form_label(form.service.customer.lastName) }}
+                {{ form_widget(form.service.customer.lastName, {'attr':{'class': 'form-control'} }) }}
+            </div>
         </div>
 
         <div class="form-group">
-            {{ form_label(form.service.serviceProvider) }}
-            {{ form_widget(form.service.serviceProvider, {'attr':{'class': 'form-control'} }) }}
+            <div class="col-xs-12">
+               {{ form_label(form.service.customer.customerIdReference) }}
+               {{ form_widget(form.service.customer.customerIdReference, {'attr':{'class': 'form-control'} }) }}
+            </div>
         </div>
 
         <div class="form-group">
-            {{ form_label(form.service.serviceGroup) }}
-            {{ form_widget(form.service.serviceGroup, {'attr':{'class': 'form-control'} }) }}
+            <div class="col-xs-12">
+                {{ form_label(form.service.date) }}
+                <div class="form-inline">
+                    {% for date in form.service.date %}
+                        <div class="col-xs-4">
+                            {{ form_widget(date, {'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12">
+                {{ form_label(form.service.serviceIdReference) }}
+                {{ form_widget(form.service.serviceIdReference, {'attr':{'class': 'form-control'} }) }}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12">
+                {{ form_label(form.service.serviceProvider) }}
+                {{ form_widget(form.service.serviceProvider, {'attr':{'class': 'form-control'} }) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12">
+                {{ form_label(form.service.serviceGroup) }}
+                {{ form_widget(form.service.serviceGroup, {'attr':{'class': 'form-control'} }) }}
+            </div>
         </div>
     {% endblock %}
 

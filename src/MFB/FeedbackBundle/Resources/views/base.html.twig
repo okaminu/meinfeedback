@@ -18,7 +18,7 @@
             Please leave feedback about {{ accountChannel.getName }}
         </div>
 
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'} } ) }}
 
         {{ form_errors(form) }}
 
@@ -27,8 +27,10 @@
             {% set criteriaName = criteria.ratingCriteriaId.vars.value %}
             {{ form_row(criteria.ratingCriteriaId) }}
             <div class="form-group">
+                <div class="col-xs-12">
                 {{ form_label(criteria.rating) }}
                 {{ stars.select_stars(criteriaName, criteria.rating) }}
+                </div>
             </div>
             <div class="clearfix"></div>
             {% if  criteria.rating.vars.value != 0%}
@@ -37,16 +39,20 @@
         {% endfor %}
 
         <div class="form-group">
+            <div class="col-xs-12">
             {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark form-control', 'placeholder':"Feedback"} }) }}
-            <div class="mandatory" style="float: right">*</div>
+            <div class="mandatory">*</div>
+            </div>
         </div>
         {% block postRating %} {% endblock %}
 
         <div class="form-group">
+            <div class="col-xs-12">
             {{ form_widget(form.save, {'attr': {'class': 'btn col-xs-12'} }) }}
+            </div>
         </div>
 
-        <div class="text-center form-endnote">
+        <div class="text-center form-endnote col-xs-12">
             <span class="mandatory-mark">*</span> <span>{% trans %} indicates required fields {% endtrans %}</span>
         </div>
         {{ form_row(form._token) }}
