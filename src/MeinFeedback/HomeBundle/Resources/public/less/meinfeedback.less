@@ -10,7 +10,7 @@
 
 body {
   font-family: "Lato" ,"Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding-top: 120px;
+  padding-top: 80px;
 }
 
 header {
@@ -20,12 +20,12 @@ header {
     background: @hblack;
     margin-bottom: 0;
   }
-  &.dashboard {
-    height: 85px;
-    .nav {
-      margin-top: 5px;
-    }
-  }
+//  &.dashboard {
+//    height: 85px;
+//    .nav {
+//      margin-top: 5px;
+//    }
+//  }
   .navbar-brand {
     height: 40px;
     padding: 0;
@@ -96,11 +96,18 @@ header {
 }
 
 .no-pad-left {
-  padding-left: 0;
+  padding-left: 0 !important;
 }
 
 .no-pad-right {
-  padding-right: 0;
+  padding-right: 0 !important;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:hover {
+  background: @gold;
+  color: @hblack;
+  border-color: #DDD;
 }
 
 .no-marg-top-bottom {
@@ -234,6 +241,10 @@ header {
   font-size: 17px;
 }
 
+.mb15 {
+  margin-bottom: 15px;
+}
+
 .feedback-count {
   padding-left: 25px;
   margin-bottom: 30px;
@@ -304,6 +315,9 @@ header {
     margin-top: 40px;
     .service-title {
       font-weight: bold;
+    }
+    &.no-marg-top {
+      margin-top: 0;
     }
   }
   .overall {
@@ -402,6 +416,10 @@ footer {
   width: 90%;
   margin-left: 15px;
   margin-top: 15px;
+  &.feedback-full-width {
+    width: 100%;
+    margin-left: 0;
+  }
   .comment-top {
     position: absolute;
     top: -10px;

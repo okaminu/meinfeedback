@@ -1,21 +1,21 @@
-<div>
+<div class="container">
     <div class="row-fluid inner-page contact">
-        <div class="span12">
-            <div style="padding:20px 10px 15px 0; font-size: 24px; font-weight:300;">
+        <div class="col-xs-10 col-xs-offset-1">
+            <h3 class="form-header">
                 {% trans %}Thank you page template{% endtrans %}
-            </div>
+            </h3>
             {{ form_start(form_thankyou) }}
             {{ form_errors(form_thankyou) }}
 
             <div>
-                {{ form_widget(form_thankyou.templateCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required', 'placeholder': 'Text*'} }) }}
+                {{ form_widget(form_thankyou.templateCode, {'attr': {'rows': 13, 'cols': 60, 'class': 'required form-control', 'placeholder': 'Text*'} }) }}
                 {{ form_errors(form_thankyou.templateCode) }}
             </div>
 
-            <div class="add-variable">
+            <div class="add-variable text-right">
                 <a href="{{ path('mfb_admin_list_possible_variables', {'emailTemplateId': thankyou_entity.id }) }}" class="iframe"> {% trans %} Add Variable {% endtrans %}</a>
             </div>
-            <div style="width:250px; padding-top:10px;">
+            <div>
                 <input id="sendOut" name="thankyou_template" class="btn btn-left orange abstandoben breite210" value="{% trans %} Save {% endtrans %}" type="submit">
             </div>
             {{ form_end(form_thankyou) }}

@@ -2,16 +2,16 @@
 {% import "MFBFeedbackBundle::feedbackMacros.html.twig" as feedbackMacros %}
 {% block title %}Feedbacks für {{ account_channel_name }}{% endblock %}
 
-{% block head %}
-    <div class="writeFeedbackButton">
-        <a href="{{ path('mfb_feedback_create', {'accountId': account_id}) }}" class="btn btn-left orange abstandoben breite130">{% trans %} Give Feedback {% endtrans %}</a>
-    </div>
-{% endblock %}
-
 {% block content %}
     <!-- Brand and Navigation -->
-    <div style="margin-left: 20px">
-        <h3 style="margin-top: 50px;">Company profile</h3>
+    <div class="container">
+        <h3 class="form-header mb10 pull-left">Company profile</h3>
+
+        <div class="writeFeedbackButton pull-right">
+            <a href="{{ path('mfb_feedback_create', {'accountId': account_id}) }}" class="btn btn-left orange abstandoben breite130">{% trans %} Give Feedback {% endtrans %}</a>
+        </div>
+
+        <div class="clearfix"></div>
 
         <div id="companyProfile">
         {% if channel.getName %}
@@ -35,7 +35,7 @@
         {% endif %}
         </div>
 
-        <h3 style="margin-top: 50px;">aktuelle Feedbacks für {{ account_channel_name }}</h3>
+        <h3 class="form-header mb10 mt50">aktuelle Feedbacks für {{ account_channel_name }}</h3>
         <ul class="stars_rating channel-ratings not-nested">
             {% for ratingCriteria in channelRatingSummaryList %}
                 <li>
@@ -52,12 +52,12 @@
             {% endfor %}
         </ul>
 
-        <div>Total feedbacks: {{ ratingCount }}</div>
+        <div class="feedback-count fs17">Total feedbacks: {{ ratingCount }}</div>
 
-        <div class="feedbackDisplayForm">
+        <div class="feedbackDisplayForm individual-feedback">
             {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}
                 {% set feedback = feedbackSummaryItem.getFeedback %}
-                <div style="margin:20px 0px">
+                <div class="mb15">
                     <div class="username">
                         {% if (feedback.getCustomer.getFirstName) and (feedback.getCustomer.getAnonymous == false) %}
                             {{ feedback.getCustomer.getFirstName }}
@@ -67,42 +67,40 @@
                     </div>
                     {% set ratingCriteria = feedbackSummaryItem.getRatingByName('Overall') %}
                     {% if ratingCriteria.getRating > 0 %}
-                        <div class="stars_rating feedback-ratings">
-                        <div class="stars_gray_small">
-                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                        <div class="col-xs-4">
+                            <div class="stars_rating  no-pad-left">
+                                <div class="feedback-ratings rating-stars">
+                                    <div class="stars_gray_small">
+                                        <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="clearfix"></div>
-                    </div>
                     {% endif %}
-                    <div class="service-pane" style="margin-right: 20px">
-                        <div class="service-info">
-                            <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                            <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
-                        </div>
 
-                        <div class="service-info">
-                            <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
-                            <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
-                        </div>
+                    <div class="service-info no-marg-top col-xs-2 col-xs-offset-4">
+                        <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                        <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
+                    </div>
+
+                    <div class="service-info no-marg-top col-xs-2">
+                        <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
+                        <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div style="margin-top: 20px">
-                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_piece_top.png') }}" width="14" height="12" class="comment-piece-top">
 
-                        <table width="700px" border="0" cellspacing="0" cellpadding="0" class="box-comment" >
-                            <tbody><tr>
-                                <td width="80%" style="padding:10px;">
-                                    <span class="comment-text left" itemprop="description">
-                                        {{ feedback.content }}
-                                    </span>
-                                </td>
 
-                                <td align="right" valign="top" nowrap="nowrap" style="padding:10px;">
-                                    <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="row feedback-wrap feedback-full-width">
+                        <img src="{{ asset('bundles/meinfeedbackhome/images/comment_top.png') }}" width="16" height="10" class="comment-top"/>
+                        <div class="col-xs-10">
+                                <span class="comment-text left" itemprop="description">
+                                    {{ feedback.content }}
+                                </span>
+                        </div>
+                        <div class="col-xs-2">
+                                <span title="{{ feedback.createdAt|date('Y-m-d') }}" class="timeago">{{ feedback.createdAt|date('D, d. M. Y, H:i') }}</span>
+                        </div>
+
                     </div>
                 </div>
             {% endfor %}

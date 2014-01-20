@@ -1,19 +1,21 @@
 {% macro pagination(currentPageNr, lastPageNr) %}
-    <div class="pagination pagination-centered">
-        <ul>
-            {% if currentPageNr > 1 %}
-                <li><a href="{{ currentPageNr - 1 }}">Prev</a></li>
-            {% endif %}
+    <div class="container">
+        <div class="text-center">
+            <ul class="pagination">
+                {% if currentPageNr > 1 %}
+                    <li><a href="{{ currentPageNr - 1 }}">Prev</a></li>
+                {% endif %}
 
-            {% for i in 1..lastPageNr %}
-                <li {% if i == currentPageNr %} class="disabled" {% endif %}>
-                    <a href="{{ i }}">{{ i }}</a>
-                </li>
-            {% endfor %}
+                {% for i in 1..lastPageNr %}
+                    <li {% if i == currentPageNr %} class="active" {% endif %}>
+                        <a href="{{ i }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
 
-            {% if currentPageNr < lastPageNr %}
-                <li><a href="{{ currentPageNr + 1 }}">Next</a></li>
-            {% endif %}
-        </ul>
+                {% if currentPageNr < lastPageNr %}
+                    <li><a href="{{ currentPageNr + 1 }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 {% endmacro %}
