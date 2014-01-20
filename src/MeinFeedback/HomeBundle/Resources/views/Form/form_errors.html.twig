@@ -1,9 +1,9 @@
 {% block form_errors %}
     {% spaceless %}
         {% if errors|length > 0 %}
-            <ul>
-                <li>{{ errors[0].message }}</li>
-            </ul>
+            <div class="alert alert-danger">
+                {{ errors[0].message }}
+            </div>
         {% endif %}
     {% endspaceless %}
 {% endblock form_errors %}

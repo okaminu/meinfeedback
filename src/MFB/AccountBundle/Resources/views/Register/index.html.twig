@@ -12,7 +12,7 @@
 
     <div class="form-group">
         <div class="col-xs-12">
-            <div class="mandatoryFieldMark">*</div>
+            <div class="mandatory">*</div>
             {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Name'} }) }}
             {{ form_errors(form.name) }}
         </div>
@@ -20,7 +20,7 @@
 
     <div class="form-group">
         <div class="col-xs-12">
-            <div class="mandatoryFieldMark">*</div>
+            <div class="mandatory">*</div>
             {{ form_widget(form.lastname, {'attr': {'class': 'required fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Lastname'} }) }}
             {{ form_errors(form.lastname) }}
         </div>
@@ -28,7 +28,7 @@
 
     <div class="form-group">
         <div class="col-xs-12">
-            <div class="mandatoryFieldMark">*</div>
+            <div class="mandatory">*</div>
             {{ form_widget(form.email, {'attr': {'class': 'required validate-email fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Email'} }) }}
             {{ form_errors(form.email) }}
         </div>
@@ -36,7 +36,7 @@
 
     <div class="form-group">
         <div class="col-xs-12">
-            <div class="mandatoryFieldMark">*</div>
+            <div class="mandatory">*</div>
             {{ form_widget(form.password.first, {'attr': {'class': 'required validate-passwd validate-alphanum fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Passwort'} }) }}
             {{ form_errors(form.password.first) }}
         </div>
@@ -44,7 +44,7 @@
 
     <div class="form-group">
         <div class="col-xs-12">
-            <div class="mandatoryFieldMark">*</div>
+            <div class="mandatory">*</div>
             {{ form_widget(form.password.second, {'attr': {'class': 'required validate-match validate-alphanum fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Passwort Wiederholung'} }) }}
             {{ form_errors(form.password.second) }}
         </div>

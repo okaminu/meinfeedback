@@ -19,3 +19,18 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro select_stars(criteriaName, rating) %}
+    <div class="criteria-rating" style="display: block" id="{{ criteriaName }}">
+        <div class="stars_gray">
+            <span style="width: 0%;" class="stars_gold"></span>
+            <div onmouseout="setRating(0, '{{ criteriaName }}');" class="stars_coords">
+                {% for i in 1..5 %}
+                    <div onmousemove="setRating({{ i }}, '{{ criteriaName }}');" onclick="clickRating({{ i }}, '{{ criteriaName }}');"></div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="mandatory">*</div>
+        {{ form_widget(rating, {'attr': {'class': 'rating'} }) }}
+    </div>
+{% endmacro %}

@@ -190,12 +190,18 @@ header {
   }
 }
 
-.mandatoryFieldMark {
+.mandatory {
   position: absolute;
   color: @red;
   font-size: 17px;
   right: 0;
   top: 0;
+  .criteria-rating &
+  {
+    float: left;
+    position: relative;
+    top:10px;
+  }
 }
 
 .transition (@transition) {
@@ -238,6 +244,7 @@ header {
     margin-top: 60px;
   }
 }
+
 
 .form-header {
   margin: 0 auto 30px 0;
@@ -451,6 +458,5 @@ footer {
   display: block;
 }
 
-@import (less) "../css/magnific.popup.css";
 @import (less) "../css/colpick.css";
 @import (less) "../css/jquery.qtip.min.css";

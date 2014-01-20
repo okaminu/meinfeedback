@@ -23,11 +23,12 @@ class CustomerType extends AbstractType
                 'gender',
                 'choice',
                 array(
-                    'choices' => array(1 => 'Male', 2 => 'Female'),
+                    'choices' => array('male' => 'Male', 'female' => 'Female'),
                     'required' => false,
                     'multiple'  => false,
                     'empty_value' => false,
-                    'expanded' => true
+                    'expanded' => true,
+                    'label' => 'Gender'
                 )
             )
             ->add('firstName', 'text', array('required' => false))
