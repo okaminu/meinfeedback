@@ -89,3 +89,14 @@ mfb_admin_update_service_visibility:
 mfb_admin_update_rating_criteria_select:
     pattern: /mfb_admin_update_rating_criteria_select
     defaults: { _controller: MFBAdminBundle:FormSetup:updateRatingCriteriaSelect}
+mfb_admin_images_show:
+    pattern: /mfb_admin_images_show
+    defaults: { _controller: MFBAdminBundle:Image:show }
+
+mfb_admin_image_save_logo:
+    pattern: /mfb_admin_image_save_logo
+    defaults: { _controller: MFBAdminBundle:Image:saveLogo }
+
+mfb_admin_image_remove_logo:
+    pattern: /mfb_admin_image_remove_logo
+    defaults: { _controller: MFBAdminBundle:Image:removeLogo }

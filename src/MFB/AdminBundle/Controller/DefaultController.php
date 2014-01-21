@@ -49,14 +49,9 @@ class DefaultController extends Controller
     public function locationAction(Request $request)
     {
         $em = $this->getEntityManager();
-
         $accountId = $this->getCurrentUser()->getId();
-
         $entity = $this->getAccountChannel($em, $accountId);
-        if (!$entity) {
-            $entity = new AccountChannel();
-            $entity->setAccountId($accountId);
-        }
+
         $form = $this->createForm(
             new AccountChannelType(),
             $entity,
@@ -212,9 +207,6 @@ class DefaultController extends Controller
         return $this->get('security.context')->getToken()->getUser();
     }
 
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|object
-     */
     private function getEntityManager()
     {
         return $this->getDoctrine()->getManager();

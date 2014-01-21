@@ -111,6 +111,15 @@ class AccountChannel
 
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->serviceProvider = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceGroup = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -303,14 +312,7 @@ class AccountChannel
     {
         return $this->phoneNumber;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->serviceProvider = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceGroup = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+
     
     /**
      * Add serviceProvider

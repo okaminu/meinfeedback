@@ -59,4 +59,12 @@ class Channel
         );
         return $accountChannel;
     }
+
+    public function findById($channelId)
+    {
+        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
+            array('id' => $channelId)
+        );
+        return $accountChannel;
+    }
 }
