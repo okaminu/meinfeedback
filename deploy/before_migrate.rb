@@ -58,13 +58,21 @@ end
 
 execute "Bootstrap symlink 1 for Mopa" do
     cwd release_path
-    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap"
+    command "php app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap
+    vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap"
     action :run
 end
 
 execute "Bootstrap symlink 2 for Mopa" do
     cwd release_path
-    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
+    command "php app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap
+    vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
+    action :run
+end
+
+execute "Dump Assets" do
+    cwd release_path
+    command "php app/console assetic:dump"
     action :run
 end
 
