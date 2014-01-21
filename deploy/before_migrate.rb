@@ -55,3 +55,26 @@ execute "fix cache and logs permissions" do
     command "chmod -R 0777 app/cache app/logs"
     action :run
 end
+
+execute "Bootstrap symlink for Mopa" do
+    cwd release_path
+    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
+    action :run
+end
+
+execute "Dump Assets files" do
+    cwd release_path
+    command "php app/console assetic:dump"
+    action :run
+end
+
+execute "create bundle assets symlinks" do
+    cwd release_path
+    command "php app/console assets:install --symlink"
+    action :run
+end
+
+
+
+
+
