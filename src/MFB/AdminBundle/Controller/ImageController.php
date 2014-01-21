@@ -2,8 +2,11 @@
 
 namespace MFB\AdminBundle\Controller;
 
+use MFB\DocumentBundle\DocumentException;
 use MFB\DocumentBundle\Form\DocumentType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 class ImageController extends Controller
@@ -13,10 +16,7 @@ class ImageController extends Controller
         $document = $this->createNewLogoDocument($this->getAccountChannel()->getId());
         $form = $this->createLogoForm($document);
 
-        return $this->render(
-            'MFBAdminBundle:Image:show.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->showImageForm($form);
     }
 
     public function saveLogoAction(Request $request)
@@ -25,12 +25,18 @@ class ImageController extends Controller
         $form = $this->createLogoForm($document);
 
         $form->handleRequest($request);
-
-        if ($form->isValid($request)) {
+        try {
+            if (!$form->isValid($request)) {
+                throw new Exception('');
+            }
             $this->get('mfb_document.service')->store($document);
+            return $this->redirect($this->generateUrl('mfb_admin_images_show'));
+        } catch (DocumentException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
+        } catch (Exception $ex) {
+            $form->addError(new FormError('Cannot upload'));
         }
-
-        return $this->redirect($this->generateUrl('mfb_admin_images_show'));
+        return $this->showImageForm($form);
     }
 
     public function removeLogoAction()
@@ -69,6 +75,18 @@ class ImageController extends Controller
             'image'
         );
         return $document;
+    }
+
+    /**
+     * @param $form
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function showImageForm($form)
+    {
+        return $this->render(
+            'MFBAdminBundle:Image:show.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
 }

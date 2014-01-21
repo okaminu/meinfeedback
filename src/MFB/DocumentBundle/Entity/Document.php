@@ -3,6 +3,7 @@
 namespace MFB\DocumentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MFB\DocumentBundle\DocumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -93,10 +94,14 @@ class Document
      */
     public function preUpload()
     {
+        $whitelist = array('png', 'jpg');
         $file = $this->getFile();
         if (isset($file)) {
             $this->filename = sha1(uniqid(mt_rand(), true)) . '.'. $file->guessExtension();
-            $this->extension = $file->guessExtension();
+
+            if (!in_array($file->guessExtension(), $whitelist)) {
+                throw new DocumentException('Not allowed file extension');
+            }
         }
     }
 
