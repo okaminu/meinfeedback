@@ -56,9 +56,15 @@ execute "fix cache and logs permissions" do
     action :run
 end
 
-execute "Bootstrap symlink for Mopa" do
+execute "Bootstrap symlink 1 for Mopa" do
     cwd release_path
     command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap"
+    action :run
+end
+
+execute "Bootstrap symlink 2 for Mopa" do
+    cwd release_path
+    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
     action :run
 end
 
