@@ -102,13 +102,6 @@ class AccountChannel
      */
     private $ratingCriteria;
 
-    /**
-     * @var integer
-     *
-     * @ORM\OneToMany(targetEntity="MFB\DocumentBundle\Entity\Document", mappedBy="channel", cascade={"persist"})
-     **/
-    private $document;
-
 
     /**
      * Get id
@@ -409,38 +402,5 @@ class AccountChannel
     public function getRatingCriteria()
     {
         return $this->ratingCriteria;
-    }
-
-    /**
-     * Add document
-     *
-     * @param \MFB\DocumentBundle\Entity\Document $document
-     * @return AccountChannel
-     */
-    public function addDocument(\MFB\DocumentBundle\Entity\Document $document)
-    {
-        $this->document[] = $document;
-    
-        return $this;
-    }
-
-    /**
-     * Remove document
-     *
-     * @param \MFB\DocumentBundle\Entity\Document $document
-     */
-    public function removeDocument(\MFB\DocumentBundle\Entity\Document $document)
-    {
-        $this->document->removeElement($document);
-    }
-
-    /**
-     * Get document
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDocument()
-    {
-        return $this->document;
     }
 }
