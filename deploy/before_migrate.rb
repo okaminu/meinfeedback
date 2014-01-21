@@ -62,12 +62,6 @@ execute "Bootstrap symlink for Mopa" do
     action :run
 end
 
-execute "Dump Assets files" do
-    cwd release_path
-    command "php app/console assetic:dump"
-    action :run
-end
-
 execute "create bundle assets symlinks" do
     cwd release_path
     command "php app/console assets:install --symlink"
