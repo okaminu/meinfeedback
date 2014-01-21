@@ -20,7 +20,6 @@ class TemplatesController extends Controller
 
         $emailTemplateService = $this->get('mfb_email.template');
 
-        /** @var EmailTemplate $emailTemplate  */
         $emailTemplate =$emailTemplateService->getEmailTemplate($this->getUserId());
 
         $typesToFilter = array('firstname', 'service_name', 'service_date', 'service_id', 'customer_id','reference_id');
@@ -60,10 +59,6 @@ class TemplatesController extends Controller
     }
 
 
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function editAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -71,9 +66,6 @@ class TemplatesController extends Controller
 
         $emailTemplateService = $this->get('mfb_email.template');
 
-        /**
-         * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
-         */
         $emailTemplate = $emailTemplateService->getEmailTemplate($accountId);
         $editForm = $this->createEditForm($emailTemplate);
 
@@ -86,7 +78,7 @@ class TemplatesController extends Controller
 
             $notUsedVariables = $emailTemplateService->getMandatoryAndUnusedVariables($emailTemplate);
 
-            if(count($notUsedVariables) > 0){
+            if (count($notUsedVariables) > 0) {
                 $showErrors = 'The following variables were not used: '. implode(' , ', $notUsedVariables);
                 return $this->showEmailTemplate($accountId, $showErrors);
             }
@@ -102,18 +94,11 @@ class TemplatesController extends Controller
     }
 
 
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
     public function thankYouEditAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $accountId = $this->getUserId();
 
-        /**
-         * @var $emailTemplate \MFB\EmailBundle\Entity\EmailTemplate
-         */
         $thankYouTemplate = $this->get('mfb_email.template')->getThankYouTemplate($accountId);
 
         $thankYouForm = $this->createThankYouForm($thankYouTemplate);
@@ -131,14 +116,8 @@ class TemplatesController extends Controller
         return $this->showEmailTemplate($accountId);
     }
 
-    /**
-     * @param $accountId
-     * @param $errors
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function showEmailTemplate($accountId, $errors = null)
     {
-        /** @var EmailTemplate $emailTemplate  */
         $emailTemplate = $this->get('mfb_email.template')->getEmailTemplate($accountId);
         $thankYouTemplate = $this->get('mfb_email.template')->getThankYouTemplate($accountId);
 
@@ -184,12 +163,6 @@ class TemplatesController extends Controller
         );
     }
 
-    /**
-     * Creates a form to edit a EmailTemplate entity.
-     *
-     * @param EmailTemplate $entity The entity
-     * @return \Symfony\Component\Form\Form The form
-     */
     private function createEditForm(EmailTemplate $entity)
     {
         $form = $this->createForm(
@@ -204,12 +177,6 @@ class TemplatesController extends Controller
         return $form;
     }
 
-    /**
-     * Creates a form to edit a EmailTemplate entity.
-     *
-     * @param EmailTemplate $entity The entity
-     * @return \Symfony\Component\Form\Form The form
-     */
     private function createThankYouForm(EmailTemplate $entity)
     {
         $form = $this->createForm(
@@ -235,9 +202,6 @@ class TemplatesController extends Controller
         return $this->get('mfb_email.template')->plain2html($text);
     }
 
-    /**
-     * @return mixed
-     */
     public function getUserId()
     {
         $token = $this->get('security.context')->getToken();
@@ -245,9 +209,6 @@ class TemplatesController extends Controller
         return $accountId;
     }
 
-    /**
-     * @return mixed
-     */
     private function getTemporaryTemplate()
     {
         $temporaryTemplateCodeArray = $this->getRequest()->getSession()->getFlashBag()->get('templateCode');
@@ -255,9 +216,6 @@ class TemplatesController extends Controller
         return $temporaryTemplateCode;
     }
 
-    /**
-     * @param $templateCode
-     */
     private function setTemporaryTemplate($templateCode)
     {
         $this->getRequest()->getSession()->getFlashBag()->set(
