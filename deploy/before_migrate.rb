@@ -58,7 +58,7 @@ end
 
 execute "Bootstrap symlink for Mopa" do
     cwd release_path
-    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
+    command "app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap"
     action :run
 end
 
