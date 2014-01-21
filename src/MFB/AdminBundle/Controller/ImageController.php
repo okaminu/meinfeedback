@@ -30,7 +30,7 @@ class ImageController extends Controller
             $this->get('mfb_document.service')->store($document);
         }
 
-        $this->redirect($this->generateUrl('mfb_admin_images_show'));
+        return $this->redirect($this->generateUrl('mfb_admin_images_show'));
     }
 
     public function removeLogoAction()

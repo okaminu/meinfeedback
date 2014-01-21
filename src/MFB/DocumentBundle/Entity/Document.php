@@ -26,9 +26,16 @@ class Document
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=64)
+     * @ORM\Column(name="filetype", type="string", length=64)
      */
-    private $type;
+    private $filetype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="filename", type="string", length=255)
+     */
+    private $filename;
 
     /**
      * @var string
@@ -36,13 +43,6 @@ class Document
      * @ORM\Column(name="category", type="string", length=64)
      */
     private $category;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
 
     /**
      * @var int
@@ -57,6 +57,8 @@ class Document
 
 
     private $file;
+    
+    private $extension;
 
     /**
      * Get id
@@ -86,26 +88,80 @@ class Document
     }
 
     /**
-     * Set type
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        $file = $this->getFile();
+        if (isset($file)) {
+            $this->filename = sha1(uniqid(mt_rand(), true)) . '.'. $file->guessExtension();
+            $this->extension = $file->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        $file = $this->getFile();
+        if (is_null($file)) {
+            return $file;
+        }
+        if (!is_dir($this->getUserUploadRootDir())) {
+            mkdir($this->getUserUploadRootDir(), 0755, true);
+        }
+        
+        $file->move($this->getuserUploadRootDir(), $this->filename);
+    }
+
+
+    /**
+     * Set filetype
      *
-     * @param string $type
+     * @param string $filetype
      * @return Document
      */
-    public function setType($type)
+    public function setFiletype($filetype)
     {
-        $this->type = $type;
+        $this->filetype = $filetype;
     
         return $this;
     }
 
     /**
-     * Get type
+     * Get filetype
      *
      * @return string 
      */
-    public function getType()
+    public function getFiletype()
     {
-        return $this->type;
+        return $this->filetype;
+    }
+
+    /**
+     * Set filename
+     *
+     * @param string $filename
+     * @return Document
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    
+        return $this;
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string 
+     */
+    public function getFilename()
+    {
+        return $this->filename;
     }
 
     /**
@@ -132,29 +188,6 @@ class Document
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     * @return Document
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set channel
      *
      * @param \MFB\ChannelBundle\Entity\AccountChannel $channel
@@ -175,5 +208,33 @@ class Document
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    public function getUploadDir()
+    {
+        return 'uploads';
+    }
+
+    public function getUserUploadRootDir()
+    {
+        $segments = array(
+            __DIR__,
+            '../Resources/public',
+            $this->getUploadDir(),
+            $this->getUserDir()
+        );
+
+        return implode('/', $segments);
+    }
+
+    public function getUserDir()
+    {
+        $segments =array(
+            $this->filetype,
+            $this->category,
+            $this->channel->getAccountId(),
+            $this->channel->getId());
+
+        return implode('/', $segments);
     }
 }

@@ -25,7 +25,7 @@ class Document
         $document = new DocumentEntity();
         $document->setChannel($accountChannel);
         $document->setCategory($category);
-        $document->setType($type);
+        $document->setFiletype($type);
         return $document;
     }
 

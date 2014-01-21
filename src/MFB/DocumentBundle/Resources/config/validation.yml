@@ -1,0 +1,10 @@
+MFB\DocumentBundle\Entity\Document:
+    properties:
+        file:
+            - File:
+                maxSize: 2M
+        extension:
+             - Regex:
+                 pattern: "/png/"
+                 match:   true
+                 message: Your name cannot contain a number
