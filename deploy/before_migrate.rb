@@ -66,7 +66,7 @@ end
 
 execute "create Document bundle uploads symlink" do
     cwd release_path
-    command "ln -s /tmp/www/meinfeedback/uploads/ uploads"
+    command "ln -s /tmp/www/meinfeedback/uploads/ #{release_path}/src/MFB/DocumentBundle/Resources/public/uploads"
     action :run
 end
 
@@ -79,7 +79,7 @@ end
 execute "Bootstrap symlink 2 for Mopa" do
     cwd release_path
     command "php app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
-    action :run
+    action :r
 end
 
 execute "Dump Assets" do
