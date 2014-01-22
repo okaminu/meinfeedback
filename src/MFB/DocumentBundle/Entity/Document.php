@@ -207,11 +207,10 @@ class Document
      */
     public function removeUpload()
     {
-        if ($file = $this->getUserUploadRootDir()) {
+        if ($file = $this->getUserUploadRootDir() .'/'.$this->filename) {
             unlink($file);
         }
     }
-
 
     /**
      * Get channel
@@ -250,4 +249,16 @@ class Document
 
         return implode('/', $segments);
     }
+
+    public function getWebPath()
+    {
+        $segments = array(
+            $this->getUploadDir(),
+            $this->getUserDir(),
+            $this->filename
+        );
+
+        return implode('/', $segments);
+    }
+
 }

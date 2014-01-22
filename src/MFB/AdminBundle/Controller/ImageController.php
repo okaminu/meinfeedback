@@ -15,7 +15,6 @@ class ImageController extends Controller
     {
         $document = $this->createNewLogoDocument($this->getAccountChannel()->getId());
         $form = $this->createLogoForm($document);
-
         return $this->showImageForm($form);
     }
 
@@ -29,7 +28,7 @@ class ImageController extends Controller
             if (!$form->isValid($request)) {
                 throw new Exception('');
             }
-            $this->get('mfb_document.service')->store($document);
+            $this->get('mfb_document.service')->storeSingleForCategory($document);
             return $this->redirect($this->generateUrl('mfb_admin_images_show'));
         } catch (DocumentException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -77,15 +76,24 @@ class ImageController extends Controller
         return $document;
     }
 
-    /**
-     * @param $form
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     private function showImageForm($form)
     {
+        $channelId = $this->getAccountChannel()->getId();
+        $documents = $this->get('mfb_document.service')->findByCategory($channelId, 'logo');
+
+        $logoPath = '';
+
+        if (!empty($documents)) {
+            $document = array_pop($documents);
+            $logoPath = $document->getWebPath();
+        }
+
         return $this->render(
             'MFBAdminBundle:Image:show.html.twig',
-            array('form' => $form->createView())
+            array(
+                'form' => $form->createView(),
+                'logoUrl' => $logoPath
+            )
         );
     }
 

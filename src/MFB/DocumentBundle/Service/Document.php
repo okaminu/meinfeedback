@@ -1,6 +1,7 @@
 <?php
 namespace MFB\DocumentBundle\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\Service\Channel as ChannelService;
@@ -35,17 +36,45 @@ class Document
         try {
             $this->saveEntity($document);
         } catch (DBALException $ex) {
-//            throw new Exception('Upload error');
-              throw $ex;
+            throw new Exception('Upload error');
         }
     }
 
-    /**
-     * @param $entity
-     */
+    public function storeSingleForCategory($document)
+    {
+        try {
+            $this->removeCategoryDocuments($document->getChannel()->getId(), $document->getCategory());
+            $this->saveEntity($document);
+        } catch (DBALException $ex) {
+            throw new Exception('Upload error');
+        }
+    }
+
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
+    }
+
+    private function removeCategoryDocuments($channelId, $category)
+    {
+        $documents = $this->findByCategory($channelId, $category);
+
+        foreach ($documents as $document) {
+            $this->entityManager->remove($document);
+        }
+        $this->entityManager->flush();
+    }
+
+    public function findByCategory($channelId, $category)
+    {
+        $documents = $this->entityManager->getRepository("MFBDocumentBundle:Document")->findBy(
+            array(
+                'channel' => $channelId,
+                'category' => $category
+            )
+        );
+
+        return $documents;
     }
 }

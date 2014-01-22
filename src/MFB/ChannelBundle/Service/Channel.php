@@ -67,4 +67,5 @@ class Channel
         );
         return $accountChannel;
     }
+
 }
