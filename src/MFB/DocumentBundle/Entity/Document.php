@@ -56,10 +56,9 @@ class Document
      */
     private $channel;
 
-
     private $file;
-    
-    private $extension;
+
+    private $extensionWhitelist = array('jpg', 'png');
 
     /**
      * Get id
@@ -94,12 +93,10 @@ class Document
      */
     public function preUpload()
     {
-        $whitelist = array('png', 'jpg');
         $file = $this->getFile();
         if (isset($file)) {
             $this->filename = sha1(uniqid(mt_rand(), true)) . '.'. $file->guessExtension();
-
-            if (!in_array($file->guessExtension(), $whitelist)) {
+            if (!in_array($file->guessExtension(), $this->extensionWhitelist)) {
                 throw new DocumentException('Not allowed file extension');
             }
         }
@@ -204,6 +201,17 @@ class Document
     
         return $this;
     }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getUserUploadRootDir()) {
+            unlink($file);
+        }
+    }
+
 
     /**
      * Get channel
