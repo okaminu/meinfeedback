@@ -22,6 +22,12 @@ class DefaultController extends Controller
         if (!$accountChannel) {
             return $this->render('MFBAccountProfileBundle:Default:no_feedbacks.html.twig');
         }
+        $documents = $this->get('mfb_document.service')->findByCategory($accountChannel->getId(), 'logo');
+
+        $logoPath = '';
+        if ($document = end($documents)) {
+            $logoPath = $document->getWebPath();
+        }
 
         $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($accountChannel->getId());
         $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
@@ -34,7 +40,8 @@ class DefaultController extends Controller
                 'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
                 'channelRatingSummaryList' => $channelFeedbacks->getChannelRatingSummary(),
                 'channelAddress' => $channelAddress,
-                'channel' => $accountChannel
+                'channel' => $accountChannel,
+                'logoUrl' => $logoPath
             )
         );
     }

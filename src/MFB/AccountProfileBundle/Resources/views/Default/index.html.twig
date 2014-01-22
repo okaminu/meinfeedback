@@ -14,6 +14,12 @@
         <div class="clearfix"></div>
 
         <div id="companyProfile">
+            <div class="row mb15">
+                <div class="col-xs-12 logo">
+                    <img src="{{ asset('bundles/mfbdocument/' ~ logoUrl) }}" class="img-rounded"/>
+                </div>
+            </div>
+
         {% if channel.getName %}
             <div>Company name: {{ channel.getName }}</div>
         {% endif %}
@@ -26,13 +32,15 @@
             <div>Address: {{ channelAddress }}</div>
         {% endif %}
 
-            {% if channel.getCountry.getName %}
+        {% if channel.getCountry.getName %}
             <div>Country: {{ channel.getCountry.getName }}</div>
         {% endif %}
 
-            {% if channel.getPhoneNumber %}
+        {% if channel.getPhoneNumber %}
             <div style="">Phone number: {{ channel.getPhoneNumber }}</div>
         {% endif %}
+
+
         </div>
 
         <h3 class="form-header mb10 mt50">aktuelle Feedbacks für {{ account_channel_name }}</h3>

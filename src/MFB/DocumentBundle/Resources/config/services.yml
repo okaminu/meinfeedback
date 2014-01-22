@@ -1,7 +1,11 @@
 parameters:
     mfb_document.class: MFB\DocumentBundle\Service\Document
+    mfb_document.whitelist.extension:
+      image:
+        - png
+        - jpg
 
 services:
     mfb_document.service:
         class: %mfb_document.class%
-        arguments: [@doctrine.orm.default_entity_manager, @mfb_account_channel.service]
+        arguments: [@doctrine.orm.default_entity_manager, @mfb_account_channel.service, %mfb_document.whitelist.extension%]

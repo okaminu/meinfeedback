@@ -1,7 +1,6 @@
 <?php
 namespace MFB\DocumentBundle\Service;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\Service\Channel as ChannelService;
@@ -12,14 +11,16 @@ class Document
 {
     private $entityManager;
     private $channelService;
+    private $extensionWhitelist;
 
-    public function __construct(EntityManager $em, ChannelService $cs)
+    public function __construct(EntityManager $em, ChannelService $cs, $ew)
     {
         $this->entityManager = $em;
         $this->channelService = $cs;
+        $this->extensionWhitelist = $ew;
     }
 
-    public function createNewDocument($channelId, $category, $type)
+    private function createNewDocument($channelId, $category, $type)
     {
         $accountChannel = $this->channelService->findById($channelId);
 
@@ -27,14 +28,22 @@ class Document
         $document->setChannel($accountChannel);
         $document->setCategory($category);
         $document->setFiletype($type);
+        $document->setExtensionWhitelist($this->extensionWhitelist);
         return $document;
+    }
+
+    public function createNewImage($channelId, $category)
+    {
+        return $this->createNewDocument($channelId, $category, 'image');
     }
 
 
     public function store($document)
     {
         try {
-            $this->saveEntity($document);
+            $this->entityManager->persist($document);
+
+            $this->entityManager->flush();
         } catch (DBALException $ex) {
             throw new Exception('Upload error');
         }
@@ -44,16 +53,12 @@ class Document
     {
         try {
             $this->removeCategoryDocuments($document->getChannel()->getId(), $document->getCategory());
-            $this->saveEntity($document);
+            $this->entityManager->persist($document);
+
+            $this->entityManager->flush();
         } catch (DBALException $ex) {
             throw new Exception('Upload error');
         }
-    }
-
-    private function saveEntity($entity)
-    {
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
     }
 
     private function removeCategoryDocuments($channelId, $category)
@@ -63,7 +68,6 @@ class Document
         foreach ($documents as $document) {
             $this->entityManager->remove($document);
         }
-        $this->entityManager->flush();
     }
 
     public function findByCategory($channelId, $category)
@@ -74,7 +78,6 @@ class Document
                 'category' => $category
             )
         );
-
         return $documents;
     }
 }

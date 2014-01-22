@@ -56,6 +56,20 @@ execute "fix cache and logs permissions" do
     action :run
 end
 
+directory "/tmp/www/meinfeedback/uploads" do
+    mode 00777
+    owner "www-data"
+    group "www-data"
+    action :create
+    recursive true
+end
+
+execute "create Document bundle uploads symlink" do
+    cwd release_path
+    command "ln -s /tmp/www/meinfeedback/uploads/ uploads"
+    action :run
+end
+
 execute "Bootstrap symlink 1 for Mopa" do
     cwd release_path
     command "php app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap"
@@ -79,6 +93,10 @@ execute "create bundle assets symlinks" do
     command "php app/console assets:install --symlink"
     action :run
 end
+
+
+
+
 
 
 

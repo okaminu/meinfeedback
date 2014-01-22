@@ -13,14 +13,14 @@ class ImageController extends Controller
 {
     public function showAction()
     {
-        $document = $this->createNewLogoDocument($this->getAccountChannel()->getId());
+        $document = $this->createNewLogo($this->getAccountChannel()->getId());
         $form = $this->createLogoForm($document);
         return $this->showImageForm($form);
     }
 
     public function saveLogoAction(Request $request)
     {
-        $document = $this->createNewLogoDocument($this->getAccountChannel()->getId());
+        $document = $this->createNewLogo($this->getAccountChannel()->getId());
         $form = $this->createLogoForm($document);
 
         $form->handleRequest($request);
@@ -66,14 +66,9 @@ class ImageController extends Controller
         return $form;
     }
 
-    private function createNewLogoDocument($channelId)
+    private function createNewLogo($channelId)
     {
-        $document = $this->get('mfb_document.service')->createNewDocument(
-            $channelId,
-            'logo',
-            'image'
-        );
-        return $document;
+        return $this->get('mfb_document.service')->createNewImage($channelId, 'logo');
     }
 
     private function showImageForm($form)
@@ -82,9 +77,7 @@ class ImageController extends Controller
         $documents = $this->get('mfb_document.service')->findByCategory($channelId, 'logo');
 
         $logoPath = '';
-
-        if (!empty($documents)) {
-            $document = array_pop($documents);
+        if ($document = end($documents)) {
             $logoPath = $document->getWebPath();
         }
 

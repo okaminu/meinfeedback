@@ -58,7 +58,7 @@ class Document
 
     private $file;
 
-    private $extensionWhitelist = array('jpg', 'png');
+    private $extensionWhitelist;
 
     /**
      * Get id
@@ -68,6 +68,14 @@ class Document
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $extensionWhitelist
+     */
+    public function setExtensionWhitelist($extensionWhitelist)
+    {
+        $this->extensionWhitelist = $extensionWhitelist;
     }
 
 
@@ -85,38 +93,6 @@ class Document
     public function getFile()
     {
         return $this->file;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function preUpload()
-    {
-        $file = $this->getFile();
-        if (isset($file)) {
-            $this->filename = sha1(uniqid(mt_rand(), true)) . '.'. $file->guessExtension();
-            if (!in_array($file->guessExtension(), $this->extensionWhitelist)) {
-                throw new DocumentException('Not allowed file extension');
-            }
-        }
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function upload()
-    {
-        $file = $this->getFile();
-        if (is_null($file)) {
-            return $file;
-        }
-        if (!is_dir($this->getUserUploadRootDir())) {
-            mkdir($this->getUserUploadRootDir(), 0755, true);
-        }
-        
-        $file->move($this->getuserUploadRootDir(), $this->filename);
     }
 
 
@@ -203,23 +179,57 @@ class Document
     }
 
     /**
-     * @ORM\PostRemove()
-     */
-    public function removeUpload()
-    {
-        if ($file = $this->getUserUploadRootDir() .'/'.$this->filename) {
-            unlink($file);
-        }
-    }
-
-    /**
      * Get channel
      *
-     * @return \MFB\ChannelBundle\Entity\AccountChannel 
+     * @return \MFB\ChannelBundle\Entity\AccountChannel
      */
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        $file = $this->getFile();
+        if (isset($file)) {
+            $this->filename = sha1(uniqid(mt_rand(), true)) . '.'. $file->guessExtension();
+            if (!in_array($file->guessExtension(), $this->extensionWhitelist[$this->filetype])) {
+                throw new DocumentException('Not allowed file extension');
+            }
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        $file = $this->getFile();
+        if (is_null($file)) {
+            return $file;
+        }
+        if (!is_dir($this->getUserUploadRootDir())) {
+            mkdir($this->getUserUploadRootDir(), 0755, true);
+        }
+
+        $file->move($this->getuserUploadRootDir(), $this->filename);
+    }
+
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $file = $this->getUserUploadRootDir() .'/'.$this->filename;
+        if (is_file($file)) {
+            unlink($file);
+        }
     }
 
     public function getUploadDir()
@@ -260,5 +270,4 @@ class Document
 
         return implode('/', $segments);
     }
-
 }
