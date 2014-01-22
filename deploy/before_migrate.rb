@@ -56,13 +56,6 @@ execute "fix cache and logs permissions" do
     action :run
 end
 
-directory "/tmp/www/meinfeedback/uploads" do
-    mode 00777
-    owner "www-data"
-    group "www-data"
-    action :create
-    recursive true
-end
 
 execute "create Document bundle uploads symlink" do
     cwd release_path
