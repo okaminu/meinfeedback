@@ -52,25 +52,6 @@ class WidgetController extends Controller
             $em->flush();
         }
 
-
-        $widgetLink = $this->generateUrl(
-            'mfb_account_profile_homepage',
-            array('accountId' => $accountId, 'feedbackPage' => 1),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $widgetImage = $this->generateUrl(
-            'mfb_widget_account_channel',
-            array('accountId' => $accountId),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $inviteUrl  = $this->generateUrl(
-            'mfb_feedback_create',
-            array('accountId' => $accountId),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
         $base = $request->getSchemeAndHttpHost();
         $lightIconLink = $base.$this->get('templating.helper.assets')
                 ->getUrl('bundles/meinfeedbackhome/images/mf_light_de.png');
@@ -81,9 +62,9 @@ class WidgetController extends Controller
         return $this->render(
             'MFBAdminBundle:Widget:index.html.twig',
             array(
-                'widgetLink' => $widgetLink,
-                'widgetImage' => $widgetImage,
-                'inviteUrl' => $inviteUrl,
+                'widgetLink' => $this->getRouteUrl($accountId, 'mfb_account_profile_homepage'),
+                'widgetImage' => $this->getRouteUrl($accountId, 'mfb_widget_account_channel'),
+                'inviteUrl' => $this->getRouteUrl($accountId, 'mfb_feedback_create'),
                 'darkIcon' => $darkIconLink,
                 'lightIcon' => $lightIconLink,
                 'form' => $form->createView()
@@ -179,6 +160,16 @@ class WidgetController extends Controller
         );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    private function getRouteUrl($accountId, $route)
+    {
+        $link = $this->generateUrl(
+            $route,
+            array('accountId' => $accountId),
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        return $link;
     }
 
 

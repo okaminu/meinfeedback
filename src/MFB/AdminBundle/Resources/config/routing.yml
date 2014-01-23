@@ -100,3 +100,4 @@ mfb_admin_image_save_logo:
 mfb_admin_image_remove_logo:
     pattern: /mfb_admin_image_remove_logo
     defaults: { _controller: MFBAdminBundle:Image:removeLogo }
+

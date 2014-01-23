@@ -22,6 +22,7 @@ $("img.lazy").lazyload({
 });
 
 $('#pickerText').colpick({
+    layout: 'hex',
     onChange:function(hsb,hex,rgb,fromSetColor) {
         $('.textColor').val(hex);
     },
@@ -29,6 +30,7 @@ $('#pickerText').colpick({
 });
 
 $('#pickerBackground').colpick({
+    layout: 'hex',
     onChange:function(hsb,hex,rgb,fromSetColor) {
         $('.backgroundColor').val(hex);
     },

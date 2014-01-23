@@ -41,7 +41,8 @@ class DefaultController extends Controller
                 'channelRatingSummaryList' => $channelFeedbacks->getChannelRatingSummary(),
                 'channelAddress' => $channelAddress,
                 'channel' => $accountChannel,
-                'logoUrl' => $logoPath
+                'logoUrl' => $logoPath,
+                'baseUrl' => $this->generateUrl('mfb_account_profile_homepage', array('accountId' => $accountId))
             )
         );
     }
