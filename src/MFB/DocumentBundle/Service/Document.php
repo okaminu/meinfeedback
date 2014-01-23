@@ -80,4 +80,9 @@ class Document
         );
         return $documents;
     }
+    
+    public function getTypeExtensionWhitelist($type)
+    {
+            return $this->extensionWhitelist[$type];
+    }
 }

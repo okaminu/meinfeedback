@@ -85,7 +85,8 @@ class ImageController extends Controller
             'MFBAdminBundle:Image:show.html.twig',
             array(
                 'form' => $form->createView(),
-                'logoUrl' => $logoPath
+                'logoUrl' => $logoPath,
+                'allowedImageExtensions' => $this->get('mfb_document.service')->getTypeExtensionWhitelist('image')
             )
         );
     }

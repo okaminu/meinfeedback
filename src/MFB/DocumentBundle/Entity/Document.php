@@ -217,7 +217,7 @@ class Document
             mkdir($this->getUserUploadRootDir(), 0755, true);
         }
 
-        $file->move($this->getuserUploadRootDir(), $this->filename);
+        $file->move($this->getUserUploadRootDir(), $this->filename);
     }
 
 
