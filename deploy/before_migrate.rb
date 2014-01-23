@@ -72,7 +72,7 @@ end
 execute "Bootstrap symlink 2 for Mopa" do
     cwd release_path
     command "php app/console mopa:bootstrap:symlink:less -m /srv/www/meinfeedback_app/current/vendor/twitter/bootstrap vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/bootstrap"
-    action :r
+    action :run
 end
 
 execute "Dump Assets" do
