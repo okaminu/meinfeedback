@@ -1,0 +1,8 @@
+MFB\ServiceBundle\Entity\ServiceProvider:
+  properties:
+    honorific:
+      - Range:
+          min: 1
+          max: 2
+          minMessage: Error selecting title
+          maxMessage: Error selecting title

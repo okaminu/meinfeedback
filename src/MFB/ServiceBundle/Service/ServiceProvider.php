@@ -4,15 +4,19 @@ namespace MFB\ServiceBundle\Service;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ServiceBundle\Entity\ServiceProvider as ServiceProviderEntity;
+use MFB\ServiceBundle\Form\ServiceProviderType;
 use MFB\ServiceBundle\ServiceException;
 
 class ServiceProvider
 {
     private $entityManager;
+    
+    private $honorific;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, $honorific)
     {
         $this->entityManager = $em;
+        $this->honorific = $honorific;
     }
 
     public function createNewServiceProvider($accountId)
@@ -30,6 +34,12 @@ class ServiceProvider
             throw new ServiceException('Email already exists');
         }
     }
+
+    public function getType()
+    {
+        return new ServiceProviderType($this->honorific);
+    }
+
 
     /**
      * @param $entity
@@ -80,5 +90,10 @@ class ServiceProvider
             return true;
         }
         return false;
+    }
+    
+    public function getHonorifics()
+    {
+        return $this->honorific;
     }
 }

@@ -56,6 +56,7 @@ class Feedback
     {
         $serviceGroup = $service->getServiceGroup();
         $serviceProvider = $service->getServiceProvider();
+
         $singleSummary->setServiceTypeName($serviceGroup->getName());
         $serviceProviderInfo = $serviceProvider->getFirstname() . ' ' . $serviceProvider->getLastname();
         $singleSummary->setServiceProviderInfo($serviceProviderInfo);

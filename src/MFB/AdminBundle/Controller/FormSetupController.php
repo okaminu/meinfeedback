@@ -169,7 +169,7 @@ class FormSetupController extends Controller
     private function getServiceProviderForm(ServiceProvider $serviceProvider)
     {
         $form = $this->createForm(
-            new ServiceProviderType(),
+            $this->get('mfb_service_provider.service')->getType(),
             $serviceProvider,
             array(
                 'action' => $this->generateUrl('mfb_admin_save_service_provider'),
@@ -224,6 +224,7 @@ class FormSetupController extends Controller
                 'method' => 'POST',
             )
         );
+        $this->addServiceProviderTitles($channelServicesForm);
         return $channelServicesForm;
     }
 
@@ -245,5 +246,16 @@ class FormSetupController extends Controller
                 'method' => 'POST',
             )
         );
+    }
+
+    private function addServiceProviderTitles($form)
+    {
+        $honorificList = $this->get('mfb_service_provider.service')->getHonorifics();
+        $serviceProviderForm = $form->get('serviceProvider');
+        foreach ($serviceProviderForm as $providerForm) {
+            $honorificId = $providerForm->getData()->getHonorific();
+            $providerForm->remove('honorific');
+            $providerForm->add('honorific', 'hidden', array('label' => $honorificList[$honorificId]));
+        }
     }
 }

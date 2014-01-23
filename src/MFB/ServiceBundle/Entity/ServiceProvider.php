@@ -31,15 +31,20 @@ class ServiceProvider
     private $channel;
 
     /**
-     * @var string
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @var int
+     * @ORM\Column(name="honorific", type="smallint")
      */
-    private $firstname;
-
+    private $honorific;
 
     /**
      * @var string
-     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     */
+    private $firstname;
+
+    /**
+     * @var string
+     * @ORM\Column(name="lastname", type="string", length=255)
      */
     private $lastname;
 
@@ -150,5 +155,28 @@ class ServiceProvider
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * Set honorific
+     *
+     * @param integer $honorific
+     * @return ServiceProvider
+     */
+    public function setHonorific($honorific)
+    {
+        $this->honorific = $honorific;
+    
+        return $this;
+    }
+
+    /**
+     * Get honorific
+     *
+     * @return integer 
+     */
+    public function getHonorific()
+    {
+        return $this->honorific;
     }
 }

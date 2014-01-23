@@ -1,4 +1,5 @@
 {% extends 'MFBAdminBundle::base.html.twig' %}
+{% form_theme serviceProviderForm "MeinFeedbackHomeBundle:Form:form_errors.html.twig" %}
 
 {% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
 
@@ -52,7 +53,7 @@
                         {% for serviceProvider in channelServicesForm.serviceProvider %}
                             <div class="checkbox">
                                 <label>
-                                    {{ form_widget(serviceProvider.visibility) }} {{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}
+                                    {{ form_widget(serviceProvider.visibility) }} {{ serviceProvider.honorific.vars.label }} {{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}
                                 </label>
                             </div>
                         {% endfor %}
@@ -106,8 +107,20 @@
                         {% trans %} Add Service Provider {% endtrans %}
                     </h3>
 
+                    {{ form_errors(serviceProviderForm) }}
                     <div class="sectionIdent">
                         {{ form_start(serviceProviderForm) }}
+                        <div class="form-group">
+                            {{ form_label(serviceProviderForm.honorific, null, {'label_attr':{'class': 'control-label'} }) }}
+                            <div class="input-group">
+                                {% for title in serviceProviderForm.honorific %}
+                                    <label class="radio-inline">
+                                        {{ form_widget(title, {'attr': {'class': 'radio'} }) }} {{ title.vars.label }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             {{ form_label(serviceProviderForm.firstname, null, {'label_attr':{'class': 'control-label'} }) }}
                             {{ form_widget(serviceProviderForm.firstname, {'attr': {'class': 'form-control'} }) }}
@@ -116,6 +129,8 @@
                             {{ form_label(serviceProviderForm.lastname, null, {'label_attr':{'class': 'control-label'} }) }}
                             {{ form_widget(serviceProviderForm.lastname, {'attr': {'class': 'form-control'} }) }}
                         </div>
+
+
                         <div class="form-group">
                             {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                         </div>

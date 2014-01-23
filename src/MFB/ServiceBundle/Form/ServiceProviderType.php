@@ -8,6 +8,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ServiceProviderType extends AbstractType
 {
+
+    private $honorific;
+
+    public function __construct($honorific)
+    {
+        $this->honorific = $honorific;
+    }
+
         /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -15,8 +23,20 @@ class ServiceProviderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstname', 'text', array('label' => 'Firstname', 'required' => true))
-            ->add('lastname', 'text', array('label' => 'Lastname', 'required' => false))
+            ->add(
+                'honorific',
+                'choice',
+                array(
+                    'choices' => $this->honorific,
+                    'required' => true,
+                    'multiple'  => false,
+                    'empty_value' => false,
+                    'expanded' => true,
+                    'label' => 'Title'
+                )
+            )
+            ->add('firstname', 'text', array('label' => 'Firstname', 'required' => false))
+            ->add('lastname', 'text', array('label' => 'Lastname', 'required' => true))
         ;
     }
     
