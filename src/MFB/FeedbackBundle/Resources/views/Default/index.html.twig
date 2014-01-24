@@ -76,6 +76,14 @@
 
         <div class="form-group">
             <div class="col-xs-12">
+                {{ form_label(form.service.serviceIdReference) }}
+                {{ form_widget(form.service.serviceIdReference, {'attr':{'class': 'form-control'} }) }}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12">
                 {{ form_label(form.service.date) }}
                 <div class="form-inline">
                     {% for date in form.service.date %}
@@ -84,14 +92,6 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-xs-12">
-                {{ form_label(form.service.serviceIdReference) }}
-                {{ form_widget(form.service.serviceIdReference, {'attr':{'class': 'form-control'} }) }}
-
             </div>
         </div>
 
