@@ -38,14 +38,13 @@ class ServiceType extends AbstractType
             ->add('serviceGroup', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceGroup',
                     'property' => 'name',
-                    'choices' => $this->serviceGroup
+                    'choices' => $this->serviceGroup,
                 ))
             ->add('serviceProvider', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceProvider',
                     'property' => 'lastname',
                     'label' => "Service Provider",
-                    'choices' => $this->serviceProvider
-
+                    'choices' => $this->serviceProvider,
                 ))
         ;
     }

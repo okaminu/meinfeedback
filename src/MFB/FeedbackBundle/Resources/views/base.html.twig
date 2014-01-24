@@ -1,5 +1,6 @@
 {% extends "MFBAccountBundle::base.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_errors.html.twig" %}
+{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+{% form_theme form "MeinFeedbackHomeBundle:Form:form_label_mandatory.html.twig" %}
 {% import "MFBFeedbackBundle::feedbackMacros.html.twig" as stars %}
 
 {% block title %}MeinFeedback{% endblock %}
@@ -40,8 +41,8 @@
 
         <div class="form-group">
             <div class="col-xs-12">
-            {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark form-control', 'placeholder':"Feedback"} }) }}
-            <div class="mandatory">*</div>
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content, {'attr': {'rows': 6, 'name': 'feedback', 'class': 'spaceForMandatoryMark form-control', 'placeholder':"Write you feedback"} }) }}
             </div>
         </div>
         {% block postRating %} {% endblock %}

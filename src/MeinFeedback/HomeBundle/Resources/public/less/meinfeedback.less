@@ -198,7 +198,7 @@ header {
 }
 
 .mandatory {
-  position: absolute;
+  position: relative;
   color: @red;
   font-size: 17px;
   right: 0;
@@ -208,6 +208,10 @@ header {
     float: left;
     position: relative;
   }
+  input + &{
+    position: absolute;
+  }
+
 }
 
 .transition (@transition) {

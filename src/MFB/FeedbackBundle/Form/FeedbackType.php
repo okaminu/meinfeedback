@@ -23,7 +23,7 @@ class FeedbackType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', 'textarea')
+            ->add('content', 'textarea', array('label' => 'Feedback'))
             ->add('service', $this->serviceType)
             ->add('save', 'submit', array('label' => 'Send'))
             ->add('feedbackRating', 'collection', array('type' => new FeedbackRatingType()));

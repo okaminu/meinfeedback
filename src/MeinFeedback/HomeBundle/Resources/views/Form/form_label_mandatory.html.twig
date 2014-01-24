@@ -1,0 +1,8 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_label%}
+    {{ parent() }}
+    {% if required and ((form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
+        <span class="mandatory">*</span>
+    {% endif %}
+{% endblock %}

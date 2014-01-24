@@ -15,6 +15,7 @@ class RegisterController extends Controller
         $entity = new Account();
         $form   = $this->createCreateForm($entity);
 
+        $test = $form->createView();
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),

@@ -18,7 +18,6 @@ class Feedback
         $this->channelFeedbacks = $channelFeedbacks;
     }
 
-
     public function createChannelRatingSummary($channelCriteriaRatings, $average)
     {
         $ratings = array();
