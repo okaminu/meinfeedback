@@ -5,6 +5,7 @@ use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class ServiceType extends AbstractType
 {
@@ -26,13 +27,21 @@ class ServiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $test = range(date('n') - 1, date('n'));
+
+        $begin = new \DateTime('now');
+        $end = new \DateTime(strtotime("-1 year"));
+
+
         $builder
             ->add('date', 'date', array(
-                    'required' => false,
+                    'required' => true,
                     'input' => 'datetime',
                     'label' => 'Service Date',
                     'widget' => 'choice',
-                    'data'  => new \DateTime('now')))
+                    'data'  => new \DateTime('now'),
+                    'years' => range(date('Y') - 1, date('Y')),
+                    'months' => range(date('n') - 1, date('n'))))
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('customer', new CustomerType())
             ->add('serviceGroup', 'entity', array(
