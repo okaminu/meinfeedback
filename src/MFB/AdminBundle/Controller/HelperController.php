@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class HelperController extends Controller
 {
-    public function getCompanyNameAction()
+    public function getAccountNameAction()
     {
         $entity = $this->get('mfb_account.service')->findByAccountId($this->getUserId());
         return $this->showText($entity->getName());

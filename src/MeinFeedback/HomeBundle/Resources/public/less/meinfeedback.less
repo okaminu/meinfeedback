@@ -6,6 +6,8 @@
 @white: #fff;
 @hblack: #4b4b4b;
 @red: #A94442;
+@light_yellow: #f7f590;
+@dark_yellow: #d0c972;
 
 
 body {
@@ -80,10 +82,21 @@ header {
         color: @hblack;
       }
     }
-    a {
-      color: @white;
+    .aligned {
       padding: 0 20px;
       line-height: 40px;
+    }
+    .user{
+      .aligned;
+      color: @light_yellow;
+      .user-name{
+        font-weight: bold;
+        color: @dark_yellow;
+      }
+    }
+    a {
+      .aligned;
+      color: @white;
       background: @hblack;
       .transition(.5s);
       &:hover {

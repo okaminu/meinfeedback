@@ -16,15 +16,12 @@
 
             <nav class="collapse navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav" id="menu">
-                    <li>
-                        <a title="Company" class="scroll fadeto brand-4">{{ render(controller('MFBAdminBundle:Helper:getCompanyName')) }}</a>
-                    </li>
                     <li{% if app.request.get('_route') == 'mfb_admin_homepage' %} class="active"{% endif %}>
-                        <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">{% trans %}Dashboard{% endtrans %}</a>
+                        <a title="Start" class="scroll brand-1" href="{{ path('mfb_admin_homepage') }}">{% trans %}Feedbacks{% endtrans %}</a>
                     </li>
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">{% trans %}Feedback{% endtrans %} <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle">{% trans %}Setup{% endtrans %} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li{% if app.request.get('_route') == 'mfb_admin_edit_template'%} class="active"{% endif %}>
                                 <a title="Template setup" href="{{ path('mfb_admin_edit_template') }}" class="scroll fadeto brand-1" rel="nofollow">{% trans %} Templates Set-Up {% endtrans %}</a>
@@ -52,6 +49,9 @@
                         </ul>
                     </li>
                     <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">{% trans %} Logout {% endtrans %}</a></li>
+                    <li>
+                        <span title="User" class="user">User:  <span class="user-name">{{ render(controller('MFBAdminBundle:Helper:getAccountName')) }}</span></span>
+                    </li>
                 </ul>
             </nav>
         </div>
