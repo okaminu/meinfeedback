@@ -113,7 +113,7 @@ function syncDateInputs(){
 
     day = $('.selectDate.Day').val();
     if(day == ""){
-        day = 1;
+        day = 0;
     }
     setDay(day);
 }
