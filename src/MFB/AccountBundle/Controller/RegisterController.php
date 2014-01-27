@@ -7,6 +7,7 @@ use MFB\AccountBundle\Form\Type\AccountType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class RegisterController extends Controller
 {
@@ -40,7 +41,8 @@ class RegisterController extends Controller
 
             $this->get('mfb_account_channel.service')->createStoreNewChannel($entity->getId());
 
-            return $this->redirect($this->generateUrl('mfb_account_login'));
+            $this->get('mfb_account.security.service')->login($entity->getId(), 'secured_area');
+            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
 
         return $this->render('MFBAccountBundle:Register:index.html.twig', array(
@@ -58,5 +60,4 @@ class RegisterController extends Controller
 
         return $form;
     }
-
 }

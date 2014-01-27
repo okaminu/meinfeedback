@@ -5,6 +5,7 @@ parameters:
      mfb_account.util.encoder.class: MFB\AccountBundle\Util\Encoder
      mfb_account.change_password.form.factory.class: MFB\AccountBundle\Form\Factory\FormFactory
      mfb_account.change_password.form.type.class: MFB\AccountBundle\Form\Type\ChangePasswordFormType
+     mfb_account.security.class: MFB\AccountBundle\Service\AccountSecurity
 
 services:
      mfb_account.service:
@@ -27,3 +28,8 @@ services:
         arguments: ["%mfb_account.entity.class%"]
         tags:
             - { name: form.type, alias: mfb_account_change_password }
+
+     mfb_account.security.service:
+        class: %mfb_account.security.class%
+        arguments: ["@request", "@security.context", "@mfb_account.service"]
+        scope: request
