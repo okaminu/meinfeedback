@@ -30,14 +30,13 @@ class ServiceType extends AbstractType
         $begin = new \DateTime("-1 year");
         $end = new \DateTime('+1 month');
 
-        $interval = \DateInterval::createFromDateString('1 month');
-        $period = new \DatePeriod($begin, $interval, $end, \DatePeriod::EXCLUDE_START_DATE);
+        $monthInterval = \DateInterval::createFromDateString('1 month');
+        $period = new \DatePeriod($begin, $monthInterval, $end, \DatePeriod::EXCLUDE_START_DATE);
 
         $dateChoices = array();
         foreach ($period as $date) {
-            $dateChoices["{$date->format('Y')}_{$date->format('M')}"] = "{$date->format('Y')}-{$date->format('F')}";
+            $dateChoices["{$date->format('Y')}_{$date->format('m')}"] = "{$date->format('Y')}-{$date->format('F')}";
         }
-
 
         $builder
             ->add('date_YearMonth', 'choice', array(
@@ -46,9 +45,14 @@ class ServiceType extends AbstractType
                     'label' => 'Service Date',
                     'mapped' => false))
             ->add('date_Day', 'choice', array(
-                    'choices' => range(1, 30),
+                    'choices' => array_combine(range(1, 30), range(1, 30)),
                     'required' => false,
                     'mapped' => false))
+            ->add('date', 'date', array(
+                    'input' => 'datetime',
+                    'widget' => 'text',
+                    'data'  => new \DateTime('now'),
+                    'format' => 'y-M-d'))
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('customer', new CustomerType())
             ->add('serviceGroup', 'entity', array(

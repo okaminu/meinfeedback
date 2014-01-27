@@ -2,6 +2,16 @@ $(document).ready(function() {
 
 $('.redirectUrl').val(window.parent.document.URL);
 
+syncDateInputs();
+
+$('.selectDate.YearMonth').on('change', function(){
+    syncDateInputs();
+});
+
+$('.selectDate.Day').on('change', function(){
+    syncDateInputs();
+});
+
 // Lazy loading.
 $("img.lazy").lazyload({ 
   // The image starts loading 200 px before it is in viewport
@@ -95,6 +105,27 @@ $('#menu a').click(function (e) {
 
 
 });
+
+function syncDateInputs(){
+    var date = $('.selectDate.YearMonth').val();
+    var yearMonth = date.split('_');
+    setYearMonth(yearMonth[0], yearMonth[1]);
+
+    day = $('.selectDate.Day').val();
+    if(day == ""){
+        day = 1;
+    }
+    setDay(day);
+}
+
+function setYearMonth(year, month){
+    $('.insertDate.Year').val(year);
+    $('.insertDate.Month').val(month);
+}
+
+function setDay(day){
+    $('.insertDate.Day').val(day);
+}
 
 $(function() {
     $( "#sortable" ).sortable({

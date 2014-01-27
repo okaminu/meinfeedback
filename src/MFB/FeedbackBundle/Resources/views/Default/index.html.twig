@@ -87,13 +87,19 @@
                 {{ form_label(form.service.date_YearMonth) }}
                 <div class="form-inline">
                     <div class="col-xs-6">
-                        {{ form_widget(form.service.date_YearMonth, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.service.date_YearMonth, {'attr': {'class': 'form-control selectDate YearMonth'} }) }}
                     </div>
                     <div class="col-xs-4">
-                        {{ form_widget(form.service.date_Day, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.service.date_Day, {'attr': {'class': 'form-control selectDate Day'} }) }}
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="hidden">
+            {{ form_widget(form.service.date.year, {'attr': {'class': 'insertDate Year'} }) }}
+            {{ form_widget(form.service.date.month, {'attr': {'class': 'insertDate Month'} }) }}
+            {{ form_widget(form.service.date.day, {'attr': {'class': 'insertDate Day'} }) }}
         </div>
 
         <div class="form-group">
