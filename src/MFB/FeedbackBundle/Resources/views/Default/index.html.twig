@@ -84,13 +84,14 @@
 
         <div class="form-group">
             <div class="col-xs-12">
-                {{ form_label(form.service.date) }}
+                {{ form_label(form.service.date_YearMonth) }}
                 <div class="form-inline">
-                    {% for date in form.service.date %}
-                        <div class="col-xs-4">
-                            {{ form_widget(date, {'attr': {'class': 'form-control'} }) }}
-                        </div>
-                    {% endfor %}
+                    <div class="col-xs-6">
+                        {{ form_widget(form.service.date_YearMonth, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="col-xs-4">
+                        {{ form_widget(form.service.date_Day, {'attr': {'class': 'form-control'} }) }}
+                    </div>
                 </div>
             </div>
         </div>

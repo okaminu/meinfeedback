@@ -27,21 +27,28 @@ class ServiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $test = range(date('n') - 1, date('n'));
+        $begin = new \DateTime("-1 year");
+        $end = new \DateTime('+1 month');
 
-        $begin = new \DateTime('now');
-        $end = new \DateTime(strtotime("-1 year"));
+        $interval = \DateInterval::createFromDateString('1 month');
+        $period = new \DatePeriod($begin, $interval, $end, \DatePeriod::EXCLUDE_START_DATE);
+
+        $dateChoices = array();
+        foreach ($period as $date) {
+            $dateChoices["{$date->format('Y')}_{$date->format('M')}"] = "{$date->format('Y')}-{$date->format('F')}";
+        }
 
 
         $builder
-            ->add('date', 'date', array(
+            ->add('date_YearMonth', 'choice', array(
+                    'choices' => $dateChoices,
                     'required' => true,
-                    'input' => 'datetime',
                     'label' => 'Service Date',
-                    'widget' => 'choice',
-                    'data'  => new \DateTime('now'),
-                    'years' => range(date('Y') - 1, date('Y')),
-                    'months' => range(date('n') - 1, date('n'))))
+                    'mapped' => false))
+            ->add('date_Day', 'choice', array(
+                    'choices' => range(1, 30),
+                    'required' => false,
+                    'mapped' => false))
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('customer', new CustomerType())
             ->add('serviceGroup', 'entity', array(
