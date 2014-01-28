@@ -101,6 +101,12 @@ mfb_admin_image_remove_logo:
     pattern: /admin_image_remove_logo
     defaults: { _controller: MFBAdminBundle:Image:removeLogo }
 
-mfb_admin_setup_step:
-    pattern: /admin_setup_step
-    defaults: { _controller: MFBAdminBundle:SetupWizard:step }
+mfb_admin_setup_select_business:
+    pattern: /admin_setup_select_business
+    defaults: { _controller: MFBAdminBundle:SetupWizard:selectBusiness }
+
+mfb_admin_setup_select_service_type:
+    pattern: /admin_setup_select_service_type/{businessId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:selectServiceType }
+    requirements:
+      businessId: \d+

@@ -1,11 +1,13 @@
 parameters:
   mfb_admin.form_setup.class: MFB\AdminBundle\Service\Admin
-  mfb_admin.form_setup_paths:
+  mfb_admin.form_setup.allowed.actions:
             - 'mfb_admin_update_rating_criteria_select'
-            - 'mfb_admin_save_service_group'
             - 'mfb_admin_save_service_provider'
             - 'mfb_admin_update_service_visibility'
-  mfb_admin.form_setup.redirect: 'mfb_admin_setup_step'
+  mfb_admin.form_setup.allowed.controllers:
+            - 'MFB\AdminBundle\Controller\SetupWizardController'
+
+  mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
 
 services:
 
@@ -24,6 +26,6 @@ services:
           -  { name: kernel.event_subscriber }
   kernel.listener.LoggedInAdminListener:
       class: MFB\AdminBundle\EventListener\LoggedInAdminListener
-      arguments: [@router, @security.context, @mfb_admin.form_setup.service, %mfb_admin.form_setup_paths%, %mfb_admin.form_setup.redirect%]
+      arguments: [@router, @security.context, @mfb_admin.form_setup.service, %mfb_admin.form_setup.allowed.actions%, %mfb_admin.form_setup.allowed.controllers%, %mfb_admin.form_setup.redirect%]
       tags:
         - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}

@@ -103,7 +103,6 @@ class DefaultController extends Controller
      */
     private function showFeedbackFrom($accountChannel, $form)
     {
-        $test = $form->createView();
         return $this->render(
             'MFBFeedbackBundle:Default:index.html.twig',
             array(

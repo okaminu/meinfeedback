@@ -15,7 +15,9 @@ class LoggedInAdminListener
     
     private $securityContext;
 
-    private $criteriaFormPaths;
+    private $allowedActions;
+
+    private $allowedControllers;
 
     private $adminService;
 
@@ -25,14 +27,16 @@ class LoggedInAdminListener
         Router $router,
         SecurityContext $securityContext,
         Admin $adminService,
-        $criteriaFormPaths,
+        $allowedActions,
+        $allowedControllers,
         $showFormRoute
     ) {
         $this->router = $router;
         $this->securityContext = $securityContext;
         $this->showFormRoute = $showFormRoute;
-        $this->criteriaFormPaths = array_merge($criteriaFormPaths, array($showFormRoute));
+        $this->allowedActions = array_merge($allowedActions, array($showFormRoute));
         $this->adminService = $adminService;
+        $this->allowedControllers = $allowedControllers;
 
     }
     
@@ -46,21 +50,14 @@ class LoggedInAdminListener
         }
     }
 
-    /**
-     * @param $route
-     * @return bool
-     */
-    private function isUserNotInCriteriaForm($route)
+    private function isUserNotInCriteriaForm($route, $controller)
     {
-        if (in_array($route, $this->criteriaFormPaths)) {
+        if (in_array($route, $this->allowedActions) || in_array($controller, $this->allowedControllers)) {
             return false;
         }
         return true;
     }
 
-    /**
-     * @return bool
-     */
     private function isUserLoggenIn()
     {
         if ($this->securityContext->getToken() != null) {
@@ -95,7 +92,7 @@ class LoggedInAdminListener
     private function shouldRedirect(GetResponseEvent $event)
     {
         return $this->isUserLoggenIn() &&
-        $this->isUserNotInCriteriaForm($this->getRoute($event)) &&
+        $this->isUserNotInCriteriaForm($this->getRoute($event), $this->getController($event)) &&
         $this->adminService->isMissingMandatorySettings($this->getUser()->getId());
     }
 
@@ -104,7 +101,14 @@ class LoggedInAdminListener
      */
     private function getRedirectUrl()
     {
-        $url = $this->router->generate($this->showFormRoute, array(), Router::ABSOLUTE_URL);
-        return $url;
+        return $this->router->generate($this->showFormRoute, array(), Router::ABSOLUTE_URL);
     }
+
+    private function getController(GetResponseEvent $event)
+    {
+        $fullController = $event->getRequest()->get('_controller');
+        preg_match("/^(.*Bundle.*Controller).*Action$/", $fullController, $match);
+        return $match[1];
+    }
+
 }

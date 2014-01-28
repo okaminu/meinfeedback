@@ -20,12 +20,22 @@ class Business
         return new BusinessEntity();
     }
 
+    public function findById($id)
+    {
+        return $this->entityManager->getRepository("MFBServiceBundle:Business")->find($id);
+    }
+
+    public function findAll()
+    {
+        return $this->entityManager->getRepository("MFBServiceBundle:Business")->findAll();
+    }
+
     public function store($service)
     {
         try {
             $this->saveEntity($service);
         } catch (DBALException $ex) {
-            throw new ServiceException('Service already exists');
+            throw new ServiceException('Business already exists');
         }
     }
 
