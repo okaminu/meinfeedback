@@ -87,9 +87,10 @@ class AccountChannel
     /**
      * @var integer
      *
-     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceGroup", mappedBy="channel", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MFB\ChannelBundle\Entity\ChannelServiceType",
+     * mappedBy="channel", cascade={"persist"})
      **/
-    private $serviceGroup;
+    private $channelServiceType;
 
     /**
      * @var integer
@@ -348,29 +349,6 @@ class AccountChannel
     }
 
     /**
-     * Add serviceGroup
-     *
-     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
-     * @return AccountChannel
-     */
-    public function addServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup)
-    {
-        $this->serviceGroup[] = $serviceGroup;
-    
-        return $this;
-    }
-
-    /**
-     * Remove serviceGroup
-     *
-     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
-     */
-    public function removeServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup)
-    {
-        $this->serviceGroup->removeElement($serviceGroup);
-    }
-
-    /**
      * Get serviceGroup
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -444,5 +422,38 @@ class AccountChannel
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Add channelServiceType
+     *
+     * @param \MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType
+     * @return AccountChannel
+     */
+    public function addChannelServiceType(\MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType)
+    {
+        $this->channelServiceType[] = $channelServiceType;
+    
+        return $this;
+    }
+
+    /**
+     * Remove channelServiceType
+     *
+     * @param \MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType
+     */
+    public function removeChannelServiceType(\MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType)
+    {
+        $this->channelServiceType->removeElement($channelServiceType);
+    }
+
+    /**
+     * Get channelServiceType
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChannelServiceType()
+    {
+        return $this->channelServiceType;
     }
 }

@@ -63,10 +63,10 @@ class Service
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceGroup")
-     * @ORM\JoinColumn(name="service_group_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="MFB\ChannelBundle\Entity\ChannelServiceType")
+     * @ORM\JoinColumn(name="channel_service_type_id", referencedColumnName="id")
      **/
-    private $serviceGroup;
+    private $channelServiceType;
 
     /**
      * @var integer
@@ -246,5 +246,28 @@ class Service
     public function getServiceProvider()
     {
         return $this->serviceProvider;
+    }
+
+    /**
+     * Set channelServiceType
+     *
+     * @param \MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType
+     * @return Service
+     */
+    public function setChannelServiceType(\MFB\ChannelBundle\Entity\ChannelServiceType $channelServiceType = null)
+    {
+        $this->channelServiceType = $channelServiceType;
+    
+        return $this;
+    }
+
+    /**
+     * Get channelServiceType
+     *
+     * @return \MFB\ChannelBundle\Entity\ChannelServiceType 
+     */
+    public function getChannelServiceType()
+    {
+        return $this->channelServiceType;
     }
 }
