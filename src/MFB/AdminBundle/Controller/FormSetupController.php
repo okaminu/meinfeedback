@@ -79,7 +79,7 @@ class FormSetupController extends Controller
             /**
              * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
              */
-            $serviceGroup = $this->get('mfb_service_group.service')->createNewServiceGroup($accountId);
+            $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNewServiceType($accountId, null);
 
             $form = $this->getServiceGroupForm($serviceGroup);
             $form->handleRequest($request);
@@ -87,7 +87,7 @@ class FormSetupController extends Controller
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-            $this->get('mfb_service_group.service')->store($serviceGroup);
+            $this->get('mfb_account_channel.service_type.service')->store($serviceGroup);
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
@@ -186,7 +186,7 @@ class FormSetupController extends Controller
      */
     private function getNewServiceGroupForm($accountId)
     {
-        $serviceGroup = $this->get('mfb_service_group.service')->createNewServiceGroup($accountId);
+        $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNewServiceType($accountId, null);
         $serviceGroupForm = $this->getServiceGroupForm($serviceGroup);
         return $serviceGroupForm;
     }

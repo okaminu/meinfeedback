@@ -1,20 +1,36 @@
 parameters:
   mfb_service.class: MFB\ServiceBundle\Service\Service
-  mfb_service_group.class: MFB\ServiceBundle\Service\ServiceGroup
   mfb_service_provider.class: MFB\ServiceBundle\Service\ServiceProvider
   mfb_service_provider.honorific:
     1: Mr
     2: Mrs
+  mfb_service_business.defaults:
+    1: Service Providers
+    2: Sellers and Stores
+    3: Restaurants and Hotels
+    4: Producers
+  mfb_service_types.defaults:
+    1:
+      - Lawyers
+      - Medical practicioner
+    2:
+      - Car Seller
+      - Grocery
+      - Hardware
+      - Bicycles
+    3:
+      - Restaurant
+      - Hotel
+    4:
+      - Fashion
+      - Clothes
+      - Software
 
 services:
   mfb_service.service:
     class: %mfb_service.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service_provider.service", "@mfb_service_group.service"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service_provider.service", "@mfb_account_channel.service_type.service"]
 
   mfb_service_provider.service:
     class: %mfb_service_provider.class%
     arguments: ["@doctrine.orm.default_entity_manager", %mfb_service_provider.honorific%]
-
-  mfb_service_group.service:
-    class: %mfb_service_group.class%
-    arguments: ["@doctrine.orm.default_entity_manager"]

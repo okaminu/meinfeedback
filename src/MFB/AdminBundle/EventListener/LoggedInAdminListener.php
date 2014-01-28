@@ -19,18 +19,21 @@ class LoggedInAdminListener
 
     private $adminService;
 
-    private $showFormRoute = 'mfb_admin_show_form_setup';
+    private $showFormRoute;
 
     public function __construct(
         Router $router,
         SecurityContext $securityContext,
         Admin $adminService,
-        $criteriaFormPaths
+        $criteriaFormPaths,
+        $showFormRoute
     ) {
         $this->router = $router;
         $this->securityContext = $securityContext;
-        $this->criteriaFormPaths = $criteriaFormPaths;
+        $this->showFormRoute = $showFormRoute;
+        $this->criteriaFormPaths = array_merge($criteriaFormPaths, array($showFormRoute));
         $this->adminService = $adminService;
+
     }
     
     public function onKernelRequest(GetResponseEvent $event)

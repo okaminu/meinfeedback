@@ -2,7 +2,7 @@
 namespace MFB\AdminBundle\Service;
 
 use MFB\ChannelBundle\Service\ChannelRatingCriteria as CriteriaService;
-use MFB\ServiceBundle\Service\ServiceGroup;
+use MFB\ChannelBundle\Service\ChannelServiceType;
 use MFB\ServiceBundle\Service\ServiceProvider;
 use Symfony\Component\Security\Core\SecurityContext;
 
@@ -12,18 +12,18 @@ class Admin
 
     private $serviceProvider;
 
-    private $serviceGroup;
+    private $serviceType;
     
     private $securityContext;
 
     public function __construct(
         CriteriaService $ratingCriteriaService,
-        ServiceGroup $serviceGroup,
+        ChannelServiceType $serviceType,
         ServiceProvider $serviceProvider,
         SecurityContext $securityContext
     ) {
         $this->ratingCriteriaService = $ratingCriteriaService;
-        $this->serviceGroup = $serviceGroup;
+        $this->serviceType = $serviceType;
         $this->serviceProvider = $serviceProvider;
         $this->securityContext = $securityContext;
     }
@@ -65,6 +65,6 @@ class Admin
 
     private function isUserMissingServiceGroup($accountId)
     {
-        return !$this->serviceGroup->hasVisibleServiceGroup($accountId);
+        return !$this->serviceType->hasVisible($accountId);
     }
 }

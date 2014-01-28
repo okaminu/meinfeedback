@@ -1,6 +1,7 @@
 parameters:
      mfb_account_channel.account.class: MFB\ChannelBundle\Entity\AccountChannel
      mfb_account_channel.class: MFB\ChannelBundle\Service\Channel
+     mfb_account_channel.service_type.class: MFB\ChannelBundle\Service\ChannelServiceType
      mfb_account_channel.rating_criteria.class: MFB\ChannelBundle\Service\ChannelRatingCriteria
      mfb_account_channel.rating_criteria.limit: 3
 
@@ -12,3 +13,7 @@ services:
      mfb_account_channel.rating_criteria.service:
         class: %mfb_account_channel.rating_criteria.class%
         arguments: ["@doctrine.orm.default_entity_manager", "%mfb_account_channel.rating_criteria.limit%"]
+
+     mfb_account_channel.service_type.service:
+       class: %mfb_account_channel.service_type.class%
+       arguments: ["@doctrine.orm.default_entity_manager", @mfb_account_channel.service]

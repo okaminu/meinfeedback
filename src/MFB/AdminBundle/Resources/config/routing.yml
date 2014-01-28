@@ -75,29 +75,32 @@ mfb_admin_show_form_setup:
     defaults: { _controller: MFBAdminBundle:FormSetup:show}
 
 mfb_admin_save_service_group:
-    pattern: /mfb_admin_save_service_group
+    pattern: /admin_save_service_group
     defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceGroup}
 
 mfb_admin_save_service_provider:
-    pattern: /mfb_admin_save_service_provider
+    pattern: /admin_save_service_provider
     defaults: { _controller: MFBAdminBundle:FormSetup:saveServiceProvider}
 
 mfb_admin_update_service_visibility:
-    pattern: /mfb_admin_update_service_visibility
+    pattern: /admin_update_service_visibility
     defaults: { _controller: MFBAdminBundle:FormSetup:updateServicesVisibility}
 
 mfb_admin_update_rating_criteria_select:
-    pattern: /mfb_admin_update_rating_criteria_select
+    pattern: /admin_update_rating_criteria_select
     defaults: { _controller: MFBAdminBundle:FormSetup:updateRatingCriteriaSelect}
 mfb_admin_images_show:
-    pattern: /mfb_admin_images_show
+    pattern: /admin_images_show
     defaults: { _controller: MFBAdminBundle:Image:show }
 
 mfb_admin_image_save_logo:
-    pattern: /mfb_admin_image_save_logo
+    pattern: /admin_image_save_logo
     defaults: { _controller: MFBAdminBundle:Image:saveLogo }
 
 mfb_admin_image_remove_logo:
-    pattern: /mfb_admin_image_remove_logo
+    pattern: /admin_image_remove_logo
     defaults: { _controller: MFBAdminBundle:Image:removeLogo }
 
+mfb_admin_setup_step:
+    pattern: /admin_setup_step
+    defaults: { _controller: MFBAdminBundle:SetupWizard:step }

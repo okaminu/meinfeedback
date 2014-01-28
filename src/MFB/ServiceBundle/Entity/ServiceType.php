@@ -74,10 +74,10 @@ class ServiceType
     /**
      * Set business
      *
-     * @param \MFB\ServiceBundle\Entity\Bussiness $business
+     * @param \MFB\ServiceBundle\Entity\Business $business
      * @return ServiceType
      */
-    public function setBusiness(\MFB\ServiceBundle\Entity\Bussiness $business = null)
+    public function setBusiness(\MFB\ServiceBundle\Entity\Business $business = null)
     {
         $this->business = $business;
     
@@ -87,7 +87,7 @@ class ServiceType
     /**
      * Get business
      *
-     * @return \MFB\ServiceBundle\Entity\Bussiness 
+     * @return \MFB\ServiceBundle\Entity\Business
      */
     public function getBusiness()
     {
