@@ -32,9 +32,9 @@ class Business
     /**
      * @var boolean
      *
-     * @ORM\Column(name="multiple_services", type="boolean", options={"default" : 0})
+     * @ORM\Column(name="is_multiple_services", type="boolean", options={"default" : 0})
      */
-    private $multipleServices = 0;
+    private $isMultipleServices = 0;
 
     /**
      * @var integer
@@ -111,25 +111,25 @@ class Business
     }
 
     /**
-     * Set multipleServices
+     * Set isMultipleServices
      *
-     * @param boolean $multipleServices
+     * @param boolean $isMultipleServices
      * @return Business
      */
-    public function setMultipleServices($multipleServices)
+    public function setIsMultipleServices($isMultipleServices)
     {
-        $this->multipleServices = $multipleServices;
+        $this->isMultipleServices = $isMultipleServices;
     
         return $this;
     }
 
     /**
-     * Get multipleServices
+     * Get isMultipleServices
      *
      * @return boolean 
      */
-    public function getMultipleServices()
+    public function getIsMultipleServices()
     {
-        return $this->multipleServices;
+        return $this->isMultipleServices;
     }
 }

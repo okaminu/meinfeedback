@@ -105,9 +105,15 @@ mfb_admin_setup_select_business:
     pattern: /admin_setup_select_business
     defaults: { _controller: MFBAdminBundle:SetupWizard:selectBusiness }
 
-mfb_admin_setup_select_service_type:
-    pattern: /admin_setup_select_service_type/{businessId}
-    defaults: { _controller: MFBAdminBundle:SetupWizard:selectServiceType }
+mfb_admin_setup_select_single_service:
+    pattern: /admin_setup_select_single_service/{businessId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:selectSingleServiceType }
+    requirements:
+      businessId: \d+
+
+mfb_admin_setup_select_multiple_service:
+    pattern: /admin_setup_select_multiple_service/{businessId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:selectMultipleServiceType }
     requirements:
       businessId: \d+
 

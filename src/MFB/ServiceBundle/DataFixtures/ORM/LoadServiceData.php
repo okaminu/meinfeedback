@@ -38,7 +38,7 @@ class LoadServiceData implements FixtureInterface, ContainerAwareInterface
     {
         $entity = new Business();
         $entity->setName($name);
-        $entity->setMultipleServices($multiple);
+        $entity->setIsMultipleServices($multiple);
         return $entity;
     }
 
