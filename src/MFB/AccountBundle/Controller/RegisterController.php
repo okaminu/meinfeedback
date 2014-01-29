@@ -39,8 +39,6 @@ class RegisterController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('mfb_account_channel.service')->createStoreNewChannel($entity->getId());
-
             $this->get('mfb_account.security.service')->login($entity->getId(), 'secured_area');
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }

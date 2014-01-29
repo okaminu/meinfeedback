@@ -16,4 +16,4 @@ services:
 
      mfb_account_channel.service_type.service:
        class: %mfb_account_channel.service_type.class%
-       arguments: ["@doctrine.orm.default_entity_manager", @mfb_account_channel.service]
+       arguments: ["@doctrine.orm.default_entity_manager", @mfb_account_channel.service, @mfb_service_type.service]

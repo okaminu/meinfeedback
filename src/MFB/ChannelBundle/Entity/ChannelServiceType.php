@@ -7,8 +7,7 @@ use MFB\ChannelBundle\Entity\AccountChannel;
 
 /**
  * ChannelServiceType
- *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="service_type_per_channel", columns={"channel_id", "service_type_id"})})
  * @ORM\Entity
  */
 class ChannelServiceType

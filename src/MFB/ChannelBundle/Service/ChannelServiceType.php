@@ -4,7 +4,7 @@ namespace MFB\ChannelBundle\Service;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\ChannelBundle\Entity\ChannelServiceType as ChannelServiceEntity;
-use MFB\ServiceBundle\Entity\ServiceType;
+use MFB\ServiceBundle\Service\ServiceType;
 use MFB\ServiceBundle\ServiceException;
 
 class ChannelServiceType
@@ -13,27 +13,40 @@ class ChannelServiceType
 
     private $channelService;
 
-    public function __construct(EntityManager $em, Channel $channelService)
+    private $serviceType;
+
+    public function __construct(EntityManager $em, Channel $channelService, ServiceType $serviceType)
     {
         $this->entityManager = $em;
         $this->channelService = $channelService;
+        $this->serviceType = $serviceType;
     }
 
-    public function createNewServiceType($accountId, ServiceType $serviceType)
+    public function createNew($accountId, $serviceTypeId)
     {
-        $accountChannel = $this->channelService->findByAccountId($accountId);
+        $accountChannel = $this->channelService->findById($accountId);
+        $serviceType = $this->serviceType->findById($serviceTypeId);
+
         $cse = new ChannelServiceEntity();
         $cse->setChannel($accountChannel);
         $cse->setServiceType($serviceType);
+
         return $cse;
     }
+
+    public function createStoreNew($accountId, $serviceTypeId)
+    {
+        $st = $this->createNew($accountId, $serviceTypeId);
+        $this->store($st);
+    }
+
 
     public function store($service)
     {
         try {
             $this->saveEntity($service);
         } catch (DBALException $ex) {
-            throw new ServiceException('Email already exists');
+            throw new ServiceException('Service is already selected');
         }
     }
 

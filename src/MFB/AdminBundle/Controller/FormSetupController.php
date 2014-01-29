@@ -79,7 +79,7 @@ class FormSetupController extends Controller
             /**
              * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
              */
-            $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNewServiceType($accountId, null);
+            $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
 
             $form = $this->getServiceGroupForm($serviceGroup);
             $form->handleRequest($request);
@@ -186,7 +186,7 @@ class FormSetupController extends Controller
      */
     private function getNewServiceGroupForm($accountId)
     {
-        $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNewServiceType($accountId, null);
+        $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
         $serviceGroupForm = $this->getServiceGroupForm($serviceGroup);
         return $serviceGroupForm;
     }

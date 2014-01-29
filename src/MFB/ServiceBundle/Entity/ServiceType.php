@@ -45,10 +45,15 @@ class ServiceType
     private $channelServiceType;
 
 
+    public function __construct()
+    {
+        $this->channelServiceType = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -80,10 +85,9 @@ class ServiceType
     public function setBusiness(\MFB\ServiceBundle\Entity\Business $business = null)
     {
         $this->business = $business;
-    
+
         return $this;
     }
-
     /**
      * Get business
      *
@@ -93,14 +97,7 @@ class ServiceType
     {
         return $this->business;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->channelServiceType = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Add channelServiceType
      *

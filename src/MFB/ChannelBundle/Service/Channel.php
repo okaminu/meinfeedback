@@ -18,7 +18,7 @@ class Channel
         $this->countryService = $countryService;
     }
 
-    public function createNewChannel($accountId)
+    public function createNew($accountId)
     {
         $accountChannel = new AccountChannel();
         $accountChannel->setAccountId($accountId);
@@ -28,9 +28,9 @@ class Channel
         return $accountChannel;
     }
 
-    public function createStoreNewChannel($accountId)
+    public function createStoreNew($accountId)
     {
-        $accountChannel = $this->createNewChannel($accountId);
+        $accountChannel = $this->createNew($accountId);
         $this->store($accountChannel);
     }
 

@@ -110,3 +110,9 @@ mfb_admin_setup_select_service_type:
     defaults: { _controller: MFBAdminBundle:SetupWizard:selectServiceType }
     requirements:
       businessId: \d+
+
+mfb_admin_setup_select_definitions:
+    pattern: /admin_setup_select_definitions/{channelId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:selectDefinitions }
+    requirements:
+      channelId: \d+

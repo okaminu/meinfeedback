@@ -2,53 +2,69 @@
 
 namespace MFB\AdminBundle\Controller;
 
+use MFB\AdminBundle\Form\SingleSelectType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use MFB\ServiceBundle\ServiceException;
 
 class SetupWizardController extends Controller
 {
     public function selectBusinessAction(Request $request)
     {
-        $form = $this->createBusinessForm();
+        $businessList = $this->get('mfb_service_business.service')->findAll();
+        $form = $this->createSingleSelectForm($businessList);
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             return $this->createRedirect(
                 'mfb_admin_setup_select_service_type',
-                array('businessId' => $form->get('businessType')->getData())
+                array('businessId' => $form->get('choice')->getData())
             );
         }
-        return $this->showSelectBusinessForm($form);
+        return $this->showBusinessSelectForm($form);
     }
 
-    public function selectServiceTypeAction($businessId)
+    public function selectServiceTypeAction(Request $request, $businessId)
     {
-        $temp = $businessId;
-        exit;
-    }
+        $channel = $this->getChannel();
 
-    private function createBusinessForm()
-    {
-        $businessList = $this->get('mfb_service_business.service')->findAll();
-        $choices = array();
-        foreach ($businessList as $business) {
-            $choices[$business->getId()] = $business->getName();
+        $serviceTypes = $this->get('mfb_service_type.service')->findByBusinessId($businessId);
+        $form = $this->createSingleSelectForm($serviceTypes);
+
+        $form->handleRequest($request);
+
+        try {
+            if ($form->isValid()) {
+                $selectedServiceId = $form->get('choice')->getData();
+                $this->get('mfb_account_channel.service_type.service')
+                    ->createStoreNew($channel->getId(), $selectedServiceId);
+
+                return $this->createRedirect(
+                    'mfb_admin_setup_select_definitions',
+                    array('channelId' => $channel->getId())
+                );
+            }
+        } catch (ServiceException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
         }
 
-        $builder = $this->createFormBuilder();
-        $builder->add(
-            'businessType',
-            'choice',
-            array(
-                'multiple' => false,
-                'expanded' => true,
-                'mapped' => false,
-                'choices' => $choices
-            )
-        );
+        return $this->showServiceSelectForm($form);
+    }
 
-        $builder->add('submit', 'submit', array('label' => 'Continue'));
-        return $builder->getForm();
+    public function selectDefinitionsAction(Request $request, $channelId)
+    {
+        $temp = $channelId;
+    }
+
+    private function createSingleSelectForm($list)
+    {
+        $choices = array();
+        foreach ($list as $entity) {
+            $choices[$entity->getId()] = $entity->getName();
+        }
+        return $this->createForm(new SingleSelectType($choices));
     }
 
     private function createRedirect($path, $options)
@@ -56,11 +72,40 @@ class SetupWizardController extends Controller
         return $this->redirect($this->generateUrl($path, $options));
     }
 
-    private function showSelectBusinessForm($form)
+    private function showBusinessSelectForm($form)
     {
         return $this->render(
-            "MFBAdminBundle:SetupWizard:selectBusiness.html.twig",
+            "MFBAdminBundle:SetupWizard:businessSelect.html.twig",
             array('form' => $form->createView())
         );
     }
+
+    private function showServiceSelectForm($form)
+    {
+        return $this->render(
+            "MFBAdminBundle:SetupWizard:serviceSelect.html.twig",
+            array('form' => $form->createView())
+        );
+    }
+
+    private function getLoggedInUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
+    }
+
+    private function getChannel()
+    {
+        $accountId = $this->getLoggedInUser()->getId();
+
+        $channelService = $this->get('mfb_account_channel.service');
+        $channel = $channelService->findByAccountId($accountId);
+
+        if (!$channel) {
+            $channelService->createStoreNew($accountId);
+            $channel = $channelService->findByAccountId($accountId);
+        }
+        return $channel;
+    }
+
+
 }
