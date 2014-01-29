@@ -17,18 +17,11 @@ class SetupWizardController extends Controller
         $form = $this->createSingleSelectForm($businessList);
 
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $businessId = $form->get('choice')->getData();
-            $path = 'mfb_admin_setup_select_single_service';
-
-            $businessEntity = $this->get('mfb_service_business.service')->findById($businessId);
-            if ($businessEntity->getIsMultipleServices() == 1) {
-                $path = 'mfb_admin_setup_select_multiple_service';
-            }
 
             return $this->createRedirect(
-                $path,
+                $this->getServiceSelectRoute($businessId),
                 array('businessId' => $businessId)
             );
         }
@@ -39,62 +32,43 @@ class SetupWizardController extends Controller
     {
         $channel = $this->getChannel();
         $serviceTypes = $this->get('mfb_service_type.service')->findByBusinessId($businessId);
-
         $form = $this->createSingleSelectForm($serviceTypes);
 
         $form->handleRequest($request);
-
         try {
             if ($form->isValid()) {
                 $selectedServiceId = $form->get('choice')->getData();
-                $this->get('mfb_account_channel.service_type.service')
-                    ->createStoreNew($channel->getId(), $selectedServiceId);
+                $this->storeChannelServiceType($channel, $selectedServiceId);
 
-                return $this->createRedirect(
-                    'mfb_admin_setup_select_definitions',
-                    array('channelId' => $channel->getId())
-                );
+                return $this->createDefinitionsRedirect($channel->getId());
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:serviceSelectSingle.html.twig",
-            array('form' => $form->createView())
-        );
+        return $this->showSingleServiceForm($form);
     }
 
     public function selectMultipleServiceTypeAction(Request $request, $businessId)
     {
         $channel = $this->getChannel();
         $serviceTypes = $this->get('mfb_service_type.service')->findByBusinessId($businessId);
-
         $form = $this->createMultipleSelectForm($serviceTypes);
 
         $form->handleRequest($request);
-
         try {
             if ($form->isValid()) {
                 $selectedServices = $form->get('choice')->getData();
                 foreach ($selectedServices as $serviceId) {
-                    $this->get('mfb_account_channel.service_type.service')
-                        ->createStoreNew($channel->getId(), $serviceId);
+                    $this->storeChannelServiceType($channel, $serviceId);
                 }
-
-                return $this->createRedirect(
-                    'mfb_admin_setup_select_definitions',
-                    array('channelId' => $channel->getId())
-                );
+                return $this->createDefinitionsRedirect($channel->getId());
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:serviceSelectMultiple.html.twig",
-            array('form' => $form->createView())
-        );
+        return $this->showMultipleServiceForm($form);
     }
 
     public function selectDefinitionsAction(Request $request, $channelId)
@@ -102,35 +76,9 @@ class SetupWizardController extends Controller
         $temp = $channelId;
     }
 
-    private function createSingleSelectForm($list)
-    {
-        $choices = array();
-        foreach ($list as $entity) {
-            $choices[$entity->getId()] = $entity->getName();
-        }
-        return $this->createForm(new SingleSelectType($choices));
-    }
-
-    private function createMultipleSelectForm($list)
-    {
-        $choices = array();
-        foreach ($list as $entity) {
-            $choices[$entity->getId()] = $entity->getName();
-        }
-        return $this->createForm(new MultipleSelectType($choices));
-    }
-
     private function createRedirect($path, $options)
     {
         return $this->redirect($this->generateUrl($path, $options));
-    }
-
-    private function showBusinessSelectForm($form)
-    {
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:businessSelect.html.twig",
-            array('form' => $form->createView())
-        );
     }
 
     private function getLoggedInUser()
@@ -152,5 +100,71 @@ class SetupWizardController extends Controller
         return $channel;
     }
 
+    private function storeChannelServiceType($channel, $selectedServiceId)
+    {
+        $this->get('mfb_account_channel.service_type.service')
+            ->createStoreNew($channel->getId(), $selectedServiceId);
+    }
 
+    private function createSingleSelectForm($list)
+    {
+        $choices = array();
+        foreach ($list as $entity) {
+            $choices[$entity->getId()] = $entity->getName();
+        }
+        return $this->createForm(new SingleSelectType($choices));
+    }
+
+    private function createMultipleSelectForm($list)
+    {
+        $choices = array();
+        foreach ($list as $entity) {
+            $choices[$entity->getId()] = $entity->getName();
+        }
+        return $this->createForm(new MultipleSelectType($choices));
+    }
+    private function showBusinessSelectForm($form)
+    {
+        return $this->render(
+            "MFBAdminBundle:SetupWizard:businessSelect.html.twig",
+            array('form' => $form->createView())
+        );
+    }
+
+    private function showSingleServiceForm($form)
+    {
+        return $this->render(
+            "MFBAdminBundle:SetupWizard:serviceSelectSingle.html.twig",
+            array('form' => $form->createView())
+        );
+    }
+
+    private function showMultipleServiceForm($form)
+    {
+        return $this->render(
+            "MFBAdminBundle:SetupWizard:serviceSelectMultiple.html.twig",
+            array('form' => $form->createView())
+        );
+    }
+
+    private function createDefinitionsRedirect($channelId)
+    {
+        return $this->createRedirect(
+            'mfb_admin_setup_select_definitions',
+            array('channelId' => $channelId)
+        );
+    }
+
+
+    private function getServiceSelectRoute($businessId)
+    {
+        $path = 'mfb_admin_setup_select_single_service';
+
+        $businessEntity = $this->get('mfb_service_business.service')->findById($businessId);
+        if ($businessEntity->getIsMultipleServices() == 1) {
+            $path = 'mfb_admin_setup_select_multiple_service';
+            return $path;
+        }
+        return $path;
+    }
 }
