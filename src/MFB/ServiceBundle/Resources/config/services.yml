@@ -8,10 +8,10 @@ parameters:
     1: Mr
     2: Mrs
   mfb_service_business.defaults:
-    1: Service Providers
-    2: Sellers and Stores
-    3: Restaurants and Hotels
-    4: Producers
+    1: {name: Service Providers, multiple: 0}
+    2: {name: Sellers and Stores, multiple: 1}
+    3: {name: Restaurants and Hotels, multiple: 0}
+    4: {name: Producers, multiple: 1}
   mfb_service_types.defaults:
     1:
       - Lawyers

@@ -30,6 +30,13 @@ class Business
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="multiple_services", type="boolean", options={"default" : 0})
+     */
+    private $multipleServices = 0;
+
+    /**
      * @var integer
      *
      * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceType", mappedBy="business", cascade={"persist"})
@@ -101,5 +108,28 @@ class Business
     public function getServiceType()
     {
         return $this->serviceType;
+    }
+
+    /**
+     * Set multipleServices
+     *
+     * @param boolean $multipleServices
+     * @return Business
+     */
+    public function setMultipleServices($multipleServices)
+    {
+        $this->multipleServices = $multipleServices;
+    
+        return $this;
+    }
+
+    /**
+     * Get multipleServices
+     *
+     * @return boolean 
+     */
+    public function getMultipleServices()
+    {
+        return $this->multipleServices;
     }
 }

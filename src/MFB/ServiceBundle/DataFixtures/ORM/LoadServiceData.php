@@ -25,8 +25,8 @@ class LoadServiceData implements FixtureInterface, ContainerAwareInterface
         $businessList = $this->container->getParameter('mfb_service_business.defaults');
         $serviceTypesList = $this->container->getParameter('mfb_service_types.defaults');
 
-        foreach ($businessList as $key => $businessName) {
-            $businessEntity = $this->createNewBusinessEntity($businessName);
+        foreach ($businessList as $key => $business) {
+            $businessEntity = $this->createNewBusinessEntity($business['name'], $business['multiple']);
             $manager->persist($businessEntity);
 
             $this->loadServiceTypesForBusiness($manager, $serviceTypesList[$key], $businessEntity);
@@ -34,10 +34,11 @@ class LoadServiceData implements FixtureInterface, ContainerAwareInterface
         $manager->flush();
     }
 
-    private function createNewBusinessEntity($name)
+    private function createNewBusinessEntity($name, $multiple)
     {
         $entity = new Business();
         $entity->setName($name);
+        $entity->setMultipleServices($multiple);
         return $entity;
     }
 
