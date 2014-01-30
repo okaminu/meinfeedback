@@ -4,6 +4,7 @@ namespace MFB\AdminBundle\Controller;
 
 use MFB\AdminBundle\Form\SingleSelectType;
 use MFB\AdminBundle\Form\MultipleSelectType;
+use MFB\ChannelBundle\ChannelException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +18,19 @@ class SetupWizardController extends Controller
         $form = $this->createSingleSelectForm($businessList);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $businessId = $form->get('choice')->getData();
+        try {
+            if ($form->isValid()) {
+                $businessId = $form->get('choice')->getData();
 
-            $this->updateBusinessForChannel($businessId);
+                $this->createUpdateBusinessForChannel($businessId);
 
-            return $this->createRedirect(
-                $this->getServiceSelectRoute($businessId),
-                array('businessId' => $businessId)
-            );
+                return $this->createRedirect(
+                    $this->getServiceSelectRoute($businessId),
+                    array('businessId' => $businessId)
+                );
+            }
+        } catch (ChannelException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
         }
         return $this->showBusinessSelectForm($form);
     }
@@ -61,6 +66,7 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $selectedServices = $form->get('choice')->getData();
+
                 foreach ($selectedServices as $serviceId) {
                     $this->storeChannelServiceType($channel, $serviceId);
                 }
@@ -94,16 +100,18 @@ class SetupWizardController extends Controller
         return $this->get('mfb_account_channel.service')->findByAccountId($accountId);
     }
 
-    public function updateBusinessForChannel($businessId)
+    public function createUpdateBusinessForChannel($businessId)
     {
         $channelService = $this->get('mfb_account_channel.service');
-        $accountId = $this->getLoggedInUser()->getId();
         $channel = $this->getChannel();
 
         if ($channel == null) {
-            $channel = $channelService->createNew($accountId);
+            $channel = $channelService->createNew($this->getLoggedInUser()->getId());
         }
 
+        if ($channel->getBusiness() != null) {
+            throw new ChannelException('Business is already selected');
+        }
         $business = $this->get('mfb_service_business.service')->findById($businessId);
         $channel->setBusiness($business);
 
