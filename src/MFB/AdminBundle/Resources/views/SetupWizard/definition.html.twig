@@ -38,14 +38,10 @@
             </div>
 
             <div class="col-xs-9">
-                {{ form_widget(form.definition, {'attr': {'class': 'form-control'} }) }}
+                {{ form_widget(form.definition, {'attr': {'class': 'form-control', 'placeholder': 'Write service definition', 'value':''} }) }}
             </div>
         </div>
     </div>
-
-
-
-
     {{ form_end(form) }}
 
 </div>

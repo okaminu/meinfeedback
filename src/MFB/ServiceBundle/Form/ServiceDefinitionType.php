@@ -18,7 +18,8 @@ class ServiceDefinitionType extends AbstractType
         $builder
             ->add(
                 'definition',
-                'text'
+                'text',
+                array('data' => '')
             )
             ->add(
                 'submit',
