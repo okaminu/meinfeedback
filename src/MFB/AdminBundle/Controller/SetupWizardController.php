@@ -48,7 +48,7 @@ class SetupWizardController extends Controller
                 $selectedServiceId = $form->get('choice')->getData();
                 $this->storeChannelServiceType($channel, $selectedServiceId);
 
-                return $this->createDefinitionsRedirect($channel->getId());
+                return $this->createRedirect('mfb_admin_setup_insert_definitions');
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -71,7 +71,7 @@ class SetupWizardController extends Controller
                 foreach ($selectedServices as $serviceId) {
                     $this->storeChannelServiceType($channel, $serviceId);
                 }
-                return $this->createDefinitionsRedirect($channel->getId());
+                return $this->createRedirect('mfb_admin_setup_insert_definitions');
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -80,8 +80,9 @@ class SetupWizardController extends Controller
         return $this->showMultipleServiceForm($form);
     }
 
-    public function insertDefinitionsAction(Request $request, $channelId)
+    public function insertDefinitionsAction(Request $request)
     {
+        $channelId = $this->getChannel()->getId();
         $definitionService = $this->get('mfb_service_definition.service');
 
         $definition = $definitionService->createNew($channelId);
@@ -106,10 +107,10 @@ class SetupWizardController extends Controller
         $definition = $definitionService->findByChannelIdAndId($channel->getId(), $definitionId);
         $definitionService->remove($definition);
 
-        return $this->createDefinitionsRedirect($channel->getId());
+        return $this->createRedirect('mfb_admin_setup_insert_definitions');
     }
 
-    private function createRedirect($path, $options)
+    private function createRedirect($path, $options = array())
     {
         return $this->redirect($this->generateUrl($path, $options));
     }
@@ -199,15 +200,6 @@ class SetupWizardController extends Controller
                 'form' => $form->createView(),
                 'definitionList' => $definitionList
             )
-        );
-    }
-
-
-    private function createDefinitionsRedirect($channelId)
-    {
-        return $this->createRedirect(
-            'mfb_admin_setup_insert_definitions',
-            array('channelId' => $channelId)
         );
     }
 

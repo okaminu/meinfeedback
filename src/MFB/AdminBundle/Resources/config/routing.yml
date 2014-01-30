@@ -118,10 +118,8 @@ mfb_admin_setup_select_multiple_service:
       businessId: \d+
 
 mfb_admin_setup_insert_definitions:
-    pattern: /admin_setup_insert_definitions/{channelId}
+    pattern: /admin_setup_insert_definitions
     defaults: { _controller: MFBAdminBundle:SetupWizard:insertDefinitions }
-    requirements:
-      channelId: \d+
 
 mfb_admin_setup_remove_definitions:
     pattern: /admin_setup_remove_definitions/{definitionId}
