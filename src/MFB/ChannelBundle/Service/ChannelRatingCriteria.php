@@ -40,6 +40,10 @@ class ChannelRatingCriteria
         $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
             array('accountId' => $accountId)
         );
+
+        if ($accountChannel == null) {
+            throw new ChannelException('Channel not found');
+        }
         return $accountChannel;
     }
 

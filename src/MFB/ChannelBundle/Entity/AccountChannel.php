@@ -110,6 +110,14 @@ class AccountChannel
      **/
     private $document;
 
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\Business", cascade={"persist"})
+     * @ORM\JoinColumn(name="business_id", referencedColumnName="id")
+     */
+    private $business;
+
 
     /**
      * Constructor
@@ -455,5 +463,28 @@ class AccountChannel
     public function getChannelServiceType()
     {
         return $this->channelServiceType;
+    }
+
+    /**
+     * Set business
+     *
+     * @param \MFB\ServiceBundle\Entity\Business $business
+     * @return AccountChannel
+     */
+    public function setBusiness(\MFB\ServiceBundle\Entity\Business $business = null)
+    {
+        $this->business = $business;
+    
+        return $this;
+    }
+
+    /**
+     * Get business
+     *
+     * @return \MFB\ServiceBundle\Entity\Business 
+     */
+    public function getBusiness()
+    {
+        return $this->business;
     }
 }

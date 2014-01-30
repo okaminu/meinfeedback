@@ -91,9 +91,14 @@ class LoggedInAdminListener
      */
     private function shouldRedirect(GetResponseEvent $event)
     {
-        return $this->isUserLoggenIn() &&
-        $this->isUserNotInCriteriaForm($this->getRoute($event), $this->getController($event)) &&
-        $this->adminService->isMissingMandatorySettings($this->getUser()->getId());
+        try {
+            $result =  $this->isUserLoggenIn() &&
+            $this->isUserNotInCriteriaForm($this->getRoute($event), $this->getController($event)) &&
+            $this->adminService->isMissingMandatorySettings($this->getUser()->getId());
+        } catch (\Exception $ex) {
+            $result = true;
+        }
+        return $result;
     }
 
     /**

@@ -25,13 +25,8 @@ class Channel
 
         $countries = $this->countryService->findAll();
         $accountChannel->setCountry($countries[0]);
-        return $accountChannel;
-    }
 
-    public function createStoreNew($accountId)
-    {
-        $accountChannel = $this->createNew($accountId);
-        $this->store($accountChannel);
+        return $accountChannel;
     }
 
     public function store($channel)

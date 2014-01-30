@@ -20,6 +20,8 @@ class SetupWizardController extends Controller
         if ($form->isValid()) {
             $businessId = $form->get('choice')->getData();
 
+            $this->updateBusinessForChannel($businessId);
+
             return $this->createRedirect(
                 $this->getServiceSelectRoute($businessId),
                 array('businessId' => $businessId)
@@ -89,16 +91,25 @@ class SetupWizardController extends Controller
     private function getChannel()
     {
         $accountId = $this->getLoggedInUser()->getId();
-
-        $channelService = $this->get('mfb_account_channel.service');
-        $channel = $channelService->findByAccountId($accountId);
-
-        if (!$channel) {
-            $channelService->createStoreNew($accountId);
-            $channel = $channelService->findByAccountId($accountId);
-        }
-        return $channel;
+        return $this->get('mfb_account_channel.service')->findByAccountId($accountId);
     }
+
+    public function updateBusinessForChannel($businessId)
+    {
+        $channelService = $this->get('mfb_account_channel.service');
+        $accountId = $this->getLoggedInUser()->getId();
+        $channel = $this->getChannel();
+
+        if ($channel == null) {
+            $channel = $channelService->createNew($accountId);
+        }
+
+        $business = $this->get('mfb_service_business.service')->findById($businessId);
+        $channel->setBusiness($business);
+
+        $channelService->store($channel);
+    }
+
 
     private function storeChannelServiceType($channel, $selectedServiceId)
     {
