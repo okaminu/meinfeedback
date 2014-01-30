@@ -88,17 +88,14 @@ class SetupWizardController extends Controller
         $form = $this->createForm(new ServiceDefinitionType(), $definition);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $definitionService->store($definition);
+        try {
+            if ($form->isValid()) {
+                $definitionService->store($definition);
+            }
+        } catch (ServiceException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
         }
-
-        return $this->render(
-            'MFBAdminBundle:SetupWizard:definition.html.twig',
-            array(
-                'form' => $form->createView(),
-                'definitionList' => $definitionService->findByChannelId($channelId)
-            )
-        );
+        return $this->showDefinitionForm($form, $definitionService->findByChannelId($channelId));
     }
 
     public function removeDefinitionsAction($definitionId)
@@ -194,6 +191,18 @@ class SetupWizardController extends Controller
         );
     }
 
+    private function showDefinitionForm($form, $definitionList)
+    {
+        return $this->render(
+            'MFBAdminBundle:SetupWizard:definition.html.twig',
+            array(
+                'form' => $form->createView(),
+                'definitionList' => $definitionList
+            )
+        );
+    }
+
+
     private function createDefinitionsRedirect($channelId)
     {
         return $this->createRedirect(
@@ -201,7 +210,6 @@ class SetupWizardController extends Controller
             array('channelId' => $channelId)
         );
     }
-
 
     private function getServiceSelectRoute($businessId)
     {
