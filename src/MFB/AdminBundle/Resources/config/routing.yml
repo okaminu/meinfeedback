@@ -123,6 +123,6 @@ mfb_admin_setup_insert_definitions:
 
 mfb_admin_setup_remove_definitions:
     pattern: /admin_setup_remove_definitions/{definitionId}
-    defaults: { _controller: MFBAdminBundle:SetupWizard:removeDefinitions }
+    defaults: { _controller: MFBAdminBundle:SetupWizard:removeDefinitions, _method: post }
     requirements:
       definitionId: \d+
