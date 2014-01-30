@@ -80,7 +80,7 @@ class SetupWizardController extends Controller
         return $this->showMultipleServiceForm($form);
     }
 
-    public function selectDefinitionsAction(Request $request, $channelId)
+    public function insertDefinitionsAction(Request $request, $channelId)
     {
         $definitionService = $this->get('mfb_service_definition.service');
 
@@ -206,7 +206,7 @@ class SetupWizardController extends Controller
     private function createDefinitionsRedirect($channelId)
     {
         return $this->createRedirect(
-            'mfb_admin_setup_select_definitions',
+            'mfb_admin_setup_insert_definitions',
             array('channelId' => $channelId)
         );
     }

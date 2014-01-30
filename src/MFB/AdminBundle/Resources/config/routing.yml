@@ -117,9 +117,9 @@ mfb_admin_setup_select_multiple_service:
     requirements:
       businessId: \d+
 
-mfb_admin_setup_select_definitions:
-    pattern: /admin_setup_select_definitions/{channelId}
-    defaults: { _controller: MFBAdminBundle:SetupWizard:selectDefinitions }
+mfb_admin_setup_insert_definitions:
+    pattern: /admin_setup_insert_definitions/{channelId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:insertDefinitions }
     requirements:
       channelId: \d+
 
