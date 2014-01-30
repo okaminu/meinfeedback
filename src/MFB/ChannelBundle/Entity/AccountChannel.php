@@ -118,6 +118,14 @@ class AccountChannel
      */
     private $business;
 
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceDefinition",
+     * mappedBy="channel", cascade={"persist"})
+     */
+    private $serviceDefinition;
+
 
     /**
      * Constructor
@@ -126,6 +134,7 @@ class AccountChannel
     {
         $this->serviceProvider = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviceGroup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceDefinition = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -486,5 +495,40 @@ class AccountChannel
     public function getBusiness()
     {
         return $this->business;
+    }
+
+
+
+    /**
+     * Add serviceDefinition
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceDefinition $serviceDefinition
+     * @return AccountChannel
+     */
+    public function addServiceDefinition(\MFB\ServiceBundle\Entity\ServiceDefinition $serviceDefinition)
+    {
+        $this->serviceDefinition[] = $serviceDefinition;
+    
+        return $this;
+    }
+
+    /**
+     * Remove serviceDefinition
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceDefinition $serviceDefinition
+     */
+    public function removeServiceDefinition(\MFB\ServiceBundle\Entity\ServiceDefinition $serviceDefinition)
+    {
+        $this->serviceDefinition->removeElement($serviceDefinition);
+    }
+
+    /**
+     * Get serviceDefinition
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceDefinition()
+    {
+        return $this->serviceDefinition;
     }
 }

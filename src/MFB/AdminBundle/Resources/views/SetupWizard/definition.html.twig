@@ -1,0 +1,52 @@
+{% extends "MFBAdminBundle::base.html.twig" %}
+{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+
+{% block title %}Setup wizard{% endblock %}
+
+{% block content %}
+
+<div class="formular container modal-spacing">
+    <h3 class="text-center form-header">{% trans %} Insert service definitions {% endtrans %}</h3>
+
+    {{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    <div class="row">
+        {% for serviceDefinition in definitionList %}
+            <div class="row">
+                <div class="col-xs-1 col-xs-offset-1">
+                    <div class="form-group">
+                        <a href={{ path('mfb_admin_setup_remove_definitions', {'definitionId': serviceDefinition.id}) }}>X</a>
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    {{ serviceDefinition.definition }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="form-group">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn inline-submit form-control'} }) }}
+            </div>
+        </div>
+
+        <div class="col-xs-9">
+            <div class="form-group">
+                {{ form_widget(form.definition, {'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {{ form_end(form) }}
+
+</div>
+
+
+{% endblock %}

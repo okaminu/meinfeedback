@@ -122,3 +122,9 @@ mfb_admin_setup_select_definitions:
     defaults: { _controller: MFBAdminBundle:SetupWizard:selectDefinitions }
     requirements:
       channelId: \d+
+
+mfb_admin_setup_remove_definitions:
+    pattern: /admin_setup_remove_definitions/{definitionId}
+    defaults: { _controller: MFBAdminBundle:SetupWizard:removeDefinitions }
+    requirements:
+      definitionId: \d+

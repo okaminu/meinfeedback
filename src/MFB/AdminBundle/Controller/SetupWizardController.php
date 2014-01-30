@@ -5,6 +5,8 @@ namespace MFB\AdminBundle\Controller;
 use MFB\AdminBundle\Form\SingleSelectType;
 use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
+use MFB\ServiceBundle\Entity\ServiceDefinition;
+use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +23,6 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $businessId = $form->get('choice')->getData();
-
                 $this->createUpdateBusinessForChannel($businessId);
 
                 return $this->createRedirect(
@@ -81,7 +82,34 @@ class SetupWizardController extends Controller
 
     public function selectDefinitionsAction(Request $request, $channelId)
     {
-        $temp = $channelId;
+        $definitionService = $this->get('mfb_service_definition.service');
+
+        $definition = $definitionService->createNew($channelId);
+        $form = $this->createForm(new ServiceDefinitionType(), $definition);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $definitionService->store($definition);
+        }
+
+        return $this->render(
+            'MFBAdminBundle:SetupWizard:definition.html.twig',
+            array(
+                'form' => $form->createView(),
+                'definitionList' => $definitionService->findByChannelId($channelId)
+            )
+        );
+    }
+
+    public function removeDefinitionsAction($definitionId)
+    {
+        $channel = $this->getChannel();
+
+        $definitionService = $this->get('mfb_service_definition.service');
+        $definition = $definitionService->findByChannelIdAndId($channel->getId(), $definitionId);
+        $definitionService->remove($definition);
+
+        return $this->createDefinitionsRedirect($channel->getId());
     }
 
     private function createRedirect($path, $options)
