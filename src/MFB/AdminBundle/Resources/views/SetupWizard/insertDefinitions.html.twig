@@ -41,7 +41,15 @@
                 {{ form_widget(form.definition, {'attr': {'class': 'form-control', 'placeholder': 'Write service definition', 'value':''} }) }}
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-xs-offset-6">
+                <a class="btn" href="{{ path('mfb_admin_setup_select_criterias') }}">Continue</a>
+            </div>
+        </div>
     </div>
+
+
+
     {{ form_end(form) }}
 
 </div>

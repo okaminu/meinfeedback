@@ -141,6 +141,17 @@ class SetupWizardController extends Controller
         return $this->createRedirect('mfb_admin_setup_insert_definitions');
     }
 
+    /**
+     * @Route("/setup_select_criterias", name="mfb_admin_setup_select_criterias")
+     * @Template
+     */
+
+    public function selectCriteriasAction()
+    {
+        return array();
+    }
+
+
     private function createRedirect($path, $options = array())
     {
         return $this->redirect($this->generateUrl($path, $options));
