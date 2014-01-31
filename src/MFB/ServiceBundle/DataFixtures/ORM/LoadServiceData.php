@@ -53,7 +53,18 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         array('name' => 'Software', 'criterias' => array('Service', 'Price', 'Quality', 'Support', 'Speed'))
     );
 
+    public function getOrder()
+    {
+        return 2;
+    }
+
     public function load(ObjectManager $manager)
+    {
+        $this->loadServiceBusiness($manager);
+        $this->loadServiceTypeCriterias($manager);
+    }
+
+    private function loadServiceBusiness(ObjectManager $manager)
     {
         foreach ($this->businessList as $business) {
             $businessEntity = $this->createNewBusinessEntity($business['name'], $business['multiple']);
@@ -61,26 +72,40 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
             $this->loadServiceTypesForBusiness($manager, $business['service_types'], $businessEntity);
         }
         $manager->flush();
+    }
 
+    private function loadServiceTypeCriterias(ObjectManager $manager)
+    {
         foreach ($this->serviceTypeCriterias as $type) {
             $serviceType = $manager->getRepository('MFBServiceBundle:ServiceType')->findOneBy(
                 array('name' => $type['name'])
             );
+            $this->linkCriteriasToServiceType($manager, $type, $serviceType);
+        }
+        $manager->flush();
+    }
 
-            foreach ($type['criterias'] as $criteria) {
-                try {
-                    $rating = $this->getReference("rating-{$criteria}");
-                } catch (\Exception $ex) {
-                    $rating = new Rating();
-                    $rating->setName($criteria);
-                    $manager->persist($rating);
-                    $this->addReference("rating-{$criteria}", $rating);
-                }
-                $serviceCriteria = new ServiceTypeCriteria();
-                $serviceCriteria->setServiceType($serviceType);
-                $serviceCriteria->setRating($rating);
-                $manager->persist($serviceCriteria);
+    private function loadServiceTypesForBusiness(ObjectManager $manager, $serviceTypes, $businessEntity)
+    {
+        foreach ($serviceTypes as $type) {
+            $typeEntity = $this->createNewServiceTypeEntity($type, $businessEntity);
+            $manager->persist($typeEntity);
+        }
+        $manager->flush();
+    }
+
+    private function linkCriteriasToServiceType(ObjectManager $manager, $type, $serviceType)
+    {
+        foreach ($type['criterias'] as $criteria) {
+            try {
+                $rating = $this->getReference("rating-{$criteria}");
+            } catch (\Exception $ex) {
+                $rating = $this->createNewRatingEntity($manager, $criteria);
+                $manager->persist($rating);
+                $this->addReference("rating-{$criteria}", $rating);
             }
+            $serviceCriteria = $this->createServiceCriteriaEntity($serviceType, $rating);
+            $manager->persist($serviceCriteria);
         }
         $manager->flush();
     }
@@ -93,14 +118,6 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         return $entity;
     }
 
-    private function loadServiceTypesForBusiness(ObjectManager $manager, $serviceTypes, $businessEntity)
-    {
-        foreach ($serviceTypes as $type) {
-            $typeEntity = $this->createNewServiceTypeEntity($type, $businessEntity);
-            $manager->persist($typeEntity);
-        }
-    }
-
     private function createNewServiceTypeEntity($name, $business)
     {
         $entity = new ServiceType();
@@ -109,9 +126,19 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         return $entity;
     }
 
-    public function getOrder()
+    private function createNewRatingEntity($criteria)
     {
-        return 2;
+        $rating = new Rating();
+        $rating->setName($criteria);
+        return $rating;
+    }
+
+    private function createServiceCriteriaEntity($serviceType, $rating)
+    {
+        $serviceCriteria = new ServiceTypeCriteria();
+        $serviceCriteria->setServiceType($serviceType);
+        $serviceCriteria->setRating($rating);
+        return $serviceCriteria;
     }
 
 
