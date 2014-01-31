@@ -7,24 +7,16 @@ class ChannelCriteriaRepository extends EntityRepository
 {
     public function findAllUnusedRatingCriterias($channelId)
     {
-        $rule = null;
-        $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
-        if (!empty($usedCriteriasIds)) {
-            $rule = $this->getEntityManager()->createQueryBuilder()->expr()->notIn('e.id', $usedCriteriasIds);
-        }
-        return $this->findAllRatingCriterias($rule);
+        $unusedCriteriaRule = $this->unusedCriteriaRule($channelId);
+        return $this->findAllRatingCriterias($unusedCriteriaRule);
     }
 
     public function findAllUnusedCriteriasForServices($channelId, $serviceIds)
     {
-        $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
         $expr = $this->getEntityManager()->createQueryBuilder()->expr();
+        $usedServiceIdsRule = $expr->in('stc.serviceType', $serviceIds);
 
-        $excludedCriteriasRule = null;
-        if (!empty($usedCriteriasIds)) {
-            $excludedCriteriasRule = $expr->notIn('e.id', $usedCriteriasIds);
-        }
-        $rule = $expr->andX($excludedCriteriasRule, $expr->in('stc.serviceType', $serviceIds));
+        $rule = $expr->andX($this->unusedCriteriaRule($channelId), $usedServiceIdsRule);
 
         return $this->findAllRatingCriterias($rule);
     }
@@ -69,5 +61,16 @@ class ChannelCriteriaRepository extends EntityRepository
             $criteriaIds = array_merge($criteriaIds, $singleId);
         }
         return $criteriaIds;
+    }
+
+    private function unusedCriteriaRule($channelId)
+    {
+        $rule = null;
+        $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
+        $expr = $this->getEntityManager()->createQueryBuilder()->expr();
+        if (!empty($usedCriteriasIds)) {
+            $rule = $expr->notIn('e.id', $usedCriteriasIds);
+        }
+        return $rule;
     }
 }

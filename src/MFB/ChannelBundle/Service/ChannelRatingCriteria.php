@@ -11,12 +11,14 @@ class ChannelRatingCriteria
 {
     private $entityManager;
     private $criteriaLimit;
+    private $channelServiceType;
 
 
-    public function __construct(EntityManager $em, $criteriaLimit)
+    public function __construct(EntityManager $em, $criteriaLimit, $channelServiceType)
     {
         $this->entityManager = $em;
         $this->criteriaLimit = $criteriaLimit;
+        $this->channelServiceType = $channelServiceType;
     }
 
     public function createNewChannelCriteria($channel)
@@ -63,8 +65,14 @@ class ChannelRatingCriteria
             ->findAllUnusedRatingCriterias($channelId);
     }
 
-    public function getNotUsedCriteriasForService($channelId, $serviceIds)
+    public function getNotUsedCriteriasForService($channelId)
     {
+        $channelServices = $this->channelServiceType->findByChannelId($channelId);
+
+        $serviceIds = array();
+        foreach ($channelServices as $service) {
+            $serviceIds[] = $service->getServiceType()->getId();
+        }
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->findAllUnusedCriteriasForServices($channelId, $serviceIds);
     }
