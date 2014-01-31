@@ -68,6 +68,16 @@ class ChannelServiceType
         return $serviceProvider;
     }
 
+    public function findByChannelId($channelId)
+    {
+        $accountChannel = $this->channelService->findById($channelId);
+        $serviceProvider = $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceType')->findBy(
+            array('channel' => $accountChannel)
+        );
+        return $serviceProvider;
+    }
+
+
     public function findVisibleByAccountId($accountId)
     {
         $accountChannel = $this->channelService->findByAccountId($accountId);

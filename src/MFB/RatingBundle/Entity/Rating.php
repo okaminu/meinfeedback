@@ -28,6 +28,13 @@ class Rating
      */
     private $name;
 
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceTypeCriteria", mappedBy="rating")
+     */
+    private $serviceTypeCriteria;
+
 
     /**
      * Get id
@@ -60,5 +67,45 @@ class Rating
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->serviceTypeCriteria = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add serviceTypeCriteria
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceTypeCriteria $serviceTypeCriteria
+     * @return Rating
+     */
+    public function addServiceTypeCriteria(\MFB\ServiceBundle\Entity\ServiceTypeCriteria $serviceTypeCriteria)
+    {
+        $this->serviceTypeCriteria[] = $serviceTypeCriteria;
+    
+        return $this;
+    }
+
+    /**
+     * Remove serviceTypeCriteria
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceTypeCriteria $serviceTypeCriteria
+     */
+    public function removeServiceTypeCriteria(\MFB\ServiceBundle\Entity\ServiceTypeCriteria $serviceTypeCriteria)
+    {
+        $this->serviceTypeCriteria->removeElement($serviceTypeCriteria);
+    }
+
+    /**
+     * Get serviceTypeCriteria
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceTypeCriteria()
+    {
+        return $this->serviceTypeCriteria;
     }
 }

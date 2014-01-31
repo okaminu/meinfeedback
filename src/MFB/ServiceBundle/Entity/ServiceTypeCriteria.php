@@ -32,7 +32,7 @@ class ServiceTypeCriteria
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="MFB\RatingBundle\Entity\Rating")
+     * @ORM\ManyToOne(targetEntity="MFB\RatingBundle\Entity\Rating", inversedBy="serviceTypeCriterias")
      * @ORM\JoinColumn(name="rating_id", referencedColumnName="id")
      */
     private $rating;

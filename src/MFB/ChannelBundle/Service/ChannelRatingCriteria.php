@@ -63,6 +63,12 @@ class ChannelRatingCriteria
             ->findAllUnusedRatingCriterias($channelId);
     }
 
+    public function getNotUsedCriteriasForService($channelId, $serviceIds)
+    {
+        return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
+            ->findAllUnusedCriteriasForServices($channelId, $serviceIds);
+    }
+
     public function getUsedRatingCriteriasCount($accountId)
     {
         $accountChannelId = $this->getAccountChannel($accountId)->getId();

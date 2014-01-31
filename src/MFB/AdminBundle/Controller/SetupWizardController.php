@@ -256,8 +256,14 @@ class SetupWizardController extends Controller
 
     private function getChannelRatingSelectForm($channelCriteria, $channelId)
     {
+        $services = $this->get('mfb_account_channel.service_type.service')->findByChannelId($channelId);
+
+        $serviceIds = array();
+        foreach ($services as $service) {
+            $serviceIds[] = $service->getServiceType()->getId();
+        }
         $unusedCriterias = $this->get('mfb_account_channel.rating_criteria.service')
-            ->getNotUsedRatingCriterias($channelId);
+            ->getNotUsedCriteriasForService($channelId, $serviceIds);
 
         return $this->createForm(
             new ChannelRatingSelectType($unusedCriterias),

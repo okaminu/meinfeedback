@@ -7,19 +7,28 @@ class ChannelCriteriaRepository extends EntityRepository
 {
     public function findAllUnusedRatingCriterias($channelId)
     {
+        $rule = null;
         $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
-
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $builder = $qb->select('e')->from('MFBRatingBundle:Rating', 'e');
-
         if (!empty($usedCriteriasIds)) {
-            $builder->where(
-                $qb->expr()->notIn('e.id', $usedCriteriasIds)
-            );
+            $rule = $this->getEntityManager()->createQueryBuilder()->expr()->notIn('e.id', $usedCriteriasIds);
         }
-
-        return $builder->getQuery()->getResult();
+        return $this->findAllRatingCriterias($rule);
     }
+
+    public function findAllUnusedCriteriasForServices($channelId, $serviceIds)
+    {
+        $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
+        $expr = $this->getEntityManager()->createQueryBuilder()->expr();
+
+        $excludedCriteriasRule = null;
+        if (!empty($usedCriteriasIds)) {
+            $excludedCriteriasRule = $expr->notIn('e.id', $usedCriteriasIds);
+        }
+        $rule = $expr->andX($excludedCriteriasRule, $expr->in('stc.serviceType', $serviceIds));
+
+        return $this->findAllRatingCriterias($rule);
+    }
+
 
     public function findAllUsedRatingCriteriaIds($channelId)
     {
@@ -36,6 +45,18 @@ class ChannelCriteriaRepository extends EntityRepository
         return count($unusedCriteriaIds);
     }
 
+    private function findAllRatingCriterias($rules)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $builder = $qb->select('e')->from('MFBRatingBundle:Rating', 'e');
+        $builder->join('e.serviceTypeCriteria', 'stc');
+
+        if (!empty($rules)) {
+            $builder->where($rules);
+        }
+
+        return $builder->getQuery()->getResult();
+    }
 
     /**
      * @param $result
