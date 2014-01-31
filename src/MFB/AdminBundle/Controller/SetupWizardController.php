@@ -5,6 +5,7 @@ namespace MFB\AdminBundle\Controller;
 use MFB\AdminBundle\Form\SingleSelectType;
 use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
+use MFB\ChannelBundle\Form\ChannelRatingSelectType;
 use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -148,7 +149,37 @@ class SetupWizardController extends Controller
 
     public function selectCriteriasAction()
     {
-        return array();
+        $channel = $this->getChannel();
+        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
+
+        $channelCriteria = $channelRatingService->createNewChannelCriteria($channel);
+        $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
+
+        return
+            array(
+                'ratingSelectionForm' => $form->createView(),
+                'channelRatingCriterias' => $channel->getRatingCriteria(),
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit')
+        );
+    }
+
+    /**
+     * @Route("/setup_save_criterias", name="mfb_admin_setup_save_criterias")
+     */
+    public function saveCriteriasAction(Request $request)
+    {
+        $channel = $this->getChannel();
+        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
+
+        $channelCriteria = $channelRatingService->createNewChannelCriteria($channel);
+        $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $channelRatingService->store($channelCriteria);
+        }
+
+        return $this->createRedirect('mfb_admin_setup_select_criterias');
     }
 
 
@@ -221,5 +252,20 @@ class SetupWizardController extends Controller
             return $path;
         }
         return $path;
+    }
+
+    private function getChannelRatingSelectForm($channelCriteria, $channelId)
+    {
+        $unusedCriterias = $this->get('mfb_account_channel.rating_criteria.service')
+            ->getNotUsedRatingCriterias($channelId);
+
+        return $this->createForm(
+            new ChannelRatingSelectType($unusedCriterias),
+            $channelCriteria,
+            array(
+                'action' => $this->generateUrl('mfb_admin_setup_save_criterias'),
+                'method' => 'POST'
+            )
+        );
     }
 }

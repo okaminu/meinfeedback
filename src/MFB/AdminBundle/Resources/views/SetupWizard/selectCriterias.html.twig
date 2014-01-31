@@ -1,5 +1,5 @@
 {% extends "MFBAdminBundle::base.html.twig" %}
-{#{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}#}
+{% form_theme ratingSelectionForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 
 {% block title %}Setup wizard{% endblock %}
 
@@ -8,6 +8,30 @@
 <div class="formular container modal-spacing">
     <h3 class="text-center form-header">{% trans %} Select Criterias {% endtrans %}</h3>
 
+    {{ form_errors(ratingSelectionForm) }}
+    <div id="selectRatingCriteria">
+        <div class="title">{% trans %} The following rating criterias were added {% endtrans %}</div>
+        <div class="sectionIdent">
+            <ol>
+                {% for criteria in channelRatingCriterias %}
+                    <li>
+                        {{ criteria.getRatingCriteria.getName }}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% if channelRatingCriterias|length < criteriaLimit %}
+            <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
+            <div class="sectionIdent">
+                {{ form_start(ratingSelectionForm) }}
+                <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>
+                {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+            </div>
+            {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
+            {{ form_end(ratingSelectionForm) }}
+        {% endif %}
+    </div>
 
 
 </div>
