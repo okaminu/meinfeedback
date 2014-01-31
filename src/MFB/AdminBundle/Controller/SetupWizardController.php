@@ -5,15 +5,22 @@ namespace MFB\AdminBundle\Controller;
 use MFB\AdminBundle\Form\SingleSelectType;
 use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
-use MFB\ServiceBundle\Entity\ServiceDefinition;
 use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use MFB\ServiceBundle\ServiceException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class SetupWizardController extends Controller
 {
+    /**
+     * @Route("/setup_select_business", name="mfb_admin_setup_select_business")
+     * @Template
+     */
+
     public function selectBusinessAction(Request $request)
     {
         $businessList = $this->get('mfb_service_business.service')->findAll();
@@ -33,8 +40,14 @@ class SetupWizardController extends Controller
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return $this->showBusinessSelectForm($form);
+        return array('form' => $form->createView());
     }
+
+    /**
+     * @Route("/setup_select_single_service/{businessId}", name="mfb_admin_setup_select_single_service",
+     * requirements={"businessId" = "\d+"})
+     * @Template
+     */
 
     public function selectSingleServiceTypeAction(Request $request, $businessId)
     {
@@ -54,8 +67,14 @@ class SetupWizardController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->showSingleServiceForm($form);
+        return array('form' => $form->createView());
     }
+
+    /**
+     * @Route("/setup_select_multiple_service/{businessId}", name="mfb_admin_setup_select_multiple_service",
+     * requirements={"businessId" = "\d+"})
+     * @Template
+     */
 
     public function selectMultipleServiceTypeAction(Request $request, $businessId)
     {
@@ -77,8 +96,13 @@ class SetupWizardController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->showMultipleServiceForm($form);
+        return array('form' => $form->createView());
     }
+
+    /**
+     * @Route("/setup_insert_definitions", name="mfb_admin_setup_insert_definitions")
+     * @Template
+     */
 
     public function insertDefinitionsAction(Request $request)
     {
@@ -96,8 +120,15 @@ class SetupWizardController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return $this->showDefinitionForm($form, $definitionService->findByChannelId($channelId));
+        return array('form' => $form->createView(),'definitionList' => $definitionService->findByChannelId($channelId));
     }
+
+    /**
+     * @Route("/setup_remove_definitions/{definitionId}", name="mfb_admin_setup_remove_definitions",
+     * requirements={"definitionId" = "\d+"})
+     * @Method({"POST"})
+     * @Template
+     */
 
     public function removeDefinitionsAction($definitionId)
     {
@@ -167,40 +198,6 @@ class SetupWizardController extends Controller
             $choices[$entity->getId()] = $entity->getName();
         }
         return $this->createForm(new MultipleSelectType($choices));
-    }
-    private function showBusinessSelectForm($form)
-    {
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:businessSelect.html.twig",
-            array('form' => $form->createView())
-        );
-    }
-
-    private function showSingleServiceForm($form)
-    {
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:serviceSelectSingle.html.twig",
-            array('form' => $form->createView())
-        );
-    }
-
-    private function showMultipleServiceForm($form)
-    {
-        return $this->render(
-            "MFBAdminBundle:SetupWizard:serviceSelectMultiple.html.twig",
-            array('form' => $form->createView())
-        );
-    }
-
-    private function showDefinitionForm($form, $definitionList)
-    {
-        return $this->render(
-            'MFBAdminBundle:SetupWizard:definition.html.twig',
-            array(
-                'form' => $form->createView(),
-                'definitionList' => $definitionList
-            )
-        );
     }
 
     private function getServiceSelectRoute($businessId)
