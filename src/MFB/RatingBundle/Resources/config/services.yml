@@ -1,11 +1,4 @@
 parameters:
-    mfb_rating.default.ratings:
-      - Speed
-      - Price
-      - Delivery
-      - Quality
-      - Service
-
     mfb_rating.boundary:
       min: 1
       max: 5

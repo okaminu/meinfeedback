@@ -4,27 +4,33 @@ namespace MFB\RatingBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use MFB\RatingBundle\Entity\Rating;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class LoadRatingData implements FixtureInterface, ContainerAwareInterface
+class LoadRatingData extends AbstractFixture implements FixtureInterface, OrderedFixtureInterface
 {
-    /**
-     * @var $container \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
+    private $ratingNames = array(
+        'Availability',
+        'Communication',
+        'Competence',
+        'Delivery',
+        'Enviroment',
+        'Knowledge',
+        'Price',
+        'Quality',
+        'Qualtiy',
+        'Service',
+        'Skill',
+        'Speed',
+        'Support'
+    );
 
     public function load(ObjectManager $manager)
     {
-        $ratingNames = $this->container->getParameter('mfb_rating.default.ratings');
-        foreach ($ratingNames as $ratingName) {
+        foreach ($this->ratingNames as $ratingName) {
             $ratingEntity = $this->createNewRatingEntity($ratingName);
             $manager->persist($ratingEntity);
+            $this->addReference("rating-{$ratingName}", $ratingEntity);
         }
         $manager->flush();
     }
@@ -35,4 +41,10 @@ class LoadRatingData implements FixtureInterface, ContainerAwareInterface
         $ratingEntity->setName($ratingName);
         return $ratingEntity;
     }
+
+    public function getOrder()
+    {
+        return 1;
+    }
+
 }
