@@ -221,6 +221,7 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $this->get('mfb_account_channel.service')->store($channel);
+                return $this->createRedirect('mfb_admin_homepage');
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));

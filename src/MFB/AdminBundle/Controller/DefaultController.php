@@ -3,6 +3,7 @@
 namespace MFB\AdminBundle\Controller;
 
 
+use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\ServiceBundle\Entity\Service;
@@ -48,29 +49,22 @@ class DefaultController extends Controller
 
     public function locationAction(Request $request)
     {
-        $em = $this->getEntityManager();
-        $accountId = $this->getCurrentUser()->getId();
-        $entity = $this->getAccountChannel($em, $accountId);
-
-        $form = $this->createForm(
-            new AccountChannelType(),
-            $entity,
-            array(
-                'action' => $this->generateUrl('mfb_location'),
-                'method' => 'POST',
-            )
-        );
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($this->getCurrentUser()->getId());
+        $form = $this->createForm(new AccountChannelType(), $channel);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $this->saveEntity($em, $entity);
-            return $this->redirect($form->get('redirect')->getData());
+        try {
+            if ($form->isValid()) {
+                $this->get('mfb_account_channel.service')->store($channel);
+            }
+        } catch (ChannelException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
         }
 
         return $this->render(
             'MFBAdminBundle:Default:location.html.twig',
             array(
-                'entity' => $entity,
+                'entity' => $channel,
                 'form' => $form->createView(),
             )
         );

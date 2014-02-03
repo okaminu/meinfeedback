@@ -1,5 +1,7 @@
 {% extends 'MFBAdminBundle::base.html.twig' %}
 {% form_theme form "MeinFeedbackHomeBundle:Form:form_widget_mandatory.html.twig" %}
+{% form_theme form "MeinFeedbackHomeBundle:Form:form_widget_mandatory.html.twig" %}
+
 
 {% block title %}Welcome to MeinFeedback{% endblock %}
 
@@ -10,7 +12,7 @@
         <div class="places">
 
 
-            {{ form_start(form, {'attr':{'target':'_top', 'class': 'form-horizontal'} }) }}
+            {{ form_start(form, {'attr':{'class': 'form-horizontal'} }) }}
             {{ form_errors(form) }}
 
             {#<form id="" action="assets/img/joker.png" enctype="multipart/form-data" class="form-inline">#}
