@@ -246,12 +246,12 @@ class FormSetupController extends Controller
 
     private function addServiceProviderTitles($form)
     {
-        $honorificList = $this->get('mfb_service_provider.service')->getHonorifics();
+        $prefixList = $this->get('mfb_service_provider.service')->getPrefix();
         $serviceProviderForm = $form->get('serviceProvider');
         foreach ($serviceProviderForm as $providerForm) {
-            $honorificId = $providerForm->getData()->getHonorific();
-            $providerForm->remove('honorific');
-            $providerForm->add('honorific', 'hidden', array('label' => $honorificList[$honorificId]));
+            $prefixId = $providerForm->getData()->getPrefix();
+            $providerForm->remove('prefix');
+            $providerForm->add('prefix', 'hidden', array('label' => $prefixList[$prefixId]));
         }
     }
 }

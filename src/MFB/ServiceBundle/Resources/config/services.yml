@@ -5,7 +5,7 @@ parameters:
   mfb_service_business.class: MFB\ServiceBundle\Service\Business
   mfb_service_definition.class: MFB\ServiceBundle\Service\ServiceDefinition
 
-  mfb_service_provider.honorific:
+  mfb_service_provider.prefix:
     1: Mr
     2: Mrs
 
@@ -16,7 +16,7 @@ services:
 
   mfb_service_provider.service:
     class: %mfb_service_provider.class%
-    arguments: ["@doctrine.orm.default_entity_manager", %mfb_service_provider.honorific%, @mfb_account_channel.service]
+    arguments: ["@doctrine.orm.default_entity_manager", %mfb_service_provider.prefix%, @mfb_account_channel.service]
 
   mfb_service_business.service:
     class: %mfb_service_business.class%

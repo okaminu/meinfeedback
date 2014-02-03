@@ -13,16 +13,16 @@
 
         {% if addedTeamMemberName is not null %}
             <div class="alert alert-info text-center">
-                The team member {{ addedTeamMemberName }} was added
+                The team member "{{ addedTeamMemberName }}" was added
             </div>
         {% endif %}
 
         <div class="sectionIdent">
             {{ form_start(serviceProviderForm) }}
             <div class="form-group">
-                {{ form_label(serviceProviderForm.honorific, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_label(serviceProviderForm.prefix, null, {'label_attr':{'class': 'control-label'} }) }}
                 <div class="input-group">
-                    {% for title in serviceProviderForm.honorific %}
+                    {% for title in serviceProviderForm.prefix %}
                         <label class="radio-inline">
                             {{ form_widget(title, {'attr': {'class': 'radio'} }) }} {{ title.vars.label }}
                         </label>

@@ -1,6 +1,6 @@
 MFB\ServiceBundle\Entity\ServiceProvider:
   properties:
-    honorific:
+    prefix:
       - Range:
           min: 1
           max: 2

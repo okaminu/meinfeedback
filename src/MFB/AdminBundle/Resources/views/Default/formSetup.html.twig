@@ -53,7 +53,7 @@
                         {% for serviceProvider in channelServicesForm.serviceProvider %}
                             <div class="checkbox">
                                 <label>
-                                    {{ form_widget(serviceProvider.visibility) }} {{ serviceProvider.honorific.vars.label }} {{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}
+                                    {{ form_widget(serviceProvider.visibility) }} {{ serviceProvider.prefix.vars.label }} {{  serviceProvider.firstname.vars.value }} {{  serviceProvider.lastname.vars.value }}
                                 </label>
                             </div>
                         {% endfor %}
@@ -111,9 +111,9 @@
                     <div class="sectionIdent">
                         {{ form_start(serviceProviderForm) }}
                         <div class="form-group">
-                            {{ form_label(serviceProviderForm.honorific, null, {'label_attr':{'class': 'control-label'} }) }}
+                            {{ form_label(serviceProviderForm.prefix, null, {'label_attr':{'class': 'control-label'} }) }}
                             <div class="input-group">
-                                {% for title in serviceProviderForm.honorific %}
+                                {% for title in serviceProviderForm.prefix %}
                                     <label class="radio-inline">
                                         {{ form_widget(title, {'attr': {'class': 'radio'} }) }} {{ title.vars.label }}
                                     </label>

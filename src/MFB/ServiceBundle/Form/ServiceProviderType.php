@@ -9,11 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ServiceProviderType extends AbstractType
 {
 
-    private $honorific;
+    private $prefix;
 
-    public function __construct($honorific)
+    public function __construct($prefix)
     {
-        $this->honorific = $honorific;
+        $this->prefix = $prefix;
     }
 
         /**
@@ -24,10 +24,10 @@ class ServiceProviderType extends AbstractType
     {
         $builder
             ->add(
-                'honorific',
+                'prefix',
                 'choice',
                 array(
-                    'choices' => $this->honorific,
+                    'choices' => $this->prefix,
                     'required' => true,
                     'multiple'  => false,
                     'empty_value' => false,

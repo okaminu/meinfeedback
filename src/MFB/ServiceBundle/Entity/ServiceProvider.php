@@ -32,9 +32,9 @@ class ServiceProvider
 
     /**
      * @var int
-     * @ORM\Column(name="honorific", type="smallint")
+     * @ORM\Column(name="prefix", type="smallint")
      */
-    private $honorific;
+    private $prefix;
 
     /**
      * @var string
@@ -158,25 +158,25 @@ class ServiceProvider
     }
 
     /**
-     * Set honorific
+     * Set prefix
      *
-     * @param integer $honorific
+     * @param integer $prefix
      * @return ServiceProvider
      */
-    public function setHonorific($honorific)
+    public function setPrefix($prefix)
     {
-        $this->honorific = $honorific;
+        $this->prefix = $prefix;
     
         return $this;
     }
 
     /**
-     * Get honorific
+     * Get prefix
      *
      * @return integer 
      */
-    public function getHonorific()
+    public function getPrefix()
     {
-        return $this->honorific;
+        return $this->prefix;
     }
 }

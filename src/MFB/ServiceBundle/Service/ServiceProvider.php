@@ -12,14 +12,14 @@ class ServiceProvider
 {
     private $entityManager;
     
-    private $honorific;
+    private $prefix;
 
     private $channelService;
 
-    public function __construct(EntityManager $em, $honorific, Channel $cs)
+    public function __construct(EntityManager $em, $prefix, Channel $cs)
     {
         $this->entityManager = $em;
-        $this->honorific = $honorific;
+        $this->prefix = $prefix;
         $this->channelService = $cs;
     }
 
@@ -41,7 +41,7 @@ class ServiceProvider
 
     public function getType()
     {
-        return new ServiceProviderType($this->honorific);
+        return new ServiceProviderType($this->prefix);
     }
 
 
@@ -89,8 +89,8 @@ class ServiceProvider
         return false;
     }
     
-    public function getHonorifics()
+    public function getPrefix()
     {
-        return $this->honorific;
+        return $this->prefix;
     }
 }
