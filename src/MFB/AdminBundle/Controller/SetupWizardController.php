@@ -5,6 +5,7 @@ namespace MFB\AdminBundle\Controller;
 use MFB\AdminBundle\Form\SingleSelectType;
 use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
+use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
 use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -182,6 +183,7 @@ class SetupWizardController extends Controller
         return $this->createRedirect('mfb_admin_setup_show_criterias');
     }
 
+
     /**
      * @Route("/setup_insert_team_member", name="mfb_admin_setup_insert_service_provider")
      * @Template
@@ -195,7 +197,6 @@ class SetupWizardController extends Controller
         $teamMember = $providerService->createNewServiceProvider($channelId);
         $form = $this->getNewServiceProviderForm($teamMember);
         $form->handleRequest($request);
-
         try {
             if ($form->isValid()) {
                 $this->get('mfb_service_provider.service')->store($teamMember);
@@ -204,10 +205,27 @@ class SetupWizardController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return array(
-            'serviceProviderForm' => $form->createView(),
-            'addedTeamMemberName' => $addedMemberName
-        );
+        return array('serviceProviderForm' => $form->createView(), 'addedTeamMemberName' => $addedMemberName);
+    }
+
+    /**
+     * @Route("/setup_account_settings", name="mfb_admin_setup_account_settings")
+     * @Template
+     */
+    public function accountSettingsAction(Request $request)
+    {
+        $channel = $this->getChannel();
+        $form = $this->createForm(new AccountChannelType(), $channel);
+        $form->handleRequest($request);
+
+        try {
+            if ($form->isValid()) {
+                $this->get('mfb_account_channel.service')->store($channel);
+            }
+        } catch (ChannelException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
+        }
+        return array('form' => $form->createView());
     }
 
 

@@ -3,14 +3,14 @@
 
 {% block form_widget_compound%}
     {{ parent() }}
-    {% if ((form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
+    {% if (required and (form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
         <span class="mandatory">*</span>
     {% endif %}
 {% endblock %}
 
 {% block form_widget_simple%}
     {{ parent() }}
-    {% if ((form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
+    {% if (required and (form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
         <span class="mandatory">*</span>
     {% endif %}
 {% endblock %}

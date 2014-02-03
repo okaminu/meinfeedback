@@ -34,7 +34,7 @@ class Channel
         try {
             $this->saveEntity($channel);
         } catch (DBALException $ex) {
-            throw new ChannelException('Cannot store channel data');
+            throw new ChannelException('Cannot save channel information');
         }
     }
 
