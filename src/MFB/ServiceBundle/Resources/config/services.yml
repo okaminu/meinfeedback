@@ -16,7 +16,7 @@ services:
 
   mfb_service_provider.service:
     class: %mfb_service_provider.class%
-    arguments: ["@doctrine.orm.default_entity_manager", %mfb_service_provider.honorific%]
+    arguments: ["@doctrine.orm.default_entity_manager", %mfb_service_provider.honorific%, @mfb_account_channel.service]
 
   mfb_service_business.service:
     class: %mfb_service_business.class%

@@ -191,13 +191,9 @@ class FormSetupController extends Controller
         return $serviceGroupForm;
     }
 
-    /**
-     * @param $accountId
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getNewServiceProviderForm($accountId)
+    private function getNewServiceProviderForm($channelId)
     {
-        $serviceProvider = $this->get('mfb_service_provider.service')->createNewServiceProvider($accountId);
+        $serviceProvider = $this->get('mfb_service_provider.service')->createNewServiceProvider($channelId);
         $serviceProviderForm = $this->getServiceProviderForm($serviceProvider);
         return $serviceProviderForm;
     }

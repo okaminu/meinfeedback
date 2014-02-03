@@ -1,0 +1,49 @@
+{% extends 'MFBAdminBundle::base.html.twig' %}
+{% form_theme serviceProviderForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+
+{% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="formular container modal-spacing">
+        <h3 class="text-center form-header">
+            {% trans %} Add Service Provider {% endtrans %}
+        </h3>
+        <h4><div class="text-center">Add your team members you want to be rated</div></h4>
+        {{ form_errors(serviceProviderForm) }}
+
+        {% if addedTeamMemberName is not null %}
+            <div class="alert alert-info text-center">
+                The team member {{ addedTeamMemberName }} was added
+            </div>
+        {% endif %}
+
+        <div class="sectionIdent">
+            {{ form_start(serviceProviderForm) }}
+            <div class="form-group">
+                {{ form_label(serviceProviderForm.honorific, null, {'label_attr':{'class': 'control-label'} }) }}
+                <div class="input-group">
+                    {% for title in serviceProviderForm.honorific %}
+                        <label class="radio-inline">
+                            {{ form_widget(title, {'attr': {'class': 'radio'} }) }} {{ title.vars.label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(serviceProviderForm.firstname, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_widget(serviceProviderForm.firstname, {'attr': {'class': 'form-control', 'value':''} }) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(serviceProviderForm.lastname, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_widget(serviceProviderForm.lastname, {'attr': {'class': 'form-control', 'value':''} }) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
+            </div>
+            {{ form_end(serviceProviderForm) }}
+        </div>
+    </div>
+{% endblock %}

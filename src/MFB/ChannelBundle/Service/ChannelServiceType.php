@@ -22,9 +22,9 @@ class ChannelServiceType
         $this->serviceType = $serviceType;
     }
 
-    public function createNew($accountId, $serviceTypeId)
+    public function createNew($channelId, $serviceTypeId)
     {
-        $accountChannel = $this->channelService->findById($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
         $serviceType = $this->serviceType->findById($serviceTypeId);
 
         $cse = new ChannelServiceEntity();
@@ -59,15 +59,6 @@ class ChannelServiceType
         $this->entityManager->flush();
     }
 
-    public function findByAccountId($accountId)
-    {
-        $accountChannel = $this->channelService->findByAccountId($accountId);
-        $serviceProvider = $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceType')->findBy(
-            array('channel' => $accountChannel)
-        );
-        return $serviceProvider;
-    }
-
     public function findByChannelId($channelId)
     {
         $accountChannel = $this->channelService->findById($channelId);
@@ -78,9 +69,9 @@ class ChannelServiceType
     }
 
 
-    public function findVisibleByAccountId($accountId)
+    public function findVisibleByAccountId($channelId)
     {
-        $accountChannel = $this->channelService->findByAccountId($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
         $serviceProvider = $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceType')->findBy(
             array('channel' => $accountChannel, 'visibility' => 1)
         );

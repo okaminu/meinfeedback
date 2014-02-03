@@ -1,0 +1,57 @@
+{% extends "MFBAdminBundle::base.html.twig" %}
+{% form_theme ratingSelectionForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+
+{% block title %}Setup wizard{% endblock %}
+
+{% block content %}
+
+<div class="formular container modal-spacing">
+    <h3 class="text-center form-header">{% trans %} Select Criterias {% endtrans %}</h3>
+
+    {{ form_errors(ratingSelectionForm) }}
+    <div id="selectRatingCriteria">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="title">{% trans %} The following rating criterias were added {% endtrans %}</div>
+                <div class="sectionIdent">
+                    <ol>
+                        {% for criteria in channelRatingCriterias %}
+                            <li>
+                                {{ criteria.getRatingCriteria.getName }}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        {% if channelRatingCriterias|length < criteriaLimit %}
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
+                    <div class="sectionIdent">
+                        {{ form_start(ratingSelectionForm) }}
+                        <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>
+                        {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="form-group">
+                    {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
+                </div>
+            </div>
+            {{ form_end(ratingSelectionForm) }}
+        {% else %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <a class="btn" href="{{ path('mfb_admin_setup_insert_service_provider') }}">{% trans %}Continue{% endtrans %}</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+</div>
+{% endblock %}

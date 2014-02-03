@@ -143,11 +143,11 @@ class SetupWizardController extends Controller
     }
 
     /**
-     * @Route("/setup_select_criterias", name="mfb_admin_setup_select_criterias")
+     * @Route("/setup_show_criterias", name="mfb_admin_setup_show_criterias")
      * @Template
      */
 
-    public function selectCriteriasAction()
+    public function showCriteriasFormAction()
     {
         $channel = $this->getChannel();
         $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
@@ -179,7 +179,35 @@ class SetupWizardController extends Controller
             $channelRatingService->store($channelCriteria);
         }
 
-        return $this->createRedirect('mfb_admin_setup_select_criterias');
+        return $this->createRedirect('mfb_admin_setup_show_criterias');
+    }
+
+    /**
+     * @Route("/setup_insert_team_member", name="mfb_admin_setup_insert_service_provider")
+     * @Template
+     */
+    public function insertServiceProviderAction(Request $request)
+    {
+        $providerService = $this->get('mfb_service_provider.service');
+        $channelId = $this->getChannel()->getId();
+        $addedMemberName = null;
+
+        $teamMember = $providerService->createNewServiceProvider($channelId);
+        $form = $this->getNewServiceProviderForm($teamMember);
+        $form->handleRequest($request);
+
+        try {
+            if ($form->isValid()) {
+                $this->get('mfb_service_provider.service')->store($teamMember);
+                $addedMemberName = $teamMember->getFirstname() .' '. $teamMember->getLastname();
+            }
+        } catch (ServiceException $ex) {
+            $form->addError(new FormError($ex->getMessage()));
+        }
+        return array(
+            'serviceProviderForm' => $form->createView(),
+            'addedTeamMemberName' => $addedMemberName
+        );
     }
 
 
@@ -267,5 +295,15 @@ class SetupWizardController extends Controller
                 'method' => 'POST'
             )
         );
+    }
+
+    private function getNewServiceProviderForm($serviceProvider)
+    {
+        $form =  $this->createForm(
+            $this->get('mfb_service_provider.service')->getType(),
+            $serviceProvider
+        );
+        $form->add('save', 'submit', array('label' => 'Send'));
+        return $form;
     }
 }

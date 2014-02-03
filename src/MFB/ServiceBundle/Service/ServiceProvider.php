@@ -3,6 +3,7 @@ namespace MFB\ServiceBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
+use MFB\ChannelBundle\Service\Channel;
 use MFB\ServiceBundle\Entity\ServiceProvider as ServiceProviderEntity;
 use MFB\ServiceBundle\Form\ServiceProviderType;
 use MFB\ServiceBundle\ServiceException;
@@ -13,15 +14,18 @@ class ServiceProvider
     
     private $honorific;
 
-    public function __construct(EntityManager $em, $honorific)
+    private $channelService;
+
+    public function __construct(EntityManager $em, $honorific, Channel $cs)
     {
         $this->entityManager = $em;
         $this->honorific = $honorific;
+        $this->channelService = $cs;
     }
 
-    public function createNewServiceProvider($accountId)
+    public function createNewServiceProvider($channelId)
     {
-        $accountChannel = $this->getAccountChannel($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
         $service = $this->getNewServiceProviderEntity($accountChannel);
         return $service;
     }
@@ -31,7 +35,7 @@ class ServiceProvider
         try {
             $this->saveEntity($service);
         } catch (DBALException $ex) {
-            throw new ServiceException('Email already exists');
+            throw new ServiceException('Team member already exists');
         }
     }
 
@@ -50,13 +54,6 @@ class ServiceProvider
         $this->entityManager->flush();
     }
 
-    private function getAccountChannel($accountId)
-    {
-        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
-    }
 
     private function getNewServiceProviderEntity($accountChannel)
     {
@@ -65,27 +62,27 @@ class ServiceProvider
         return $serviceGroup;
     }
 
-    public function findByAccountId($accountId)
+    public function findByChannelId($channelId)
     {
-        $accountChannel = $this->getAccountChannel($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
         $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
             array('channel' => $accountChannel)
         );
         return $serviceProvider;
     }
 
-    public function findVisibleByAccountId($accountId)
+    public function findVisibleByChannelId($channelId)
     {
-        $accountChannel = $this->getAccountChannel($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
         $serviceProvider = $this->entityManager->getRepository('MFBServiceBundle:ServiceProvider')->findBy(
             array('channel' => $accountChannel, 'visibility' => 1)
         );
         return $serviceProvider;
     }
     
-    public function hasVisibleServiceProviders($accountId)
+    public function hasVisibleServiceProviders($channelId)
     {
-        $service = $this->findVisibleByAccountId($accountId);
+        $service = $this->findVisibleByChannelId($channelId);
         if (count($service) > 0) {
             return true;
         }
