@@ -15,21 +15,25 @@
     <div class="container">
     <h3 class="form-header mb10">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
 
-    <ul class="stars_rating channel-ratings not-nested">
+    <div class="stars_rating channel-ratings not-nested">
         {% for ratingCriteria in channelRatingSummaryList %}
-            <li>
-                <div class="rating-title {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                    {{ ratingCriteria.getName }}
-                </div>
-                <div class="rating-stars">
-                    <div class="stars_gray_small">
-                        <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="{% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                        {{ ratingCriteria.getName }}
                     </div>
-                    <div class="clearfix"></div>
                 </div>
-            </li>
+                <div class="col-xs-4">
+                    <div class="rating-stars">
+                        <div class="stars_gray_small">
+                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
     <div class="feedback-count fs17">Total active feedbacks: {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
@@ -53,24 +57,29 @@
                         {% trans %} Anonymous says: {% endtrans %}
                     {% endif %}
                 </div>
+
                 <div class="col-xs-4">
-                    <ul class="stars_rating not-nested">
+                    <div class="stars_rating">
                         {% for ratingCriteria in feedbackSummaryItem.getRatings %}
                             {% if ratingCriteria.getRating > 0 %}
-                                <li>
-                                    <div class="rating-title feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
-                                        {{ ratingCriteria.getName }}
-                                    </div>
-                                    <div class="rating-stars">
-                                        <div class="stars_gray_small">
-                                            <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="feedback-ratings {% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
+                                            {{ ratingCriteria.getName }}
                                         </div>
-                                        <div class="clearfix"></div>
                                     </div>
-                                </li>
+                                    <div class="col-xs-8">
+                                        <div class="rating-stars">
+                                            <div class="stars_gray_small">
+                                                <span style="width: {{ ratingCriteria.getRating * 20 }}%;" class="stars_gold_small"></span>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}
                         {% endfor %}
-                    </ul>
+                    </div>
                 </div>
 
                 <div class="service-info col-xs-2 col-xs-offset-3">

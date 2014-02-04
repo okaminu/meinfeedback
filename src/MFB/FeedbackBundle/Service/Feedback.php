@@ -59,8 +59,8 @@ class Feedback
 
         $feedback = $this->getNewFeedbackEntity($accountId, $channel->getId());
 
-        $feedback->setService($this->getServiceEntity($accountId));
-        $feedback->setCustomer($this->getCustomerEntity($accountId));
+        $feedback->setService($this->getServiceEntity($channel->getId()));
+        $feedback->setCustomer($this->getCustomerEntity($channel->getId()));
 
         $feedback = $this->addFeedbackCriterias($channel->getRatingCriteria(), $feedback);
 
@@ -162,18 +162,18 @@ class Feedback
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
     }
 
-    private function getCustomerEntity($accountId)
+    private function getCustomerEntity($channelId)
     {
         if (!$this->customerEntity) {
-            $this->customerEntity = $this->customerService->createNewCustomer($accountId);
+            $this->customerEntity = $this->customerService->createNewCustomer($channelId);
         }
         return $this->customerEntity;
     }
 
-    private function getServiceEntity($accountId)
+    private function getServiceEntity($channelId)
     {
         if (!$this->serviceEntity) {
-            $this->serviceEntity = $this->service->createNewService($accountId, $this->getCustomerEntity($accountId));
+            $this->serviceEntity = $this->service->createNewService($channelId, $this->getCustomerEntity($channelId));
         }
         return $this->serviceEntity;
     }

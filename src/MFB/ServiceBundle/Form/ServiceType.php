@@ -55,9 +55,9 @@ class ServiceType extends AbstractType
                     'format' => 'y-M-d'))
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('customer', new CustomerType())
-            ->add('serviceType', 'entity', array(
-                    'class' => 'MFBServiceBundle:ServiceType',
-                    'property' => 'name',
+            ->add('channelServiceType', 'entity', array(
+                    'class' => 'MFBChannelBundle:ChannelServiceType',
+                    'property' => 'serviceTypeName',
                     'choices' => $this->serviceType,
                 ))
             ->add('serviceProvider', 'entity', array(

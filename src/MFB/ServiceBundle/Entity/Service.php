@@ -74,7 +74,7 @@ class Service
      * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceProvider")
      * @ORM\JoinColumn(name="service_provider_id", referencedColumnName="id")
      **/
-    private $serviceProvider;
+    private $serviceProvider = null;
 
 
     /**
@@ -202,28 +202,6 @@ class Service
         return $this->customer;
     }
 
-    /**
-     * Set serviceType
-     *
-     * @param \MFB\ServiceBundle\Entity\serviceType $serviceType
-     * @return Service
-     */
-    public function setServiceType(\MFB\ServiceBundle\Entity\ServiceType $serviceType = null)
-    {
-        $this->channelServiceType = $serviceType;
-    
-        return $this;
-    }
-
-    /**
-     * Get serviceType
-     *
-     * @return \MFB\ServiceBundle\Entity\serviceType
-     */
-    public function getServiceType()
-    {
-        return $this->channelServiceType;
-    }
 
     /**
      * Set serviceProvider

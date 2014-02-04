@@ -44,6 +44,7 @@ class Service
             $customer = $this->customerService->createNewCustomer($channelId);
         }
         $service = $this->getNewServiceEntity($channel->getId(), $channel->getAccountId());
+        $service->setChannelServiceType($this->channelServiceType->createNew($channelId));
         $service->setCustomer($customer);
         return $service;
     }

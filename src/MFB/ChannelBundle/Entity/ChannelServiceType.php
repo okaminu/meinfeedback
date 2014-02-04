@@ -170,4 +170,10 @@ class ChannelServiceType
     {
         return $this->service;
     }
+
+    public function getServiceTypeName()
+    {
+        return $this->getServiceType()->getName();
+    }
+
 }

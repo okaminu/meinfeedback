@@ -53,7 +53,7 @@ class Feedback
 
     private function addServiceSummary(FeedbackSummaryItem $singleSummary, ServiceEntity $service)
     {
-        $serviceType = $service->getServiceType();
+        $serviceType = $service->getChannelServiceType()->getServiceType();
         $serviceProvider = $service->getServiceProvider();
 
         $singleSummary->setServiceTypeName($serviceType->getName());

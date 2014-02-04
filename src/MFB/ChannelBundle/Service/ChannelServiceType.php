@@ -22,14 +22,11 @@ class ChannelServiceType
         $this->serviceType = $serviceType;
     }
 
-    public function createNew($channelId, $serviceTypeId)
+    public function createNew($channelId)
     {
         $accountChannel = $this->channelService->findById($channelId);
-        $serviceType = $this->serviceType->findById($serviceTypeId);
-
         $cse = new ChannelServiceEntity();
         $cse->setChannel($accountChannel);
-        $cse->setServiceType($serviceType);
 
         return $cse;
     }

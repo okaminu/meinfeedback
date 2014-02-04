@@ -14,18 +14,18 @@ class DefaultController extends Controller
 {
     public function showCreateFeedbackFormAction($accountId)
     {
-        $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountChannel->getId());
-        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel);
-        return $this->showFeedbackFrom($accountChannel, $form);
+        $channel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($channel->getId());
+        $form = $this->getFeedbackForm($feedback, $channel->getAccountId(), $channel->getId());
+        return $this->showFeedbackFrom($channel, $form);
     }
 
     public function saveFeedbackAction(Request $request)
     {
         $accountId = $request->get('accountId');
-        $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
-        $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel);
+        $channel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($channel->getId());
+        $form = $this->getFeedbackForm($feedback, $channel->getAccountId(), $channel->getId());
         try {
             $form->handleRequest($request);
 
@@ -34,7 +34,7 @@ class DefaultController extends Controller
             }
             $this->get('mfb_feedback.service')->processFeedback($feedback);
             return $this->showThankyouForm(
-                $accountChannel,
+                $channel,
                 $feedback,
                 $this->container->getParameter('mfb_feedback.redirectTimeout')
             );
@@ -44,7 +44,7 @@ class DefaultController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->showFeedbackFrom($accountChannel, $form);
+        return $this->showFeedbackFrom($channel, $form);
     }
 
 
@@ -74,19 +74,13 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $feedback
-     * @param $accountId
-     * @param $accountChannel
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getFeedbackForm(Feedback $feedback, $accountId, AccountChannel $accountChannel)
+    private function getFeedbackForm(Feedback $feedback, $accountId, $channelId)
     {
-        $feedbackType = $this->get('mfb_feedback.service')->getFeedbackType($accountId);
+        $feedbackType = $this->get('mfb_feedback.service')->getFeedbackType($channelId);
         $form = $this->createForm($feedbackType, $feedback, array(
             'action' => $this->generateUrl('mfb_feedback_save', array(
                         'accountId' => $accountId,
-                        'accountChannelId' => $accountChannel->getId()
+                        'accountChannelId' => $channelId
                     )),
                 'method' => 'POST'
             ));
@@ -96,11 +90,6 @@ class DefaultController extends Controller
         return $form;
     }
 
-    /**
-     * @param $accountChannel
-     * @param $form
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     private function showFeedbackFrom($accountChannel, $form)
     {
         return $this->render(
@@ -112,12 +101,6 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $accountChannel
-     * @param $feedback
-     * @param $redirectTimeout
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     private function showThankyouForm($accountChannel, $feedback, $redirectTimeout)
     {
         $return_url = $this->getReturnUrl($accountChannel);
@@ -131,9 +114,6 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $form
-     */
     private function addCriteriaLabels($form)
     {
         $feedbackRatingForms = $form->get('feedbackRating');
