@@ -6,7 +6,6 @@ parameters:
             - 'mfb_admin_update_service_visibility'
   mfb_admin.form_setup.allowed.controllers:
             - 'MFB\AdminBundle\Controller\SetupWizardController'
-            - 'MFB\AdminBundle\Controller\FormSetupController'
 
   mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
 

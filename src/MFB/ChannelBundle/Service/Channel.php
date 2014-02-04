@@ -32,6 +32,10 @@ class Channel
     public function store($channel)
     {
         try {
+            if ($this->areNoVisibleServiceTypes($channel)) {
+                throw new ChannelException('At least one service must be visible');
+            }
+
             $this->saveEntity($channel);
         } catch (DBALException $ex) {
             throw new ChannelException('Cannot save channel information');
@@ -58,5 +62,28 @@ class Channel
             array('id' => $channelId)
         );
         return $accountChannel;
+    }
+
+    private function areNoVisibleServiceTypes($channel)
+    {
+        $serviceTypes = $channel->getServiceType();
+        if ($serviceTypes != null) {
+            $count = $this->getInvisibleServiceTypes($serviceTypes);
+            if (count($serviceTypes) == $count) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function getInvisibleServiceTypes($serviceTypes)
+    {
+        $count = 0;
+        foreach ($serviceTypes as $type) {
+            if ($type->getVisibility() == false) {
+                $count++;
+            }
+        }
+        return $count;
     }
 }

@@ -32,6 +32,7 @@
 
                     {{ form_start(channelServicesForm) }}
 
+                    {{ form_errors(channelServicesForm) }}
                     {% if channelServicesForm.serviceProvider|length > 0 %}
                     <div class="serviceType sectionIdent">
                         <div class="title">{% trans %} Service Providers {% endtrans %}</div>

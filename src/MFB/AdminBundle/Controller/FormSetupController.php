@@ -1,6 +1,7 @@
 <?php
 namespace MFB\AdminBundle\Controller;
 
+use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Form\ChannelServicesType as ChannelServiceFormType;
 use MFB\ServiceBundle\Entity\ServiceProvider;
 use MFB\ServiceBundle\ServiceException;
@@ -58,7 +59,7 @@ class FormSetupController extends Controller
                 throw new \Exception('Not valid form');
             }
             $this->get('mfb_account_channel.service')->store($channel);
-        } catch (ServiceException $ex) {
+        } catch (ChannelException $ex) {
             $channelServicesForm->addError(new FormError($ex->getMessage()));
         }
 
