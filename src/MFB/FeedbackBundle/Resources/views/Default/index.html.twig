@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        {% if form.service.serviceProvider.vars.choices|length > 0 %}
+        {% if form.service.serviceProvider is defined %}
             <div class="form-group">
                 <div class="col-xs-12">
                     {{ form_label(form.service.serviceProvider) }}

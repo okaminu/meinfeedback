@@ -59,14 +59,19 @@ class ServiceType extends AbstractType
                     'class' => 'MFBChannelBundle:ChannelServiceType',
                     'property' => 'serviceTypeName',
                     'choices' => $this->serviceType,
-                ))
-            ->add('serviceProvider', 'entity', array(
+                ));
+        if (count($this->serviceProvider) > 0) {
+            $builder->add(
+                'serviceProvider',
+                'entity',
+                array(
                     'class' => 'MFBServiceBundle:ServiceProvider',
                     'property' => 'lastname',
                     'label' => "Service Provider",
                     'choices' => $this->serviceProvider,
-                ))
-        ;
+                )
+            );
+        }
     }
 
     /**
