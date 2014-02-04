@@ -16,7 +16,7 @@ class ServiceTypeVisibilityType extends AbstractType
     {
         $builder
             ->add('visibility', 'checkbox', array('required' => false))
-            ->add('name', 'hidden')
+            ->add('serviceTypeName', 'hidden')
         ;
     }
     
@@ -26,7 +26,7 @@ class ServiceTypeVisibilityType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MFB\ServiceBundle\Entity\ServiceType'
+            'data_class' => 'MFB\ChannelBundle\Entity\ChannelServiceType'
         ));
     }
 

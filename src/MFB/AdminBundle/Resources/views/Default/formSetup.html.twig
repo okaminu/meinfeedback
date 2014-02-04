@@ -9,13 +9,8 @@
         <div class="col-xs-6">
             <div class="modal-spacing">
                 <div id="selectRatingCriteria">
-                    {% if errors|length > 0 %}
-                        <div class="alert alert-info">
-                            {{ errors[0] }}
-                        </div>
-                    {% endif %}
                     <h3 class="form-header mb10">
-                        {% trans %} Add Rating Criteria {% endtrans %}
+                        {% trans %} Rating Criteria {% endtrans %}
                     </h3>
 
                     <div class="title">{% trans %} The following rating criterias were added {% endtrans %}</div>
@@ -28,17 +23,6 @@
                             {% endfor %}
                         </ol>
                     </div>
-
-                    {% if channelRatingCriterias|length < criteriaLimit %}
-                    <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
-                    <div class="sectionIdent">
-                        {{ form_start(ratingSelectionForm) }}
-                        <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>
-                        {{ form_widget(ratingSelectionForm.ratingCriteria) }}
-                    </div>
-                    {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
-                    {{ form_end(ratingSelectionForm) }}
-                    {% endif %}
                 </div>
 
                 <div id="displayServiceTypesProviders" class="section mt50">
@@ -48,6 +32,7 @@
 
                     {{ form_start(channelServicesForm) }}
 
+                    {% if channelServicesForm.serviceProvider|length > 0 %}
                     <div class="serviceType sectionIdent">
                         <div class="title">{% trans %} Service Providers {% endtrans %}</div>
                         {% for serviceProvider in channelServicesForm.serviceProvider %}
@@ -58,13 +43,14 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
 
                     <div class="serviceType sectionIdent">
                         <div class="title">{% trans %} Service Types {% endtrans %}</div>
                         {% for serviceType in channelServicesForm.serviceType %}
                             <div class="checkbox">
                                 <label>
-                                    {{ form_widget(serviceType.visibility) }} {{  serviceType.name.vars.value }}
+                                    {{ form_widget(serviceType.visibility) }} {{  serviceType.serviceTypeName.vars.value }}
                                 </label>
                             </div>
                         {% endfor %}
@@ -84,24 +70,6 @@
 
         <div class="col-xs-6">
             <div class="modal-spacing">
-                <div id="addServiceProvider" class="section">
-                    <h3 class="form-header mb10">
-                        {% trans %} Add Service Type {% endtrans %}
-                    </h3>
-                    <div class="sectionIdent">
-                        {{ form_start(serviceTypeForm) }}
-                        <div class="form-group">
-                            {{ form_label(serviceTypeForm.name, null, {'label_attr':{'class': 'control-label'} }) }}
-                            {{ form_widget(serviceTypeForm.name, {'attr': {'class': 'form-control'} }) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(serviceTypeForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
-                        </div>
-
-                        {{ form_end(serviceTypeForm) }}
-                    </div>
-                </div>
-
                 <div class="section mt50">
                     <h3 class="form-header mb10">
                         {% trans %} Add Service Provider {% endtrans %}

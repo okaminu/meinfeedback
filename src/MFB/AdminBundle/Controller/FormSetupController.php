@@ -1,13 +1,8 @@
 <?php
 namespace MFB\AdminBundle\Controller;
 
-use MFB\ChannelBundle\Form\ChannelRatingSelectType;
-use MFB\ChannelBundle\Form\ChannelServicesType;
-use MFB\ServiceBundle\Entity\ServiceType;
+use MFB\ChannelBundle\Form\ChannelServicesType as ChannelServiceFormType;
 use MFB\ServiceBundle\Entity\ServiceProvider;
-use MFB\ServiceBundle\Form\ServiceT;
-use MFB\ServiceBundle\Form\ServiceProviderType;
-use MFB\ServiceBundle\Form\ServiceTypeType;
 use MFB\ServiceBundle\ServiceException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -18,82 +13,24 @@ class FormSetupController extends Controller
 
     public function showAction()
     {
-        $accountId = $this->getCurrentUserId();
-        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
-        $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
-            ->createNewChannelCriteria($channel);
+        $channel = $this->getChannel();
 
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
             array(
-                'serviceTypeForm' => $this->getNewServiceTypeForm($accountId)->createView(),
-                'serviceProviderForm' => $this->getNewServiceProviderForm($accountId)->createView(),
+                'serviceProviderForm' => $this->getNewServiceProviderForm($channel->getId())->createView(),
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
-                'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria, $channel->getId())
-                        ->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
-                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
-                'errors' => $this->getErrors()
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit')
             )
         );
     }
 
-
-    private function getErrors()
-    {
-        $adminService = $this->get('mfb_admin.form_setup.service');
-        if ($adminService->isMissingMandatorySettings($this->getCurrentUserId())) {
-            return $adminService->missingMandatorySettingsErrors($this->getCurrentUserId());
-        }
-    }
-
-    public function updateRatingCriteriaSelectAction(Request $request)
-    {
-        $accountId = $this->getCurrentUserId();
-        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
-        try {
-            $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
-                ->createNewChannelCriteria($channel);
-
-            $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
-            $form->handleRequest($request);
-
-            if (!$form->isValid()) {
-                throw new \Exception('Not valid form');
-            }
-            $this->get('mfb_account_channel.rating_criteria.service')->store($channelCriteria);
-        } catch (ServiceException $ex) {
-            $form->addError(new FormError($ex->getMessage()));
-        }
-
-        return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
-    }
-
-    public function saveServiceTypeAction(Request $request)
-    {
-        $accountId = $this->getCurrentUserId();
-        try {
-            $serviceType = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
-
-            $form = $this->getServiceTypeForm($serviceType);
-            $form->handleRequest($request);
-
-            if (!$form->isValid()) {
-                throw new \Exception('Not valid form');
-            }
-            $this->get('mfb_account_channel.service_type.service')->store($serviceType);
-        } catch (ServiceException $ex) {
-            $form->addError(new FormError($ex->getMessage()));
-        }
-
-        return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
-    }
-
     public function saveServiceProviderAction(Request $request)
     {
-        $accountId = $this->getCurrentUserId();
+        $channel = $this->getChannel();
         try {
-            $serviceProvider = $this->get('mfb_service_provider.service')->createNewServiceProvider($accountId);
+            $serviceProvider = $this->get('mfb_service_provider.service')->createNewServiceProvider($channel->getId());
 
             $form = $this->getServiceProviderForm($serviceProvider);
             $form->handleRequest($request);
@@ -111,9 +48,8 @@ class FormSetupController extends Controller
 
     public function updateServicesVisibilityAction(Request $request)
     {
-        $accountId = $this->getCurrentUserId();
+        $channel = $this->getChannel();
         try {
-            $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
             $channelServicesForm = $this->getChannelServiceForm($channel);
 
             $channelServicesForm->handleRequest($request);
@@ -134,20 +70,6 @@ class FormSetupController extends Controller
         return $this->get('security.context')->getToken()->getUser();
     }
 
-    private function getServiceTypeForm(ServiceType $serviceType)
-    {
-        $form = $this->createForm(
-            new ServiceTypeType(),
-            $serviceType,
-            array(
-                'action' => $this->generateUrl('mfb_admin_save_service_type'),
-                'method' => 'POST',
-            )
-        );
-        $form->add('save', 'submit', array('label' => 'Send'));
-        return $form;
-    }
-
     private function getServiceProviderForm(ServiceProvider $serviceProvider)
     {
         $form = $this->createForm(
@@ -160,13 +82,6 @@ class FormSetupController extends Controller
         );
         $form->add('save', 'submit', array('label' => 'Send'));
         return $form;
-    }
-
-    private function getNewServiceTypeForm($accountId)
-    {
-        $serviceType = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
-        $serviceTypeForm = $this->getServiceTypeForm($serviceType);
-        return $serviceTypeForm;
     }
 
     private function getNewServiceProviderForm($channelId)
@@ -184,7 +99,7 @@ class FormSetupController extends Controller
     private function getChannelServiceForm($channel)
     {
         $channelServicesForm = $this->createForm(
-            new ChannelServicesType(),
+            new ChannelServiceFormType(),
             $channel,
             array(
                 'action' => $this->generateUrl('mfb_admin_update_service_visibility'),
@@ -193,21 +108,6 @@ class FormSetupController extends Controller
         );
         $this->addServiceProviderTitles($channelServicesForm);
         return $channelServicesForm;
-    }
-
-    private function getChannelRatingSelectForm($channelCriteria, $channelId)
-    {
-        $unusedCriterias = $this->get('mfb_account_channel.rating_criteria.service')
-            ->getNotUsedRatingCriterias($channelId);
-
-        return $this->createForm(
-            new ChannelRatingSelectType($unusedCriterias),
-            $channelCriteria,
-            array(
-                'action' => $this->generateUrl('mfb_admin_update_rating_criteria_select'),
-                'method' => 'POST',
-            )
-        );
     }
 
     private function addServiceProviderTitles($form)
@@ -219,5 +119,12 @@ class FormSetupController extends Controller
             $providerForm->remove('prefix');
             $providerForm->add('prefix', 'hidden', array('label' => $prefixList[$prefixId]));
         }
+    }
+
+    private function getChannel()
+    {
+        $accountId = $this->getCurrentUserId();
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
+        return $channel;
     }
 }
