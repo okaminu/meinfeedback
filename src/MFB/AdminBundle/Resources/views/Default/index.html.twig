@@ -83,8 +83,10 @@
                 </div>
 
                 <div class="service-info col-xs-2 col-xs-offset-3">
-                    <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                    <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
+                    {% if feedbackSummaryItem.getServiceProviderInfo is not null %}
+                        <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                        <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
+                    {% endif %}
                 </div>
 
                 <div class="service-info col-xs-2">

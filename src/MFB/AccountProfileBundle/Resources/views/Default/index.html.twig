@@ -91,15 +91,18 @@
 
                     {% endif %}
 
-                    <div class="service-info no-marg-top col-xs-2 col-xs-offset-4">
-                        <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
-                        <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
-                    </div>
+                        <div class="service-info no-marg-top col-xs-2 col-xs-offset-4">
+                            {% if feedbackSummaryItem.getServiceProviderInfo is not null %}
+                                <div class="service-title"> {% trans %} Service Provider {% endtrans %}</div>
+                                <div> {{ feedbackSummaryItem.getServiceProviderInfo }} </div>
+                            {% endif %}
+                        </div>
 
                     <div class="service-info no-marg-top col-xs-2">
                         <div class="service-title"> {% trans %} Service Type {% endtrans %}</div>
                         <div> {{ feedbackSummaryItem.getServiceTypeName}} </div>
                     </div>
+
                     <div class="clearfix"></div>
 
 

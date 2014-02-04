@@ -8,6 +8,7 @@ use MFB\FeedbackBundle\Summary\FeedbackItem as FeedbackSummaryItem;
 use MFB\RatingBundle\Entity\RatingSummary;
 use MFB\FeedbackBundle\Entity\Feedback as FeedbackEntity;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
+use MFB\ServiceBundle\Entity\Service;
 
 class Feedback
 {
@@ -54,11 +55,9 @@ class Feedback
     private function addServiceSummary(FeedbackSummaryItem $singleSummary, ServiceEntity $service)
     {
         $serviceType = $service->getChannelServiceType()->getServiceType();
-        $serviceProvider = $service->getServiceProvider();
 
         $singleSummary->setServiceTypeName($serviceType->getName());
-        $serviceProviderInfo = $serviceProvider->getFirstname() . ' ' . $serviceProvider->getLastname();
-        $singleSummary->setServiceProviderInfo($serviceProviderInfo);
+        $singleSummary->setServiceProviderInfo($this->getServiceProviderInfo($service));
         return $singleSummary;
     }
 
@@ -75,5 +74,14 @@ class Feedback
             $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
         }
         return $ratings;
+    }
+
+    private function getServiceProviderInfo(Service $service)
+    {
+        $info = null;
+        if ($provider = $service->getServiceProvider()) {
+            $info = $provider->getFirstname() . ' '. $provider->getLastname();
+        }
+        return $info;
     }
 }
