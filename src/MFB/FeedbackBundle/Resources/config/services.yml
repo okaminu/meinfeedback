@@ -18,7 +18,7 @@ services:
 
   mfb_feedback.service:
     class: %mfb_feedback.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service", "@mfb_feedback_rating.service", "@event_dispatcher", "%mfb_feedback.sort_order%"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service.service", "@mfb_feedback_rating.service", "@event_dispatcher", "%mfb_feedback.sort_order%", @mfb_account_channel.service, @mfb_account.service]
 
   mfb_feedback_invite.service:
     class: %mfb_feedback_invite.class%

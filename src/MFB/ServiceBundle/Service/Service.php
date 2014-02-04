@@ -3,7 +3,7 @@ namespace MFB\ServiceBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use MFB\ServiceBundle\Service\ServiceGroup as ServiceGroupService;
+use MFB\ServiceBundle\Service\ServiceType as ServiceTypeService;
 use MFB\ServiceBundle\Service\ServiceProvider as ServiceProviderService;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
 use MFB\ServiceBundle\Form\ServiceType;
@@ -18,18 +18,18 @@ class Service
 
     private $serviceProvider;
 
-    private $serviceGroup;
+    private $serviceType;
 
     public function __construct(
         EntityManager $em,
         CustomerService $customer,
         ServiceProviderService $serviceProvider,
-        ServiceGroupService $serviceGroup
+        ServiceTypeService $serviceType
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->serviceProvider = $serviceProvider;
-        $this->serviceGroup = $serviceGroup;
+        $this->serviceType = $serviceType;
     }
 
     public function createNewService($accountId, $customer = null)
@@ -59,9 +59,9 @@ class Service
      */
     public function getServiceType($accountId)
     {
-        $serviceGroup = $this->serviceGroup->findVisibleByAccountId($accountId);
+        $serviceType = $this->serviceType->findVisibleByAccountId($accountId);
         $serviceProvider = $this->serviceProvider->findVisibleByAccountId($accountId);
-        $serviceType = new ServiceType($serviceProvider, $serviceGroup);
+        $serviceType = new ServiceType($serviceProvider, $serviceType);
         return $serviceType;
     }
 
@@ -84,10 +84,10 @@ class Service
 
     private function getNewServiceEntity($accountChannel, $accountId)
     {
-        $serviceGroup = new ServiceEntity();
-        $serviceGroup->setChannelId($accountChannel);
-        $serviceGroup->setAccountId($accountId);
-        return $serviceGroup;
+        $serviceType = new ServiceEntity();
+        $serviceType->setChannelId($accountChannel);
+        $serviceType->setAccountId($accountId);
+        return $serviceType;
     }
 
 }

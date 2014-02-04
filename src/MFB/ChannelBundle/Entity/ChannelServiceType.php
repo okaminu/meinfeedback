@@ -63,34 +63,10 @@ class ChannelServiceType
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     * @return ServiceGroup
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-
-    /**
      * Set visibility
      *
      * @param integer $visibility
-     * @return ServiceGroup
+     * @return ServiceType
      */
     public function setVisibility($visibility)
     {
@@ -113,7 +89,7 @@ class ChannelServiceType
      * Set channel
      *
      * @param \MFB\ChannelBundle\Entity\AccountChannel $channel
-     * @return ServiceGroup
+     * @return ServiceType
      */
     public function setChannel(AccountChannel $channel = null)
     {

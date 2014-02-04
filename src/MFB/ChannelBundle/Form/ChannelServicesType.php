@@ -2,7 +2,7 @@
 
 namespace MFB\ChannelBundle\Form;
 
-use MFB\ServiceBundle\Form\ServiceGroupVisibilityType;
+use MFB\ServiceBundle\Form\ServiceTypeVisibilityType;
 use MFB\ServiceBundle\Form\ServiceProviderVisibilityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +19,7 @@ class ChannelServicesType extends AbstractType
     {
         $builder
             ->add('serviceProvider', 'collection', array('type' => new ServiceProviderVisibilityType()))
-            ->add('serviceGroup', 'collection', array('type' => new ServiceGroupVisibilityType()))
+            ->add('serviceType', 'collection', array('type' => new ServiceTypeVisibilityType()))
             ->add('submit', 'submit', array('label' => 'Update'))
         ;
     }

@@ -203,26 +203,26 @@ class Service
     }
 
     /**
-     * Set serviceGroup
+     * Set serviceType
      *
-     * @param \MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup
+     * @param \MFB\ServiceBundle\Entity\serviceType $serviceType
      * @return Service
      */
-    public function setServiceGroup(\MFB\ServiceBundle\Entity\ServiceGroup $serviceGroup = null)
+    public function setServiceType(\MFB\ServiceBundle\Entity\ServiceType $serviceType = null)
     {
-        $this->serviceGroup = $serviceGroup;
+        $this->channelServiceType = $serviceType;
     
         return $this;
     }
 
     /**
-     * Get serviceGroup
+     * Get serviceType
      *
-     * @return \MFB\ServiceBundle\Entity\ServiceGroup 
+     * @return \MFB\ServiceBundle\Entity\serviceType
      */
-    public function getServiceGroup()
+    public function getServiceType()
     {
-        return $this->serviceGroup;
+        return $this->channelServiceType;
     }
 
     /**

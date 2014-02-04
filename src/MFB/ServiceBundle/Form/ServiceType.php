@@ -12,12 +12,12 @@ class ServiceType extends AbstractType
 
     private $serviceProvider;
 
-    private $serviceGroup;
+    private $serviceType;
 
 
-    public function __construct($serviceProvider, $serviceGroup)
+    public function __construct($serviceProvider, $serviceType)
     {
-        $this->serviceGroup = $serviceGroup;
+        $this->serviceType = $serviceType;
 
         $this->serviceProvider = $serviceProvider;
     }
@@ -55,10 +55,10 @@ class ServiceType extends AbstractType
                     'format' => 'y-M-d'))
             ->add('serviceIdReference', 'text', array('required' => false))
             ->add('customer', new CustomerType())
-            ->add('serviceGroup', 'entity', array(
-                    'class' => 'MFBServiceBundle:ServiceGroup',
+            ->add('serviceType', 'entity', array(
+                    'class' => 'MFBServiceBundle:ServiceType',
                     'property' => 'name',
-                    'choices' => $this->serviceGroup,
+                    'choices' => $this->serviceType,
                 ))
             ->add('serviceProvider', 'entity', array(
                     'class' => 'MFBServiceBundle:ServiceProvider',

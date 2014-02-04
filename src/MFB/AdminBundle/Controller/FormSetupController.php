@@ -2,12 +2,12 @@
 namespace MFB\AdminBundle\Controller;
 
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
-use MFB\ChannelBundle\Form\ChannelRatingType;
 use MFB\ChannelBundle\Form\ChannelServicesType;
-use MFB\ServiceBundle\Entity\ServiceGroup;
+use MFB\ServiceBundle\Entity\ServiceType;
 use MFB\ServiceBundle\Entity\ServiceProvider;
-use MFB\ServiceBundle\Form\ServiceGroupType;
+use MFB\ServiceBundle\Form\ServiceT;
 use MFB\ServiceBundle\Form\ServiceProviderType;
+use MFB\ServiceBundle\Form\ServiceTypeType;
 use MFB\ServiceBundle\ServiceException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -26,7 +26,7 @@ class FormSetupController extends Controller
         return $this->render(
             'MFBAdminBundle:Default:formSetup.html.twig',
             array(
-                'serviceGroupForm' => $this->getNewServiceGroupForm($accountId)->createView(),
+                'serviceTypeForm' => $this->getNewServiceTypeForm($accountId)->createView(),
                 'serviceProviderForm' => $this->getNewServiceProviderForm($accountId)->createView(),
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
                 'ratingSelectionForm' => $this->getChannelRatingSelectForm($channelCriteria, $channel->getId())
@@ -52,9 +52,6 @@ class FormSetupController extends Controller
         $accountId = $this->getCurrentUserId();
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         try {
-            /**
-             * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
-             */
             $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')
                 ->createNewChannelCriteria($channel);
 
@@ -72,22 +69,19 @@ class FormSetupController extends Controller
         return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
     }
 
-    public function saveServiceGroupAction(Request $request)
+    public function saveServiceTypeAction(Request $request)
     {
         $accountId = $this->getCurrentUserId();
         try {
-            /**
-             * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
-             */
-            $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
+            $serviceType = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
 
-            $form = $this->getServiceGroupForm($serviceGroup);
+            $form = $this->getServiceTypeForm($serviceType);
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
                 throw new \Exception('Not valid form');
             }
-            $this->get('mfb_account_channel.service_type.service')->store($serviceGroup);
+            $this->get('mfb_account_channel.service_type.service')->store($serviceType);
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
@@ -99,9 +93,6 @@ class FormSetupController extends Controller
     {
         $accountId = $this->getCurrentUserId();
         try {
-            /**
-             * @var $service \MFB\ServiceBundle\Entity\ServiceGroup
-             */
             $serviceProvider = $this->get('mfb_service_provider.service')->createNewServiceProvider($accountId);
 
             $form = $this->getServiceProviderForm($serviceProvider);
@@ -122,7 +113,6 @@ class FormSetupController extends Controller
     {
         $accountId = $this->getCurrentUserId();
         try {
-            /** @var $service \MFB\ServiceBundle\Entity\ServiceGroup */
             $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
             $channelServicesForm = $this->getChannelServiceForm($channel);
 
@@ -144,17 +134,13 @@ class FormSetupController extends Controller
         return $this->get('security.context')->getToken()->getUser();
     }
 
-    /**
-     * @param $serviceGroup
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getServiceGroupForm(ServiceGroup $serviceGroup)
+    private function getServiceTypeForm(ServiceType $serviceType)
     {
         $form = $this->createForm(
-            new ServiceGroupType(),
-            $serviceGroup,
+            new ServiceTypeType(),
+            $serviceType,
             array(
-                'action' => $this->generateUrl('mfb_admin_save_service_group'),
+                'action' => $this->generateUrl('mfb_admin_save_service_type'),
                 'method' => 'POST',
             )
         );
@@ -162,10 +148,6 @@ class FormSetupController extends Controller
         return $form;
     }
 
-    /**
-     * @param $serviceProvider
-     * @return \Symfony\Component\Form\Form
-     */
     private function getServiceProviderForm(ServiceProvider $serviceProvider)
     {
         $form = $this->createForm(
@@ -180,15 +162,11 @@ class FormSetupController extends Controller
         return $form;
     }
 
-    /**
-     * @param $accountId
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getNewServiceGroupForm($accountId)
+    private function getNewServiceTypeForm($accountId)
     {
-        $serviceGroup = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
-        $serviceGroupForm = $this->getServiceGroupForm($serviceGroup);
-        return $serviceGroupForm;
+        $serviceType = $this->get('mfb_account_channel.service_type.service')->createNew($accountId, null);
+        $serviceTypeForm = $this->getServiceTypeForm($serviceType);
+        return $serviceTypeForm;
     }
 
     private function getNewServiceProviderForm($channelId)
@@ -198,18 +176,11 @@ class FormSetupController extends Controller
         return $serviceProviderForm;
     }
 
-    /**
-     * @return mixed
-     */
     private function getCurrentUserId()
     {
         return $this->getCurrentUser()->getId();
     }
 
-    /**
-     * @param $channel
-     * @return \Symfony\Component\Form\Form
-     */
     private function getChannelServiceForm($channel)
     {
         $channelServicesForm = $this->createForm(
@@ -224,11 +195,6 @@ class FormSetupController extends Controller
         return $channelServicesForm;
     }
 
-    /**
-     * @param $channelCriteria
-     * @param $channelId
-     * @return \Symfony\Component\Form\Form
-     */
     private function getChannelRatingSelectForm($channelCriteria, $channelId)
     {
         $unusedCriterias = $this->get('mfb_account_channel.rating_criteria.service')

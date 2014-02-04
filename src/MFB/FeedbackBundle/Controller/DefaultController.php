@@ -15,7 +15,7 @@ class DefaultController extends Controller
     public function showCreateFeedbackFormAction($accountId)
     {
         $accountChannel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
-        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountId);
+        $feedback= $this->get('mfb_feedback.service')->createNewFeedback($accountChannel->getId());
         $form = $this->getFeedbackForm($feedback, $accountId, $accountChannel);
         return $this->showFeedbackFrom($accountChannel, $form);
     }

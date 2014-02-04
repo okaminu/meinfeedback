@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ServiceGroupType extends AbstractType
+class ServiceTypeVisibilityType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,7 +15,8 @@ class ServiceGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('label' => 'Service name', 'required' => true))
+            ->add('visibility', 'checkbox', array('required' => false))
+            ->add('name', 'hidden')
         ;
     }
     
@@ -25,7 +26,7 @@ class ServiceGroupType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MFB\ServiceBundle\Entity\ServiceGroup'
+            'data_class' => 'MFB\ServiceBundle\Entity\ServiceType'
         ));
     }
 
@@ -34,6 +35,6 @@ class ServiceGroupType extends AbstractType
      */
     public function getName()
     {
-        return 'mfb_servicebundle_servicegroup';
+        return 'mfb_servicebundle_servicetypevisibility';
     }
 }

@@ -57,9 +57,9 @@ class ServiceProvider
 
     private function getNewServiceProviderEntity($accountChannel)
     {
-        $serviceGroup = new ServiceProviderEntity();
-        $serviceGroup->setChannel($accountChannel);
-        return $serviceGroup;
+        $serviceType = new ServiceProviderEntity();
+        $serviceType->setChannel($accountChannel);
+        return $serviceType;
     }
 
     public function findByChannelId($channelId)

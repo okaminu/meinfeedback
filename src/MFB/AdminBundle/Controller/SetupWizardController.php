@@ -229,7 +229,6 @@ class SetupWizardController extends Controller
         return array('form' => $form->createView());
     }
 
-
     private function createRedirect($path, $options = array())
     {
         return $this->redirect($this->generateUrl($path, $options));

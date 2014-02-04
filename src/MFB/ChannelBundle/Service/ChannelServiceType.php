@@ -69,20 +69,12 @@ class ChannelServiceType
     }
 
 
-    public function findVisibleByAccountId($channelId)
+    public function findVisibleByChannelId($channelId)
     {
         $accountChannel = $this->channelService->findById($channelId);
         $serviceProvider = $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceType')->findBy(
             array('channel' => $accountChannel, 'visibility' => 1)
         );
         return $serviceProvider;
-    }
-    public function hasVisible($accountId)
-    {
-        $service = $this->findVisibleByAccountId($accountId);
-        if (count($service) > 0) {
-            return true;
-        }
-        return false;
     }
 }

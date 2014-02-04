@@ -3,6 +3,8 @@ namespace MFB\FeedbackBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
+use MFB\AccountBundle\Service\Account;
+use MFB\ChannelBundle\Service\Channel;
 use MFB\FeedbackBundle\Service\FeedbackRating as FeedbackRatingService;
 use MFB\FeedbackBundle\Event\FeedbackNotificationEvent;
 use MFB\FeedbackBundle\FeedbackEvents;
@@ -28,32 +30,39 @@ class Feedback
     
     private $feedbackRatingService;
 
-    private $accountId;
+    private $channelService;
+
+    private $accountService;
 
     public function __construct(
         EntityManager $em,
         CustomerService $customer,
         Service $service,
         FeedbackRatingService $feedbackRatingService,
-        $ed
+        $eventDispatcher,
+        Channel $channelService,
+        Account $accountService
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->service = $service;
         $this->feedbackRatingService = $feedbackRatingService;
-        $this->eventDispatcher = $ed;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->channelService = $channelService;
+        $this->accountService = $accountService;
     }
 
-    public function createNewFeedback($accountId)
+    public function createNewFeedback($channelId)
     {
-        $this->setAccountId($accountId);
-        $accountChannel = $this->getAccountChannel($accountId);
-        $feedback = $this->getNewFeedbackEntity($accountId, $accountChannel->getId());
+        $channel = $this->channelService->findById($channelId);
+        $accountId = $channel->getAccountId();
 
-        $feedback->setService($this->getServiceEntity());
-        $feedback->setCustomer($this->getCustomerEntity());
+        $feedback = $this->getNewFeedbackEntity($accountId, $channel->getId());
 
-        $feedback = $this->addFeedbackCriterias($accountChannel->getRatingCriteria(), $feedback);
+        $feedback->setService($this->getServiceEntity($accountId));
+        $feedback->setCustomer($this->getCustomerEntity($accountId));
+
+        $feedback = $this->addFeedbackCriterias($channel->getRatingCriteria(), $feedback);
 
         return $feedback;
     }
@@ -110,33 +119,11 @@ class Feedback
         $this->saveEntity($feedback);
     }
 
-    /**
-     * @param mixed $accountId
-     */
-    public function setAccountId($accountId)
-    {
-        $this->accountId = $accountId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountId()
-    {
-        return $this->accountId;
-    }
-
-    /**
-     * @param null $customerEntity
-     */
     public function setCustomerEntity($customerEntity)
     {
         $this->customerEntity = $customerEntity;
     }
 
-    /**
-     * @param null $serviceEntity
-     */
     public function setServiceEntity($serviceEntity)
     {
         $this->serviceEntity = $serviceEntity;
@@ -147,29 +134,10 @@ class Feedback
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
-    /**
-     * @param $entity
-     */
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
-    }
-
-    private function getAccountChannel($accountId)
-    {
-        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
-    }
-
-    private function getAccount($accountId)
-    {
-        $account = $this->entityManager->getRepository('MFBAccountBundle:Account')->findOneBy(
-            array('id' => $accountId)
-        );
-        return $account;
     }
 
     private function getNewFeedbackEntity($accountId, $channelId)
@@ -181,13 +149,10 @@ class Feedback
     }
 
 
-    /**
-     * @param $feedback
-     */
     private function dispatchCreateFeedbackEvent(FeedbackEntity $feedback)
     {
         $customer = $feedback->getCustomer();
-        $account = $this->getAccount($feedback->getAccountId());
+        $account = $this->accountService->findByAccountId($feedback->getAccountId());
 
         $event = new FeedbackNotificationEvent(
             $feedback,
@@ -197,33 +162,22 @@ class Feedback
         $this->eventDispatcher->dispatch(FeedbackEvents::REGULAR_COMPLETE, $event);
     }
 
-    /**
-     * @return null
-     */
-    private function getCustomerEntity()
+    private function getCustomerEntity($accountId)
     {
         if (!$this->customerEntity) {
-            $this->customerEntity = $this->customerService->createNewCustomer($this->getAccountId());
+            $this->customerEntity = $this->customerService->createNewCustomer($accountId);
         }
         return $this->customerEntity;
     }
 
-    /**
-     * @return null
-     */
-    private function getServiceEntity()
+    private function getServiceEntity($accountId)
     {
         if (!$this->serviceEntity) {
-            $this->serviceEntity = $this->service->createNewService($this->getAccountId(), $this->getCustomerEntity());
+            $this->serviceEntity = $this->service->createNewService($accountId, $this->getCustomerEntity($accountId));
         }
         return $this->serviceEntity;
     }
 
-    /**
-     * @param $ratingCriterias
-     * @param \MFB\FeedbackBundle\Entity\Feedback $feedback
-     * @return Feedback
-     */
     private function addFeedbackCriterias($ratingCriterias, $feedback)
     {
         foreach ($ratingCriterias as $criteria) {
@@ -233,14 +187,8 @@ class Feedback
         return $feedback;
     }
 
-    /**
-     * @param $feedbackRatings
-     */
     private function preserveRatingCriteriaOrder($feedbackRatings)
     {
-        /**
-         * @var $rating \MFB\FeedbackBundle\Entity\FeedbackRating
-         */
         foreach ($feedbackRatings as $rating) {
             $channelRatingCriteria = $this->entityManager
                 ->getReference('MFBChannelBundle:ChannelRatingCriteria', $rating->getRatingCriteriaId());

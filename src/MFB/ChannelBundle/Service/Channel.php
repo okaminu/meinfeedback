@@ -38,9 +38,6 @@ class Channel
         }
     }
 
-    /**
-     * @param $entity
-     */
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
@@ -62,5 +59,4 @@ class Channel
         );
         return $accountChannel;
     }
-
 }

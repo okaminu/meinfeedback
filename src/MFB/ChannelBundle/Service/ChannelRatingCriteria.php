@@ -12,13 +12,18 @@ class ChannelRatingCriteria
     private $entityManager;
     private $criteriaLimit;
     private $channelServiceType;
+    private $channelService;
 
-
-    public function __construct(EntityManager $em, $criteriaLimit, $channelServiceType)
-    {
+    public function __construct(
+        EntityManager $em,
+        $criteriaLimit,
+        ChannelServiceType $channelServiceType,
+        Channel $channelService
+    ) {
         $this->entityManager = $em;
         $this->criteriaLimit = $criteriaLimit;
         $this->channelServiceType = $channelServiceType;
+        $this->channelService = $channelService;
     }
 
     public function createNewChannelCriteria($channel)
@@ -35,28 +40,6 @@ class ChannelRatingCriteria
         } catch (DBALException $ex) {
             throw new ChannelException('Cannot store channel data');
         }
-    }
-
-    private function getAccountChannel($accountId)
-    {
-        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-
-        if ($accountChannel == null) {
-            throw new ChannelException('Channel not found');
-        }
-        return $accountChannel;
-    }
-
-    public function hasSelectedRatingCriterias($accountId)
-    {
-        $missingCount = $this->missingRatingCriteriaCount($accountId);
-
-        if ($missingCount > 0) {
-            return false;
-        }
-        return true;
     }
 
     public function getNotUsedRatingCriterias($channelId)
@@ -77,23 +60,20 @@ class ChannelRatingCriteria
             ->findAllUnusedCriteriasForServices($channelId, $serviceIds);
     }
 
-    public function getUsedRatingCriteriasCount($accountId)
+    public function getUsedRatingCriteriasCount($channelId)
     {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        $accountChannelId = $this->channelService->findById($channelId)->getId();
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->getUsedCriteriaCount($accountChannelId);
     }
 
-    public function missingRatingCriteriaCount($accountId)
+    public function missingRatingCriteriaCount($channelId)
     {
-        $usedCriteriaCount = $this->getUsedRatingCriteriasCount($accountId);
+        $usedCriteriaCount = $this->getUsedRatingCriteriasCount($channelId);
         return $this->criteriaLimit - $usedCriteriaCount;
     }
 
 
-    /**
-     * @param $entity
-     */
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);

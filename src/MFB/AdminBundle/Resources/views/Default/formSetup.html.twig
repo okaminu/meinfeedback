@@ -61,10 +61,10 @@
 
                     <div class="serviceType sectionIdent">
                         <div class="title">{% trans %} Service Types {% endtrans %}</div>
-                        {% for serviceGroup in channelServicesForm.serviceGroup %}
+                        {% for serviceType in channelServicesForm.serviceType %}
                             <div class="checkbox">
                                 <label>
-                                    {{ form_widget(serviceGroup.visibility) }} {{  serviceGroup.name.vars.value }}
+                                    {{ form_widget(serviceType.visibility) }} {{  serviceType.name.vars.value }}
                                 </label>
                             </div>
                         {% endfor %}
@@ -89,16 +89,16 @@
                         {% trans %} Add Service Type {% endtrans %}
                     </h3>
                     <div class="sectionIdent">
-                        {{ form_start(serviceGroupForm) }}
+                        {{ form_start(serviceTypeForm) }}
                         <div class="form-group">
-                            {{ form_label(serviceGroupForm.name, null, {'label_attr':{'class': 'control-label'} }) }}
-                            {{ form_widget(serviceGroupForm.name, {'attr': {'class': 'form-control'} }) }}
+                            {{ form_label(serviceTypeForm.name, null, {'label_attr':{'class': 'control-label'} }) }}
+                            {{ form_widget(serviceTypeForm.name, {'attr': {'class': 'form-control'} }) }}
                         </div>
                         <div class="form-group">
-                            {{ form_row(serviceGroupForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
+                            {{ form_row(serviceTypeForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                         </div>
 
-                        {{ form_end(serviceGroupForm) }}
+                        {{ form_end(serviceTypeForm) }}
                     </div>
                 </div>
 

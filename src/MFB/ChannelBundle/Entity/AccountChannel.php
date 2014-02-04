@@ -133,7 +133,7 @@ class AccountChannel
     public function __construct()
     {
         $this->serviceProvider = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceGroup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->channelServiceType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviceDefinition = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -366,13 +366,13 @@ class AccountChannel
     }
 
     /**
-     * Get serviceGroup
+     * Get serviceType
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getServiceGroup()
+    public function getServiceType()
     {
-        return $this->serviceGroup;
+        return $this->channelServiceType;
     }
 
     /**
