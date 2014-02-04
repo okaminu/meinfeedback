@@ -13,7 +13,7 @@ services:
 
   mfb_admin.form_setup.service:
     class: %mfb_admin.form_setup.class%
-    arguments: [@mfb_account_channel.rating_criteria.service, @mfb_account_channel.service_type.service, @mfb_account_channel.service]
+    arguments: [@mfb_account_channel.rating_criteria.service, @mfb_account_channel.service_type.service, @mfb_account_channel.service, @mfb_service_definition.service, @mfb_service_provider.service]
 
   my_locale_listener:
       class: MFB\AdminBundle\LocaleListener

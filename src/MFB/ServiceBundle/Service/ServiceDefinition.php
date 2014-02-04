@@ -48,6 +48,18 @@ class ServiceDefinition
         }
     }
 
+    public function removeList($definitionList)
+    {
+        try {
+            foreach ($definitionList as $definition) {
+                $this->entityManager->remove($definition);
+            }
+            $this->entityManager->flush();
+        } catch (DBALException $ex) {
+            throw new ServiceException('Cannot remove definition');
+        }
+    }
+
     public function findByChannelId($channelId)
     {
         return $this->entityManager->getRepository('MFBServiceBundle:ServiceDefinition')->findBy(

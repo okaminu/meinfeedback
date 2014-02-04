@@ -22,11 +22,15 @@ class ChannelServiceType
         $this->serviceType = $serviceType;
     }
 
-    public function createNew($channelId)
+    public function createNew($channelId, $serviceTypeId = null)
     {
         $accountChannel = $this->channelService->findById($channelId);
         $cse = new ChannelServiceEntity();
         $cse->setChannel($accountChannel);
+
+        if ($serviceTypeId != null) {
+            $cse->setServiceType($this->serviceType->findById($serviceTypeId));
+        }
 
         return $cse;
     }
@@ -73,5 +77,17 @@ class ChannelServiceType
             array('channel' => $accountChannel, 'visibility' => 1)
         );
         return $serviceProvider;
+    }
+
+    public function removeList($list)
+    {
+        try {
+            foreach ($list as $single) {
+                $this->entityManager->remove($single);
+            }
+            $this->entityManager->flush();
+        } catch (DBALException $ex) {
+            throw new  ServiceException('Cannot remove service');
+        }
     }
 }

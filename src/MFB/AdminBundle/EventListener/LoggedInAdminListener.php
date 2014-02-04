@@ -49,6 +49,7 @@ class LoggedInAdminListener
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             if ($this->shouldRedirect($event)) {
+                $this->clearAllFormData();
                 $url = $this->getRedirectUrl();
                 $event->setResponse(new RedirectResponse($url));
             }
@@ -108,5 +109,10 @@ class LoggedInAdminListener
         $fullController = $event->getRequest()->get('_controller');
         preg_match("/^(.*Bundle.*Controller).*Action$/", $fullController, $match);
         return $match[1];
+    }
+
+    private function clearAllFormData()
+    {
+        $this->formSetupService->removeAllSetupFormData($this->getUser()->getId());
     }
 }

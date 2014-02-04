@@ -43,9 +43,26 @@ class Customer
         }
     }
 
-    /**
-     * @param $entity
-     */
+    public function findByChannelId($channelId)
+    {
+        return $this->entityManager->getRepository('MFBCustomerBundle:Customer')->findAll(
+            array('channel' => $channelId)
+        );
+    }
+
+    public function removeList($list)
+    {
+        try {
+            foreach ($list as $single) {
+                $this->entityManager->remove($single);
+            }
+            $this->entityManager->flush();
+        } catch (DBALException $ex) {
+            throw new  AccountException('Cannot remove customer');
+        }
+    }
+
+
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
@@ -64,6 +81,5 @@ class Customer
         $customer->setChannelId($accountChannel->getId());
         return $customer;
     }
-
 
 }

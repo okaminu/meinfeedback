@@ -93,4 +93,16 @@ class ServiceProvider
     {
         return $this->prefix;
     }
+
+    public function removeList($list)
+    {
+        try {
+            foreach ($list as $single) {
+                $this->entityManager->remove($single);
+            }
+            $this->entityManager->flush();
+        } catch (DBALException $ex) {
+            throw new  ServiceException('Cannot remove team member');
+        }
+    }
 }

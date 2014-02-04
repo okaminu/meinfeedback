@@ -67,7 +67,7 @@ class Channel
     private function areNoVisibleServiceTypes($channel)
     {
         $serviceTypes = $channel->getServiceType();
-        if ($serviceTypes != null) {
+        if (count($serviceTypes) > 0) {
             $count = $this->getInvisibleServiceTypes($serviceTypes);
             if (count($serviceTypes) == $count) {
                 return true;
@@ -85,5 +85,16 @@ class Channel
             }
         }
         return $count;
+    }
+
+    public function remove($entity)
+    {
+        $this->removeEntity($entity);
+    }
+
+    private function removeEntity($entity)
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
     }
 }

@@ -73,6 +73,24 @@ class ChannelRatingCriteria
         return $this->criteriaLimit - $usedCriteriaCount;
     }
 
+    public function findByChannelId($channelId)
+    {
+        return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')->findBy(
+            array('channel' => $channelId)
+        );
+    }
+
+    public function removeList($list)
+    {
+        try {
+            foreach ($list as $single) {
+                $this->entityManager->remove($single);
+            }
+            $this->entityManager->flush();
+        } catch (DBALException $ex) {
+            throw new  ChannelException('Cannot remove channel rating criteria');
+        }
+    }
 
     private function saveEntity($entity)
     {
