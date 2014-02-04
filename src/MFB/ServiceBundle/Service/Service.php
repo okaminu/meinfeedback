@@ -3,10 +3,11 @@ namespace MFB\ServiceBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use MFB\ServiceBundle\Service\ServiceType as ServiceTypeService;
+use MFB\ChannelBundle\Service\Channel;
+use MFB\ChannelBundle\Service\ChannelServiceType;
 use MFB\ServiceBundle\Service\ServiceProvider as ServiceProviderService;
 use MFB\ServiceBundle\Entity\Service as ServiceEntity;
-use MFB\ServiceBundle\Form\ServiceType;
+use MFB\ServiceBundle\Form\ServiceType as ServiceTypeForm;
 use MFB\ServiceBundle\ServiceException;
 use MFB\CustomerBundle\Service\Customer as CustomerService;
 
@@ -18,27 +19,31 @@ class Service
 
     private $serviceProvider;
 
-    private $serviceType;
+    private $channelServiceType;
+
+    private $channelService;
 
     public function __construct(
         EntityManager $em,
         CustomerService $customer,
         ServiceProviderService $serviceProvider,
-        ServiceTypeService $serviceType
+        ChannelServiceType $channelServiceType,
+        Channel $channelService
     ) {
         $this->entityManager = $em;
         $this->customerService = $customer;
         $this->serviceProvider = $serviceProvider;
-        $this->serviceType = $serviceType;
+        $this->channelServiceType = $channelServiceType;
+        $this->channelService = $channelService;
     }
 
-    public function createNewService($accountId, $customer = null)
+    public function createNewService($channelId, $customer = null)
     {
-        $accountChannelId = $this->getAccountChannel($accountId)->getId();
+        $channel = $this->channelService->findById($channelId);
         if (!$customer) {
-            $customer = $this->customerService->createNewCustomer($accountId);
+            $customer = $this->customerService->createNewCustomer($channelId);
         }
-        $service = $this->getNewServiceEntity($accountChannelId, $accountId);
+        $service = $this->getNewServiceEntity($channel->getId(), $channel->getAccountId());
         $service->setCustomer($customer);
         return $service;
     }
@@ -53,39 +58,24 @@ class Service
         }
     }
 
-    /**
-     * @param $accountId
-     * @return ServiceType
-     */
-    public function getServiceType($accountId)
+    public function getServiceFormType($channelId)
     {
-        $serviceType = $this->serviceType->findVisibleByAccountId($accountId);
-        $serviceProvider = $this->serviceProvider->findVisibleByAccountId($accountId);
-        $serviceType = new ServiceType($serviceProvider, $serviceType);
+        $serviceType = $this->channelServiceType->findVisibleByChannelId($channelId);
+        $serviceProvider = $this->serviceProvider->findVisibleByChannelId($channelId);
+        $serviceType = new ServiceTypeForm($serviceProvider, $serviceType);
         return $serviceType;
     }
 
-    /**
-     * @param $entity
-     */
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
 
-    private function getAccountChannel($accountId)
-    {
-        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
-    }
-
-    private function getNewServiceEntity($accountChannel, $accountId)
+    private function getNewServiceEntity($channelId, $accountId)
     {
         $serviceType = new ServiceEntity();
-        $serviceType->setChannelId($accountChannel);
+        $serviceType->setChannelId($channelId);
         $serviceType->setAccountId($accountId);
         return $serviceType;
     }

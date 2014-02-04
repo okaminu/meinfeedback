@@ -93,9 +93,9 @@ class Feedback
         $this->removeEntity($entity);
     }
 
-    public function getFeedbackType($accountId)
+    public function getFeedbackType($channelId)
     {
-        return new FeedbackType($this->service->getServiceType($accountId));
+        return new FeedbackType($this->service->getServiceFormType($channelId));
     }
 
     public function batchActivate($activateList, $inFeedbackList)

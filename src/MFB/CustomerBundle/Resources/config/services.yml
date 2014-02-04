@@ -12,4 +12,4 @@ services:
 
     mfb_customer.service:
       class: %mfb_customer.service.class%
-      arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher"]
+      arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher", @mfb_account_channel.service]

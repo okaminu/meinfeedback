@@ -3,6 +3,7 @@ namespace MFB\CustomerBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\AccountException;
+use MFB\ChannelBundle\Service\Channel;
 use MFB\CustomerBundle\Entity\Customer as CustomerEntity;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -12,16 +13,19 @@ class Customer
     private $entityManager;
 
     private $eventDispacher;
+    
+    private $channelService;
 
-    public function __construct(EntityManager $em, $ed)
+    public function __construct(EntityManager $em, $ed, Channel $channelService)
     {
         $this->entityManager = $em;
         $this->eventDispacher = $ed;
+        $this->channelService = $channelService;
     }
 
-    public function createNewCustomer($accountId)
+    public function createNewCustomer($channelId)
     {
-        $customer = $this->getNewCustomerEntity($accountId);
+        $customer = $this->getNewCustomerEntity($channelId);
         return $customer;
 
     }
@@ -48,23 +52,15 @@ class Customer
         $this->entityManager->flush();
     }
 
-    private function getAccountChannel($accountId)
+    private function getNewCustomerEntity($channelId)
     {
-        $accountChannel = $this->entityManager->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
-    }
-
-    private function getNewCustomerEntity($accountId)
-    {
-        $accountChannel = $this->getAccountChannel($accountId);
+        $accountChannel = $this->channelService->findById($channelId);
 
         if ($accountChannel == null) {
             throw new AccountException('No account data found. Please fill Account setup form.');
         }
         $customer = new CustomerEntity();
-        $customer->setAccountId($accountId);
+        $customer->setAccountId($accountChannel->getAccountId());
         $customer->setChannelId($accountChannel->getId());
         return $customer;
     }

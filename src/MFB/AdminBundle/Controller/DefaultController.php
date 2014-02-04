@@ -72,10 +72,10 @@ class DefaultController extends Controller
 
     public function showCreateServiceCustomerFormAction()
     {
-        $accountId = $this->getCurrentUser()->getId();
+        $channel = $this->getChannel();
 
-        $service = $this->get('mfb_service.service')->createNewService($accountId);
-        $form = $this->getServiceForm($service, $accountId);
+        $service = $this->get('mfb_service.service')->createNewService($channel->getId());
+        $form = $this->getServiceForm($service, $channel->getId());
 
         return $this->render(
             'MFBAdminBundle:Default:customer.html.twig',
@@ -91,8 +91,9 @@ class DefaultController extends Controller
         $accountId = $this->getCurrentUser()->getId();
         $customerEmail = null;
         try {
-            $service = $this->get('mfb_service.service')->createNewService($accountId);
-            $form = $this->getServiceForm($service, $accountId);
+            $channelId = $this->getChannel()->getId();
+            $service = $this->get('mfb_service.service')->createNewService($channelId);
+            $form = $this->getServiceForm($service, $channelId);
             $form->handleRequest($request);
 
             if (!$form->isValid()) {
@@ -169,14 +170,9 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * @param $service
-     * @param $accountId
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getServiceForm(Service $service, $accountId)
+    private function getServiceForm(Service $service, $channelId)
     {
-        $serviceType = $this->get('mfb_service.service')->getServiceType($accountId);
+        $serviceType = $this->get('mfb_service.service')->getServiceFormType($channelId);
         $form = $this->createForm(
             $serviceType,
             $service,
@@ -214,7 +210,15 @@ class DefaultController extends Controller
         return $accountChannel;
     }
 
-
+    /**
+     * @return AccountChannel
+     */
+    private function getChannel()
+    {
+        $accountId = $this->getCurrentUser()->getId();
+        $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
+        return $channel;
+    }
 
 
 }

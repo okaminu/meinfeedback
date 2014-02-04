@@ -12,7 +12,7 @@ parameters:
 services:
   mfb_service.service:
     class: %mfb_service.class%
-    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service_provider.service", "@mfb_account_channel.service_type.service"]
+    arguments: ["@doctrine.orm.default_entity_manager", "@mfb_customer.service", "@mfb_service_provider.service", "@mfb_account_channel.service_type.service", @mfb_account_channel.service]
 
   mfb_service_provider.service:
     class: %mfb_service_provider.class%
