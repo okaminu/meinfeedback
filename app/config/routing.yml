@@ -14,10 +14,6 @@ mfb_feedback:
     resource: "@MFBFeedbackBundle/Resources/config/routing.yml"
     prefix:   /
 
-mfb_admin:
-    resource: "@MFBAdminBundle/Resources/config/routing.yml"
-    prefix:   /admin
-
 mfb_account:
     resource: "@MFBAccountBundle/Resources/config/routing.yml"
     prefix:   /
@@ -25,4 +21,9 @@ mfb_account:
 mein_feedback_home:
     resource: "@MeinFeedbackHomeBundle/Resources/config/routing.yml"
     prefix:   /
+
+mfb_admin:
+  resource: "@MFBAdminBundle/Controller"
+  type: annotation
+  prefix: /admin
 

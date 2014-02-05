@@ -4,6 +4,8 @@ parameters:
       - Germany
       - Spain
       - France
+      - Italy
+      - United Kingdom
 
 services:
     mfb_country.service:

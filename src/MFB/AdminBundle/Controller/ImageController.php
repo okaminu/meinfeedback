@@ -8,9 +8,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ImageController extends Controller
 {
+
+    /**
+     * @Route("/admin_images_show", name="mfb_admin_images_show")
+     * @Template
+     */
+
     public function showAction()
     {
         $document = $this->createNewLogo($this->getAccountChannel()->getId());
@@ -18,6 +27,10 @@ class ImageController extends Controller
         return $this->showImageForm($form);
     }
 
+    /**
+     * @Route("/admin_image_save_logo", name="mfb_admin_image_save_logo")
+     * @Template("MFBAdminBundle:Image:show.html.twig")
+     */
     public function saveLogoAction(Request $request)
     {
         $document = $this->createNewLogo($this->getAccountChannel()->getId());
@@ -36,10 +49,6 @@ class ImageController extends Controller
             $form->addError(new FormError('Cannot upload'));
         }
         return $this->showImageForm($form);
-    }
-
-    public function removeLogoAction()
-    {
     }
 
     private function getCurrentUser()
@@ -81,13 +90,10 @@ class ImageController extends Controller
             $logoPath = $document->getWebPath();
         }
 
-        return $this->render(
-            'MFBAdminBundle:Image:show.html.twig',
-            array(
+        return array(
                 'form' => $form->createView(),
                 'logoUrl' => $logoPath,
                 'allowedImageExtensions' => $this->get('mfb_document.service')->getTypeExtensionWhitelist('image')
-            )
         );
     }
 

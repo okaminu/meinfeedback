@@ -1,6 +1,6 @@
 parameters:
     mfb_reskribe.api.class: MFB\ReskribeBundle\Service\Api
-    mfb_reskribe.token: "6zrqfmnwzjosgyf2wzxltanius4ozqbfkek__fpdd9nqc4j5ux88quwm5k84jobdha"
+    mfb_reskribe.token: "d1951ed66baa05e70319c1ce1c850086"
 
 services:
     mfb_reskribe.api:

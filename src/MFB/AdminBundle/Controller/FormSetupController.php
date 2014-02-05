@@ -8,24 +8,32 @@ use MFB\ServiceBundle\ServiceException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class FormSetupController extends Controller
 {
+    /**
+     * @Route("/show_form_setup", name="mfb_admin_show_form_setup")
+     * @Template
+     */
 
     public function showAction()
     {
         $channel = $this->getChannel();
 
-        return $this->render(
-            'MFBAdminBundle:Default:formSetup.html.twig',
-            array(
+        return array(
                 'serviceProviderForm' => $this->getNewServiceProviderForm($channel->getId())->createView(),
                 'channelServicesForm' => $this->getChannelServiceForm($channel)->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
                 'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit')
-            )
         );
     }
+
+    /**
+     * @Route("/save_service_provider", name="mfb_admin_save_service_provider")
+     */
 
     public function saveServiceProviderAction(Request $request)
     {
@@ -46,6 +54,10 @@ class FormSetupController extends Controller
         return $this->redirect($this->generateUrl('mfb_admin_show_form_setup'));
     }
 
+
+    /**
+     * @Route("/update_service_visibility", name="mfb_admin_update_service_visibility")
+     */
 
     public function updateServicesVisibilityAction(Request $request)
     {

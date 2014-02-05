@@ -13,9 +13,19 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Route("/show_create_customer", name="mfb_show_create_customer")
+     * @Route("/", name="mfb_admin_homepage")
+     * @Route("/login_check", name="mfb_admin_login_check")
+     * @Route("/logout", name="mfb_admin_logout")
+     * @Template
+     */
     public function indexAction()
     {
         $accountId = $this->getCurrentUser()->getId();
@@ -23,16 +33,17 @@ class DefaultController extends Controller
         $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($channel->getId());
         $channelFeedbacks->setElementsPerPage($this->container->getParameter('mfb_feedback.maxFeedbacks'));
 
-        return $this->render(
-            'MFBAdminBundle:Default:index.html.twig',
-            array(
+        return array(
                 'feedbackSummaryPage' => $channelFeedbacks->getFeedbackSummary(),
                 'ratingCount' => $channelFeedbacks->getChannelFeedbackCount(),
                 'channelRatingSummaryList' => $channelFeedbacks->getChannelRatingSummary()
-            )
         );
     }
 
+    /**
+     * @Route("/save_feedback_activation", name="mfb_save_feedback_activation")
+     * @Method({"POST"})
+     */
     public function saveFeedbackActivationAction(Request $request)
     {
         $accountId = $this->getCurrentUser()->getId();
@@ -47,6 +58,10 @@ class DefaultController extends Controller
     }
 
 
+    /**
+     * @Route("/about_me", name="mfb_location")
+     * @Template
+     */
     public function locationAction(Request $request)
     {
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($this->getCurrentUser()->getId());
@@ -61,12 +76,9 @@ class DefaultController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->render(
-            'MFBAdminBundle:Default:location.html.twig',
-            array(
+        return array(
                 'entity' => $channel,
                 'form' => $form->createView(),
-            )
         );
     }
 
@@ -86,7 +98,11 @@ class DefaultController extends Controller
         );
     }
 
-    public function saveServiceCustomerAction(Request $request)
+    /**
+     * @Route("/save_customer", name="mfb_save_customer")
+     * @Template
+     */
+    public function customerAction(Request $request)
     {
         $accountId = $this->getCurrentUser()->getId();
         $customerEmail = null;
@@ -114,20 +130,17 @@ class DefaultController extends Controller
             $form->addError(new FormError($ex->getMessage()));
         }
 
-        return $this->render(
-            'MFBAdminBundle:Default:customer.html.twig',
-            array(
+        return array(
                 'customerEmail' => $customerEmail,
                 'form' => $form->createView()
-            )
         );
     }
 
     /**
-     *
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route("/change_password", name="mfb_admin_change_password")
+     * @Template
      */
+
     public function changePasswordAction(Request $request)
     {
         $account = $this->getCurrentUser();
@@ -153,21 +166,18 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render(
-            'MFBAccountBundle:ChangePassword:changePassword.html.twig',
-            array(
-                'form' => $form->createView()
-            )
-        );
+        return array('form' => $form->createView());
     }
 
 
+    /**
+     * @Route("/sucess", name="mfb_admin_success")
+     * @Template
+     */
+
     public function successAction()
     {
-        return $this->render(
-            'MFBAccountBundle:Default:success.html.twig',
-            array('message' => 'Password successfully changed')
-        );
+        return array('message' => 'Password successfully changed');
     }
 
     private function getServiceForm(Service $service, $channelId)

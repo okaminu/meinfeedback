@@ -8,12 +8,18 @@ use MFB\EmailBundle\Form\ThankYouTemplateType;
 use MFB\EmailBundle\Form\VariableType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MFB\EmailBundle\Service\Template;
+use MFB\EmailBundle\Service\Template as EmailTemplateService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class TemplatesController extends Controller
 {
 
-
+    /**
+     * @Route("/select_variables", name="mfb_admin_select_variables")
+     * @Template
+     */
     public function selectVariablesAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -52,12 +58,13 @@ class TemplatesController extends Controller
 
             return $this->redirect($this->generateUrl('mfb_admin_edit_template'));
         }
-        return $this->render(
-            'MFBAdminBundle:Templates:selectVariables.html.twig',
-            array('form' => $form->createView())
-        );
+        return array('form' => $form->createView());
     }
 
+    /**
+     * @Route("edit_template", name="mfb_admin_edit_template")
+     * @Template("MFBAdminBundle:Templates:edit.html.twig")
+     */
 
     public function editAction(Request $request)
     {
@@ -74,7 +81,7 @@ class TemplatesController extends Controller
         if ($editForm->isValid()) {
             $this->setTemporaryTemplate($emailTemplate->getTemplateCode());
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
-            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
+            $emailTemplate->setTemplateTypeId(EmailTemplateService::EMAIL_TEMPLATE_TYPE);
 
             $notUsedVariables = $emailTemplateService->getMandatoryAndUnusedVariables($emailTemplate);
 
@@ -85,7 +92,7 @@ class TemplatesController extends Controller
 
             $emailTemplate->setTemplateCode($this->plain2html($emailTemplate->getTemplateCode()));
 
-            $emailTemplate->setTemplateTypeId(Template::EMAIL_TEMPLATE_TYPE);
+            $emailTemplate->setTemplateTypeId(EmailTemplateService::EMAIL_TEMPLATE_TYPE);
             $em->persist($emailTemplate);
             $em->flush();
         }
@@ -94,6 +101,10 @@ class TemplatesController extends Controller
     }
 
 
+    /**
+     * @Route("/edit_thankyou_template", name="mfb_admin_edit_thankyou_template")
+     * @Template("MFBAdminBundle:Templates:edit.html.twig")
+     */
     public function thankYouEditAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -106,7 +117,7 @@ class TemplatesController extends Controller
         $thankYouForm->handleRequest($request);
         if ($thankYouForm->isValid()) {
             $thankYouTemplate->setTemplateCode($this->plain2html($thankYouTemplate->getTemplateCode()));
-            $thankYouTemplate->setTemplateTypeId(Template::THANKYOU_TEMPLATE_TYPE);
+            $thankYouTemplate->setTemplateTypeId(EmailTemplateService::THANKYOU_TEMPLATE_TYPE);
             $em->persist($thankYouTemplate);
             $em->flush();
 
@@ -137,9 +148,7 @@ class TemplatesController extends Controller
         $thankYouForm->get('templateCode')->setData($savedTemplate);
         $thankyou_variables = $this->get('mfb_email.variables')->getVariables($thankYouTemplate);
 
-        return $this->render(
-            'MFBAdminBundle:Templates:edit.html.twig',
-            array(
+        return array(
                 'errors' => $errors,
                 'variables' => $variables,
                 'entity' => $emailTemplate,
@@ -147,19 +156,19 @@ class TemplatesController extends Controller
                 'thankyou_entity' => $thankYouTemplate,
                 'form_thankyou' => $thankYouForm->createView(),
                 'thankyou_variables' => $thankyou_variables,
-            )
         );
     }
 
+    /**
+     * @Route("/template/{emailTemplateId}/list_variables", name="mfb_admin_list_possible_variables")
+     * @Template
+     */
     public function listPossibleVariablesAction($emailTemplateId)
     {
         $variables = $this->get('mfb_email.variables')->getSelectedVariables($emailTemplateId);
-        return $this->render(
-            'MFBAdminBundle:Templates:possibleVariablesList.html.twig',
-            array(
+        return array(
                 'emailTemplateId' => $emailTemplateId,
                 'variables' => $variables
-            )
         );
     }
 

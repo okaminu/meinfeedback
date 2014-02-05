@@ -10,9 +10,16 @@ use Symfony\Component\HttpFoundation\Response;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\WidgetBundle\Entity\Widget as WidgetEntity;
 use MFB\WidgetBundle\Form\WidgetType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class WidgetController extends Controller
 {
+    /**
+     * @Route("/widget", name="mfb_widget")
+     * @Template
+     */
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -59,26 +66,21 @@ class WidgetController extends Controller
         $darkIconLink = $base.$this->get('templating.helper.assets')
                 ->getUrl('bundles/meinfeedbackhome/images/mf_dark_de.png');
 
-        return $this->render(
-            'MFBAdminBundle:Widget:index.html.twig',
-            array(
+        return array(
                 'widgetLink' => $this->getRouteUrl($accountId, 'mfb_account_profile_homepage'),
                 'widgetImage' => $this->getRouteUrl($accountId, 'mfb_widget_account_channel'),
                 'inviteUrl' => $this->getRouteUrl($accountId, 'mfb_feedback_create'),
                 'darkIcon' => $darkIconLink,
                 'lightIcon' => $lightIconLink,
                 'form' => $form->createView()
-            )
         );
     }
 
     /**
-     * Enable Feedback by feedback link
-     *
-     * @param $feedbackId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @Route("/enableFeedback/{feedbackId}", name="mfb_feedback_enable")
+     * @Method({"GET"})
      */
+
     public function enableAction($feedbackId)
     {
         $this->get('mfb_feedback.service')->activateFeedback($feedbackId);
@@ -96,6 +98,10 @@ class WidgetController extends Controller
         );
     }
 
+    /**
+     * @Route("/feedback_sort", name="mfb_feedback_sort")
+     * @Method({"POST"})
+     */
     public function sortAction(Request $request)
     {
         $accountId = $this->getUserId();
@@ -117,12 +123,6 @@ class WidgetController extends Controller
         return $this->sortResponse($item_order_str);
     }
 
-    /**
-     * @param $account
-     * @param $accountChannel
-     * @param $em
-     * @return WidgetEntity
-     */
     public function createDefaultWidget($account, $accountChannel, $em)
     {
         $widget = new WidgetEntity();
@@ -135,18 +135,11 @@ class WidgetController extends Controller
         return $widget;
     }
 
-    /**
-     * @return mixed
-     */
     private function getUserId()
     {
         return $this->get('security.context')->getToken()->getUser()->getId();
     }
 
-    /**
-     * @param $item_order_str
-     * @return Response
-     */
     private function sortResponse($item_order_str)
     {
         $response = new Response();
