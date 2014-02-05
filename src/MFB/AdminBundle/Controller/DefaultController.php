@@ -156,7 +156,7 @@ class DefaultController extends Controller
             if ($form->isValid()) {
 
                 $this->get('mfb_account.encoder')->encodePassword($account);
-                $this->get('mfb_account.service')->addAccount($account);
+                $this->get('mfb_account.service')->store($account);
 
                 $passwordChanged = $this->get('translator')->trans("Password changed");
 

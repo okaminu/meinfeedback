@@ -10,7 +10,7 @@ parameters:
 services:
      mfb_account.service:
         class: %mfb_account.service.class%
-        arguments: ["@doctrine.orm.default_entity_manager"]
+        arguments: ["@doctrine.orm.default_entity_manager", @security.encoder_factory, @security.secure_random]
 
      mfb_account.util.token_generator:
         class:  %mfb_account.util.token_generator.class%

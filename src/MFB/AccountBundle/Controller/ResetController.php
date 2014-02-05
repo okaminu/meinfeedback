@@ -36,7 +36,7 @@ class ResetController extends Controller
         $account->setPassword($encoder->encodePassword($newPassword, $account->getSalt()));
 
         $this->get('mfb_email.sender')->sendResettingEmailMessage($account, $newPassword);
-        $this->get('mfb_account.service')->addAccount($account);
+        $this->get('mfb_account.service')->store($account);
 
         return array();
     }

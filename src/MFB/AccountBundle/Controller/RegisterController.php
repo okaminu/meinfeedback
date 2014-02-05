@@ -20,13 +20,10 @@ class RegisterController extends Controller
      */
     public function indexAction()
     {
-        $entity = new Account();
+        $entity = $this->get('mfb_account.service')->createNew();
         $form   = $this->createCreateForm($entity);
 
-        return array(
-                'entity' => $entity,
-                'form'   => $form->createView(),
-            );
+        return array('entity' => $entity, 'form'   => $form->createView());
 
     }
 
@@ -37,28 +34,17 @@ class RegisterController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Account();
-        $form = $this->createCreateForm($entity);
+        $account = $this->get('mfb_account.service')->createNew();
+        $form = $this->createCreateForm($account);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $encoder = $this->get('security.encoder_factory')->getEncoder($entity);
-            $entity->setSalt(base64_encode($this->get('security.secure_random')->nextBytes(20)));
-            $entity->setPassword($encoder->encodePassword($entity->getPassword(), $entity->getSalt()));
-            $entity->setIsEnabled(true);
-            $entity->setIsLocked(false);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            $this->get('mfb_account.security.service')->login($entity->getId(), 'secured_area');
+            $this->get('mfb_account.service')->store($account);
+            $this->get('mfb_account.security.service')->login($account->getId(), 'secured_area');
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
 
-        return array(
-                'entity' => $entity,
-                'form'   => $form->createView(),
-            );
+        return array('entity' => $account,'form'   => $form->createView());
     }
 
     private function createCreateForm(Account $entity)
