@@ -8,6 +8,10 @@
 <div class="formular container modal-spacing">
     <h3 class="text-center form-header">{% trans %} Select Criterias {% endtrans %}</h3>
 
+    {% if neededCriteriaCount > 0 %}
+        <div class="alert alert-info centered text-center"> Please select {{ neededCriteriaCount }} criterias</div>
+    {% endif %}
+
     {{ form_errors(ratingSelectionForm) }}
     <div id="selectRatingCriteria">
         <div class="col-xs-12">

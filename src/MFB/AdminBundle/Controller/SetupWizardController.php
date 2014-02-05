@@ -160,7 +160,8 @@ class SetupWizardController extends Controller
             array(
                 'ratingSelectionForm' => $form->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
-                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit')
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
+                'neededCriteriaCount' => $channelRatingService->missingRatingCriteriaCount($channel->getId())
         );
     }
 
