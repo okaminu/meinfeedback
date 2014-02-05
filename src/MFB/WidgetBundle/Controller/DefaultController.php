@@ -2,20 +2,17 @@
 
 namespace MFB\WidgetBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
-use MFB\AccountBundle\Entity\Account;
-use MFB\ChannelBundle\Entity\AccountChannel;
-use MFB\FeedbackBundle\Entity\Feedback;
-use MFB\WidgetBundle\Builder\ImageBuilder;
-use MFB\WidgetBundle\Director\MainWidgetDirector;
-use MFB\WidgetBundle\Entity\Color;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use MFB\FeedbackBundle\Specification as Spec;
-use MFB\WidgetBundle\Entity\Widget as WidgetEntity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Route("/account_channel/{accountId}", name="mfb_widget_account_channel")
+     */
     public function indexAction($accountId)
     {
         $response = new Response();

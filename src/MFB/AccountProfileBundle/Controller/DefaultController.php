@@ -5,9 +5,18 @@ namespace MFB\AccountProfileBundle\Controller;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+
+    /**
+     * @Route("/feedbacks/{accountId}/{feedbackPage}", name="mfb_account_profile_homepage",
+     * requirements={"feedbackPage" = "\d+"}, defaults={"feedbackPage" = "1"})
+     * @Template
+     */
     public function indexAction($accountId, $feedbackPage)
     {
         /** @var Account $account */
@@ -31,8 +40,7 @@ class DefaultController extends Controller
 
         $channelFeedbacks = $this->get('mfb_feedback_display.service')->getChannelFeedbacks($accountChannel->getId());
         $channelAddress = "{$accountChannel->getCity()}  {$accountChannel->getPlace()} {$accountChannel->getStreet()}";
-        return $this->render(
-            'MFBAccountProfileBundle:Default:index.html.twig',
+        return
             array(
                 'account_channel_name' => $accountChannel->getName(),
                 'account_id' => $account->getId(),
@@ -43,7 +51,6 @@ class DefaultController extends Controller
                 'channel' => $accountChannel,
                 'logoUrl' => $logoPath,
                 'baseUrl' => $this->generateUrl('mfb_account_profile_homepage', array('accountId' => $accountId))
-            )
         );
     }
 }

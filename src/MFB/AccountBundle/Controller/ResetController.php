@@ -4,16 +4,25 @@ namespace MFB\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ResetController extends Controller
 {
+    /**
+     * @Route("/request", name="mfb_account_reset_request")
+     * @Template
+     */
     public function requestPasswordAction()
     {
-        return $this->render(
-            'MFBAccountBundle:Reset:request.html.twig'
-        );
+        return array();
     }
 
+    /**
+     * @Route("/send", name="mfb_account_send_email")
+     * @Template
+     */
     public function sendEmailAction(Request $request)
     {
         $username = $request->request->get('username');
@@ -29,9 +38,7 @@ class ResetController extends Controller
         $this->get('mfb_email.sender')->sendResettingEmailMessage($account, $newPassword);
         $this->get('mfb_account.service')->addAccount($account);
 
-        return $this->render(
-            'MFBAccountBundle:Reset:sendEmail.html.twig'
-        );
+        return array();
     }
 
 

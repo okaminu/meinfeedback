@@ -1,26 +1,32 @@
 mfb_reskribe:
-    resource: "@MFBReskribeBundle/Resources/config/routing.yml"
-    prefix:   /reskribe
+  resource: "@MFBReskribeBundle/Controller"
+  type: annotation
+  prefix: /reskribe
 
 mfb_widget:
-    resource: "@MFBWidgetBundle/Resources/config/routing.yml"
-    prefix:   /widget
+  resource: "@MFBWidgetBundle/Controller"
+  type: annotation
+  prefix: /widget
 
 mfb_account_profile:
-    resource: "@MFBAccountProfileBundle/Resources/config/routing.yml"
-    prefix:   /
+  resource: "@MFBAccountProfileBundle/Controller"
+  type: annotation
+  prefix: /
 
 mfb_feedback:
-    resource: "@MFBFeedbackBundle/Resources/config/routing.yml"
-    prefix:   /
+  resource: "@MFBFeedbackBundle/Controller"
+  type: annotation
+  prefix: /
 
 mfb_account:
-    resource: "@MFBAccountBundle/Resources/config/routing.yml"
-    prefix:   /
+  resource: "@MFBAccountBundle/Controller"
+  type: annotation
+  prefix: /
 
 mein_feedback_home:
-    resource: "@MeinFeedbackHomeBundle/Resources/config/routing.yml"
-    prefix:   /
+  resource: "@MeinFeedbackHomeBundle/Controller"
+  type: annotation
+  prefix: /
 
 mfb_admin:
   resource: "@MFBAdminBundle/Controller"

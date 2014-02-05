@@ -8,21 +8,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class RegisterController extends Controller
 {
+    /**
+     * @Route("/register", name="mfb_account_register")
+     * @Template
+     */
     public function indexAction()
     {
         $entity = new Account();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('MFBAccountBundle:Register:index.html.twig', array(
+        return array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-            ));
+            );
 
     }
 
+    /**
+     * @Route("/create", name="mfb_account_create")
+     * @Method({"POST"})
+     * @Template("MFBAccountBundle:Register:index.html.twig")
+     */
     public function createAction(Request $request)
     {
         $entity = new Account();
@@ -45,10 +57,10 @@ class RegisterController extends Controller
             return $this->redirect($url);
         }
 
-        return $this->render('MFBAccountBundle:Register:index.html.twig', array(
+        return array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-            ));
+            );
     }
 
     private function createCreateForm(Account $entity)

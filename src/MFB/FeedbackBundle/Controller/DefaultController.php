@@ -9,9 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\FormError;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Route("/createFeedback/{accountId}", name="mfb_feedback_create")
+     */
     public function showCreateFeedbackFormAction($accountId)
     {
         $channel = $this->get("mfb_account_channel.service")->findByAccountId($accountId);
@@ -20,6 +26,11 @@ class DefaultController extends Controller
         return $this->showFeedbackFrom($channel, $form);
     }
 
+    /**
+     * @Route("/saveFeedback/{accountId}/{accountChannelId}", name="mfb_feedback_save",
+     * requirements={"accountId" = "\d+", "accountChannelId" = "\d+"})
+     * @Method({"POST"})
+     */
     public function saveFeedbackAction(Request $request)
     {
         $accountId = $request->get('accountId');
@@ -93,7 +104,7 @@ class DefaultController extends Controller
     private function showFeedbackFrom($accountChannel, $form)
     {
         return $this->render(
-            'MFBFeedbackBundle:Default:index.html.twig',
+            'MFBFeedbackBundle:Default:showCreateFeedbackForm.html.twig',
             array(
                 'accountChannel' => $accountChannel,
                 'form' => $form->createView()

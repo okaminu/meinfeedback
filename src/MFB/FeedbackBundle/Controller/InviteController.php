@@ -10,9 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\Form\FeedbackInviteType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class InviteController extends Controller
 {
+
+    /**
+     * @Route("/createFeedback/invite/{token}", name="mfb_feedback_create_with_invite")
+     */
     public function showCreateFeedbackFormAction(Request $request)
     {
 
@@ -30,6 +37,11 @@ class InviteController extends Controller
         $form = $this->getFeedbackForm($token, $feedbackService->createNewFeedback($accountId));
         return $this->showFeedbackForm($accountChannel, $form);
     }
+
+    /**
+     * @Route("/saveFeedback/invite/{token}", name="mfb_feedback_save_with_invite")
+     * @Method({"POST"})
+     */
 
     public function saveFeedbackAction(Request $request)
     {

@@ -6,9 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Route("/login", name="mfb_account_login")
+     * @Route("/login_check", name="mfb_account_login_check")
+     * @Template
+     */
     public function indexAction(Request $request)
     {
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -22,11 +30,10 @@ class DefaultController extends Controller
             $payUrl = $this->get('mfb_reskribe.api')->getSignUrl($error->getUser());
         }
 
-        return $this->render('MFBAccountBundle:Default:index.html.twig', array(
+        return array(
                 'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
                 'error'         => $error,
                 'pay_url'       => $payUrl,
-            )
         );
     }
 }
