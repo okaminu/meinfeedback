@@ -41,7 +41,10 @@ class RegisterController extends Controller
             $account = $this->get('mfb_account.security.service')->encryptAccountPassword($account);
             $accountService->store($account);
 
-            return $this->redirect($this->get('mfb_payment.service')->getSignUrl($account->getId()));
+            $this->get('mfb_account.service')->enableAccount($account->getId());
+            $this->get('mfb_account.security.service')->login($account->getId(), 'secured_area');
+            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
+            //return $this->redirect($this->get('mfb_payment.service')->getSignUrl($account->getId()));
         }
         return array('entity' => $account,'form'   => $form->createView());
     }
