@@ -50,7 +50,8 @@
         "symfony-web-dir": "web",
         "symfony-assets-install": "symlink",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+            "file": "app/config/parameters.yml",
+            "dist-file": "app/config/parameters.yml.MeinFeedback_Master"
         },
         "branch-alias": {
             "dev-master": "2.4-dev"
