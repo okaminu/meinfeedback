@@ -12,6 +12,7 @@ class Api
     protected $em;
     protected $buzz;
     protected $reskribeToken;
+
     public function __construct(EntityManager $em, Browser $buzz, $reskribeToken)
     {
         $this->em = $em;
@@ -19,12 +20,12 @@ class Api
         $this->reskribeToken = $reskribeToken;
     }
 
-    public function getSignUrl(Account $account)
+    public function getSignUrl($accountId, $accountEmail, $accountName)
     {
         $data['plan_code'] = 'b01';
-        $data['uid'] = $account->getId();
-        $data['subscription[email]'] = $account->getEmail();
-        if ($name = $account->getName()) {
+        $data['uid'] = $accountId;
+        $data['subscription[email]'] = $accountEmail;
+        if ($name = $accountName) {
             $separated = array_filter(explode(' ', $name));
             if (count($separated) > 1) {
                 $data['subscription[lastname]'] = array_pop($separated);

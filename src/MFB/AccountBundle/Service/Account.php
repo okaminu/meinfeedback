@@ -22,12 +22,17 @@ class Account
     public function createNew()
     {
         $account = new AccountEntity();
+        $account->setIsEnabled(false);
+        $account->setIsLocked(false);
+        return $account;
+    }
+
+    public function encryptAccountPassword($account)
+    {
         $encoder = $this->encoder->getEncoder($account);
 
         $account->setSalt(base64_encode($this->random->nextBytes(20)));
         $account->setPassword($encoder->encodePassword($account->getPassword(), $account->getSalt()));
-        $account->setIsEnabled(true);
-        $account->setIsLocked(false);
         return $account;
     }
 
@@ -38,6 +43,20 @@ class Account
         } catch (\Exception $ex) {
             throw new AccountException('Cannot create account');
         }
+    }
+
+    public function enableAccount($accountId)
+    {
+        $account = $this->findByAccountId($accountId);
+        $account->setIsEnabled(true);
+        $this->store($account);
+    }
+
+    public function disableAccount($accountId)
+    {
+        $account = $this->findByAccountId($accountId);
+        $account->setIsEnabled(false);
+        $this->store($account);
     }
 
     private function saveEntity($entity)

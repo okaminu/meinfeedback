@@ -21,10 +21,7 @@ class RegisterController extends Controller
     public function indexAction()
     {
         $entity = $this->get('mfb_account.service')->createNew();
-        $form   = $this->createCreateForm($entity);
-
-        return array('entity' => $entity, 'form'   => $form->createView());
-
+        return array('entity' => $entity, 'form'   => $this->createCreateForm($entity)->createView());
     }
 
     /**
@@ -34,16 +31,18 @@ class RegisterController extends Controller
      */
     public function createAction(Request $request)
     {
-        $account = $this->get('mfb_account.service')->createNew();
+        $accountService = $this->get('mfb_account.service');
+
+        $account = $accountService->createNew();
         $form = $this->createCreateForm($account);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->get('mfb_account.service')->store($account);
-            $this->get('mfb_account.security.service')->login($account->getId(), 'secured_area');
-            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
-        }
+            $account = $accountService->encryptAccountPassword($account);
+            $accountService->store($account);
 
+            return $this->redirect($this->get('mfb_payment.service')->getSignUrl($account->getId()));
+        }
         return array('entity' => $account,'form'   => $form->createView());
     }
 

@@ -38,12 +38,10 @@ class DefaultController extends Controller
     {
         $uid = $request->get('uid');
         if ($uid) {
-            $em = $this->getDoctrine()->getManager();
-            $account = $em->find('MFBAccountBundle:Account', $uid);
-            $account->setIsEnabled(true);
-            $em->persist($account);
-            $em->flush();
-            return $this->redirect($this->generateUrl('mfb_account_login'));
+            $this->get('mfb_account.service')->enableAccount($uid);
+
+            $this->get('mfb_account.security.service')->login($uid, 'secured_area');
+            return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
         throw new BadRequestHttpException('no needed data set');
     }

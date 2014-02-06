@@ -27,7 +27,7 @@ class DefaultController extends Controller
 
         $payUrl = '';
         if ($error && $error instanceof DisabledException) {
-            $payUrl = $this->get('mfb_reskribe.api')->getSignUrl($error->getUser());
+            $payUrl = $this->get('mfb_payment.service')->getSignUrl($error->getUser()->getId());
         }
 
         return array(

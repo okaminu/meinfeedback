@@ -1,0 +1,7 @@
+parameters:
+      mfb_payment.class: MFB\PaymentBundle\Services\Payment
+
+services:
+      mfb_payment.service:
+        class: %mfb_payment.class%
+        arguments: [@mfb_reskribe.api, @mfb_account.service]

@@ -196,28 +196,9 @@ class DefaultController extends Controller
         return $form;
     }
 
-    private function saveEntity($em, $entity)
-    {
-        $em->persist($entity);
-        $em->flush();
-    }
-
     private function getCurrentUser()
     {
         return $this->get('security.context')->getToken()->getUser();
-    }
-
-    private function getEntityManager()
-    {
-        return $this->getDoctrine()->getManager();
-    }
-
-    private function getAccountChannel($em, $accountId)
-    {
-        $accountChannel = $em->getRepository('MFBChannelBundle:AccountChannel')->findOneBy(
-            array('accountId' => $accountId)
-        );
-        return $accountChannel;
     }
 
     /**
@@ -229,6 +210,4 @@ class DefaultController extends Controller
         $channel = $this->get('mfb_account_channel.service')->findByAccountId($accountId);
         return $channel;
     }
-
-
 }

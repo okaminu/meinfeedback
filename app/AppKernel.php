@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new MFB\RatingBundle\MFBRatingBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new MFB\DocumentBundle\MFBDocumentBundle(),
+            new MFB\PaymentBundle\MFBPaymentBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
