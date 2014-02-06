@@ -9,14 +9,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Account
 {
     private $entityManager;
-    private $encoder;
-    private $random;
 
-    public function __construct($em, $encoder, $random)
+    public function __construct($em)
     {
         $this->entityManager = $em;
-        $this->encoder = $encoder;
-        $this->random = $random;
     }
 
     public function createNew()
@@ -24,15 +20,7 @@ class Account
         $account = new AccountEntity();
         $account->setIsEnabled(false);
         $account->setIsLocked(false);
-        return $account;
-    }
-
-    public function encryptAccountPassword($account)
-    {
-        $encoder = $this->encoder->getEncoder($account);
-
-        $account->setSalt(base64_encode($this->random->nextBytes(20)));
-        $account->setPassword($encoder->encodePassword($account->getPassword(), $account->getSalt()));
+        $account->setHash($this->generateRandomHash());
         return $account;
     }
 
@@ -45,9 +33,18 @@ class Account
         }
     }
 
+    public function enableAccountByHash($hash)
+    {
+        $account = $this->findByHash($hash);
+
+        $account->setIsEnabled(true);
+        $this->store($account);
+    }
+
     public function enableAccount($accountId)
     {
         $account = $this->findByAccountId($accountId);
+
         $account->setIsEnabled(true);
         $this->store($account);
     }
@@ -55,6 +52,7 @@ class Account
     public function disableAccount($accountId)
     {
         $account = $this->findByAccountId($accountId);
+
         $account->setIsEnabled(false);
         $this->store($account);
     }
@@ -80,5 +78,18 @@ class Account
             array('email' => $username)
         );
         return $account;
+    }
+
+    public function findByHash($hash)
+    {
+        $account = $this->entityManager->getRepository('MFBAccountBundle:Account')->findOneBy(
+            array('hash' => $hash)
+        );
+        return $account;
+    }
+
+    private function generateRandomHash()
+    {
+        return sha1(uniqid(mt_rand(), true));
     }
 }

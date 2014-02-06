@@ -18,6 +18,6 @@ class Payment
     public function getSignUrl($accountId)
     {
         $account = $this->accountService->findByAccountId($accountId);
-        return $this->reskribe->getSignUrl($account->getId(), $account->getEmail(), $account->getName());
+        return $this->reskribe->getSignUrl($account->getHash(), $account->getEmail(), $account->getName());
     }
 }

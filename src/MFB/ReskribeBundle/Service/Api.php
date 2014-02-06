@@ -20,10 +20,10 @@ class Api
         $this->reskribeToken = $reskribeToken;
     }
 
-    public function getSignUrl($accountId, $accountEmail, $accountName)
+    public function getSignUrl($accountHash, $accountEmail, $accountName)
     {
         $data['plan_code'] = 'b01';
-        $data['uid'] = $accountId;
+        $data['uid'] = $accountHash;
         $data['subscription[email]'] = $accountEmail;
         if ($name = $accountName) {
             $separated = array_filter(explode(' ', $name));

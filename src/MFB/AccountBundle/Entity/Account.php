@@ -87,6 +87,13 @@ class Account implements AdvancedUserInterface
     private $isLocked;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=40)
+     */
+    private $hash;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -359,5 +366,28 @@ class Account implements AdvancedUserInterface
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Account
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+    
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }

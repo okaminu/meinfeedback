@@ -38,9 +38,9 @@ class DefaultController extends Controller
     {
         $uid = $request->get('uid');
         if ($uid) {
-            $this->get('mfb_account.service')->enableAccount($uid);
+            $this->get('mfb_account.service')->enableAccountByHash($uid);
 
-            $this->get('mfb_account.security.service')->login($uid, 'secured_area');
+            $this->get('mfb_account.security.service')->loginByHash($uid, 'secured_area');
             return $this->redirect($this->generateUrl('mfb_admin_homepage'));
         }
         throw new BadRequestHttpException('no needed data set');

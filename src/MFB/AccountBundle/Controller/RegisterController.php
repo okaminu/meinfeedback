@@ -38,7 +38,7 @@ class RegisterController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $account = $accountService->encryptAccountPassword($account);
+            $account = $this->get('mfb_account.security.service')->encryptAccountPassword($account);
             $accountService->store($account);
 
             return $this->redirect($this->get('mfb_payment.service')->getSignUrl($account->getId()));
