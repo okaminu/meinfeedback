@@ -1,0 +1,15 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     'mfbdev0.cmolshlvl5b0.eu-west-1.rds.amazonaws.com'
+    database_port:     ~
+    database_name:     meinfeedback_dev_db
+    database_user:     'mfb_app'
+    database_password: 'xNzSViuaURe62QY5'
+
+    mailer_transport:  smtp
+    mailer_host:       email-smtp.us-east-1.amazonaws.com
+    mailer_user:       mfb_dev_app
+    mailer_password:   "e2H73PWBhnV8KUSr"
+
+    locale:            en
+    secret:            MoreSecretKeyHere

@@ -3,7 +3,7 @@ node[:deploy].each do |application, deploy|
 
   file "#{release_path}/app/config/parameters.yml" do
     database = deploy[:database]
-    content ERB.new(::File.read("#{release_path}/app/config/parameters.yml.dist")).result(binding)
+    content ERB.new(::File.read("#{release_path}/app/config/parameters.yml.#{node[:opsworks][:stack][:name]}")).result(binding)
     action :create
     mode "0644"
   end
