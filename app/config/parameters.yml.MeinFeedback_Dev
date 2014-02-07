@@ -3,7 +3,7 @@ parameters:
     database_host:     'mfbdev0.cmolshlvl5b0.eu-west-1.rds.amazonaws.com'
     database_port:     ~
     database_name:     meinfeedback_dev_db
-    database_user:     'mfb_app'
+    database_user:     'mfb_dev_app'
     database_password: 'xNzSViuaURe62QY5'
 
     mailer_transport:  smtp
