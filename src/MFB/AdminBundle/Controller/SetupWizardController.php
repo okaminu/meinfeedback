@@ -26,12 +26,14 @@ class SetupWizardController extends Controller
     public function selectBusinessAction(Request $request)
     {
         $businessList = $this->get('mfb_service_business.service')->findAll();
+
         $form = $this->createSingleSelectForm($businessList);
 
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
-                $businessId = $form->get('choice')->getData();
+
+                $businessId = $this->getBusinessIdFromSubmit($form);
                 $this->createUpdateBusinessForChannel($businessId);
 
                 return $this->createRedirect(
@@ -324,5 +326,18 @@ class SetupWizardController extends Controller
         );
         $form->add('save', 'submit', array('label' => 'Send'));
         return $form;
+    }
+
+    private function getBusinessIdFromSubmit($form)
+    {
+        $businessId = $form->get('choice')->getData();
+
+        if ($form->getData('customInsert') != '') {
+            $businessEntity = $this->get('mfb_service_business.service')->createNewBusiness();
+            $businessEntity->setIsCustom(true);
+            $this->get('mfb_service_business.service')->store($businessEntity);
+            $businessId = $businessEntity->getId();
+        }
+        return $businessId;
     }
 }

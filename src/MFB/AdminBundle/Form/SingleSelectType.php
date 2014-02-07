@@ -29,9 +29,11 @@ class SingleSelectType extends AbstractType
                         'multiple' => false,
                         'expanded' => true,
                         'mapped' => false,
-                        'choices' => $this->choices
+                        'choices' => $this->choices,
+                        'required' => false
                     )
                 )
+        ->add('customInsert', 'text', array('required' => false))
         ->add('submit', 'submit', array('label' => 'Submit'));
     }
 

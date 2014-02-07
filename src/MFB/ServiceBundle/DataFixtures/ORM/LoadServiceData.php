@@ -115,6 +115,7 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         $entity = new Business();
         $entity->setName($name);
         $entity->setIsMultipleServices($multiple);
+        $entity->setIsCustom(false);
         return $entity;
     }
 

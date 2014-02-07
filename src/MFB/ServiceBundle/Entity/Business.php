@@ -43,6 +43,12 @@ class Business
      */
     private $serviceType;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_custom", type="boolean", options={"default" : 0})
+     */
+    private $isCustom = 0;
 
     /**
      * Get id
@@ -131,5 +137,28 @@ class Business
     public function getIsMultipleServices()
     {
         return $this->isMultipleServices;
+    }
+
+    /**
+     * Set isCustom
+     *
+     * @param boolean $isCustom
+     * @return Business
+     */
+    public function setIsCustom($isCustom)
+    {
+        $this->isCustom = $isCustom;
+    
+        return $this;
+    }
+
+    /**
+     * Get isCustom
+     *
+     * @return boolean 
+     */
+    public function getIsCustom()
+    {
+        return $this->isCustom;
     }
 }
