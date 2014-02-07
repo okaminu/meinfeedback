@@ -4,7 +4,7 @@ parameters:
     database_port:     ~
     database_name:     meinfeedback_dev_db
     database_user:     'mfb_dev_app'
-    database_password: 'xNzSViuaURe62QY5'
+    database_password: 'e2H73PWBhnV8KUSr'
 
     mailer_transport:  smtp
     mailer_host:       email-smtp.us-east-1.amazonaws.com
