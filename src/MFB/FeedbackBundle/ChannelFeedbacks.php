@@ -27,17 +27,11 @@ class ChannelFeedbacks
         $this->channelId = $channelId;
     }
 
-    /**
-     * @param mixed $elementsPerPage
-     */
     public function setElementsPerPage($elementsPerPage)
     {
         $this->elementsPerPage = $elementsPerPage;
     }
 
-    /**
-     * @param mixed $channelId
-     */
     public function setChannelId($channelId)
     {
         $this->channelId = $channelId;

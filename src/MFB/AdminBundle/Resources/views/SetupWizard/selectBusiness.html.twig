@@ -12,27 +12,23 @@
 
     {{ form_errors(form) }}
 
-    <div class="form-group">
-        <div class="col-xs-9">
+    <div class="col-xs-9">
+        <div class="form-group">
             {% for type in form.choice %}
                 <div class="input-group">
                     <label class="radio-inline">
                         {{ form_widget(type, {'attr': {'class' : 'radio'} }) }} {{ type.vars.label }}
                     </label>
+                    {% if type.vars.value == 'customInputOption' %}
+                        {{ form_widget(form.customInputText, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'Custom Business Name'} }) }}
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-xs-12">
-            {{ form_widget(form.customInsert, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'CustomInput'} }) }}
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-xs-12">
+    <div class="col-xs-12">
+        <div class="form-group">
             {{ form_widget(form.submit, {'attr': {'class': 'btn col-xs-12 form-control'} }) }}
         </div>
     </div>

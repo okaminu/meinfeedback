@@ -330,11 +330,13 @@ class SetupWizardController extends Controller
 
     private function getBusinessIdFromSubmit($form)
     {
-        $businessId = $form->get('choice')->getData();
+        $choice = $form->get('choice')->getData();
+        $businessId = $choice;
 
-        if ($form->getData('customInsert') != '') {
-            $businessEntity = $this->get('mfb_service_business.service')->createNewBusiness();
-            $businessEntity->setIsCustom(true);
+        if ($choice == 'customInputOption') {
+            $businessEntity = $this->get('mfb_service_business.service')->createCustomBusiness(
+                $form->get('customInputText')->getData()
+            );
             $this->get('mfb_service_business.service')->store($businessEntity);
             $businessId = $businessEntity->getId();
         }

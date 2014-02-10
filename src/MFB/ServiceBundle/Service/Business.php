@@ -20,6 +20,14 @@ class Business
         return new BusinessEntity();
     }
 
+    public function createCustomBusiness($name)
+    {
+        $entity = new BusinessEntity();
+        $entity->setIsCustom(true);
+        $entity->setName($name);
+        return $entity;
+    }
+
     public function findById($id)
     {
         return $this->entityManager->getRepository("MFBServiceBundle:Business")->find($id);

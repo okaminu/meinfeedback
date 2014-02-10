@@ -21,6 +21,7 @@ class SingleSelectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
+        $this->choices[] = array('customInputOption' => ' ');
         $builder
                 ->add(
                     'choice',
@@ -30,10 +31,10 @@ class SingleSelectType extends AbstractType
                         'expanded' => true,
                         'mapped' => false,
                         'choices' => $this->choices,
-                        'required' => false
                     )
                 )
-        ->add('customInsert', 'text', array('required' => false))
+
+        ->add('customInputText', 'text', array('required' => false, 'mapped' => false))
         ->add('submit', 'submit', array('label' => 'Submit'));
     }
 
