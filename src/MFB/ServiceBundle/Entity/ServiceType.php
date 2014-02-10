@@ -44,6 +44,13 @@ class ServiceType
      */
     private $channelServiceType;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_custom", type="boolean", options={"default" : 0})
+     */
+    private $isCustom = 0;
+
 
     public function __construct()
     {
@@ -129,5 +136,28 @@ class ServiceType
     public function getChannelServiceType()
     {
         return $this->channelServiceType;
+    }
+
+    /**
+     * Set isCustom
+     *
+     * @param boolean $isCustom
+     * @return ServiceType
+     */
+    public function setIsCustom($isCustom)
+    {
+        $this->isCustom = $isCustom;
+    
+        return $this;
+    }
+
+    /**
+     * Get isCustom
+     *
+     * @return boolean 
+     */
+    public function getIsCustom()
+    {
+        return $this->isCustom;
     }
 }

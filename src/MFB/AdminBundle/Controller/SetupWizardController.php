@@ -25,7 +25,7 @@ class SetupWizardController extends Controller
 
     public function selectBusinessAction(Request $request)
     {
-        $businessList = $this->get('mfb_service_business.service')->getDefault();
+        $businessList = $this->get('mfb_service_business.service')->getDefaultBusinesses();
 
         $form = $this->createSingleSelectForm($businessList);
 
@@ -56,13 +56,13 @@ class SetupWizardController extends Controller
     public function selectSingleServiceTypeAction(Request $request, $businessId)
     {
         $channel = $this->getChannel();
-        $serviceTypes = $this->get('mfb_service_type.service')->findByBusinessId($businessId);
+        $serviceTypes = $this->get('mfb_service_type.service')->getDefaultByBusinessId($businessId);
         $form = $this->createSingleSelectForm($serviceTypes);
 
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
-                $selectedServiceId = $form->get('choice')->getData();
+                $selectedServiceId = $this->getServiceIdFromSubmit($form, $businessId);
                 $this->storeChannelServiceType($channel, $selectedServiceId);
 
                 return $this->createRedirect('mfb_admin_setup_insert_definitions');
@@ -83,14 +83,13 @@ class SetupWizardController extends Controller
     public function selectMultipleServiceTypeAction(Request $request, $businessId)
     {
         $channel = $this->getChannel();
-        $serviceTypes = $this->get('mfb_service_type.service')->findByBusinessId($businessId);
+        $serviceTypes = $this->get('mfb_service_type.service')->getDefaultByBusinessId($businessId);
         $form = $this->createMultipleSelectForm($serviceTypes);
 
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
-                $selectedServices = $form->get('choice')->getData();
-
+                $selectedServices = $this->getServiceIdlistFromSubmit($form, $businessId);
                 foreach ($selectedServices as $serviceId) {
                     $this->storeChannelServiceType($channel, $serviceId);
                 }
@@ -334,7 +333,7 @@ class SetupWizardController extends Controller
         $businessId = $choice;
 
         if ($choice == 'customInputOption') {
-            $businessEntity = $this->get('mfb_service_business.service')->createCustomBusiness(
+            $businessEntity = $this->get('mfb_service_business.service')->createCustom(
                 $form->get('customInputText')->getData()
             );
             $this->get('mfb_service_business.service')->store($businessEntity);
@@ -342,4 +341,40 @@ class SetupWizardController extends Controller
         }
         return $businessId;
     }
+
+    private function getServiceIdFromSubmit($form, $businessId)
+    {
+        $choice = $form->get('choice')->getData();
+        $serviceId = $choice;
+
+        if ($choice == 'customInputOption') {
+            $serviceEntity = $this->get('mfb_service_type.service')->createCustom(
+                $businessId,
+                $form->get('customInputText')->getData()
+            );
+            $this->get('mfb_service_type.service')->store($serviceEntity);
+            $serviceId = $serviceEntity->getId();
+        }
+        return $serviceId;
+    }
+
+    private function getServiceIdListFromSubmit($form, $businessId)
+    {
+        $choices = $form->get('choice')->getData();
+        $serviceIdList = $choices;
+
+        $customChoice = array_search('customInputOption', $choices);
+        if ($customChoice != false) {
+            $serviceEntity = $this->get('mfb_service_type.service')->createCustom(
+                $businessId,
+                $form->get('customInputText')->getData()
+            );
+            $this->get('mfb_service_type.service')->store($serviceEntity);
+
+            unset($serviceIdList[$customChoice]);
+            $serviceIdList = array_merge($serviceIdList, array($serviceEntity->getId()));
+        }
+        return $serviceIdList;
+    }
+
 }

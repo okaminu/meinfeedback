@@ -49,7 +49,6 @@ class Service
         return $service;
     }
 
-
     public function store($service)
     {
         try {

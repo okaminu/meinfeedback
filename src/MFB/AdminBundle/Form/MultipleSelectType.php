@@ -20,7 +20,7 @@ class MultipleSelectType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        $this->choices[] = array('customInputOption' => ' ');
         $builder
                 ->add(
                     'choice',
@@ -32,6 +32,7 @@ class MultipleSelectType extends AbstractType
                         'choices' => $this->choices
                     )
                 )
+        ->add('customInputText', 'text', array('required' => false, 'mapped' => false))
         ->add('submit', 'submit', array('label' => 'Submit'));
     }
 

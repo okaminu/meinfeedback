@@ -20,9 +20,9 @@ class Business
         return new BusinessEntity();
     }
 
-    public function createCustomBusiness($name)
+    public function createCustom($name)
     {
-        $entity = new BusinessEntity();
+        $entity = $this->createNewBusiness();
         $entity->setIsCustom(true);
         $entity->setName($name);
         return $entity;
@@ -33,7 +33,7 @@ class Business
         return $this->entityManager->getRepository("MFBServiceBundle:Business")->find($id);
     }
 
-    public function getDefault()
+    public function getDefaultBusinesses()
     {
         return $this->entityManager->getRepository("MFBServiceBundle:Business")->findBy(
             array('isCustom' => false)
@@ -49,9 +49,6 @@ class Business
         }
     }
 
-    /**
-     * @param $entity
-     */
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
