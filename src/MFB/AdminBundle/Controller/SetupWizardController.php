@@ -25,7 +25,7 @@ class SetupWizardController extends Controller
 
     public function selectBusinessAction(Request $request)
     {
-        $businessList = $this->get('mfb_service_business.service')->findAll();
+        $businessList = $this->get('mfb_service_business.service')->getDefault();
 
         $form = $this->createSingleSelectForm($businessList);
 

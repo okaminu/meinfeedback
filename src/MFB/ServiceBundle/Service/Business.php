@@ -33,9 +33,11 @@ class Business
         return $this->entityManager->getRepository("MFBServiceBundle:Business")->find($id);
     }
 
-    public function findAll()
+    public function getDefault()
     {
-        return $this->entityManager->getRepository("MFBServiceBundle:Business")->findAll();
+        return $this->entityManager->getRepository("MFBServiceBundle:Business")->findBy(
+            array('isCustom' => false)
+        );
     }
 
     public function store($service)

@@ -16,12 +16,16 @@
         <div class="form-group">
             {% for type in form.choice %}
                 <div class="input-group">
-                    <label class="radio-inline">
-                        {{ form_widget(type, {'attr': {'class' : 'radio'} }) }} {{ type.vars.label }}
-                    </label>
-                    {% if type.vars.value == 'customInputOption' %}
-                        {{ form_widget(form.customInputText, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'Custom Business Name'} }) }}
-                    {% endif %}
+                    <div class="float_left">
+                        <label class="radio-inline">
+                            {{ form_widget(type, {'attr': {'class' : 'radio'} }) }} {{ type.vars.label }}
+                        </label>
+                    </div>
+                    <div class="float_left">
+                        {% if type.vars.value == 'customInputOption' %}
+                            {{ form_widget(form.customInputText, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'Custom Business Name'} }) }}
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
