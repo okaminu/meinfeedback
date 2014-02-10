@@ -248,4 +248,10 @@ class Service
     {
         return $this->channelServiceType;
     }
+
+    public function getServiceType()
+    {
+        return $this->channelServiceType->getServiceType();
+    }
+
 }

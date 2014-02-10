@@ -13,7 +13,7 @@ class ChannelCriteriaRepository extends EntityRepository
 
     public function findAllUnusedCriteriasForServices($channelId, $serviceIds)
     {
-        $expr = $this->getEntityManager()->createQueryBuilder()->expr();
+        $expr = $this->getExpression();
         $usedServiceIdsRule = $expr->in('stc.serviceType', $serviceIds);
 
         $rule = $expr->andX($this->unusedCriteriaRule($channelId), $usedServiceIdsRule);
@@ -50,10 +50,6 @@ class ChannelCriteriaRepository extends EntityRepository
         return $builder->getQuery()->getResult();
     }
 
-    /**
-     * @param $result
-     * @return array
-     */
     private function mergeToSingleArray($result)
     {
         $criteriaIds = array();
@@ -67,10 +63,18 @@ class ChannelCriteriaRepository extends EntityRepository
     {
         $rule = null;
         $usedCriteriasIds = $this->findAllUsedRatingCriteriaIds($channelId);
-        $expr = $this->getEntityManager()->createQueryBuilder()->expr();
+        $expr = $this->getExpression();
         if (!empty($usedCriteriasIds)) {
             $rule = $expr->notIn('e.id', $usedCriteriasIds);
         }
         return $rule;
+    }
+
+    private function getExpression()
+    {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->expr();
     }
 }

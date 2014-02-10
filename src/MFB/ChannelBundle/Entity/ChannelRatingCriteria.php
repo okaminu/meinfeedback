@@ -145,4 +145,10 @@ class ChannelRatingCriteria
     {
         return $this->feedbackRating;
     }
+
+    public function getName()
+    {
+        return $this->ratingCriteria->getName();
+    }
+
 }

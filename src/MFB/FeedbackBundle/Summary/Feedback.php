@@ -54,7 +54,7 @@ class Feedback
 
     private function addServiceSummary(FeedbackSummaryItem $singleSummary, ServiceEntity $service)
     {
-        $serviceType = $service->getChannelServiceType()->getServiceType();
+        $serviceType = $service->getServiceType();
 
         $singleSummary->setServiceTypeName($serviceType->getName());
         $singleSummary->setServiceProviderInfo($this->getServiceProviderInfo($service));
@@ -70,7 +70,7 @@ class Feedback
         );
 
         foreach ($feedback->getFeedbackRating() as $criteria) {
-            $criteriaName = $criteria->getRatingCriteria()->getRatingCriteria()->getName();
+            $criteriaName = $criteria->getName();
             $ratings[] = new RatingSummary($criteriaName, $criteria->getRating());
         }
         return $ratings;

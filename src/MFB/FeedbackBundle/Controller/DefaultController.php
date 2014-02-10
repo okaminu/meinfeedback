@@ -131,7 +131,7 @@ class DefaultController extends Controller
         foreach ($feedbackRatingForms as $ratingForm) {
             $channelCriteria = $ratingForm->getData()->getRatingCriteria();
             $ratingForm->remove('rating');
-            $ratingForm->add('rating', 'hidden', array('label' => $channelCriteria->getRatingCriteria()->getName()));
+            $ratingForm->add('rating', 'hidden', array('label' => $channelCriteria->getName()));
         }
     }
 }

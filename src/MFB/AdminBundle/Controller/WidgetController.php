@@ -137,9 +137,13 @@ class WidgetController extends Controller
 
     private function getUserId()
     {
-        return $this->get('security.context')->getToken()->getUser()->getId();
+        return $this->getCurrentUser()->getId();
     }
 
+    private function getCurrentUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
+    }
     private function sortResponse($item_order_str)
     {
         $response = new Response();
