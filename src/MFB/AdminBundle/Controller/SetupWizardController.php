@@ -330,22 +330,20 @@ class SetupWizardController extends Controller
     private function getBusinessIdFromSubmit($form)
     {
         $choice = $form->get('choice')->getData();
-        $businessId = $choice;
 
         if ($choice == 'customInputOption') {
             $businessEntity = $this->get('mfb_service_business.service')->createCustom(
                 $form->get('customInputText')->getData()
             );
             $this->get('mfb_service_business.service')->store($businessEntity);
-            $businessId = $businessEntity->getId();
+            $choice = $businessEntity->getId();
         }
-        return $businessId;
+        return $choice;
     }
 
     private function getServiceIdFromSubmit($form, $businessId)
     {
         $choice = $form->get('choice')->getData();
-        $serviceId = $choice;
 
         if ($choice == 'customInputOption') {
             $serviceEntity = $this->get('mfb_service_type.service')->createCustom(
@@ -353,28 +351,32 @@ class SetupWizardController extends Controller
                 $form->get('customInputText')->getData()
             );
             $this->get('mfb_service_type.service')->store($serviceEntity);
-            $serviceId = $serviceEntity->getId();
+            $choice = $serviceEntity->getId();
         }
-        return $serviceId;
+        return $choice;
     }
 
     private function getServiceIdListFromSubmit($form, $businessId)
     {
         $choices = $form->get('choice')->getData();
-        $serviceIdList = $choices;
 
-        $customChoice = array_search('customInputOption', $choices);
-        if ($customChoice != false) {
+        if ($customChoice = array_search('customInputOption', $choices)) {
             $serviceEntity = $this->get('mfb_service_type.service')->createCustom(
                 $businessId,
                 $form->get('customInputText')->getData()
             );
             $this->get('mfb_service_type.service')->store($serviceEntity);
-
-            unset($serviceIdList[$customChoice]);
-            $serviceIdList = array_merge($serviceIdList, array($serviceEntity->getId()));
+            $choices = array_merge($this->removeCustomChoice($choices), array($serviceEntity->getId()));
         }
-        return $serviceIdList;
+        return $choices;
     }
+
+    private function removeCustomChoice($choices)
+    {
+        $customChoice = array_search('customInputOption', $choices);
+        unset($choices[$customChoice]);
+        return $choices;
+    }
+
 
 }
