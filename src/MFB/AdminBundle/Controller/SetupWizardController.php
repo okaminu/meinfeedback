@@ -375,21 +375,15 @@ class SetupWizardController extends Controller
         );
     }
 
-    private function getCreateNewRating($ratingName)
-    {
-        $rating = $this->get('mfb_rating.service')->createCustom($ratingName);
-        $this->get('mfb_rating.service')->store($rating);
-        return $rating;
-    }
-
     private function storeChannelRatingCriteria($channelCriteria, $customRatingName)
     {
-        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
         if ($channelCriteria->getRatingCriteria() == null) {
-            $rating = $this->getCreateNewRating($customRatingName);
+            $rating = $this->get('mfb_rating.service')->createCustom($customRatingName);
+            $this->get('mfb_rating.service')->store($rating);
             $channelCriteria->setRatingCriteria($rating);
         }
-        $channelRatingService->store($channelCriteria);
+
+        $this->get('mfb_account_channel.rating_criteria.service')->store($channelCriteria);
     }
 
 
