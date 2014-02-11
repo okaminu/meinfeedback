@@ -153,19 +153,12 @@ class SetupWizardController extends Controller
         $channel = $this->getChannel();
         $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
 
-        $channelCriteria = $channelRatingService->createNewChannelCriteria($channel);
+        $channelCriteria = $channelRatingService->createNew($channel);
         $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
         $form->handleRequest($request);
-        //-------------------REFACTOR-----------------------
         try {
             if ($form->isValid()) {
-                if ($channelCriteria->getRatingCriteria() == null) {
-                    $rating = $this->get('mfb_rating.service')->createCustom($form->get('customRatingName')->getData());
-                    $this->get('mfb_rating.service')->store($rating);
-                    $channelCriteria->setRatingCriteria($rating);
-                }
-
-                $channelRatingService->store($channelCriteria);
+                $this->storeChannelRatingCriteria($channelCriteria, $form->get('customRatingName')->getData());
                 $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
             }
         } catch (RatingException $ex) {
@@ -377,9 +370,26 @@ class SetupWizardController extends Controller
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
                 'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
                 'neededCriteriaCount' => $this->get('mfb_account_channel.rating_criteria.service')
-                        ->missingRatingCriteriaCount($channel->getId())
+                        ->missingCount($channel->getId())
             )
         );
+    }
+
+    private function getCreateNewRating($ratingName)
+    {
+        $rating = $this->get('mfb_rating.service')->createCustom($ratingName);
+        $this->get('mfb_rating.service')->store($rating);
+        return $rating;
+    }
+
+    private function storeChannelRatingCriteria($channelCriteria, $customRatingName)
+    {
+        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
+        if ($channelCriteria->getRatingCriteria() == null) {
+            $rating = $this->getCreateNewRating($customRatingName);
+            $channelCriteria->setRatingCriteria($rating);
+        }
+        $channelRatingService->store($channelCriteria);
     }
 
 

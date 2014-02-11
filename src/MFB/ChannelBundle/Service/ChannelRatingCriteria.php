@@ -26,7 +26,7 @@ class ChannelRatingCriteria
         $this->channelService = $channelService;
     }
 
-    public function createNewChannelCriteria($channel)
+    public function createNew($channel)
     {
         $ratingCriteria = new ChannelRatingCriteriaEntity();
         $ratingCriteria->setChannel($channel);
@@ -42,7 +42,7 @@ class ChannelRatingCriteria
         }
     }
 
-    public function getNotUsedRatingCriterias($channelId)
+    public function getNotUsed($channelId)
     {
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->findAllUnusedRatingCriterias($channelId);
@@ -60,16 +60,16 @@ class ChannelRatingCriteria
             ->findAllUnusedCriteriasForServices($channelId, $serviceIds);
     }
 
-    public function getUsedRatingCriteriasCount($channelId)
+    public function getUsedCount($channelId)
     {
         $accountChannelId = $this->channelService->findById($channelId)->getId();
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelRatingCriteria')
             ->getUsedCriteriaCount($accountChannelId);
     }
 
-    public function missingRatingCriteriaCount($channelId)
+    public function missingCount($channelId)
     {
-        $usedCriteriaCount = $this->getUsedRatingCriteriasCount($channelId);
+        $usedCriteriaCount = $this->getUsedCount($channelId);
         return $this->criteriaLimit - $usedCriteriaCount;
     }
 

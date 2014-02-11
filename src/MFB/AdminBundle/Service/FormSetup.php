@@ -83,7 +83,7 @@ class FormSetup
 
     private function hasSelectedRatingCriterias($channelId)
     {
-        $missingCount = $this->ratingCriteriaService->missingRatingCriteriaCount($channelId);
+        $missingCount = $this->ratingCriteriaService->missingCount($channelId);
         if ($missingCount > 0) {
             return false;
         }
