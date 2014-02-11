@@ -14,38 +14,49 @@
 
     {{ form_errors(ratingSelectionForm) }}
     <div id="selectRatingCriteria">
-        <div class="col-xs-12">
-            <div class="form-group">
-                <div class="title">{% trans %} The following rating criterias were added {% endtrans %}</div>
-                <div class="sectionIdent">
-                    <ol>
-                        {% for criteria in channelRatingCriterias %}
-                            <li>
-                                {{ criteria.getRatingCriteria.getName }}
-                            </li>
-                        {% endfor %}
-                    </ol>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <div class="title bold">{% trans %} The following rating criterias were added {% endtrans %}</div>
+                    <div class="sectionIdent">
+                        <ol>
+                            {% for criteria in channelRatingCriterias %}
+                                <li>
+                                    {{ criteria.getRatingCriteria.getName }}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
 
         {% if channelRatingCriterias|length < criteriaLimit %}
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <div class="title">{% trans %} Add rating criteria {% endtrans %}</div>
-                    <div class="sectionIdent">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
                         {{ form_start(ratingSelectionForm) }}
-                        <div class="errorMessage">{{ form_errors(ratingSelectionForm) }}</div>
-                        {{ form_widget(ratingSelectionForm.ratingCriteria) }}
+                        {{ form_row(ratingSelectionForm.ratingCriteria, {'attr' : {'class': 'form-control'} }) }}
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12">
-                <div class="form-group">
-                    {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        {{ form_row(ratingSelectionForm.customRatingName, {'attr' : {'class': 'form-control orange abstandoben breite130', 'placeholder': 'Your Criteria Name'} } ) }}
+                    </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
+                    </div>
+                </div>
+            </div>
+
             {{ form_end(ratingSelectionForm) }}
         {% else %}
             <div class="row">

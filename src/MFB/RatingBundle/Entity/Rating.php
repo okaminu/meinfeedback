@@ -24,9 +24,16 @@ class Rating
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=128, unique=true)
+     * @ORM\Column(name="name", type="string", length=128)
      */
     private $name;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_custom", type="boolean", options={"default" : 0})
+     */
+    private $isCustom = 0;
 
     /**
      * @var integer
@@ -107,5 +114,28 @@ class Rating
     public function getServiceTypeCriteria()
     {
         return $this->serviceTypeCriteria;
+    }
+
+    /**
+     * Set isCustom
+     *
+     * @param boolean $isCustom
+     * @return Rating
+     */
+    public function setIsCustom($isCustom)
+    {
+        $this->isCustom = $isCustom;
+    
+        return $this;
+    }
+
+    /**
+     * Get isCustom
+     *
+     * @return boolean 
+     */
+    public function getIsCustom()
+    {
+        return $this->isCustom;
     }
 }

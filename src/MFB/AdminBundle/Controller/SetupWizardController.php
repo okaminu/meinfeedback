@@ -7,6 +7,7 @@ use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
+use MFB\RatingBundle\RatingException;
 use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -146,7 +147,6 @@ class SetupWizardController extends Controller
 
     /**
      * @Route("/setup_show_criterias", name="mfb_admin_setup_show_criterias")
-     * @Template
      */
 
     public function showCriteriasFormAction()
@@ -157,13 +157,7 @@ class SetupWizardController extends Controller
         $channelCriteria = $channelRatingService->createNewChannelCriteria($channel);
         $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
 
-        return
-            array(
-                'ratingSelectionForm' => $form->createView(),
-                'channelRatingCriterias' => $channel->getRatingCriteria(),
-                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
-                'neededCriteriaCount' => $channelRatingService->missingRatingCriteriaCount($channel->getId())
-        );
+        return $this->showCriteriaSelectForm($form);
     }
 
     /**
@@ -178,8 +172,19 @@ class SetupWizardController extends Controller
         $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $channelRatingService->store($channelCriteria);
+        try {
+            if ($form->isValid()) {
+                if ($channelCriteria->getRatingCriteria() == null) {
+                    $rating = $this->get('mfb_rating.service')->createCustom($form->get('customRatingName')->getData());
+                    $this->get('mfb_rating.service')->store($rating);
+                    $channelCriteria->setRatingCriteria($rating);
+                }
+
+                $channelRatingService->store($channelCriteria);
+            }
+        } catch (RatingException $ex) {
+            $form->addError(new FormError($this->get('translator')->trans('Please insert rating criteria')));
+            return $this->showCriteriaSelectForm($form);
         }
 
         return $this->createRedirect('mfb_admin_setup_show_criterias');
@@ -376,6 +381,22 @@ class SetupWizardController extends Controller
         $customChoice = array_search('customInputOption', $choices);
         unset($choices[$customChoice]);
         return $choices;
+    }
+
+    private function showCriteriaSelectForm($form)
+    {
+        $channel = $this->getChannel();
+        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
+
+        return $this->render(
+            'MFBAdminBundle:SetupWizard:showCriteriasForm.html.twig',
+            array(
+                'ratingSelectionForm' => $form->createView(),
+                'channelRatingCriterias' => $channel->getRatingCriteria(),
+                'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
+                'neededCriteriaCount' => $channelRatingService->missingRatingCriteriaCount($channel->getId())
+            )
+        );
     }
 
 

@@ -29,7 +29,21 @@ class ChannelRatingSelectType extends AbstractType
                 array(
                     'class' => 'MFBRatingBundle:Rating',
                     'property' => 'name',
-                    'choices' => $this->unusedCriterias
+                    'choices' => $this->unusedCriterias,
+                    'label' => 'Select rating criteria',
+                    'empty_value' => '--- I will insert my own criteria name ---',
+                    'empty_data' => null,
+                    'data' => 'customRatingName',
+                    'required' => false
+                )
+            )
+            ->add(
+                'customRatingName',
+                'text',
+                array(
+                    'mapped' => false,
+                    'required' => false,
+                    'label' => 'Or insert a custom rating criteria name'
                 )
             )
             ->add('submit', 'submit', array('label' => 'Add'))

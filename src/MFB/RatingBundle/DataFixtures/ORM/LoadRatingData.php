@@ -39,6 +39,7 @@ class LoadRatingData extends AbstractFixture implements FixtureInterface, Ordere
     {
         $ratingEntity = new Rating();
         $ratingEntity->setName($ratingName);
+        $ratingEntity->setIsCustom(false);
         return $ratingEntity;
     }
 

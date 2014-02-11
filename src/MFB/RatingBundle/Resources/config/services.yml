@@ -1,9 +1,10 @@
 parameters:
+    mfb_rating.class: MFB\RatingBundle\Service\Rating
     mfb_rating.boundary:
       min: 1
       max: 5
 
 services:
-#    mfb_rating.example:
-#        class: %mfb_rating.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mfb_rating.service:
+        class: %mfb_rating.class%
+        arguments: ["@doctrine.orm.default_entity_manager"]
