@@ -202,4 +202,14 @@ class ServiceType
     {
         return $this->serviceTypeDefinition;
     }
+
+    public function getDefinitions()
+    {
+        $servicedDefinitions = $this->getServiceTypeDefinition();
+        $definitions = array();
+        foreach ($servicedDefinitions as $single) {
+            $definitions[$single->getServiceDefinition()->getName()] = $single->getServiceDefinition();
+        }
+        return $definitions;
+    }
 }

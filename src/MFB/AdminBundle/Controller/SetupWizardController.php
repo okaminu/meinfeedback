@@ -397,17 +397,15 @@ class SetupWizardController extends Controller
 
         $definitions = array();
         foreach ($serviceTypes as $type) {
-            $definitions = array_merge(
-                $definitions,
-                $this->get('mfb_service_type_definition.service')->findByServiceTypeId($type->getId())
-            );
+            $definitions = array_merge($definitions, $type->getServiceType()->getDefinitions());
         }
 
         foreach ($definitions as $definition) {
-            $cdf = $this->get('mfb_channel_definition.service')->createNew($channelId);
-            $cdf->setServiceDefinition($definition->getServiceDefinition());
-            $this->get('mfb_channel_definition.service')->store($cdf);
+            $channelDefinition = $this->get('mfb_channel_definition.service')->createNewCustom($channelId);
+            $channelDefinition->setServiceDefinition($definition);
+            $this->get('mfb_channel_definition.service')->store($channelDefinition);
         }
+
 
     }
 

@@ -35,12 +35,6 @@ class ChannelServiceDefinition
         return $channelDefinition;
     }
 
-    public function createNewWithDefinition($channelId, $definitionId)
-    {
-        $def = $this->createNew($channelId);
-        $def->setServiceDefinition($this->definitionService->findById($definitionId));
-    }
-
     public function store($channel)
     {
         try {
