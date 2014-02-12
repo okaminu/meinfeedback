@@ -35,6 +35,12 @@ class ChannelServiceDefinition
         return $channelDefinition;
     }
 
+    public function createNewWithDefinition($channelId, $definitionId)
+    {
+        $def = $this->createNew($channelId);
+        $def->setServiceDefinition($this->definitionService->findById($definitionId));
+    }
+
     public function store($channel)
     {
         try {
@@ -76,6 +82,14 @@ class ChannelServiceDefinition
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceDefinition')->findBy(
             array('channel' => $channelId)
         );
+    }
+
+    public function hasDefinitions($channelId)
+    {
+        if (count($this->findByChannelId($channelId)) > 0) {
+            return true;
+        }
+        return false;
     }
 
 }

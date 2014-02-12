@@ -112,15 +112,19 @@ class SetupWizardController extends Controller
     public function insertDefinitionsAction(Request $request)
     {
         $channelId = $this->getChannel()->getId();
-        $definitionService = $this->get('mfb_channel_definition.service');
+        $channelDefinition = $this->get('mfb_channel_definition.service');
 
-        $definition = $definitionService->createNewCustom($channelId);
+        if (!$channelDefinition->hasDefinitions($channelId)) {
+            $this->loadDefinitionsByServiceTypes($channelId);
+        }
+
+        $definition = $channelDefinition->createNewCustom($channelId);
         $form = $this->createForm(new ChannelServiceDefinitionType(), $definition);
 
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
-                $definitionService->store($definition);
+                $channelDefinition->store($definition);
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -385,6 +389,26 @@ class SetupWizardController extends Controller
         }
 
         $this->get('mfb_account_channel.rating_criteria.service')->store($channelCriteria);
+    }
+
+    private function loadDefinitionsByServiceTypes($channelId)
+    {
+        $serviceTypes = $this->get('mfb_account_channel.service_type.service')->findByChannelId($channelId);
+
+        $definitions = array();
+        foreach ($serviceTypes as $type) {
+            $definitions = array_merge(
+                $definitions,
+                $this->get('mfb_service_type_definition.service')->findByServiceTypeId($type->getId())
+            );
+        }
+
+        foreach ($definitions as $definition) {
+            $cdf = $this->get('mfb_channel_definition.service')->createNew($channelId);
+            $cdf->setServiceDefinition($definition->getServiceDefinition());
+            $this->get('mfb_channel_definition.service')->store($cdf);
+        }
+
     }
 
 

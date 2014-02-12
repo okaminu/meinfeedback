@@ -66,6 +66,7 @@ class ChannelServiceType
         $serviceProvider = $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceType')->findBy(
             array('channel' => $accountChannel)
         );
+
         return $serviceProvider;
     }
 
