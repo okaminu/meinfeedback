@@ -44,6 +44,15 @@ class ServiceType
      */
     private $channelServiceType;
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\OneToMany(targetEntity="MFB\ServiceBundle\Entity\ServiceTypeDefinition",
+     * mappedBy="serviceType", cascade={"persist"})
+     */
+    private $serviceTypeDefinition;
+
     /**
      * @var boolean
      *
@@ -159,5 +168,38 @@ class ServiceType
     public function getIsCustom()
     {
         return $this->isCustom;
+    }
+
+    /**
+     * Add serviceTypeDefinition
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceTypeDefinition $serviceTypeDefinition
+     * @return ServiceType
+     */
+    public function addServiceTypeDefinition(\MFB\ServiceBundle\Entity\ServiceTypeDefinition $serviceTypeDefinition)
+    {
+        $this->serviceTypeDefinition[] = $serviceTypeDefinition;
+    
+        return $this;
+    }
+
+    /**
+     * Remove serviceTypeDefinition
+     *
+     * @param \MFB\ServiceBundle\Entity\ServiceTypeDefinition $serviceTypeDefinition
+     */
+    public function removeServiceTypeDefinition(\MFB\ServiceBundle\Entity\ServiceTypeDefinition $serviceTypeDefinition)
+    {
+        $this->serviceTypeDefinition->removeElement($serviceTypeDefinition);
+    }
+
+    /**
+     * Get serviceTypeDefinition
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceTypeDefinition()
+    {
+        return $this->serviceTypeDefinition;
     }
 }

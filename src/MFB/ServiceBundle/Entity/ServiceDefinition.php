@@ -2,12 +2,13 @@
 
 namespace MFB\ServiceBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ServiceDefinition
  *
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="definition_per_channel", columns={"channel_id", "definition"})})
+ * @ORM\Table()
  * @ORM\Entity
  */
 class ServiceDefinition
@@ -24,19 +25,16 @@ class ServiceDefinition
     /**
      * @var string
      *
-     * @ORM\Column(name="definition", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $definition;
+    private $name;
 
     /**
-     * @var int
+     * @var boolean
      *
-     * @ORM\ManyToOne(targetEntity="MFB\ChannelBundle\Entity\AccountChannel",
-     * inversedBy="serviceDefinition",
-     * cascade={"persist"})
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     * @ORM\Column(name="is_custom", type="boolean", options={"default" : 0})
      */
-    private $channel;
+    private $isCustom = 0;
 
 
     /**
@@ -50,48 +48,48 @@ class ServiceDefinition
     }
 
     /**
-     * Set definition
+     * Set name
      *
-     * @param string $definition
-     * @return ChannelServiceDefinition
+     * @param string $name
+     * @return ServiceDefinition
      */
-    public function setDefinition($definition)
+    public function setName($name)
     {
-        $this->definition = $definition;
+        $this->name = $name;
     
         return $this;
     }
 
     /**
-     * Get definition
+     * Get name
      *
      * @return string 
      */
-    public function getDefinition()
+    public function getName()
     {
-        return $this->definition;
+        return $this->name;
     }
 
     /**
-     * Set channel
+     * Set isCustom
      *
-     * @param \MFB\ChannelBundle\Entity\AccountChannel $channel
-     * @return ChannelServiceDefinition
+     * @param boolean $isCustom
+     * @return ServiceDefinition
      */
-    public function setChannel(\MFB\ChannelBundle\Entity\AccountChannel $channel = null)
+    public function setIsCustom($isCustom)
     {
-        $this->channel = $channel;
+        $this->isCustom = $isCustom;
     
         return $this;
     }
 
     /**
-     * Get channel
+     * Get isCustom
      *
-     * @return \MFB\ChannelBundle\Entity\AccountChannel 
+     * @return boolean 
      */
-    public function getChannel()
+    public function getIsCustom()
     {
-        return $this->channel;
+        return $this->isCustom;
     }
 }
