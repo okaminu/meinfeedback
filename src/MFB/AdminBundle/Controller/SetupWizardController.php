@@ -114,7 +114,7 @@ class SetupWizardController extends Controller
         $definitionService = $this->get('mfb_service_definition.service');
 
         $definition = $definitionService->createNew($channelId);
-        $form = $this->createForm(new ServiceDefinitionType(), $definition);
+//        $form = $this->createForm(new ServiceDefinitionType(), $definition);
 
         $form->handleRequest($request);
         try {

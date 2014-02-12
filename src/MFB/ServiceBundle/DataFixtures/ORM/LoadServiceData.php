@@ -5,10 +5,12 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use MFB\RatingBundle\Entity\Rating;
 use MFB\ServiceBundle\Entity\Business;
+use MFB\ServiceBundle\Entity\ServiceDefinition;
 use MFB\ServiceBundle\Entity\ServiceType;
 use MFB\ServiceBundle\Entity\ServiceTypeCriteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use MFB\ServiceBundle\Entity\ServiceTypeDefinition;
 
 class LoadServiceData extends AbstractFixture implements FixtureInterface, OrderedFixtureInterface
 {
@@ -39,18 +41,29 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         )
     );
 
-    private $serviceTypeCriterias = array(
-        array('name' => 'Lawyers', 'criterias' => array('Competence', 'Skill', 'Communication', 'Knowledge')),
-        array('name' => 'Medical practitioner', 'criterias' => array('Knowledge', 'Skill', 'Availability')),
-        array('name' => 'Car Seller', 'criterias' => array('Qualtiy', 'Support', 'Communication', 'Price')),
-        array('name' => 'Grocery', 'criterias' => array('Qualtiy', 'Price', 'Speed')),
-        array('name' => 'Hardware', 'criterias' => array('Quality', 'Support', 'Delivery', 'Service')),
-        array('name' => 'Bicycles', 'criterias' => array('Speed', 'Price', 'Service', 'Support')),
-        array('name' => 'Restaurant', 'criterias' => array('Speed', 'Service', 'Enviroment', 'Price')),
-        array('name' => 'Hotel', 'criterias' => array('Speed', 'Service', 'Enviroment', 'Price')),
-        array('name' => 'Fashion', 'criterias' => array('Service', 'Price', 'Quality', 'Support')),
-        array('name' => 'Clothes', 'criterias' => array('Service', 'Price', 'Quality', 'Support')),
-        array('name' => 'Software', 'criterias' => array('Service', 'Price', 'Quality', 'Support', 'Speed'))
+    private $serviceTypeCriteriasDefinitions = array(
+        array('name' => 'Lawyers', 'criterias' => array('Competence', 'Skill', 'Communication', 'Knowledge'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Medical practitioner', 'criterias' => array('Knowledge', 'Skill', 'Availability'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Car Seller', 'criterias' => array('Qualtiy', 'Support', 'Communication', 'Price'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Grocery', 'criterias' => array('Qualtiy', 'Price', 'Speed'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Hardware', 'criterias' => array('Quality', 'Support', 'Delivery', 'Service'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Bicycles', 'criterias' => array('Speed', 'Price', 'Service', 'Support'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Restaurant', 'criterias' => array('Speed', 'Service', 'Enviroment', 'Price'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Hotel', 'criterias' => array('Speed', 'Service', 'Enviroment', 'Price'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Fashion', 'criterias' => array('Service', 'Price', 'Quality', 'Support'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Clothes', 'criterias' => array('Service', 'Price', 'Quality', 'Support'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3')),
+        array('name' => 'Software', 'criterias' => array('Service', 'Price', 'Quality', 'Support', 'Speed'),
+            'definition' => array('Test definition 1', 'Test definition 2', 'Test definition 3'))
     );
 
     public function getOrder()
@@ -61,7 +74,7 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
     public function load(ObjectManager $manager)
     {
         $this->loadServiceBusiness($manager);
-        $this->loadServiceTypeCriterias($manager);
+        $this->loadServiceTypeCriteriasDefinitions($manager);
     }
 
     private function loadServiceBusiness(ObjectManager $manager)
@@ -74,13 +87,14 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         $manager->flush();
     }
 
-    private function loadServiceTypeCriterias(ObjectManager $manager)
+    private function loadServiceTypeCriteriasDefinitions(ObjectManager $manager)
     {
-        foreach ($this->serviceTypeCriterias as $type) {
+        foreach ($this->serviceTypeCriteriasDefinitions as $type) {
             $serviceType = $manager->getRepository('MFBServiceBundle:ServiceType')->findOneBy(
                 array('name' => $type['name'])
             );
             $this->linkCriteriasToServiceType($manager, $type, $serviceType);
+            $this->linkDefinitionsToServiceType($manager, $type, $serviceType);
         }
         $manager->flush();
     }
@@ -100,12 +114,28 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
             try {
                 $rating = $this->getReference("rating-{$criteria}");
             } catch (\Exception $ex) {
-                $rating = $this->createNewRatingEntity($manager, $criteria);
+                $rating = $this->createNewRatingEntity($criteria);
                 $manager->persist($rating);
                 $this->addReference("rating-{$criteria}", $rating);
             }
             $serviceCriteria = $this->createServiceCriteriaEntity($serviceType, $rating);
             $manager->persist($serviceCriteria);
+        }
+        $manager->flush();
+    }
+
+    private function linkDefinitionsToServiceType(ObjectManager $manager, $type, $serviceType)
+    {
+        foreach ($type['definition'] as $definitionName) {
+
+            $definition = $this->getDefinition($manager, $definitionName);
+            if ($definition == null) {
+                $definition = $this->createNewDefinitionEntity($definitionName);
+                $manager->persist($definition);
+            }
+
+            $service = $this->createServiceTypeDefinitionEntity($serviceType, $definition);
+            $manager->persist($service);
         }
         $manager->flush();
     }
@@ -135,12 +165,35 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         return $rating;
     }
 
+    private function createNewDefinitionEntity($definition)
+    {
+        $definitionEntity = new ServiceDefinition();
+        $definitionEntity->setName($definition);
+        $definitionEntity->setIsCustom(false);
+        return $definitionEntity;
+    }
+
     private function createServiceCriteriaEntity($serviceType, $rating)
     {
         $serviceCriteria = new ServiceTypeCriteria();
         $serviceCriteria->setServiceType($serviceType);
         $serviceCriteria->setRating($rating);
         return $serviceCriteria;
+    }
+
+    private function createServiceTypeDefinitionEntity($serviceType, $defitinion)
+    {
+        $service = new ServiceTypeDefinition();
+        $service->setServiceType($serviceType);
+        $service->setServiceDefinition($defitinion);
+        return $service;
+    }
+
+    private function getDefinition($manager, $defName)
+    {
+         return $manager->getRepository("MFBServiceBundle:ServiceDefinition")->findOneBy(
+             array('name' => $defName)
+         );
     }
 
 
