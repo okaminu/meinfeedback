@@ -7,6 +7,7 @@ use MFB\AdminBundle\Form\MultipleSelectType;
 use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
+use MFB\ChannelBundle\Form\ChannelServiceDefinitionType;
 use MFB\RatingBundle\RatingException;
 use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -111,10 +112,10 @@ class SetupWizardController extends Controller
     public function insertDefinitionsAction(Request $request)
     {
         $channelId = $this->getChannel()->getId();
-        $definitionService = $this->get('mfb_service_definition.service');
+        $definitionService = $this->get('mfb_channel_definition.service');
 
-        $definition = $definitionService->createNew($channelId);
-//        $form = $this->createForm(new ServiceDefinitionType(), $definition);
+        $definition = $definitionService->createNewCustom($channelId);
+        $form = $this->createForm(new ChannelServiceDefinitionType(), $definition);
 
         $form->handleRequest($request);
         try {
@@ -124,7 +125,7 @@ class SetupWizardController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return array('form' => $form->createView(),'definitionList' => $definitionService->findByChannelId($channelId));
+        return array('form' => $form->createView(),'definitionList' => array());
     }
 
     /**

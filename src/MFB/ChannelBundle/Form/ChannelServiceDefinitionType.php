@@ -1,12 +1,14 @@
 <?php
 
-namespace MFB\ServiceBundle\Form;
+namespace MFB\ChannelBundle\Form;
 
+use MFB\RatingBundle\Form\RatingType;
+use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ServiceDefinitionType extends AbstractType
+class ChannelServiceDefinitionType extends AbstractType
 {
 
      /**
@@ -17,12 +19,17 @@ class ServiceDefinitionType extends AbstractType
     {
         $builder
             ->add(
-                'name',
-                'text',
-                array('data' => '')
+                'ServiceDefinition',
+                new ServiceDefinitionType()
+            )
+            ->add(
+                'submit',
+                'submit',
+                array('label' => "Add")
             )
         ;
     }
+
 
     /**
      * @param OptionsResolverInterface $resolver
@@ -30,8 +37,8 @@ class ServiceDefinitionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-                'data_class' => 'MFB\ServiceBundle\Entity\ServiceDefinition'
-            ));
+            'data_class' => 'MFB\ChannelBundle\Entity\ChannelServiceDefinition'
+        ));
     }
 
     /**
@@ -39,6 +46,6 @@ class ServiceDefinitionType extends AbstractType
      */
     public function getName()
     {
-        return 'mfb_servicebundle_servicedefinition';
+        return 'mfb_channelbundle_channelservicedefinition';
     }
 }

@@ -24,7 +24,7 @@ class ChannelServiceDefinition
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceDefinition")
+     * @ORM\ManyToOne(targetEntity="MFB\ServiceBundle\Entity\ServiceDefinition", cascade={"persist"})
      * @ORM\JoinColumn(name="service_definition_id", referencedColumnName="id")
      */
     private $serviceDefinition;

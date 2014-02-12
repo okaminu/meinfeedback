@@ -3,6 +3,7 @@ namespace MFB\AdminBundle\Service;
 
 use MFB\ChannelBundle\Service\Channel;
 use MFB\ChannelBundle\Service\ChannelRatingCriteria as CriteriaService;
+use MFB\ChannelBundle\Service\ChannelServiceDefinition;
 use MFB\ChannelBundle\Service\ChannelServiceType;
 use MFB\ServiceBundle\Service\ServiceDefinition;
 use MFB\ServiceBundle\Service\ServiceProvider;
@@ -24,7 +25,7 @@ class FormSetup
         CriteriaService $ratingCriteriaService,
         ChannelServiceType $serviceType,
         Channel $channelService,
-        ServiceDefinition $definitionService,
+        ChannelServiceDefinition $definitionService,
         ServiceProvider $providerService
     ) {
         $this->ratingCriteriaService = $ratingCriteriaService;
