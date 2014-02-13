@@ -10,19 +10,13 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 class LoadRatingData extends AbstractFixture implements FixtureInterface, OrderedFixtureInterface
 {
     private $ratingNames = array(
-        'Availability',
-        'Communication',
-        'Competence',
-        'Delivery',
-        'Enviroment',
-        'Knowledge',
-        'Price',
-        'Quality',
-        'Qualtiy',
-        'Service',
-        'Skill',
-        'Speed',
-        'Support'
+        'Zuverlässigkeit',
+        'Preis/Leistung',
+        'Pünktlichkeit/Schnelligkeit',
+        'Qualität',
+        'Freundlichkeit',
+        'Kompetenz',
+        'Auswahl/Sortiment'
     );
 
     public function load(ObjectManager $manager)
