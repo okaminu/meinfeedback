@@ -55,7 +55,7 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
             'name' => 'Hersteller & Produzenten',
             'multiple' => 1,
             'service_types' =>
-                array()
+                array('Hersteller & Produzenten')
         ),
         array(
             'name' => 'Restaurants & Hotels',
@@ -486,6 +486,10 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
             'definition' => array('Zimmerqualität', 'Schall-Isolierung', 'Service', 'Frühstück', 'Freundlichkeit',
                 'Zimmerservice', 'Zusatzangebot', 'Sauna'),
             'criterias' => array('Preis/Leistung', 'Qualität', 'Freundlichkeit', 'Kompetenz')
+        ),
+        array(
+            'name' => 'Hersteller & Produzenten',
+            'criterias' => array('Zuverlässigkeit', 'Preis/Leistung', 'Qualität')
         ),
     );
 
