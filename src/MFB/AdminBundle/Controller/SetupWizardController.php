@@ -129,22 +129,23 @@ class SetupWizardController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return array('form' => $form->createView(),'definitionList' => array());
+        return array(
+            'form' => $form->createView(),
+            'channelDefinitionList' => $channelDefinition->findByChannelId($channelId)
+        );
     }
 
     /**
      * @Route("/setup_remove_definitions/{definitionId}", name="mfb_admin_setup_remove_definitions",
      * requirements={"definitionId" = "\d+"})
-     * @Method({"POST"})
-     * @Template
      */
 
     public function removeDefinitionsAction($definitionId)
     {
         $channel = $this->getChannel();
 
-        $definitionService = $this->get('mfb_service_definition.service');
-        $definition = $definitionService->findByChannelIdAndId($channel->getId(), $definitionId);
+        $definitionService = $this->get('mfb_channel_definition.service');
+        $definition = $definitionService->findByChannelAndDefinition($channel->getId(), $definitionId);
         $definitionService->remove($definition);
 
         return $this->createRedirect('mfb_admin_setup_insert_definitions');
@@ -405,8 +406,6 @@ class SetupWizardController extends Controller
             $channelDefinition->setServiceDefinition($definition);
             $this->get('mfb_channel_definition.service')->store($channelDefinition);
         }
-
-
     }
 
 

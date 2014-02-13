@@ -59,6 +59,12 @@ class ChannelServiceDefinition
         }
     }
 
+    private function removeEntity($entity)
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush($entity);
+    }
+
     public function removeList($definitionList)
     {
         try {
@@ -75,6 +81,13 @@ class ChannelServiceDefinition
     {
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceDefinition')->findBy(
             array('channel' => $channelId)
+        );
+    }
+
+    public function findByChannelAndDefinition($channelId, $definitionId)
+    {
+        return $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceDefinition')->findOneBy(
+            array('serviceDefinition' => $definitionId, 'channel' => $channelId)
         );
     }
 
