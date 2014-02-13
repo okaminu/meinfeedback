@@ -53,7 +53,13 @@ class ChannelServiceDefinition
     public function remove($definition)
     {
         try {
+            $serviceDefinition = $definition->getServiceDefinition();
+
             $this->removeEntity($definition);
+
+            if ($serviceDefinition->getIsCustom()) {
+                $this->removeEntity($serviceDefinition);
+            }
         } catch (DBALException $ex) {
             throw new ChannelException('Cannot remove definition');
         }
