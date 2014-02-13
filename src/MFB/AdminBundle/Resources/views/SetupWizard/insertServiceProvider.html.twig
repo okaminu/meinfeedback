@@ -1,9 +1,9 @@
-{% extends 'MFBAdminBundle::base.html.twig' %}
+{% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
 {% form_theme serviceProviderForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 
 {% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
 
-{% block content %}
+{% block formContent %}
     <div class="formular container modal-spacing">
         <h3 class="text-center form-header">
             {% trans %} Add Service Provider {% endtrans %}
