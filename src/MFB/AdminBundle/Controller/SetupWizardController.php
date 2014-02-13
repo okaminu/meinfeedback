@@ -112,26 +112,24 @@ class SetupWizardController extends Controller
     public function insertDefinitionsAction(Request $request)
     {
         $channelId = $this->getChannel()->getId();
-        $channelDefinition = $this->get('mfb_channel_definition.service');
+        $channelDefinitionService = $this->get('mfb_channel_definition.service');
 
-        if (!$channelDefinition->hasDefinitions($channelId)) {
-            $this->loadDefinitionsByServiceTypes($channelId);
-        }
+        $channelDefinition = $channelDefinitionService->createNewCustom($channelId);
 
-        $definition = $channelDefinition->createNewCustom($channelId);
-        $form = $this->createForm(new ChannelServiceDefinitionType(), $definition);
+        $defChoices = $this->getDefinitionsBySelectedServiceTypes($channelId);
+        $form = $this->createForm(new ChannelServiceDefinitionType($defChoices), $channelDefinition);
 
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
-                $channelDefinition->store($definition);
+                $this->storeChannelDefinitionFromSubmit($channelDefinition, $form->get('customDefName')->getData());
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
         return array(
             'form' => $form->createView(),
-            'channelDefinitionList' => $channelDefinition->findByChannelId($channelId)
+            'channelDefinitionList' => $channelDefinitionService->findByChannelId($channelId)
         );
     }
 
@@ -392,7 +390,7 @@ class SetupWizardController extends Controller
         $this->get('mfb_account_channel.rating_criteria.service')->store($channelCriteria);
     }
 
-    private function loadDefinitionsByServiceTypes($channelId)
+    private function getDefinitionsBySelectedServiceTypes($channelId)
     {
         $serviceTypes = $this->get('mfb_account_channel.service_type.service')->findByChannelId($channelId);
 
@@ -400,13 +398,18 @@ class SetupWizardController extends Controller
         foreach ($serviceTypes as $type) {
             $definitions = array_merge($definitions, $type->getServiceType()->getDefinitions());
         }
-
-        foreach ($definitions as $definition) {
-            $channelDefinition = $this->get('mfb_channel_definition.service')->createNewCustom($channelId);
-            $channelDefinition->setServiceDefinition($definition);
-            $this->get('mfb_channel_definition.service')->store($channelDefinition);
-        }
+        return $definitions;
     }
 
+    public function storeChannelDefinitionFromSubmit($channelDefinition, $customName)
+    {
+        if ($channelDefinition->getServiceDefinition() == null) {
+            $customDefinition = $this->get('mfb_service_definition.service')->createCustom($customName);
+            $this->get('mfb_service_definition.service')->store($customDefinition);
+            $channelDefinition->setServiceDefinition($customDefinition);
+        }
+
+        $this->get('mfb_channel_definition.service')->store($channelDefinition);
+    }
 
 }

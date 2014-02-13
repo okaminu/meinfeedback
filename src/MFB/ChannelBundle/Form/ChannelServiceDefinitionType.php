@@ -11,6 +11,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ChannelServiceDefinitionType extends AbstractType
 {
 
+    private $definitionChoices;
+
+    public function __construct($choices)
+    {
+        $this->definitionChoices = $choices;
+    }
      /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,8 +25,27 @@ class ChannelServiceDefinitionType extends AbstractType
     {
         $builder
             ->add(
-                'ServiceDefinition',
-                new ServiceDefinitionType()
+                'serviceDefinition',
+                'entity',
+                array(
+                    'class' => 'MFBServiceBundle:ServiceDefinition',
+                    'property' => 'name',
+                    'choices' => $this->definitionChoices,
+                    'label' => 'Select services',
+                    'empty_value' => '--- I will insert my own service name ---',
+                    'empty_data' => null,
+                    'data' => 'customServiceDefName',
+                    'required' => false
+                )
+            )
+            ->add(
+                'customDefName',
+                'text',
+                array(
+                    'mapped' => false,
+                    'required' => false,
+                    'label' => 'Or insert a custom service name'
+                )
             )
             ->add(
                 'submit',

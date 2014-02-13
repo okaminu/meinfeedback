@@ -4,6 +4,7 @@ parameters:
   mfb_service_provider.class: MFB\ServiceBundle\Service\ServiceProvider
   mfb_service_business.class: MFB\ServiceBundle\Service\Business
   mfb_service_type_definition.class: MFB\ServiceBundle\Service\ServiceTypeDefinition
+  mfb_service_definition.class: MFB\ServiceBundle\Service\ServiceDefinition
 
   mfb_service_provider.prefix:
     1: Mr
@@ -29,5 +30,11 @@ services:
   mfb_service_type_definition.service:
     class: %mfb_service_type_definition.class%
     arguments: ["@doctrine.orm.default_entity_manager", @mfb_service_type.service]
+
+  mfb_service_definition.service:
+    class: %mfb_service_definition.class%
+    arguments: ["@doctrine.orm.default_entity_manager"]
+
+
 
 

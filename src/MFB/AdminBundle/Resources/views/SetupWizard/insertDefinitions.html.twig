@@ -31,21 +31,30 @@
     </div>
 
     <div class="row">
-        <div class="row">
-            <div class="col-xs-2">
-                <div class="form-group">
-                    {{ form_widget(form.submit, {'attr': {'class': 'btn inline-submit form-control'} }) }}
-                </div>
-            </div>
-
-            <div class="col-xs-9">
-                {{ form_widget(form.ServiceDefinition.name, {'attr': {'class': 'form-control', 'placeholder': 'Write service definition', 'value':''} }) }}
+        <div class="col-xs-12">
+            <div class="form-group">
+                {{ form_row(form.serviceDefinition, {'attr' : {'class': 'form-control'} }) }}
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-xs-offset-6">
-                <a class="btn" href="{{ path('mfb_admin_setup_select_criterias') }}">{% trans %}Continue{% endtrans %}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-9">
+            <div class="form-group">
+                {{ form_row(form.customDefName, {'attr': {'class': 'form-control', 'placeholder': 'Write service definition', 'value':''} }) }}
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-left orange abstandoben breite130 addButton'} }) }}
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <a class="btn" href="{{ path('mfb_admin_setup_select_criterias') }}">{% trans %}Continue{% endtrans %}</a>
         </div>
     </div>
 
