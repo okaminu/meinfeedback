@@ -388,7 +388,6 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         ),
         array(
             'name' => 'Ernährungsberater & Diätzentren',
-            'definition' => array(''),
             'criterias' => array('Zuverlässigkeit', 'Preis/Leistung', 'Pünktlichkeit/Schnelligkeit', 'Qualität',
                 'Freundlichkeit', 'Kompetenz')
         ),
@@ -406,13 +405,11 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
         ),
         array(
             'name' => 'Logopäden',
-            'definition' => array(''),
             'criterias' => array('Zuverlässigkeit', 'Preis/Leistung', 'Pünktlichkeit/Schnelligkeit', 'Qualität',
                 'Freundlichkeit', 'Kompetenz')
         ),
         array(
             'name' => 'Medizinische Fusspflege',
-            'definition' => array(''),
             'criterias' => array('Zuverlässigkeit', 'Preis/Leistung', 'Pünktlichkeit/Schnelligkeit', 'Qualität',
                 'Freundlichkeit', 'Kompetenz')
         ),
@@ -552,18 +549,21 @@ class LoadServiceData extends AbstractFixture implements FixtureInterface, Order
 
     private function linkDefinitionsToServiceType(ObjectManager $manager, $type, $serviceType)
     {
-        foreach ($type['definition'] as $definitionName) {
+        if (isset($type['definition'])) {
+            foreach ($type['definition'] as $definitionName) {
 
-            $definition = $this->getDefinition($manager, $definitionName);
-            if ($definition == null) {
-                $definition = $this->createNewDefinitionEntity($definitionName);
-                $manager->persist($definition);
+                $definition = $this->getDefinition($manager, $definitionName);
+                if ($definition == null) {
+                    $definition = $this->createNewDefinitionEntity($definitionName);
+                    $manager->persist($definition);
+                }
+
+                $service = $this->createServiceTypeDefinitionEntity($serviceType, $definition);
+                $manager->persist($service);
             }
 
-            $service = $this->createServiceTypeDefinitionEntity($serviceType, $definition);
-            $manager->persist($service);
+            $manager->flush();
         }
-        $manager->flush();
     }
 
     private function createNewBusinessEntity($name, $multiple)
