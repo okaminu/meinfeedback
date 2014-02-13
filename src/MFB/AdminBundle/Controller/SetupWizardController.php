@@ -112,24 +112,22 @@ class SetupWizardController extends Controller
     public function insertDefinitionsAction(Request $request)
     {
         $channelId = $this->getChannel()->getId();
-        $channelDefinitionService = $this->get('mfb_channel_definition.service');
 
-        $channelDefinition = $channelDefinitionService->createNewCustom($channelId);
+        $channelDefinition = $this->get('mfb_channel_definition.service')->createNewCustom($channelId);
 
-        $defChoices = $this->getDefinitionsBySelectedServiceTypes($channelId);
-        $form = $this->createForm(new ChannelServiceDefinitionType($defChoices), $channelDefinition);
-
+        $form = $this->getChannelDefinitionForm($channelId, $channelDefinition);
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
                 $this->storeChannelDefinitionFromSubmit($channelDefinition, $form->get('customDefName')->getData());
+                $form = $this->getChannelDefinitionForm($channelId, $channelDefinition);
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
         return array(
             'form' => $form->createView(),
-            'channelDefinitionList' => $channelDefinitionService->findByChannelId($channelId)
+            'channelDefinitionList' => $this->get('mfb_channel_definition.service')->findByChannelId($channelId)
         );
     }
 
@@ -410,6 +408,13 @@ class SetupWizardController extends Controller
         }
 
         $this->get('mfb_channel_definition.service')->store($channelDefinition);
+    }
+
+    public function getChannelDefinitionForm($channelId, $channelDefinition)
+    {
+        $defChoices = $this->getDefinitionsBySelectedServiceTypes($channelId);
+        $form = $this->createForm(new ChannelServiceDefinitionType($defChoices), $channelDefinition);
+        return $form;
     }
 
 }
