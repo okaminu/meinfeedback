@@ -123,7 +123,7 @@ class SetupWizardController extends Controller
                 $form = $this->getChannelDefinitionForm($channelId, $channelDefinition);
             }
         } catch (ServiceException $ex) {
-            $form->addError(new FormError($ex->getMessage()));
+            $form->addError(new FormError($this->get('translator')->trans('Please insert service definition')));
         }
         return array(
             'form' => $form->createView(),
@@ -388,16 +388,6 @@ class SetupWizardController extends Controller
         $this->get('mfb_account_channel.rating_criteria.service')->store($channelCriteria);
     }
 
-    private function getDefinitionsBySelectedServiceTypes($channelId)
-    {
-        $serviceTypes = $this->get('mfb_account_channel.service_type.service')->findByChannelId($channelId);
-
-        $definitions = array();
-        foreach ($serviceTypes as $type) {
-            $definitions = array_merge($definitions, $type->getServiceType()->getDefinitions());
-        }
-        return $definitions;
-    }
 
     public function storeChannelDefinitionFromSubmit($channelDefinition, $customName)
     {
@@ -412,7 +402,9 @@ class SetupWizardController extends Controller
 
     public function getChannelDefinitionForm($channelId, $channelDefinition)
     {
-        $defChoices = $this->getDefinitionsBySelectedServiceTypes($channelId);
+        $defChoices = $this->get('mfb_service_type_definition.service')
+            ->getDefinitionsByChannelServiceTypes($channelId);
+
         $form = $this->createForm(new ChannelServiceDefinitionType($defChoices), $channelDefinition);
         return $form;
     }

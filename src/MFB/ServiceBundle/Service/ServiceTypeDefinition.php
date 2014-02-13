@@ -12,11 +12,13 @@ class ServiceTypeDefinition
 {
     private $entityManager;
     private $serviceType;
+    private $channelService;
     
-    public function __construct($em, $serviceType)
+    public function __construct($em, $serviceType, $channelService)
     {
         $this->entityManager = $em;
         $this->serviceType = $serviceType;
+        $this->channelService = $channelService;
     }
 
     public function findByServiceTypeId($serviceTypeId)
@@ -27,5 +29,16 @@ class ServiceTypeDefinition
             array('serviceType' => $serviceTypeEntity)
         );
         return $definition;
+    }
+
+    public function getDefinitionsByChannelServiceTypes($channelId)
+    {
+        $serviceTypes = $this->channelService->findByChannelId($channelId);
+
+        $definitions = array();
+        foreach ($serviceTypes as $type) {
+            $definitions = array_merge($definitions, $type->getServiceType()->getDefinitions());
+        }
+        return $definitions;
     }
 }
