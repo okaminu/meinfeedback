@@ -92,4 +92,10 @@ class ServiceDefinition
     {
         return $this->isCustom;
     }
+
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
+
 }

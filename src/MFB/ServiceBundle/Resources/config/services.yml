@@ -29,7 +29,7 @@ services:
 
   mfb_service_type_definition.service:
     class: %mfb_service_type_definition.class%
-    arguments: ["@doctrine.orm.default_entity_manager", @mfb_service_type.service, @mfb_account_channel.service_type.service]
+    arguments: ["@doctrine.orm.default_entity_manager", @mfb_service_type.service]
 
   mfb_service_definition.service:
     class: %mfb_service_definition.class%

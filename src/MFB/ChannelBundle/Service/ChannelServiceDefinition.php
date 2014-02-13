@@ -84,6 +84,18 @@ class ChannelServiceDefinition
         );
     }
 
+    public function findDefinitionIdsByChannelId($channelId)
+    {
+        $channelDefs = $this->findByChannelId($channelId);
+
+        $definitionsIds = array();
+        foreach ($channelDefs as $definition) {
+            $definitionsIds[] = $definition->getServiceDefinition()->getId();
+        }
+        return $definitionsIds;
+
+    }
+
     public function findByChannelAndDefinition($channelId, $definitionId)
     {
         return $this->entityManager->getRepository('MFBChannelBundle:ChannelServiceDefinition')->findOneBy(

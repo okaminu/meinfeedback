@@ -402,11 +402,38 @@ class SetupWizardController extends Controller
 
     public function getChannelDefinitionForm($channelId, $channelDefinition)
     {
-        $defChoices = $this->get('mfb_service_type_definition.service')
-            ->getDefinitionsByChannelServiceTypes($channelId);
+        $defChoices = $this->getUnusedChannelDefinitions($channelId);
 
         $form = $this->createForm(new ChannelServiceDefinitionType($defChoices), $channelDefinition);
         return $form;
+    }
+
+    private function getUnusedChannelDefinitions($channelId)
+    {
+        $selectedDefinitionsIds = $this->get('mfb_channel_definition.service')
+            ->findDefinitionIdsByChannelId($channelId);
+        $serviceTypes = $this->get('mfb_account_channel.service_type.service')->findByChannelId($channelId);
+
+        $definitions = array();
+        foreach ($serviceTypes as $type) {
+            $additionalDefinitions = $this->filterUnselectedDefinition(
+                $type->getServiceType()->getDefinitions(),
+                $selectedDefinitionsIds
+            );
+            $definitions = array_merge($definitions, $additionalDefinitions);
+        }
+        return $definitions;
+    }
+
+    private function filterUnselectedDefinition($serviceDefs, $selectedDefinitionsIds)
+    {
+        $definitions = array();
+        foreach ($serviceDefs as $serviceDef) {
+            if (!in_array($serviceDef->getId(), $selectedDefinitionsIds)) {
+                $definitions[$serviceDef->getName()] = $serviceDef;
+            }
+        }
+        return $definitions;
     }
 
 }
