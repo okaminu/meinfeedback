@@ -2,7 +2,6 @@
 
 namespace MFB\AdminBundle\Controller;
 
-
 use MFB\ChannelBundle\ChannelException;
 use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\ChannelBundle\Form\AccountChannelType;
