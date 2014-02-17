@@ -5,9 +5,16 @@
             <trans-unit id="1">
                 <source>Your.customers.love.your.products</source>
                 <target>
-                <![CDATA[Ihre Kunden lieben Ihre Produkte. Und Ihren Service.<br/>
+                <![CDATA[
+                Ihre Kunden lieben Ihre Produkte. Und Ihren Service.<br/>
                 Zeigen Sie es - mit Mein<span>Feedback</span>
                 ]]>
+                </target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>how.meinfeedback.works</source>
+                <target>
+                <![CDATA[So funktioniert Mein<span>Feedback</span>]]>
                 </target>
             </trans-unit>
         </body>

@@ -1,12 +1,11 @@
 {% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 
 {% block title %}Setup wizard{% endblock %}
 
 {% block formContent %}
 
 <div class="formular container modal-spacing">
-    <h3 class="text-center form-header">{% trans %} Select Service {% endtrans %}</h3>
+    <h3 class="text-center form-header">{% trans %} Select Business {% endtrans %}</h3>
 
     {{ form_start(form) }}
 
@@ -23,7 +22,7 @@
                     </div>
                     <div class="float_left">
                         {% if type.vars.value == 'customInputOption' %}
-                            {{ form_widget(form.customInputText, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'Custom Service Name'} }) }}
+                            {{ form_widget(form.customInputText, {'attr': {'class': 'col-xs-12 form-control', 'placeholder' : 'Business Name'} }) }}
                         {% endif %}
                     </div>
                 </div>

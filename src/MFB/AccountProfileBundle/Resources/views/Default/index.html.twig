@@ -21,23 +21,23 @@
             </div>
 
         {% if channel.getName %}
-            <div>Company name: {{ channel.getName }}</div>
+            <div>{% trans %} Company name {% endtrans %}: {{ channel.getName }}</div>
         {% endif %}
 
             {% if channel.getHomepageUrl %}
-            <div>Homepage: <a href="{{ channel.getHomepageUrl }}">{{ channel.getHomepageUrl }}</a></div>
+            <div>{% trans %} Homepage {% endtrans %}: <a href="{{ channel.getHomepageUrl }}">{{ channel.getHomepageUrl }}</a></div>
         {% endif %}
 
             {% if channelAddress %}
-            <div>Address: {{ channelAddress }}</div>
+            <div>{% trans %} Address {% endtrans %}: {{ channelAddress }}</div>
         {% endif %}
 
         {% if channel.getCountry.getName %}
-            <div>Country: {{ channel.getCountry.getName }}</div>
+            <div>{% trans %} Country {% endtrans %}: {{ channel.getCountry.getName }}</div>
         {% endif %}
 
         {% if channel.getPhoneNumber %}
-            <div style="">Phone number: {{ channel.getPhoneNumber }}</div>
+            <div style="">{% trans %} Phone number {% endtrans %}: {{ channel.getPhoneNumber }}</div>
         {% endif %}
 
 
@@ -47,7 +47,7 @@
         <div class="stars_rating channel-ratings not-nested">
             {% for ratingCriteria in channelRatingSummaryList %}
                 <div class="row">
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <div class="{% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
                             {{ ratingCriteria.getName }}
                         </div>
@@ -64,7 +64,7 @@
             {% endfor %}
         </div>
 
-        <div class="feedback-count fs17">Total feedbacks: {{ ratingCount }}</div>
+        <div class="feedback-count fs17">{% trans %} Total feedbacks {% endtrans %}: {{ ratingCount }}</div>
 
         <div class="feedbackDisplayForm individual-feedback">
             {% for feedbackSummaryItem in feedbackSummaryPage.getItems %}

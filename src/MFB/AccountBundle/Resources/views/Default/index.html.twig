@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="formular container modal-spacing">
-        <h3 class="text-center form-header">Kunden Login</h3>
+        <h3 class="text-center form-header">{% trans %} Client Login {% endtrans %}</h3>
 
         {% if error %}
             <div class="alert alert-danger">
@@ -30,10 +30,10 @@
             </div>
             <div class="form-group">
                 <div class="col-xs-12 text-center">
-                    <input id="sendOut" class="btn btn-left orange abstandoben breite180 width100" value="Anmelden" type="submit">
+                    <input id="sendOut" class="btn btn-left orange abstandoben breite180 width100" value="{% trans %} Submit {% endtrans %}" type="submit">
                 </div>
             </div>
         </form>
-        <p class="forget-password text-center form-endnote">Sie haben Ihr Passwort vergessen? Klicken Sie <a href="{{ path("mfb_account_reset_request") }}" title="Passwort vergessen" class="login_sublnk fright golden-link">hier</a> um ein neues anzufordern.</p>
+        <p class="forget-password text-center form-endnote">{% trans with {"%resetPasswordLink%": path("mfb_account_reset_request") } %} forgot.password.click.here {% endtrans %}</p>
     </div>
 {% endblock %}

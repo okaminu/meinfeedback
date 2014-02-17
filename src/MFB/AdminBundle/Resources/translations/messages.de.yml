@@ -24,6 +24,9 @@ Berlin: 	Berlinstraße 31,  10090 Berlin
 Service Date: Kaufdatum/Tag der Leistungserbringung
 Service Desc: Produkt/Dienstleistung
 Email template: Email Schablone
+State: Stadt
+Street: Straße
+Telephone: Telefon
 
 Anonymous: Feedback anonymisieren
 Customer id reference: Kunden ID
@@ -48,4 +51,6 @@ Service Providers: Team Members
 Add Service Provider: Add Team Member
 Please insert rating criteria: Please insert rating criteria name or select it from drop down list
 Please insert service definition: Please insert service name or select it from drop down list
+Your Feedbacks: aktuelle Feedbacks
+
 

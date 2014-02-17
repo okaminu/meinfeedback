@@ -13,12 +13,12 @@
 {% block content %}
 
     <div class="container">
-    <h3 class="form-header mb10">{% trans %} aktuelle Feedbacks {% endtrans %}</h3>
+    <h3 class="form-header mb10">{% trans %} Your Feedbacks {% endtrans %}</h3>
 
     <div class="stars_rating channel-ratings not-nested">
         {% for ratingCriteria in channelRatingSummaryList %}
             <div class="row">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <div class="{% if ratingCriteria.getName == 'Overall' %} overall {% endif %}">
                         {{ ratingCriteria.getName }}
                     </div>
@@ -34,11 +34,11 @@
             </div>
         {% endfor %}
     </div>
-    <div class="feedback-count fs17">Total active feedbacks: {{ ratingCount }}</div>
+    <div class="feedback-count fs17">{% trans %} Total active feedbacks {% endtrans %} : {{ ratingCount }}</div>
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">
-            <strong>{% trans %} Success! {% endtrans %}</strong>
+            <strong>{% trans %} Success {% endtrans %}!</strong>
             {{ flashMessage }}
             <a href="#" class="close" data-dismiss="alert">&times;</a>
         </div>
@@ -54,7 +54,7 @@
                     {% if (feedback.getCustomer.getFirstName) %}
                         {{ feedback.getCustomer.getFirstName }}
                     {% else %}
-                        {% trans %} Anonymous says: {% endtrans %}
+                        {% trans %} Anonymous says {% endtrans %} :
                     {% endif %}
                 </div>
 
@@ -125,7 +125,7 @@
         </ul>
     </form>
     {% else %}
-        {% trans %} No feedbacks yet. {% endtrans %}
+        {% trans %} No feedbacks yet {% endtrans %}
     {% endif %}
     </div>
 {% endblock %}

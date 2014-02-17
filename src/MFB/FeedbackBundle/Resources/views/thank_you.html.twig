@@ -8,7 +8,7 @@
         {%  if homepage %}
             <script>
                 var delay = {{ redirectTimeout }};
-                setTimeout(function(){ window.location = '{{ homepage }}';}, delay);
+                setTimeout(function(){ window.location = 'http://{{ homepage }}';}, delay);
             </script>
             <div class="alert alert-info text-center">
                 {% trans %} Your are being redirected {% endtrans %}

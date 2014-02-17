@@ -16,6 +16,14 @@
                     ]]>
                 </target>
             </trans-unit>
+            <trans-unit id="2">
+                <source>forgot.password.click.here</source>
+                <target>
+                <![CDATA[
+                    Sie haben Ihr Passwort vergessen? Klicken Sie <a href="%resetPasswordLink%" title="Passwort vergessen" class="login_sublnk fright golden-link">hier</a> um ein neues anzufordern
+                    ]]>
+                </target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

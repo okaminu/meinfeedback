@@ -1,5 +1,4 @@
 {% extends "MFBAccountBundle::base.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 {% form_theme form "MeinFeedbackHomeBundle:Form:form_label_mandatory.html.twig" %}
 {% import "MFBFeedbackBundle::feedbackMacros.html.twig" as stars %}
 
@@ -16,7 +15,7 @@
 
     <div class="container modal-spacing">
         <div class="text-center form-header">
-            Please leave feedback about {{ accountChannel.getName }}
+            {% trans %} Please leave feedback about {% endtrans %} {{ accountChannel.getName }}
         </div>
 
         {{ form_start(form, {'attr': {'class': 'form-horizontal'} } ) }}

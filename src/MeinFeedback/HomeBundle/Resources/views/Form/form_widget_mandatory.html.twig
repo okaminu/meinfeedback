@@ -1,4 +1,6 @@
-{% extends 'form_div_layout.html.twig' %}
+{% extends 'MeinFeedbackHomeBundle:Form:form_error.html.twig' %}
+
+{% block content %}
 {% import _self as mandatory %}
 
 {% block form_widget_compound%}
@@ -13,4 +15,5 @@
     {% if (required and (form.vars.block_prefixes.2 is defined) and (form.vars.block_prefixes.2 is not sameas('entity'))) %}
         <span class="mandatory">*</span>
     {% endif %}
+{% endblock %}
 {% endblock %}

@@ -19,7 +19,7 @@ services:
       class: MFB\AdminBundle\LocaleListener
       arguments:
           hostMap:
-              default: de
+              default: en
               miofeedback.it: it
               meinfeedback.net: de
       tags:

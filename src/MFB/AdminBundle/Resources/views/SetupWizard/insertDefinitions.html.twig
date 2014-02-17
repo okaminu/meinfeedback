@@ -1,12 +1,12 @@
 {% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+
 
 {% block title %}Setup wizard{% endblock %}
 
 {% block formContent %}
 
 <div class="formular container modal-spacing">
-    <h3 class="text-center form-header">{% trans %} Insert service definitions {% endtrans %}</h3>
+    <h3 class="text-center form-header">{% trans %} Select Services {% endtrans %}</h3>
 
     {{ form_start(form) }}
 
@@ -41,7 +41,7 @@
     <div class="row">
         <div class="col-xs-9">
             <div class="form-group">
-                {{ form_row(form.customDefName, {'attr': {'class': 'form-control', 'placeholder': 'Write service definition', 'value':''} }) }}
+                {{ form_row(form.customDefName, {'attr': {'class': 'form-control', 'placeholder': 'Write service name', 'value':''} }) }}
             </div>
         </div>
     </div>

@@ -191,7 +191,7 @@ class SetupWizardController extends Controller
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-        return array('serviceProviderForm' => $form->createView(), 'addedTeamMemberName' => $addedMemberName);
+        return array('form' => $form->createView(), 'addedTeamMemberName' => $addedMemberName);
     }
 
     /**
@@ -307,7 +307,7 @@ class SetupWizardController extends Controller
             $this->get('mfb_service_provider.service')->getType(),
             $serviceProvider
         );
-        $form->add('save', 'submit', array('label' => 'Send'));
+        $form->add('save', 'submit', array('label' => 'Add'));
         return $form;
     }
 
@@ -368,7 +368,7 @@ class SetupWizardController extends Controller
         return $this->render(
             'MFBAdminBundle:SetupWizard:selectCriterias.html.twig',
             array(
-                'ratingSelectionForm' => $form->createView(),
+                'form' => $form->createView(),
                 'channelRatingCriterias' => $channel->getRatingCriteria(),
                 'criteriaLimit' => $this->container->getParameter('mfb_account_channel.rating_criteria.limit'),
                 'neededCriteriaCount' => $this->get('mfb_account_channel.rating_criteria.service')

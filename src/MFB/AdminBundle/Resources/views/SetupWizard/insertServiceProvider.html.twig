@@ -1,5 +1,4 @@
 {% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
-{% form_theme serviceProviderForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 
 {% block title %}{% trans %} Form Setup {% endtrans %}{% endblock %}
 
@@ -8,21 +7,21 @@
         <h3 class="text-center form-header">
             {% trans %} Add Service Provider {% endtrans %}
         </h3>
-        <h4><div class="text-center">Add your team members you want to be rated</div></h4>
-        {{ form_errors(serviceProviderForm) }}
+        <h4><div class="text-center">{% trans %} Add team members {% endtrans %}</div></h4>
+        {{ form_errors(form) }}
 
         {% if addedTeamMemberName is not null %}
             <div class="alert alert-info text-center">
-                The team member "{{ addedTeamMemberName }}" was added
+                {% trans with {'%teamMemberName%': addedTeamMemberName } %} added.team.member {% endtrans %}
             </div>
         {% endif %}
 
         <div class="sectionIdent">
-            {{ form_start(serviceProviderForm) }}
+            {{ form_start(form) }}
             <div class="form-group">
-                {{ form_label(serviceProviderForm.prefix, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_label(form.prefix, null, {'label_attr':{'class': 'control-label'} }) }}
                 <div class="input-group">
-                    {% for title in serviceProviderForm.prefix %}
+                    {% for title in form.prefix %}
                         <label class="radio-inline">
                             {{ form_widget(title, {'attr': {'class': 'radio'} }) }} {{ title.vars.label }}
                         </label>
@@ -31,19 +30,19 @@
             </div>
 
             <div class="form-group">
-                {{ form_label(serviceProviderForm.firstname, null, {'label_attr':{'class': 'control-label'} }) }}
-                {{ form_widget(serviceProviderForm.firstname, {'attr': {'class': 'form-control', 'value':''} }) }}
+                {{ form_label(form.firstname, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'value':''} }) }}
             </div>
 
             <div class="form-group">
-                {{ form_label(serviceProviderForm.lastname, null, {'label_attr':{'class': 'control-label'} }) }}
-                {{ form_widget(serviceProviderForm.lastname, {'attr': {'class': 'form-control', 'value':''} }) }}
+                {{ form_label(form.lastname, null, {'label_attr':{'class': 'control-label'} }) }}
+                {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'value':''} }) }}
             </div>
 
             <div class="row">
                 <div class="col-xs-7">
                     <div class="form-group">
-                        {{ form_row(serviceProviderForm.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
+                        {{ form_row(form.save, {'attr': {'class': 'btn btn-left orange abstandoben breite210'} }) }}
                     </div>
                 </div>
 
@@ -51,7 +50,7 @@
                     <a class="btn" href="{{ path('mfb_admin_setup_account_settings') }}">{% trans %}Continue{% endtrans %}</a>
                 </div>
             </div>
-            {{ form_end(serviceProviderForm) }}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

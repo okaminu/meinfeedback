@@ -1,5 +1,5 @@
 {% extends "MFBAdminBundle::base.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
+{% form_theme form "MeinFeedbackHomeBundle:Form:form_error.html.twig" %}
 {% block title %}{% trans %} Welcome to MeinFeedback {% endtrans %}{% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
             {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
             {{ form_errors(form) }}
 
-            <div class="alert alert-info alert-dismissable"> Allowed image types:
+            <div class="alert alert-info alert-dismissable">{% trans %}  Allowed image types {% endtrans %}:
             {% for type in allowedImageExtensions %}
                <span class="bold">{{ type }}</span>
             {% endfor %}

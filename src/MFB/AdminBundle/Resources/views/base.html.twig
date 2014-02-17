@@ -50,7 +50,7 @@
                     </li>
                     <li><a title="Logout" href="{{ path('mfb_admin_logout') }}" class="scroll fadeto brand-4" rel="nofollow">{% trans %} Logout {% endtrans %}</a></li>
                     <li>
-                        <span title="User" class="user">User:  <span class="user-name">{{ render(controller('MFBAdminBundle:Helper:getAccountName')) }}</span></span>
+                        <span title="User" class="user">{% trans %} User {% endtrans %}:  <span class="user-name">{{ render(controller('MFBAdminBundle:Helper:getAccountName')) }}</span></span>
                     </li>
                 </ul>
             </nav>

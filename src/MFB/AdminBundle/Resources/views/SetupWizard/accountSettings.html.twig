@@ -1,6 +1,5 @@
 {% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
 {% form_theme form "MeinFeedbackHomeBundle:Form:form_widget_mandatory.html.twig" %}
-{% form_theme form "MeinFeedbackHomeBundle:Form:form_widget_mandatory.html.twig" %}
 
 
 {% block title %}Account Settings{% endblock %}
@@ -20,21 +19,21 @@
 
             <div class="form-group">
                 <div class="col-xs-12">
-                    {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Firma'} }) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'required fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Company'} }) }}
                     {{ form_errors(form.name) }}
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-xs-12">
-                    {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_address form-control', 'placeholder': 'Stadt'} }) }}
+                    {{ form_widget(form.city, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_address form-control', 'placeholder': 'State'} }) }}
                     {{ form_errors(form.city) }}
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-xs-8">
-                    {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_address form-control', 'placeholder': 'Straße'} }) }}
+                    {{ form_widget(form.street, {'attr': {'class': 'required fr_input_txt fr_97_5pro partial_address form-control', 'placeholder': 'Street'} }) }}
                     {{ form_errors(form.street) }}
                 </div>
                 <div class="col-xs-4">
@@ -52,7 +51,7 @@
 
             <div class="form-group">
                 <div class="col-xs-12">
-                    {{ form_widget(form.phoneNumber, {'attr': {'class': 'fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Telefon'} }) }}
+                    {{ form_widget(form.phoneNumber, {'attr': {'class': 'fr_input_txt fr_97_5pro popupInput form-control', 'placeholder': 'Telephone'} }) }}
                     {{ form_errors(form.phoneNumber) }}
                 </div>
             </div>

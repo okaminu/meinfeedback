@@ -1,46 +1,49 @@
 Templates Set-Up: 	Templates Set-Up
-Title: 	Betreff
+Title: 	Title
 Text: 	Text
-Add Variable: 	Variablen anzeigen
-Thank you text: 	Text für Danksagung
-save: 	Speichern
-Add Customer: 	Neuer Kunde
-Customer Form: 	Kundenformular
-Customers email: 	Ihre Email-Adresse
-Gender: 	Geschlecht
-Male: 	Männlich
-Female: 	Weiblich
-First name: 	Vorname
-Last name: 	Familienname
-Salutation: 	Grußformel (Hallo, Lieber, Hi)
-Send: 	Abschicken
-Logout: 	Abmelden
+Add Variable: 	Add Variable
+Thank you text: 	Thank you text
+save: 	Save
+Add Customer: 	Add Customer
+Customer Form: 	Customer Form
+Customers email: 	Customer's email
+Gender: 	Gender
+Male: 	Male
+Female: 	Female
+First name: 	Firstname
+Last name: 	Lastname
+Firstname: 	First Name
+Lastname: 	Last Name
+Salutation: 	Salutation (Hello, Hi)
+Title: Title
+Send: 	Send
+Logout: 	Logout
 Dashboard: 	Dashboard
-Account Set-Up: 	Einstellungen
-Places setting: 	Firmendaten
-Thank you page template: „Vielen Dank“ Schablone
-Firma: 	Firma
+Account Set-Up: 	Account Set-Up
+Places setting: 	Place settings
+Thank you page template: „Thank you“ template
+Firma:  Company
 Berlin: 	Berlinstraße 31,  10090 Berlin
-Service Date: Kaufdatum/Tag der Leistungserbringung
-Service Desc: Produkt/Dienstleistung
-Email template: Email Schablone
+Email template: Email template
+State: State
+Street: Street
+Telephone: Telephone
 
-Anonymous: Feedback anonymisieren
-Customer id reference: Kunden ID
-Service id reference: Rechnungsnummer / Auftragsnummer
-Service description: Produkt/Dienstleistung
-Service date: Kaufdatum/Tag der Leistungserbringung
-Ratings enabled: Sterne
+Anonymous: Anonymous feedback
+Customer id reference: Customer ID
+Service id reference: Invoice number / Order number
+Service description: Product / Service
+Service date: Purchase date / Date of service
 Enabled: An
 Disabled: Aus
-Show: Anzeigen
-Active: Speichern
-indicates required fields: kennzeichnet Pflichtfelder
+Show: Show
+Active: Active
+indicates required fields: indicates required fields
 Widget: Widget
 Icon: Icon
-Update colors: Farben ändern
+Update colors: Update colors
 Dear %customer%: Dear %customer%
-Password changed: Ihr Passwort wurde erfolgreich geändert
+Password changed: Your password was changed successfully
 Feedback: Feedback
 Account: Account
 Service Provider: Team Member
@@ -48,4 +51,43 @@ Service Providers: Team Members
 Add Service Provider: Add Team Member
 Please insert rating criteria: Please insert rating criteria name or select it from drop down list
 Please insert service definition: Please insert service name or select it from drop down list
+Your Feedbacks: Your Feedbacks
+Channel service type: Service
+Light Icon: Light Icon
+Dark Icon: Dark Icon
+Change Text color: Change Text color
+Change Background color: Change Background color
 
+Anonymous says: Anonymous says
+Total active feedbacks: Total active feedbacks
+Success: Success
+No feedbacks yet: No feedbacks yet
+Logo settings: Logo settings
+Allowed image types:  Allowed image types
+Change password: Change password
+User: User
+Rating Criteria: Rating Criteria
+Form Setup: Form Setup
+The following rating criterias were added: The following rating criterias were added
+Change Service Visibility: Change Service Visibility
+Select services: Select services
+Write service definition: Write business name
+Continue: Continue
+Add team members: Add your team members you want to be rated
+added.team.member: The team member "%teamMemberName% " was added
+Select Business kind: Select Business kind
+Custom Business Name: Custom Business Name
+Select Criterias: Select Criterias
+Needed Criterias: Please select %neededCriteriaCount% criterias
+Your Criteria Name: Your Criteria Name
+Select Service: Select Service
+Business Name: Business Name
+Select Businesses: Select Businesses
+Select Business: Select Business
+Business Kind Name: Business Kind Name
+--- I will insert my own service name ---: --- I will insert my own service name ---
+Or insert a custom service name: Or insert a custom service name
+Add: Add
+--- I will insert my own criteria name ---: --- I will insert my own criteria name ---
+Select rating criteria: Select rating criteria
+Or insert a custom rating criteria name: Or insert a custom rating criteria name

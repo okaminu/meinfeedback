@@ -1,5 +1,4 @@
 {% extends "MFBAdminBundle:SetupWizard:formSetupBase.html.twig" %}
-{% form_theme ratingSelectionForm "MeinFeedbackHomeBundle:Form:form_theme.html.twig" %}
 
 {% block title %}Setup wizard{% endblock %}
 
@@ -9,10 +8,10 @@
     <h3 class="text-center form-header">{% trans %} Select Criterias {% endtrans %}</h3>
 
     {% if neededCriteriaCount > 0 %}
-        <div class="alert alert-info centered text-center"> Please select {{ neededCriteriaCount }} criterias</div>
+        <div class="alert alert-info centered text-center"> {% trans with {'%neededCriteriaCount%': neededCriteriaCount } %} Needed Criterias {% endtrans %}</div>
     {% endif %}
 
-    {{ form_errors(ratingSelectionForm) }}
+    {{ form_errors(form) }}
     <div id="selectRatingCriteria">
         <div class="row">
             <div class="col-xs-12">
@@ -35,8 +34,8 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                        {{ form_start(ratingSelectionForm) }}
-                        {{ form_row(ratingSelectionForm.ratingCriteria, {'attr' : {'class': 'form-control'} }) }}
+                        {{ form_start(form) }}
+                        {{ form_row(form.ratingCriteria, {'attr' : {'class': 'form-control'} }) }}
                     </div>
                 </div>
             </div>
@@ -44,7 +43,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                        {{ form_row(ratingSelectionForm.customRatingName, {'attr' : {'class': 'form-control orange abstandoben breite130', 'placeholder': 'Your Criteria Name'} } ) }}
+                        {{ form_row(form.customRatingName, {'attr' : {'class': 'form-control orange abstandoben breite130', 'placeholder': 'Your Criteria Name'} } ) }}
                     </div>
                 </div>
             </div>
@@ -52,12 +51,12 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                        {{ form_row(ratingSelectionForm.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
+                        {{ form_row(form.submit, {'attr' : {'class': 'btn btn-left orange abstandoben breite130 addButton'} } ) }}
                     </div>
                 </div>
             </div>
 
-            {{ form_end(ratingSelectionForm) }}
+            {{ form_end(form) }}
         {% else %}
             <div class="row">
                 <div class="col-xs-12">
