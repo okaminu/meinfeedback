@@ -9,7 +9,6 @@ use MFB\ChannelBundle\Form\AccountChannelType;
 use MFB\ChannelBundle\Form\ChannelRatingSelectType;
 use MFB\ChannelBundle\Form\ChannelServiceDefinitionType;
 use MFB\RatingBundle\RatingException;
-use MFB\ServiceBundle\Form\ServiceDefinitionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +38,7 @@ class SetupWizardController extends Controller
                 $this->createUpdateBusinessForChannel($businessId);
 
                 return $this->createRedirect(
-                    $this->getServiceSelectRoute($businessId),
-                    array('businessId' => $businessId)
+                    $this->getServiceSelectRoute($businessId)
                 );
             }
         } catch (ChannelException $ex) {
@@ -50,41 +48,15 @@ class SetupWizardController extends Controller
     }
 
     /**
-     * @Route("/setup_select_single_service/{businessId}", name="mfb_admin_setup_select_single_service",
-     * requirements={"businessId" = "\d+"})
+     * @Route("/setup_select_service", name="mfb_admin_setup_select_service")
      * @Template
      */
 
-    public function selectSingleServiceTypeAction(Request $request, $businessId)
+    public function selectServiceTypeAction(Request $request)
     {
         $channel = $this->getChannel();
-        $serviceTypes = $this->get('mfb_service_type.service')->getDefaultByBusinessId($businessId);
-        $form = $this->createSingleSelectForm($serviceTypes);
+        $businessId = $channel->getBusiness()->getId();
 
-        $form->handleRequest($request);
-        try {
-            if ($form->isValid()) {
-                $selectedServiceId = $this->getServiceIdFromSubmit($form, $businessId);
-                $this->storeChannelServiceType($channel, $selectedServiceId);
-
-                return $this->createRedirect('mfb_admin_setup_insert_definitions');
-            }
-        } catch (ServiceException $ex) {
-            $form->addError(new FormError($ex->getMessage()));
-        }
-
-        return array('form' => $form->createView());
-    }
-
-    /**
-     * @Route("/setup_select_multiple_service/{businessId}", name="mfb_admin_setup_select_multiple_service",
-     * requirements={"businessId" = "\d+"})
-     * @Template
-     */
-
-    public function selectMultipleServiceTypeAction(Request $request, $businessId)
-    {
-        $channel = $this->getChannel();
         $serviceTypes = $this->get('mfb_service_type.service')->getDefaultByBusinessId($businessId);
         $form = $this->createMultipleSelectForm($serviceTypes);
 

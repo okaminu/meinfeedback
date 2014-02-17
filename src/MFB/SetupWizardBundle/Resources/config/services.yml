@@ -1,0 +1,6 @@
+parameters:
+    mfb_setup_wizard.class: MFB\SetupWizardBundle\Service
+
+services:
+    mfb_setup_wizard.service:
+        class: %mfb_setup_wizard.class%

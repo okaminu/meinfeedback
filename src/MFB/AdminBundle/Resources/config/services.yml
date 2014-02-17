@@ -9,8 +9,9 @@ parameters:
 
   mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
 
-services:
 
+
+services:
   mfb_admin.form_setup.service:
     class: %mfb_admin.form_setup.class%
     arguments: [@mfb_account_channel.rating_criteria.service, @mfb_account_channel.service_type.service, @mfb_account_channel.service, @mfb_channel_definition.service, @mfb_service_provider.service]
