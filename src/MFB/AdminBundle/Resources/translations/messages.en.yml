@@ -1,0 +1,51 @@
+Templates Set-Up: 	Templates Set-Up
+Title: 	Betreff
+Text: 	Text
+Add Variable: 	Variablen anzeigen
+Thank you text: 	Text für Danksagung
+save: 	Speichern
+Add Customer: 	Neuer Kunde
+Customer Form: 	Kundenformular
+Customers email: 	Ihre Email-Adresse
+Gender: 	Geschlecht
+Male: 	Männlich
+Female: 	Weiblich
+First name: 	Vorname
+Last name: 	Familienname
+Salutation: 	Grußformel (Hallo, Lieber, Hi)
+Send: 	Abschicken
+Logout: 	Abmelden
+Dashboard: 	Dashboard
+Account Set-Up: 	Einstellungen
+Places setting: 	Firmendaten
+Thank you page template: „Vielen Dank“ Schablone
+Firma: 	Firma
+Berlin: 	Berlinstraße 31,  10090 Berlin
+Service Date: Kaufdatum/Tag der Leistungserbringung
+Service Desc: Produkt/Dienstleistung
+Email template: Email Schablone
+
+Anonymous: Feedback anonymisieren
+Customer id reference: Kunden ID
+Service id reference: Rechnungsnummer / Auftragsnummer
+Service description: Produkt/Dienstleistung
+Service date: Kaufdatum/Tag der Leistungserbringung
+Ratings enabled: Sterne
+Enabled: An
+Disabled: Aus
+Show: Anzeigen
+Active: Speichern
+indicates required fields: kennzeichnet Pflichtfelder
+Widget: Widget
+Icon: Icon
+Update colors: Farben ändern
+Dear %customer%: Dear %customer%
+Password changed: Ihr Passwort wurde erfolgreich geändert
+Feedback: Feedback
+Account: Account
+Service Provider: Team Member
+Service Providers: Team Members
+Add Service Provider: Add Team Member
+Please insert rating criteria: Please insert rating criteria name or select it from drop down list
+Please insert service definition: Please insert service name or select it from drop down list
+
