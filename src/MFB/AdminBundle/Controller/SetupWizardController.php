@@ -119,14 +119,16 @@ class SetupWizardController extends Controller
     public function selectCriteriasAction(Request $request)
     {
         $channel = $this->getChannel();
-        $channelRatingService = $this->get('mfb_account_channel.rating_criteria.service');
 
-        $channelCriteria = $channelRatingService->createNew($channel);
+        $channelCriteria = $this->get('mfb_account_channel.rating_criteria.service')->createNew($channel);
         $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
         $form->handleRequest($request);
         try {
             if ($form->isValid()) {
                 $this->storeChannelRatingCriteria($channelCriteria, $form->get('customRatingName')->getData());
+                if ($this->get('mfb_account_channel.rating_criteria.service')->missingCount($channel->getId()) == 0) {
+                    return $this->createRedirect('mfb_admin_setup_insert_service_provider');
+                }
                 $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
             }
         } catch (RatingException $ex) {
