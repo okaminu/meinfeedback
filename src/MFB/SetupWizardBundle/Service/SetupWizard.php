@@ -1,11 +1,11 @@
 <?php
 namespace MFB\SetupWizardBundle\Service;
 
-use MFB\SetupWizardBundle\WizardPathsAwareInterface;
+use MFB\SetupWizardBundle\WizardStepsAwareInterface;
 
-class SetupWizard implements WizardPathsAwareInterface
+class SetupWizard implements WizardStepsAwareInterface
 {
-    private $setupPaths;
+    private $setupSteps;
 
     private $entityManager;
 
@@ -14,9 +14,9 @@ class SetupWizard implements WizardPathsAwareInterface
         $this->entityManager = $entityManager;
     }
 
-    public function setPaths($paths)
+    public function setSteps($steps)
     {
-        $this->setupPaths = $paths;
+        $this->setupSteps = $steps;
     }
 
 }

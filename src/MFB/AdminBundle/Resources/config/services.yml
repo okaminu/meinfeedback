@@ -1,6 +1,6 @@
 parameters:
   mfb_admin.form_setup.class: MFB\AdminBundle\Service\FormSetup
-  mfb_admin.form_setup.paths.class: MFB\AdminBundle\Service\FormSetupPaths
+  mfb_admin.form_setup.steps.class: MFB\AdminBundle\Service\FormSetupSteps
   mfb_admin.form_setup.allowed.actions:
             - 'mfb_admin_update_rating_criteria_select'
             - 'mfb_admin_save_service_provider'
@@ -10,7 +10,7 @@ parameters:
 
   mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
 
-  mfb_admin.form_setup.paths:
+  mfb_admin.form_setup.steps:
     1: mfb_admin_setup_select_business
     2: mfb_admin_setup_select_service
     3: mfb_admin_setup_insert_definitions
@@ -38,6 +38,6 @@ services:
       tags:
         - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
 
-  mfb_admin.form_setup.paths.service:
-    class: %mfb_admin.form_setup.paths.class%
-    arguments: [%mfb_admin.form_setup.paths%]
+  mfb_admin.form_setup.steps.service:
+    class: %mfb_admin.form_setup.steps.class%
+    arguments: [%mfb_admin.form_setup.steps%]

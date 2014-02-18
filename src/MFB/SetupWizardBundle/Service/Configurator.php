@@ -1,20 +1,20 @@
 <?php
 namespace MFB\SetupWizardBundle\Service;
 
-use MFB\AdminBundle\Service\FormSetupPaths;
-use MFB\SetupWizardBundle\WizardPathsAwareInterface;
+use MFB\AdminBundle\Service\FormSetupSteps;
+use MFB\SetupWizardBundle\WizardStepsAwareInterface;
 
 class Configurator
 {
-    private $adminFormSetupPaths;
+    private $adminFormSetupSteps;
 
-    public function __construct(FormSetupPaths $adminFormSetupPaths)
+    public function __construct(FormSetupSteps $adminFormSetupSteps)
     {
-        $this->adminFormSetupPaths = $adminFormSetupPaths;
+        $this->adminFormSetupSteps = $adminFormSetupSteps;
     }
 
-    public function configure(WizardPathsAwareInterface $service)
+    public function configure(WizardStepsAwareInterface $service)
     {
-        $service->setPaths($this->adminFormSetupPaths->getPaths());
+        $service->setSteps($this->adminFormSetupSteps->getSteps());
     }
 }
