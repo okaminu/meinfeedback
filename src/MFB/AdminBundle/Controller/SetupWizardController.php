@@ -37,7 +37,7 @@ class SetupWizardController extends Controller
                 $businessId = $this->getBusinessIdFromSubmit($form);
                 $this->createUpdateBusinessForChannel($businessId);
 
-                return $this->createRedirect('mfb_admin_setup_select_service');
+                return $this->getNextStep("mfb_admin_setup_select_business");
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -61,12 +61,11 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $this->storeSelectedServiceTypes($form, $businessId, $channel);
-                return $this->createRedirect('mfb_admin_setup_insert_definitions');
+                return $this->getNextStep('mfb_admin_setup_select_service');
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
-
         return $this->getSelectServiceTypeFrom($form);
     }
 
@@ -110,7 +109,7 @@ class SetupWizardController extends Controller
         $definition = $definitionService->findByChannelAndDefinition($channel->getId(), $definitionId);
         $definitionService->remove($definition);
 
-        return $this->createRedirect('mfb_admin_setup_insert_definitions');
+        return $this->redirect($this->generateUrl('mfb_admin_setup_insert_definitions'));
     }
 
     /**
@@ -127,7 +126,7 @@ class SetupWizardController extends Controller
             if ($form->isValid()) {
                 $this->storeChannelRatingCriteria($channelCriteria, $form->get('customRatingName')->getData());
                 if ($this->get('mfb_account_channel.rating_criteria.service')->missingCount($channel->getId()) == 0) {
-                    return $this->createRedirect('mfb_admin_setup_insert_service_provider');
+                    return $this->getNextStep('mfb_admin_setup_select_criterias');
                 }
                 $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
             }
@@ -174,17 +173,12 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $this->get('mfb_account_channel.service')->store($channel);
-                return $this->createRedirect('mfb_admin_homepage');
+                return $this->getNextStep('mfb_admin_setup_account_settings');
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
         return array('form' => $form->createView());
-    }
-
-    private function createRedirect($path, $options = array())
-    {
-        return $this->redirect($this->generateUrl($path, $options));
     }
 
     private function getLoggedInUser()
@@ -426,5 +420,10 @@ class SetupWizardController extends Controller
             $template = 'MFBAdminBundle:SetupWizard:selectMultipleServiceType.html.twig';
         }
         return $this->render($template, array('form' => $form->createView()));
+    }
+
+    private function getNextStep($currentStep)
+    {
+        return $this->get('mfb_setup_wizard.service')->getNextStep($currentStep);
     }
 }

@@ -5,9 +5,9 @@ parameters:
 services:
     mfb_setup_wizard.service:
         class: %mfb_setup_wizard.class%
-        arguments: [@doctrine.orm.default_entity_manager]
+        arguments: [@doctrine.orm.default_entity_manager, @router]
         configurator: [@mfb_setup_wizard.configurator.service, configure]
 
     mfb_setup_wizard.configurator.service:
       class: %mfb_setup_wizard.configurator.class%
-      arguments: [@mfb_admin.form_setup.paths.service]
+      arguments: [@mfb_admin.form_setup.steps.service]

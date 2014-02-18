@@ -16,5 +16,6 @@ class Configurator
     public function configure(WizardStepsAwareInterface $service)
     {
         $service->setSteps($this->adminFormSetupSteps->getSteps());
+        $service->setAfterSetup($this->adminFormSetupSteps->getAfterSetup());
     }
 }

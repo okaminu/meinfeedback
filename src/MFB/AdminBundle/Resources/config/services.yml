@@ -10,6 +10,8 @@ parameters:
 
   mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
 
+  mfb_admin.form_setup.after_setup: 'mfb_admin_homepage'
+
   mfb_admin.form_setup.steps:
     1: mfb_admin_setup_select_business
     2: mfb_admin_setup_select_service
@@ -17,6 +19,7 @@ parameters:
     4: mfb_admin_setup_select_criterias
     5: mfb_admin_setup_insert_service_provider
     6: mfb_admin_setup_account_settings
+
 
 services:
   mfb_admin.form_setup.service:
@@ -40,4 +43,4 @@ services:
 
   mfb_admin.form_setup.steps.service:
     class: %mfb_admin.form_setup.steps.class%
-    arguments: [%mfb_admin.form_setup.steps%]
+    arguments: [%mfb_admin.form_setup.steps%, %mfb_admin.form_setup.after_setup%]
