@@ -137,7 +137,6 @@ class SetupWizardController extends Controller
         return $this->showCriteriaSelectForm($form);
     }
 
-
     /**
      * @Route("/setup_insert_team_member", name="mfb_admin_setup_insert_service_provider")
      * @Template

@@ -1,6 +1,13 @@
 parameters:
-    mfb_setup_wizard.class: MFB\SetupWizardBundle\Service
+    mfb_setup_wizard.class: MFB\SetupWizardBundle\Service\SetupWizard
+    mfb_setup_wizard.configurator.class: MFB\SetupWizardBundle\Service\Configurator
 
 services:
     mfb_setup_wizard.service:
         class: %mfb_setup_wizard.class%
+        arguments: [@doctrine.orm.default_entity_manager]
+        configurator: [@mfb_setup_wizard.configurator.service, configure]
+
+    mfb_setup_wizard.configurator.service:
+      class: %mfb_setup_wizard.configurator.class%
+      arguments: [@mfb_admin.form_setup.paths.service]
