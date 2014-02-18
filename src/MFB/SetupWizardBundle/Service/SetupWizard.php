@@ -6,41 +6,24 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
-class SetupWizard implements WizardStepsAwareInterface
+class SetupWizard
 {
     private $setupSteps;
-
-    private $afterSetup;
 
     private $entityManager;
 
     private $router;
 
-    public function __construct($entityManager, Router $router)
+    public function __construct($entityManager, Router $router, $setupStepsConfigurator)
     {
         $this->entityManager = $entityManager;
         $this->router = $router;
+        $this->setupSteps = $setupStepsConfigurator->getStepsConfig();
     }
 
-    public function setSteps($steps)
+    public function getNextStep()
     {
-        $this->setupSteps = $steps;
-    }
-
-    public function setAfterSetup($afterSetup)
-    {
-        $this->afterSetup = $afterSetup;
-    }
-
-    public function getNextStep($step)
-    {
-        $key = array_search($step, $this->setupSteps);
-
-        $nextStepRoute = $this->afterSetup;
-        if (isset($this->setupSteps[$key + 1])) {
-            $nextStepRoute = $this->setupSteps[$key + 1];
-        }
-        return $this->createRedirect($nextStepRoute);
+        return $this->createRedirect('lol');
     }
 
     private function createRedirect($route)

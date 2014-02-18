@@ -8,18 +8,7 @@ parameters:
   mfb_admin.form_setup.allowed.controllers:
             - 'MFB\AdminBundle\Controller\SetupWizardController'
 
-  mfb_admin.form_setup.redirect: 'mfb_admin_setup_select_business'
-
-  mfb_admin.form_setup.after_setup: 'mfb_admin_homepage'
-
-  mfb_admin.form_setup.steps:
-    1: mfb_admin_setup_select_business
-    2: mfb_admin_setup_select_service
-    3: mfb_admin_setup_insert_definitions
-    4: mfb_admin_setup_select_criterias
-    5: mfb_admin_setup_insert_service_provider
-    6: mfb_admin_setup_account_settings
-
+  mfb_admin.form_setup.redirect: 'mfb_admin_setup_wizard'
 
 services:
   mfb_admin.form_setup.service:
@@ -40,7 +29,3 @@ services:
       arguments: [@router, @security.context, @mfb_admin.form_setup.service, %mfb_admin.form_setup.allowed.actions%, %mfb_admin.form_setup.allowed.controllers%, %mfb_admin.form_setup.redirect%, @mfb_account_channel.service]
       tags:
         - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-
-  mfb_admin.form_setup.steps.service:
-    class: %mfb_admin.form_setup.steps.class%
-    arguments: [%mfb_admin.form_setup.steps%, %mfb_admin.form_setup.after_setup%]

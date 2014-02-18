@@ -6,16 +6,19 @@ use MFB\SetupWizardBundle\WizardStepsAwareInterface;
 
 class Configurator
 {
-    private $adminFormSetupSteps;
+    private $stepsConfig = array();
 
-    public function __construct(FormSetupSteps $adminFormSetupSteps)
+    public function addStep(WizardStepsAwareInterface $service)
     {
-        $this->adminFormSetupSteps = $adminFormSetupSteps;
+        $this->stepsConfig[$service->getPriority()] =
+            array(
+                'route' => $service->getRoute(),
+                'events' => $service->getSubscribedEvents()
+            );
     }
 
-    public function configure(WizardStepsAwareInterface $service)
+    public function getStepsConfig()
     {
-        $service->setSteps($this->adminFormSetupSteps->getSteps());
-        $service->setAfterSetup($this->adminFormSetupSteps->getAfterSetup());
+        return $this->stepsConfig;
     }
 }

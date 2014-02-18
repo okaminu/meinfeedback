@@ -5,7 +5,7 @@ parameters:
      mfb_account_channel.rating_criteria.class: MFB\ChannelBundle\Service\ChannelRatingCriteria
      mfb_account_channel.rating_criteria.limit: 3
      mfb_channel_definition.class: MFB\ChannelBundle\Service\ChannelServiceDefinition
-
+     mfb_channel.business.wizard_step.class: MFB\ChannelBundle\Service\BusinessWizardStep
 
 services:
      mfb_account_channel.service:
@@ -23,3 +23,8 @@ services:
      mfb_channel_definition.service:
        class: %mfb_channel_definition.class%
        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_account_channel.service"]
+
+     mfb_channel.business.wizard_step.service:
+       class: %mfb_channel.business.wizard_step.class%
+       tags:
+          - {name: mfb_setup_wizard.steps}

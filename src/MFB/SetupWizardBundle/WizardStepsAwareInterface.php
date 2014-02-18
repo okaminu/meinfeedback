@@ -3,6 +3,7 @@ namespace MFB\SetupWizardBundle;
 
 interface WizardStepsAwareInterface
 {
-    public function setSteps($steps);
-    public function setAfterSetup($route);
+    public function getPriority();
+    public function getSubscribedEvents();
+    public function getRoute();
 }

@@ -20,6 +20,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class SetupWizardController extends Controller
 {
     /**
+     * @Route("/setup_wizard", name="mfb_admin_setup_wizard")
+     */
+
+    public function setupWizardAction(Request $request)
+    {
+        return $this->get('mfb_setup_wizard.service')->getNextStep();
+    }
+
+    /**
      * @Route("/setup_select_business", name="mfb_admin_setup_select_business")
      * @Template
      */
