@@ -23,7 +23,7 @@ class SetupWizardController extends Controller
      * @Route("/setup_wizard", name="mfb_admin_setup_wizard")
      */
 
-    public function setupWizardAction(Request $request)
+    public function setupWizardAction()
     {
         return $this->get('mfb_setup_wizard.service')->getNextStep();
     }
@@ -46,7 +46,7 @@ class SetupWizardController extends Controller
                 $businessId = $this->getBusinessIdFromSubmit($form);
                 $this->createUpdateBusinessForChannel($businessId);
 
-                return $this->getNextStep("mfb_admin_setup_select_business");
+                return $this->get('mfb_setup_wizard.service')->getNextStep($this->getChannel()->getId());
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));

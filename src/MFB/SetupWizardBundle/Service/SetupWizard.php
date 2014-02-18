@@ -10,20 +10,27 @@ class SetupWizard
 {
     private $setupSteps;
 
-    private $entityManager;
+    private $stepEntityService;
 
     private $router;
 
-    public function __construct($entityManager, Router $router, $setupStepsConfigurator)
+    private $eventDispatcher;
+
+    public function __construct($stepEntityService, Router $router, $setupStepsConfigurator, $eventDispatcher)
     {
-        $this->entityManager = $entityManager;
+        $this->stepEntityService = $stepEntityService;
         $this->router = $router;
         $this->setupSteps = $setupStepsConfigurator->getStepsConfig();
+        $this->eventDispatcher = $eventDispatcher;
+        ksort($this->setupSteps);
     }
 
     public function getNextStep()
     {
-        return $this->createRedirect('lol');
+        reset($this->setupSteps);
+        $step = current($this->setupSteps);
+        $this->eventDispatcher->dispatch("post{$step['route']}");
+        return $this->createRedirect($step['route']);
     }
 
     private function createRedirect($route)

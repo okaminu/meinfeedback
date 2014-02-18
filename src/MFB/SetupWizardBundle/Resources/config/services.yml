@@ -1,11 +1,17 @@
 parameters:
     mfb_setup_wizard.class: MFB\SetupWizardBundle\Service\SetupWizard
-    mfb_setup_wizard.configurator.class: MFB\SetupWizardBundle\Service\Configurator
+    mfb_setup_wizard.step.class: MFB\SetupWizardBundle\Service\SetupWizard
+    mfb_setup_wizard.configurator.class: MFB\SetupWizardBundle\Service\WizardStep
 
 services:
     mfb_setup_wizard.service:
         class: %mfb_setup_wizard.class%
-        arguments: [@doctrine.orm.default_entity_manager, @router, @mfb_setup_wizard.configurator.service]
+        arguments: [@mfb_setup_wizard.step.service, @router, @mfb_setup_wizard.configurator.service, @event_dispatcher]
 
     mfb_setup_wizard.configurator.service:
       class: %mfb_setup_wizard.configurator.class%
+      arguments: [@event_dispatcher]
+
+    mfb_setup_wizard.step.service:
+      class: %mfb_setup_wizard.step.class%
+      arguments: [@doctrine.orm.default_entity_manager]

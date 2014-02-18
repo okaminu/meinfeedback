@@ -8,12 +8,20 @@ class Configurator
 {
     private $stepsConfig = array();
 
+    private $eventDispatcher;
+
+    public function __construct($ed)
+    {
+        $this->eventDispatcher = $ed;
+    }
+
     public function addStep(WizardStepsAwareInterface $service)
     {
+        $this->eventDispatcher->addSubscriber($service->getSubscribedEvents());
         $this->stepsConfig[$service->getPriority()] =
             array(
                 'route' => $service->getRoute(),
-                'events' => $service->getSubscribedEvents()
+                'name' => get_class($service)
             );
     }
 

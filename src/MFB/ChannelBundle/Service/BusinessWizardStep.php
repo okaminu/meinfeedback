@@ -13,11 +13,16 @@ class BusinessWizardStep implements WizardStepsAwareInterface, EventSubscriber
 
     public function getSubscribedEvents()
     {
-        return array('preBusinessWizardStep', 'postBusinessWizardStep');
+        return array('postBusinessWizardStep');
     }
 
     public function getRoute()
     {
         return 'mfb_admin_setup_select_business';
+    }
+
+    public function postBusinessWizardStep($event)
+    {
+        echo 'test';
     }
 }
