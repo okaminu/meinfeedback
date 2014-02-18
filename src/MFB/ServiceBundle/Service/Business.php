@@ -48,7 +48,7 @@ class Business
             throw new ServiceException('Business already exists');
         }
     }
-
+    
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);
