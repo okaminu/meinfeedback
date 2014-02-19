@@ -1,6 +1,11 @@
 parameters:
   mfb_admin.form_setup.class: MFB\AdminBundle\Service\FormSetup
   mfb_admin.form_setup.steps.class: MFB\AdminBundle\Service\FormSetupSteps
+  mfb_admin.wizard_step.business.class: MFB\AdminBundle\Service\SetupWizardSteps\Business
+  mfb_admin.wizard_step.serviceType.class: MFB\AdminBundle\Service\SetupWizardSteps\ServiceType
+  mfb_admin.wizard_step.serviceType.class: MFB\AdminBundle\Service\SetupWizardSteps\ServiceType
+  mfb_admin.wizard_step.serviceDefinition.class: MFB\AdminBundle\Service\SetupWizardSteps\ServiceDefinition
+
   mfb_admin.form_setup.allowed.actions:
             - 'mfb_admin_update_rating_criteria_select'
             - 'mfb_admin_save_service_provider'
@@ -29,3 +34,19 @@ services:
       arguments: [@router, @security.context, @mfb_admin.form_setup.service, %mfb_admin.form_setup.allowed.actions%, %mfb_admin.form_setup.allowed.controllers%, %mfb_admin.form_setup.redirect%, @mfb_account_channel.service]
       tags:
         - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+
+  mfb_admin.wizard_step.business.service:
+    class: %mfb_admin.wizard_step.business.class%
+    tags:
+       - {name: mfb_setup_wizard.steps}
+
+
+  mfb_admin.wizard_step.serviceType.service:
+    class: %mfb_admin.wizard_step.serviceType.class%
+    tags:
+       - {name: mfb_setup_wizard.steps}
+
+  mfb_admin.wizard_step.serviceDefinition.service:
+    class: %mfb_admin.wizard_step.serviceDefinition.class%
+    tags:
+       - {name: mfb_setup_wizard.steps}

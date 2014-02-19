@@ -32,9 +32,9 @@ class WizardStep
 
     /**
      * @var string
-     * @ORM\Column(name="route", type="string", length=128)
+     * @ORM\Column(name="name", type="string", length=128)
      */
-    private $route;
+    private $name;
 
 
     /**
@@ -43,6 +43,7 @@ class WizardStep
      *
      */
     private $status;
+
 
 
     /**
@@ -56,26 +57,26 @@ class WizardStep
     }
 
     /**
-     * Set route
+     * Set name
      *
-     * @param string $route
+     * @param string $name
      * @return WizardStep
      */
-    public function setRoute($route)
+    public function setName($name)
     {
-        $this->route = $route;
+        $this->name = $name;
     
         return $this;
     }
 
     /**
-     * Get route
+     * Get name
      *
      * @return string 
      */
-    public function getRoute()
+    public function getName()
     {
-        return $this->route;
+        return $this->name;
     }
 
     /**

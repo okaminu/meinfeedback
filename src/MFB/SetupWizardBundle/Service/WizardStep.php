@@ -3,6 +3,7 @@ namespace MFB\SetupWizardBundle\Service;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
+use MFB\ChannelBundle\Service\Channel;
 use MFB\SetupWizardBundle\SetupWizardException;
 use MFB\SetupWizardBundle\Entity\WizardStep as WizardStepEntity;
 
@@ -10,17 +11,27 @@ class WizardStep
 {
 
     private $entityManager;
+    private $stepStatuses;
+    private $channelService;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, $stepStatuses, Channel $channelService)
     {
         $this->entityManager = $em;
+        $this->stepStatuses = $stepStatuses;
+        $this->channelService = $channelService;
     }
 
     public function createNew($channelId)
     {
         $entity = new WizardStepEntity();
-        $entity->setChannel($channelId);
+        $entity->setChannel($this->channelService->findById($channelId));
+        return $entity;
+    }
 
+    public function createNewPending($channelId)
+    {
+        $entity = $this->createNew($channelId);
+        $entity->setStatus($this->stepStatuses['pending']);
         return $entity;
     }
 
@@ -31,6 +42,22 @@ class WizardStep
         } catch (DBALException $ex) {
             throw new SetupWizardException('Cannot save wizard step');
         }
+    }
+
+    public function findPendingByChannelId($channelId)
+    {
+        return $this->entityManager->getRepository('MFBSetupWizardBundle:WizardStep')->findBy(
+            array('channel' => $channelId, 'status' => $this->stepStatuses['pending'])
+        );
+    }
+
+    public function hasPendingSteps($channelId)
+    {
+        $count = $this->findPendingByChannelId($channelId);
+        if ($count < 0) {
+            return true;
+        }
+        return false;
     }
 
     private function saveEntity($entity)
@@ -49,4 +76,5 @@ class WizardStep
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
+
 }

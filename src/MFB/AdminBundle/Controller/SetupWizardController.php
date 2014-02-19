@@ -25,7 +25,13 @@ class SetupWizardController extends Controller
 
     public function setupWizardAction()
     {
-        return $this->get('mfb_setup_wizard.service')->getNextStep();
+        $channel = $this->getChannel();
+        if ($channel == null) {
+            $channel = $this->get('mfb_account_channel.service')->createNew($this->getLoggedInUser()->getId());
+            $this->get('mfb_account_channel.service')->store($channel);
+        }
+
+        return $this->getNextStep();
     }
 
     /**
@@ -46,7 +52,7 @@ class SetupWizardController extends Controller
                 $businessId = $this->getBusinessIdFromSubmit($form);
                 $this->createUpdateBusinessForChannel($businessId);
 
-                return $this->get('mfb_setup_wizard.service')->getNextStep($this->getChannel()->getId());
+                return $this->getNextStep();
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -70,7 +76,7 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $this->storeSelectedServiceTypes($form, $businessId, $channel);
-                return $this->getNextStep('mfb_admin_setup_select_service');
+                return $this->getNextStep();
             }
         } catch (ServiceException $ex) {
             $form->addError(new FormError($ex->getMessage()));
@@ -203,12 +209,7 @@ class SetupWizardController extends Controller
 
     public function createUpdateBusinessForChannel($businessId)
     {
-        $channelService = $this->get('mfb_account_channel.service');
         $channel = $this->getChannel();
-
-        if ($channel == null) {
-            $channel = $channelService->createNew($this->getLoggedInUser()->getId());
-        }
 
         if ($channel->getBusiness() != null) {
             throw new ChannelException('Business is already selected');
@@ -216,7 +217,7 @@ class SetupWizardController extends Controller
         $business = $this->get('mfb_service_business.service')->findById($businessId);
         $channel->setBusiness($business);
 
-        $channelService->store($channel);
+        $this->get('mfb_account_channel.service')->store($channel);
     }
 
 
@@ -431,8 +432,8 @@ class SetupWizardController extends Controller
         return $this->render($template, array('form' => $form->createView()));
     }
 
-    private function getNextStep($currentStep)
+    public function getNextStep()
     {
-        return $this->get('mfb_setup_wizard.service')->getNextStep($currentStep);
+        return $this->get('mfb_setup_wizard.service')->getNextStepRedirect($this->getChannel()->getId());
     }
 }

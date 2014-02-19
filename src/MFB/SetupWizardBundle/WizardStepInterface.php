@@ -1,8 +1,9 @@
 <?php
 namespace MFB\SetupWizardBundle;
 
-interface WizardStepsAwareInterface
+interface WizardStepInterface
 {
     public function getPriority();
     public function getRoute();
+    public function getName();
 }

@@ -64,8 +64,6 @@ class FormSetup
         $this->removeServiceProviders($channel->getId());
         $this->removeServiceTypes($channel->getId());
 
-        $this->channelService->remove($channel);
-
     }
 
     private function hasChannelInfo($channel)
