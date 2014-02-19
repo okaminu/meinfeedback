@@ -1,6 +1,8 @@
 <?php
 namespace MFB\AdminBundle\Service\SetupWizardSteps;
 
+use MFB\SetupWizardBundle\Event\StepEvent;
+use MFB\SetupWizardBundle\Service\WizardStep;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepInterface;
 
@@ -12,11 +14,18 @@ class Business implements WizardStepInterface, EventSubscriberInterface
 
     private $route = 'mfb_admin_setup_select_business';
 
+    private $stepService;
+
+    public function __construct(WizardStep $stepService)
+    {
+        $this->stepService = $stepService;
+    }
+
     public static function getSubscribedEvents()
     {
         return array(
-            "setupWizard.post". self::$name =>
-            array('postStep')
+            "setupWizard.after". self::$name =>
+            array('afterStep')
         );
     }
 
@@ -35,8 +44,8 @@ class Business implements WizardStepInterface, EventSubscriberInterface
         return self::$name;
     }
 
-    public function postStep($event)
+    public function afterStep(StepEvent $event)
     {
-        echo 'test';
+//        $this->stepService->findByNameAndChannelId($event->getChannelId(), 'Business');
     }
 }

@@ -5,6 +5,7 @@ use MFB\SetupWizardBundle\WizardStepInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use MFB\SetupWizardBundle\Event\StepEvent;
 
 class SetupWizard
 {
@@ -26,22 +27,20 @@ class SetupWizard
 
     public function getNextStepRedirect($channelId)
     {
-//        $nextStep = $this->getNextPendingStep($channelId);
-
-//        $this->dispatchStepAfterEvent($this->getCurrentStep($channelId));
-//        $this->dispatchStepBeforeEvent($nextStep);
+        $this->dispatchStepAfterEvent($this->getNextPendingStep($channelId), $channelId);
+        $this->dispatchStepBeforeEvent($this->getNextPendingStep($channelId), $channelId);
 
         return $this->createStepRedirect($this->getNextPendingStep($channelId));
     }
 
-    public function dispatchStepAfterEvent(WizardStepInterface $step)
+    public function dispatchStepAfterEvent(WizardStepInterface $step, $channelId)
     {
-        $this->eventDispatcher->dispatch("setupWizard.post{$step->getName()}");
+        $this->eventDispatcher->dispatch("setupWizard.after{$step->getName()}", new StepEvent($channelId));
     }
 
-    public function dispatchStepBeforeEvent(WizardStepInterface $step)
+    public function dispatchStepBeforeEvent(WizardStepInterface $step, $channelId)
     {
-        $this->eventDispatcher->dispatch("setupWizard.pre{$step->getName()}");
+        $this->eventDispatcher->dispatch("setupWizard.before{$step->getName()}", new StepEvent($channelId));
     }
 
     private function getNextPendingStep($channelId)
@@ -75,10 +74,12 @@ class SetupWizard
     private function getPendingStepsSortedByPriority($channelId)
     {
         $pendingSteps = $this->getPendingSteps($channelId);
+
         $stepNames = array();
         foreach ($pendingSteps as $pendingStep) {
             $stepNames[] = $pendingStep->getName();
         }
+
         $this->steps->sortByPriority();
         return $this->steps->getStepsByNames($stepNames);
     }

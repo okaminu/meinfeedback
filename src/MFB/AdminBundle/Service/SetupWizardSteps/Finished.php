@@ -5,13 +5,13 @@ use MFB\SetupWizardBundle\Entity\WizardStep;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepInterface;
 
-class ServiceDefinition implements WizardStepInterface, EventSubscriberInterface
+class Finished implements WizardStepInterface, EventSubscriberInterface
 {
-    private $priority = 300;
+    private $priority = 700;
 
-    private static $name = 'ServiceDefinition';
+    private static $name = 'Finished';
 
-    private $route = 'mfb_admin_setup_insert_definitions';
+    private $route = 'mfb_admin_homepage';
 
     private $stepService;
 
@@ -22,10 +22,7 @@ class ServiceDefinition implements WizardStepInterface, EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            "setupWizard.after". self::$name =>
-            array('afterStep')
-        );
+
     }
 
     public function getPriority()
@@ -43,8 +40,4 @@ class ServiceDefinition implements WizardStepInterface, EventSubscriberInterface
         return self::$name;
     }
 
-    public function afterStep($event)
-    {
-        echo 'test';
-    }
 }

@@ -60,6 +60,13 @@ class WizardStep
         return false;
     }
 
+    public function findByChannelIdAndName($channelId, $name)
+    {
+        return $this->entityManager->getRepository('MFBSetupWizardBundle:WizardStep')->findOneBy(
+            array('channel' => $channelId, 'name' => $name)
+        );
+    }
+
     private function saveEntity($entity)
     {
         $this->entityManager->persist($entity);

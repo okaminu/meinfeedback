@@ -5,13 +5,13 @@ use MFB\SetupWizardBundle\Entity\WizardStep;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepInterface;
 
-class ServiceDefinition implements WizardStepInterface, EventSubscriberInterface
+class AccountSettings implements WizardStepInterface, EventSubscriberInterface
 {
-    private $priority = 300;
+    private $priority = 600;
 
-    private static $name = 'ServiceDefinition';
+    private static $name = 'AccountSettings';
 
-    private $route = 'mfb_admin_setup_insert_definitions';
+    private $route = 'mfb_admin_setup_account_settings';
 
     private $stepService;
 
