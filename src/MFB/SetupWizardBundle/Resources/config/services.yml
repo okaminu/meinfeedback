@@ -1,7 +1,7 @@
 parameters:
     mfb_setup_wizard.class: MFB\SetupWizardBundle\Service\SetupWizard
-    mfb_setup_wizard.step.class: MFB\SetupWizardBundle\Service\SetupWizard
-    mfb_setup_wizard.configurator.class: MFB\SetupWizardBundle\Service\WizardStep
+    mfb_setup_wizard.step.class: MFB\SetupWizardBundle\Service\WizardStep
+    mfb_setup_wizard.configurator.class: MFB\SetupWizardBundle\Service\Configurator
 
 services:
     mfb_setup_wizard.service:

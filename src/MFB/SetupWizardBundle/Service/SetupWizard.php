@@ -29,7 +29,7 @@ class SetupWizard
     {
         reset($this->setupSteps);
         $step = current($this->setupSteps);
-        $this->eventDispatcher->dispatch("post{$step['route']}");
+        $this->eventDispatcher->dispatch("setupWizard.post{$step['name']}");
         return $this->createRedirect($step['route']);
     }
 

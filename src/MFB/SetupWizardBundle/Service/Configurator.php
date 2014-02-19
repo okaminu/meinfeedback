@@ -17,11 +17,13 @@ class Configurator
 
     public function addStep(WizardStepsAwareInterface $service)
     {
-        $this->eventDispatcher->addSubscriber($service->getSubscribedEvents());
+        $reflection = new \ReflectionClass(get_class($service));
+
+        $this->eventDispatcher->addSubscriber($service);
         $this->stepsConfig[$service->getPriority()] =
             array(
                 'route' => $service->getRoute(),
-                'name' => get_class($service)
+                'name' => $reflection->getShortName()
             );
     }
 

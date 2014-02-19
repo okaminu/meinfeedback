@@ -1,19 +1,22 @@
 <?php
 namespace MFB\ChannelBundle\Service;
 
-use Doctrine\Common\EventSubscriber;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepsAwareInterface;
 
-class BusinessWizardStep implements WizardStepsAwareInterface, EventSubscriber
+class BusinessWizardStep implements WizardStepsAwareInterface, EventSubscriberInterface
 {
     public function getPriority()
     {
         return 100;
     }
 
-    public function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
-        return array('postBusinessWizardStep');
+        return array(
+            'setupWizard.postBusinessWizardStep' =>
+            array('postBusinessWizardStep')
+        );
     }
 
     public function getRoute()
