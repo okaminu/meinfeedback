@@ -1,7 +1,7 @@
 <?php
 namespace MFB\AdminBundle\Service\SetupWizardSteps;
 
-use MFB\SetupWizardBundle\Entity\WizardStep;
+use MFB\SetupWizardBundle\Service\WizardStep;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepInterface;
 
