@@ -1,6 +1,7 @@
 <?php
 namespace MFB\AdminBundle\Service\SetupWizardSteps;
 
+use MFB\SetupWizardBundle\Event\StepEvent;
 use MFB\SetupWizardBundle\Service\WizardStep;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use MFB\SetupWizardBundle\WizardStepInterface;
@@ -43,8 +44,10 @@ class ServiceProvider implements WizardStepInterface, EventSubscriberInterface
         return self::$name;
     }
 
-    public function afterStep($event)
+    public function afterStep(StepEvent $event)
     {
-        echo 'test';
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceProvider', 'complete');
+        $this->stepService->setStepStatus($event->getChannelId(), 'AccountSettings', 'pending');
+
     }
 }

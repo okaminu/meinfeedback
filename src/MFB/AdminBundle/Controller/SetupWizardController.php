@@ -31,7 +31,7 @@ class SetupWizardController extends Controller
             $this->get('mfb_account_channel.service')->store($channel);
         }
 
-        return $this->getNextStep();
+        return $this->get('mfb_setup_wizard.service')->getFirstStepRedirect($channel->getId());
     }
 
     /**

@@ -9,7 +9,6 @@ use MFB\SetupWizardBundle\Entity\WizardStep as WizardStepEntity;
 
 class WizardStep
 {
-
     private $entityManager;
     private $stepStatuses;
     private $channelService;
@@ -51,10 +50,17 @@ class WizardStep
         );
     }
 
-    public function hasPendingSteps($channelId)
+    public function findByChannelId($channelId)
     {
-        $count = $this->findPendingByChannelId($channelId);
-        if ($count < 0) {
+        return $this->entityManager->getRepository('MFBSetupWizardBundle:WizardStep')->findBy(
+            array('channel' => $channelId)
+        );
+    }
+
+    public function hasSteps($channelId)
+    {
+        $steps = $this->findByChannelId($channelId);
+        if (count($steps) > 0) {
             return true;
         }
         return false;
@@ -65,6 +71,13 @@ class WizardStep
         return $this->entityManager->getRepository('MFBSetupWizardBundle:WizardStep')->findOneBy(
             array('channel' => $channelId, 'name' => $name)
         );
+    }
+
+    public function setStepStatus($channelId, $name, $status)
+    {
+        $step = $this->findByChannelIdAndName($channelId, $name);
+        $step->setStatus($this->stepStatuses[$status]);
+        $this->store($step);
     }
 
     private function saveEntity($entity)
@@ -83,5 +96,4 @@ class WizardStep
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
-
 }

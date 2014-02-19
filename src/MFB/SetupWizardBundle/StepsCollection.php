@@ -33,6 +33,6 @@ class StepsCollection
 
     public static function compareSteps($stepA, $stepB)
     {
-        return $stepA->getPriority() < $stepB->getPriority();
+        return $stepA->getPriority() > $stepB->getPriority();
     }
 }

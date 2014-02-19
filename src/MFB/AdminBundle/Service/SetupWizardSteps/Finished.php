@@ -22,7 +22,7 @@ class Finished implements WizardStepInterface, EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-
+        return array();
     }
 
     public function getPriority()

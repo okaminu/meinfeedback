@@ -25,6 +25,12 @@ class SetupWizard
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public function getFirstStepRedirect($channelId)
+    {
+        $this->dispatchStepBeforeEvent($this->getNextPendingStep($channelId), $channelId);
+        return $this->createStepRedirect($this->getNextPendingStep($channelId));
+    }
+
     public function getNextStepRedirect($channelId)
     {
         $this->dispatchStepAfterEvent($this->getNextPendingStep($channelId), $channelId);
@@ -46,7 +52,7 @@ class SetupWizard
     private function getNextPendingStep($channelId)
     {
         $steps = $this->getPendingStepsSortedByPriority($channelId);
-        return array_pop($steps);
+        return array_shift($steps);
     }
 
     private function createStepRedirect(WizardStepInterface $step)
@@ -56,7 +62,7 @@ class SetupWizard
 
     private function getPendingSteps($channelId)
     {
-        if (!$this->stepEntityService->hasPendingSteps($channelId)) {
+        if (!$this->stepEntityService->hasSteps($channelId)) {
             $this->createStoreAllSetupSteps($channelId);
         }
         return $this->stepEntityService->findPendingByChannelId($channelId);

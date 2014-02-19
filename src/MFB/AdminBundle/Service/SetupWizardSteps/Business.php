@@ -25,7 +25,9 @@ class Business implements WizardStepInterface, EventSubscriberInterface
     {
         return array(
             "setupWizard.after". self::$name =>
-            array('afterStep')
+            array('afterStep'),
+            "setupWizard.before". self::$name =>
+            array('beforeStep')
         );
     }
 
@@ -44,8 +46,19 @@ class Business implements WizardStepInterface, EventSubscriberInterface
         return self::$name;
     }
 
+    public function beforeStep(StepEvent $event)
+    {
+        $this->stepService->setStepStatus($event->getChannelId(), 'Business', 'pending');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceType', 'inactive');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceDefinition', 'inactive');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceCriterias', 'inactive');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceProvider', 'inactive');
+        $this->stepService->setStepStatus($event->getChannelId(), 'Finished', 'inactive');
+    }
+
     public function afterStep(StepEvent $event)
     {
-//        $this->stepService->findByNameAndChannelId($event->getChannelId(), 'Business');
+        $this->stepService->setStepStatus($event->getChannelId(), 'Business', 'complete');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceType', 'pending');
     }
 }
