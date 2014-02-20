@@ -47,6 +47,5 @@ class ServiceDefinition implements WizardStepInterface, EventSubscriberInterface
     public function afterStep(StepEvent $event)
     {
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceDefinition', 'complete');
-        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceCriterias', 'pending');
     }
 }

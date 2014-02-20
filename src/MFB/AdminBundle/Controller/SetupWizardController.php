@@ -31,7 +31,7 @@ class SetupWizardController extends Controller
             $this->get('mfb_account_channel.service')->store($channel);
         }
 
-        return $this->get('mfb_setup_wizard.service')->getFirstStepRedirect($channel->getId());
+        return $this->get('mfb_setup_wizard.service')->getCurrentStepRedirect($channel->getId());
     }
 
     /**
@@ -141,7 +141,7 @@ class SetupWizardController extends Controller
             if ($form->isValid()) {
                 $this->storeChannelRatingCriteria($channelCriteria, $form->get('customRatingName')->getData());
                 if ($this->get('mfb_account_channel.rating_criteria.service')->missingCount($channel->getId()) == 0) {
-                    return $this->getNextStep('mfb_admin_setup_select_criterias');
+                    return $this->getNextStep();
                 }
                 $form = $this->getChannelRatingSelectForm($channelCriteria, $channel->getId());
             }
@@ -188,12 +188,20 @@ class SetupWizardController extends Controller
         try {
             if ($form->isValid()) {
                 $this->get('mfb_account_channel.service')->store($channel);
-                return $this->getNextStep('mfb_admin_setup_account_settings');
+                return $this->getNextStep();
             }
         } catch (ChannelException $ex) {
             $form->addError(new FormError($ex->getMessage()));
         }
         return array('form' => $form->createView());
+    }
+
+    /**
+     * @Route("/setup_next_step", name="mfb_admin_setup_next_step")
+     */
+    public function nextStepAction(Request $request)
+    {
+        return $this->getNextStep();
     }
 
     private function getLoggedInUser()
@@ -434,6 +442,6 @@ class SetupWizardController extends Controller
 
     public function getNextStep()
     {
-        return $this->get('mfb_setup_wizard.service')->getNextStepRedirect($this->getChannel()->getId());
+        return $this->get('mfb_setup_wizard.service')->completeGetNextPendingStep($this->getChannel()->getId());
     }
 }

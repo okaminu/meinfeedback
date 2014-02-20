@@ -48,5 +48,6 @@ class ServiceCriterias implements WizardStepInterface, EventSubscriberInterface
     {
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceCriterias', 'complete');
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceProvider', 'pending');
+        $this->stepService->setStepStatus($event->getChannelId(), 'AccountSettings', 'pending');
     }
 }

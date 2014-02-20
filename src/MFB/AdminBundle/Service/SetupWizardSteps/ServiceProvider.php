@@ -47,7 +47,6 @@ class ServiceProvider implements WizardStepInterface, EventSubscriberInterface
     public function afterStep(StepEvent $event)
     {
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceProvider', 'complete');
-        $this->stepService->setStepStatus($event->getChannelId(), 'AccountSettings', 'pending');
 
     }
 }

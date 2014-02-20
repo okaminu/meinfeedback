@@ -25,13 +25,13 @@ class SetupWizard
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function getFirstStepRedirect($channelId)
+    public function getCurrentStepRedirect($channelId)
     {
         $this->dispatchStepBeforeEvent($this->getNextPendingStep($channelId), $channelId);
         return $this->createStepRedirect($this->getNextPendingStep($channelId));
     }
 
-    public function getNextStepRedirect($channelId)
+    public function completeGetNextPendingStep($channelId)
     {
         $this->dispatchStepAfterEvent($this->getNextPendingStep($channelId), $channelId);
         $this->dispatchStepBeforeEvent($this->getNextPendingStep($channelId), $channelId);

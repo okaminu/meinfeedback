@@ -48,5 +48,6 @@ class ServiceType implements WizardStepInterface, EventSubscriberInterface
     {
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceType', 'complete');
         $this->stepService->setStepStatus($event->getChannelId(), 'ServiceDefinition', 'pending');
+        $this->stepService->setStepStatus($event->getChannelId(), 'ServiceCriterias', 'pending');
     }
 }
