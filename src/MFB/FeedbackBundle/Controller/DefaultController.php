@@ -2,16 +2,12 @@
 
 namespace MFB\FeedbackBundle\Controller;
 
-use MFB\ChannelBundle\Entity\AccountChannel;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\FeedbackBundle\FeedbackException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Form\FormError;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {

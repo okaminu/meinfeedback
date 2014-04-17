@@ -5,7 +5,6 @@ namespace MFB\ReskribeBundle\Service;
 
 use Buzz\Browser;
 use Doctrine\ORM\EntityManager;
-use MFB\AccountBundle\Entity\Account;
 
 class Api
 {

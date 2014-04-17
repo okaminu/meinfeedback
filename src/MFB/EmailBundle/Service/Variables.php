@@ -4,7 +4,6 @@ namespace MFB\EmailBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
-use MFB\EmailBundle\Entity\EmailTemplateVariable;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class Variables

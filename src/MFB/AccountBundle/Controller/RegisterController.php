@@ -5,12 +5,7 @@ namespace MFB\AccountBundle\Controller;
 use MFB\AccountBundle\Entity\Account;
 use MFB\AccountBundle\Form\Type\AccountType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class RegisterController extends Controller
 {

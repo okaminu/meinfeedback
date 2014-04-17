@@ -3,16 +3,13 @@
 namespace MFB\AdminBundle\Controller;
 
 use MFB\ChannelBundle\Entity\AccountChannel;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\HttpFoundation\Response;
 use MFB\FeedbackBundle\Entity\Feedback;
 use MFB\WidgetBundle\Entity\Widget as WidgetEntity;
 use MFB\WidgetBundle\Form\WidgetType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WidgetController extends Controller
 {

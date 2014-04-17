@@ -9,7 +9,6 @@ use MFB\FeedbackBundle\Entity\FeedbackInvite;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Bundle\TwigBundle\TwigEngine;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Routing\RouterInterface;
 
 

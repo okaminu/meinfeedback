@@ -5,7 +5,6 @@ use MFB\CustomerBundle\Form\CustomerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class ServiceType extends AbstractType
 {

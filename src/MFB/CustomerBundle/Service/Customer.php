@@ -1,12 +1,11 @@
 <?php
 namespace MFB\CustomerBundle\Service;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\AccountException;
 use MFB\ChannelBundle\Service\Channel;
 use MFB\CustomerBundle\Entity\Customer as CustomerEntity;
-use Doctrine\DBAL\DBALException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Customer
 {

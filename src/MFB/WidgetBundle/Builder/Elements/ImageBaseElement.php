@@ -3,7 +3,6 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 use MFB\WidgetBundle\Entity\Color;
 
 class ImageBaseElement implements ElementInterface {

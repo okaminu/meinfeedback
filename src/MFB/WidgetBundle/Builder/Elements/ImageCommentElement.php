@@ -3,10 +3,6 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
-use MFB\WidgetBundle\Builder\Elements\RatingStarsElement;
-use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
-use MFB\WidgetBundle\Builder\Elements\ElementInterface;
 use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\Config\Definition\Exception\Exception;
 

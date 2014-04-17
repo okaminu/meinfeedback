@@ -3,9 +3,6 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
-use MFB\WidgetBundle\Builder\Elements\ElementInterface;
-
 class ImageTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface
 {
 

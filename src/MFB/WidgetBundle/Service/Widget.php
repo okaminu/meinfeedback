@@ -6,12 +6,12 @@ namespace MFB\WidgetBundle\Service;
 use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
+use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 use MFB\FeedbackBundle\Specification as Spec;
 use MFB\WidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use MFB\WidgetBundle\Entity\Color;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 
 /**
  * Class Widget

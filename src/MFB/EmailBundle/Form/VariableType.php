@@ -5,7 +5,6 @@ namespace MFB\EmailBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use MFB\EmailBundle\Form\EmailTemplateVariableType;
 
 class VariableType extends AbstractType
 {

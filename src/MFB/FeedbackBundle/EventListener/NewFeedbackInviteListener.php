@@ -7,10 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use MFB\EmailBundle\Entity\EmailTemplate;
 use MFB\EmailBundle\Service\Sender;
 use MFB\FeedbackBundle\Event\NewFeedbackInviteEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use MFB\FeedbackBundle\Entity\FeedbackInvite;
 
 class NewFeedbackInviteListener
 {

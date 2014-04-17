@@ -3,9 +3,9 @@ namespace MFB\WidgetBundle\Director;
 
 use MFB\WidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Builder\Elements\ImageBaseElement;
+use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
 use MFB\WidgetBundle\Builder\Elements\ImageRepeatTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
-use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
 use MFB\WidgetBundle\Entity\Color;
 
 class MainWidgetDirector implements WidgetDirectorInterface

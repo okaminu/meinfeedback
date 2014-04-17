@@ -23,6 +23,7 @@
         "sensio/buzz-bundle": "v1.0.0",
         "twitter/bootstrap": "3.0.*@dev",
         "mopa/bootstrap-bundle": "3.*@dev",
+        "foxrate/base-widget-bundle": "dev-master",
         "knplabs/knp-components": "1.2.4"
     },
     "scripts": {
@@ -41,6 +42,12 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@bitbucket.org:foxrate/base-widget-bundle.git"
+        }
+    ],
     "config": {
         "bin-dir": "bin"
     },
