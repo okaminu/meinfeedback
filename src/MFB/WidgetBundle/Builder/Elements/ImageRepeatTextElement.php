@@ -3,6 +3,9 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
+use Foxrate\BaseWidgetBundle\Builder\Elements\ElementInterface;
+use Foxrate\BaseWidgetBundle\Builder\Elements\TextElementInterface;
+
 class ImageRepeatTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface {
 
     protected  static $last_line_padding = 20;

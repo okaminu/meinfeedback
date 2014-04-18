@@ -1,20 +1,23 @@
 <?php
 namespace MFB\WidgetBundle\Director;
 
-use MFB\WidgetBundle\Builder\BuilderInterface;
+use Foxrate\BaseWidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Builder\Elements\ImageBaseElement;
+use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
 use MFB\WidgetBundle\Builder\Elements\ImageRepeatTextElement;
 use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
-use MFB\WidgetBundle\Builder\Elements\ImageCommentElement;
 use MFB\WidgetBundle\Entity\Color;
+use MFB\WidgetBundle\Service\Resources;
 
 class MainWidgetDirector implements WidgetDirectorInterface
 {
     protected $builder;
+    protected $resources;
 
-    public function __construct(BuilderInterface $builder)
+    public function __construct(BuilderInterface $builder, Resources $resources)
     {
         $this->builder = $builder;
+        $this->resources = $resources;
     }
 
     public function build(
@@ -24,11 +27,11 @@ class MainWidgetDirector implements WidgetDirectorInterface
         Color $textColor,
         Color $backgroundColor
     ) {
-        $baseImage = new ImageBaseElement($this->builder->getResources());
+        $baseImage = new ImageBaseElement($this->resources->getResources());
         $baseImage->setBackgroundColor($backgroundColor);
         $this->builder->addElement($baseImage);
 
-        $repText = new ImageRepeatTextElement($this->builder->getResources());
+        $repText = new ImageRepeatTextElement($this->resources->getResources());
         $repText->setPositionX(10)
             ->setLastLine(214)
             ->addText($feedbackCount . " Bewertungen")
@@ -46,7 +49,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
             $date =  $lastFeedback->getFeedback()->getCreatedAt()->format('d.m.Y');
         }
 
-        $text = new ImageTextElement($this->builder->getResources());
+        $text = new ImageTextElement($this->resources->getResources());
         $text->setText($date)
             ->setPositionX(120)
             ->setPositionY(214)
@@ -54,7 +57,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
         $this->builder->addElement($text);
 
 
-        $text = new ImageTextElement($this->builder->getResources());
+        $text = new ImageTextElement($this->resources->getResources());
         $text->setText('Jetzt Feedback geben')
             ->setPositionX(9)
             ->setPositionY(273)
@@ -62,7 +65,7 @@ class MainWidgetDirector implements WidgetDirectorInterface
             ->setFontColorCode($textColor);
         $this->builder->addElement($text);
 
-        $comment = new ImageCommentElement($this->builder->getResources());
+        $comment = new ImageCommentElement($this->resources->getResources());
         $comment->setText($lastFeedbacks)
             ->setBoxWidth(170)
             ->setBoxHeight(180)

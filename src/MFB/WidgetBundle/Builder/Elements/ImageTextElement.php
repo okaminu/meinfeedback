@@ -3,8 +3,8 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
-use MFB\WidgetBundle\Builder\Elements\AbstractImageBase;
-use MFB\WidgetBundle\Builder\Elements\ElementInterface;
+use Foxrate\BaseWidgetBundle\Builder\Elements\ElementInterface;
+use Foxrate\BaseWidgetBundle\Builder\Elements\TextElementInterface;
 
 class ImageTextElement extends AbstractImageBase implements ElementInterface, TextElementInterface
 {

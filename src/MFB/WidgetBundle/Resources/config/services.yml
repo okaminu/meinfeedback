@@ -1,8 +1,6 @@
 parameters:
     mfb_widget.service.class: MFB\WidgetBundle\Service\Widget
     mfb_widget.resources.class: MFB\WidgetBundle\Service\Resources
-    mfb_widget.composite.class: MFB\WidgetBundle\Builder\ElementComposite
-    mfb_widget.imagebuilder.class: MFB\WidgetBundle\Builder\ImageBuilder
     mfb_widget.service.params:
       widgetWordCount: 10
       lastWordEnding: '...'
@@ -10,15 +8,8 @@ parameters:
 services:
     mfb_widget.service:
         class: %mfb_widget.service.class%
-        arguments: ["@doctrine.orm.default_entity_manager", "@mfb_widget.imagebuilder", '@service_container', %mfb_widget.service.params%]
+        arguments: ["@doctrine.orm.default_entity_manager", "@foxrate_base_widget.imagebuilder", '@mfb_widget.resources', '@service_container', %mfb_widget.service.params%]
 
     mfb_widget.resources:
         class: %mfb_widget.resources.class%
         arguments: ['@service_container']
-
-    mfb_widget.imagebuilder:
-        class: %mfb_widget.imagebuilder.class%
-        arguments: ["@mfb_widget.resources", "@mfb_widget.composite"]
-
-    mfb_widget.composite:
-        class: %mfb_widget.composite.class%

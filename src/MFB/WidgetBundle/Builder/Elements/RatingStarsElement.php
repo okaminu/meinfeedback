@@ -3,6 +3,8 @@
 
 namespace MFB\WidgetBundle\Builder\Elements;
 
+use Foxrate\BaseWidgetBundle\Builder\Elements\ElementInterface;
+
 class RatingStarsElement extends AbstractImageBase implements ElementInterface{
 
     protected $stars;
