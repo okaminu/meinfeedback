@@ -9,7 +9,7 @@ use MFB\WidgetBundle\Builder\Elements\ImageTextElement;
 use MFB\WidgetBundle\Entity\Color;
 use MFB\WidgetBundle\Service\Resources;
 
-class MainWidgetDirector implements WidgetDirectorInterface
+class MainWidgetDirector
 {
     protected $builder;
     protected $resources;
