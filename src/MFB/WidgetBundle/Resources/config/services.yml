@@ -8,7 +8,7 @@ parameters:
 services:
     mfb_widget.service:
         class: %mfb_widget.service.class%
-        arguments: ["@doctrine.orm.default_entity_manager", "@foxrate_base_widget.imagebuilder", '@service_container', %mfb_widget.service.params%]
+        arguments: ["@doctrine.orm.default_entity_manager", "@foxrate_base_widget.imagebuilder", '@mfb_widget.resources', '@service_container', %mfb_widget.service.params%]
 
     mfb_widget.resources:
         class: %mfb_widget.resources.class%

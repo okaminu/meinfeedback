@@ -6,8 +6,8 @@ namespace MFB\WidgetBundle\Service;
 use Doctrine\ORM\EntityManager;
 use MFB\AccountBundle\Entity\Account;
 use MFB\ChannelBundle\Entity\AccountChannel;
-use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 use MFB\FeedbackBundle\Specification as Spec;
+use MFB\FeedbackBundle\Specification\PreBuiltSpecification;
 use MFB\WidgetBundle\Builder\BuilderInterface;
 use MFB\WidgetBundle\Director\MainWidgetDirector;
 use MFB\WidgetBundle\Entity\Color;
@@ -30,11 +30,13 @@ class Widget
     public function __construct(
         EntityManager $em,
         BuilderInterface $imageBuilder,
+        Resources $resources,
         ContainerInterface $container,
         $params
     ) {
         $this->em = $em;
         $this->imageBuilder = $imageBuilder;
+        $this->resources = $resources;
         $this->container = $container;
         $this->params = $params;
     }
@@ -67,7 +69,7 @@ class Widget
         $lastFeedbacks = $channelFeedbacks->getActiveFeedbackSummary()->getItems();
         $this->filterComments($lastFeedbacks);
 
-        $imageDirector = new MainWidgetDirector($this->imageBuilder);
+        $imageDirector = new MainWidgetDirector($this->imageBuilder, $this->resources);
         return $imageDirector->build(
             $lastFeedbacks,
             $channelFeedbacks->getChannelFeedbackCount(),
